@@ -8,9 +8,10 @@ namespace GH
     public class PlayerMove : MonoBehaviour
     {
         public float playerSpeed = 5f;
+        public Animator playerAnimator;
+        private bool moveAniTrriger = false;
         void Start()
         {
-
         }
 
         void Update()
@@ -20,15 +21,37 @@ namespace GH
 
         void OnMove()
         {
-            float v = Input.GetAxis("Vertical");
-            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            float h = Input.GetAxisRaw("Horizontal");
 
             Vector3 playerDir = new Vector3(h, v, 0);
-            if(playerDir.magnitude > 1)
+
+            
+            if (playerDir.magnitude > 1)
             {
                 playerDir.Normalize();
             }
             transform.position += playerDir * playerSpeed * Time.deltaTime;
+
+
+
+            if (h == 0 && v == 0 && moveAniTrriger)
+            {
+                playerAnimator.SetTrigger("Idle");
+                moveAniTrriger = false;
+                print("11");
+            }
+            if((h != 0 || v != 0) && !moveAniTrriger)
+            {
+                playerAnimator.SetTrigger("Run");
+                moveAniTrriger = true ;
+                print("22");
+
+            }
+            print("v :" + v);
+            print("h :" + h);
+            print(moveAniTrriger);
+
         }
     }
 }
