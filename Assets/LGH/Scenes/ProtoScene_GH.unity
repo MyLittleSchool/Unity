@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 298572318}
   - component: {fileID: 298572317}
   - component: {fileID: 298572316}
+  - component: {fileID: 298572320}
   m_Layer: 0
   m_Name: Pixel Perfect Camera
   m_TagString: Untagged
@@ -316,7 +317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
-  m_AssetsPPU: 100
+  m_AssetsPPU: 78
   m_RefResolutionX: 1920
   m_RefResolutionY: 1080
   m_CropFrame: 0
@@ -362,7 +363,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.4
+  orthographic size: 9.230769
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -393,6 +394,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 888103958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &298572320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298572315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b232513204a3e24891f28f0527aa74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &475024204
 GameObject:
   m_ObjectHideFlags: 0
