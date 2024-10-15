@@ -43,6 +43,7 @@ public class HttpManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    public string SERVER_ADRESS { get; } = "http://125.132.216.190:5544";
 
     public class HttpInfo
     {
