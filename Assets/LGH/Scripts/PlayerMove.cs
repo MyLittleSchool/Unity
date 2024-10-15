@@ -48,9 +48,6 @@ namespace GH
                 print("22");
 
             }
-            print("v :" + v);
-            print("h :" + h);
-            print(moveAniTrriger);
 
         }
     }
