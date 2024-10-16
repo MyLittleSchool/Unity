@@ -79,16 +79,33 @@ namespace GH
         {
             // 닉네임의 색을 변경 Color로
             string nickName = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + nick + "</color>";
-            //전체 채팅 구성을 만들자.
+           
+
+            //귓속말인지 판단
+            // /w 아이디 메시지면 귓속말
+            string[] text = s.Split(" ", 3);
             string chat = nickName + " : " + s;
 
-            //채팅을 보내자
-            chatClient.PublishMessage(currChannel, chat);
+            //전체 채팅 구성을 만들자.
+            if (text[0] == "/w")
+            {
+
+                chat = nickName + " : " + text[2];
+                //귓속말 보내기
+                chatClient.SendPrivateMessage(text[1], chat);
+            }
+            else
+            {
+               
+                // 일반채팅을 보내자
+                chatClient.PublishMessage(currChannel, chat);
+            }
+
 
             inputChat.text = "";
         }
 
-        private void CreateChatItem(string chat)
+        private void CreateChatItem(string chat, Color chatColor)
         {
 
             //s의 내용을 ChatItem을 만들자
@@ -98,7 +115,7 @@ namespace GH
 
 
             // 가져온 컴포넌트의 SetText함수를 실행
-            chatItem.SetText(chat);
+            chatItem.SetText(chat, chatColor);
         }
 
         public void DebugReturn(DebugLevel level, string message)
@@ -127,13 +144,15 @@ namespace GH
             for (int i = 0; i < senders.Length; i++)
             {
                 // 채팅 아이템 마들어서 스크롤 뷰에 올리기
-                CreateChatItem(messages[i].ToString());
+                CreateChatItem(messages[i].ToString(), Color.black);
             }
         }
 
         //귓속말
         public void OnPrivateMessage(string sender, object message, string channelName)
         {
+            //채팅 아이템 만들어서 스크롤 뷰에 붙이자
+            CreateChatItem(message.ToString(), new Color32(255, 0, 255, 255));
         }
 
         //채널을 참여할 때

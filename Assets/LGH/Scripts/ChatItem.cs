@@ -24,9 +24,11 @@ namespace GH
         {
 
         }
-        public void SetText(string msg)
+        public void SetText(string msg, Color chatColor)
         {
             chatText.text = msg;
+
+            chatText.color = chatColor;
         }
     }
 }
