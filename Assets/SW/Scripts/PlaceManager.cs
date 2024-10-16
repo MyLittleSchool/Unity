@@ -73,6 +73,7 @@ namespace SW
                 GetPlaceResInfo dataInfo = JsonUtility.FromJson<GetPlaceResInfo>(res.text);
                 print("Get요청완료 : " + res.text);
             };
+            StartCoroutine(httpManager.Get(info));
         }
     }
 }

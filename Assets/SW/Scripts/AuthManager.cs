@@ -63,7 +63,7 @@ namespace SW
         public void OnKakaoLoginButtonClick()
         {
             clientState = GenerateRandomClientId();
-            Debug.Log("Generated Client State: " + clientState);
+            //Debug.Log("Generated Client State: " + clientState);
 
             // 카카오 로그인 페이지로 이동하는 URL 생성
             string url = $"{kakaoLoginUrl}?client_id={clientId}&redirect_uri={redirectUri}&response_type=code&state={clientState}&prompt=login";
@@ -88,7 +88,7 @@ namespace SW
                 UnityWebRequest www = UnityWebRequest.Get(checkUrl);
                 yield return www.SendWebRequest();
 
-                Debug.Log("@@@");
+                //Debug.Log("@@@");
 
                 if (www.result == UnityWebRequest.Result.Success && www.downloadHandler.text.Length > 5)
                 {
