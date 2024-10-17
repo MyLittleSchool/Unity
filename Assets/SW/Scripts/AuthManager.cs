@@ -43,6 +43,7 @@ namespace SW
 
         private void Start()
         {
+            return;
             redirectUri = HttpManager.GetInstance().SERVER_ADRESS + "/login/oauth2/code/kakao";
             serverUrl = HttpManager.GetInstance().SERVER_ADRESS + "/kakaoLoginLog";
             OnKakaoLoginButtonClick();

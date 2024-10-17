@@ -12,6 +12,7 @@ namespace SW
         {
             httpManager = HttpManager.GetInstance();
         }
+        
         [Serializable]
         public class ObjectInfo
         {
@@ -19,7 +20,7 @@ namespace SW
             public int x, y; // 좌표
             public int rot; // 회전
         }
-        [Serializable]
+        [Serializable] // 배치 요청 파라미터
         public class SetPlaceInfo : ObjectInfo
         {
             private int userId;
@@ -31,52 +32,59 @@ namespace SW
                 y = objectInfo.y;
                 rot = objectInfo.rot;
                 // 구현 필요
-                userId = 0;
-                mapId = 0;
+                userId = HttpManager.GetInstance().UserId;
+                mapId = HttpManager.GetInstance().MapId;
             }
         }
 
-        public void SetPlace(ObjectInfo objectInfo)
+        public void CreatePlace(ObjectInfo objectInfo)
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/엔드포인트";
+            info.url = httpManager.SERVER_ADRESS + "/ground-furniture";
             info.body = JsonUtility.ToJson(new SetPlaceInfo(objectInfo));
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
-                print("Set요청완료");
+                print("생성요청완료, id : " + res.text);
             };
             StartCoroutine(httpManager.Post(info));
         }
-        [Serializable]
-        public class GetPlaceReqInfo
-        {
-            int userId;
-            int mapId;
-            public GetPlaceReqInfo()
-            {
-                // 구현 필요
-                userId = 0;
-                mapId = 0;
-            }
-        }
-        [Serializable]
+        [Serializable] // 배치 불러오기 응답
         public class GetPlaceResInfo
         {
-            public List<ObjectInfo> data;
+            public List<GetPlaceInfo> data;
         }
-        public void GetPlace()
+        [Serializable] // 불러온 오브젝트 구조
+        public class GetPlaceInfo : ObjectInfo
+        {
+            public int id;
+            public int userId;
+            public int mapId;
+        }
+        public void ReadPlace()
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/엔드포인트";
-            info.body = JsonUtility.ToJson(new GetPlaceReqInfo());
-            info.contentType = "application/json";
+            info.url = httpManager.SERVER_ADRESS + "/ground-furniture/map?mapId=" + HttpManager.GetInstance().MapId;
             info.onComplete = (DownloadHandler res) =>
             {
-                GetPlaceResInfo dataInfo = JsonUtility.FromJson<GetPlaceResInfo>(res.text);
-                print("Get요청완료 : " + res.text);
+                GetPlaceResInfo dataInfo = JsonUtility.FromJson<GetPlaceResInfo>("{\"data\":" + res.text + "}");
+                foreach (GetPlaceInfo info in dataInfo.data)
+                {
+                    print(info.id + "/" + info.userId + "/" + info.mapId + "/" + info.objId + "/" + info.x + "/" + info.y + "/" + info.rot);
+                }
             };
             StartCoroutine(httpManager.Get(info));
+        }
+
+        public void DeletePlace(int furnitureId)
+        {
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = httpManager.SERVER_ADRESS + "/ground-furniture?furnitureId=" + furnitureId;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                print("제거완료");
+            };
+            StartCoroutine(httpManager.Delete(info));
         }
     }
 }

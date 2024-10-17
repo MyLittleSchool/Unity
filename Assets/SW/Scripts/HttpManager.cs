@@ -21,6 +21,8 @@ public struct PostInfoArray
 public class HttpManager : MonoBehaviour
 {
     static HttpManager instance;
+    public int UserId { get; } = 1;
+    public int MapId { get; } = 1;
     public static HttpManager GetInstance()
     {
         if (instance == null)
@@ -91,6 +93,21 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+    public IEnumerator Delete(HttpInfo info)
+    {
+        string url = info.url;
+
+        // UnityWebRequest.Delete()로 DELETE 요청 생성
+        using (UnityWebRequest webRequest = UnityWebRequest.Delete(url))
+        {
+            // 서버에 요청 보내기
+            yield return webRequest.SendWebRequest();
+
+            // 서버에게 응답이 왔다.
+            DoneRequest(webRequest, info);
+        }
+    }
+
     // 파일 업로드(form-data)
     public IEnumerator UploadFileByFormData(HttpInfo info)
     {
