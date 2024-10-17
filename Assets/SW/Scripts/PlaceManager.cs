@@ -7,8 +7,11 @@ namespace SW
 {
     public class PlaceManager : MonoBehaviour
     {
-        HttpManager httpManager = HttpManager.GetInstance();
-
+        HttpManager httpManager;
+        private void Start()
+        {
+            httpManager = HttpManager.GetInstance();
+        }
         [Serializable]
         public class ObjectInfo
         {
