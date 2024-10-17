@@ -40,13 +40,17 @@ namespace MJ
 
         [Header("꾸미기 패널")]
         public GameObject DecorationPanel;
+
+        [Header("플레이어 꾸미기 오브젝트")]
+        public GameObject PlayerObject;
         #endregion
 
         // Start is called before the first frame update
         private void Start()
         {
             PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
-
+            PlayerAnimation AnimationDT = PlayerObject.GetComponent<PlayerAnimation>();
+            
             loginButton.onClick.AddListener(OnLoginPanel);
             joinButton.onClick.AddListener(OnJoinPanel);
 
@@ -65,7 +69,13 @@ namespace MJ
             for (int i = 0; i < decorationChoiceButton.Length; i++)
             {
                 int data = i;
-                decorationChoiceButton[i].onClick.AddListener(() => DecorationDT.SetPlayerSelectDecorationData(DecorationDT.CurDecorationPanel, data));
+                decorationChoiceButton[i].onClick.AddListener(() =>
+                {
+                    DecorationDT.SetPlayerSelectDecorationData(DecorationDT.CurDecorationPanel, data);
+                    
+                    AnimationDT.ResetDecorationAnimData(DecorationDT.CurDecorationPanel); 
+                    AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
+                });
             }
                 
 

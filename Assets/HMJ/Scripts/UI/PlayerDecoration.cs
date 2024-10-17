@@ -14,7 +14,7 @@ namespace MJ
         /// <summary>
         /// Player 아바타 꾸밈 정보
         /// </summary>
-        private int[] decorationData = new int[3];
+        private int[] decorationData = new int[4];
 
         /// <summary>
         /// 파일에서 직접 로드할 이미지 데이터
@@ -77,7 +77,7 @@ namespace MJ
         public void LoadDecorationData()
         {
             string ImagePath = "Assets/Resources/Image/PlayerDecoration/";
-            string[] DecorationData = { "Hair", "Skin", "Face", "Cloth" };
+            string[] DecorationData = { "Skin", "Face", "Hair", "Cloth" };
             // 폴더명
             for(int i = 0; i < DecorationData.Length; i++)
             {
@@ -89,7 +89,6 @@ namespace MJ
                 }
             }
         }
-
-
     }
+
 }
