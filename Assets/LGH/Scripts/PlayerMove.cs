@@ -39,13 +39,11 @@ namespace GH
             {
                 playerAnimator.SetTrigger("Idle");
                 moveAniTrriger = false;
-                print("11");
             }
             if((h != 0 || v != 0) && !moveAniTrriger)
             {
                 playerAnimator.SetTrigger("Run");
                 moveAniTrriger = true ;
-                print("22");
 
             }
 
