@@ -37,7 +37,7 @@ namespace SW
             }
         }
 
-        public void CreatePlace(ObjectInfo objectInfo)
+        public void CreatePlace(ObjectInfo objectInfo, Action<PlaceInfo> callBack)
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
             info.url = httpManager.SERVER_ADRESS + "/ground-furniture";
@@ -46,32 +46,46 @@ namespace SW
             info.onComplete = (DownloadHandler res) =>
             {
                 print("생성요청완료, id : " + res.text);
+                PlaceInfo value = new PlaceInfo(objectInfo);
+                value.id = int.Parse(res.text);
+                callBack(value);
             };
             StartCoroutine(httpManager.Post(info));
         }
         [Serializable] // 배치 불러오기 응답
         public class GetPlaceResInfo
         {
-            public List<GetPlaceInfo> data;
+            public List<PlaceInfo> data;
         }
         [Serializable] // 불러온 오브젝트 구조
-        public class GetPlaceInfo : ObjectInfo
+        public class PlaceInfo : ObjectInfo
         {
             public int id;
             public int userId;
             public int mapId;
+            public PlaceInfo(ObjectInfo objectInfo)
+            {
+                objId = objectInfo.objId;
+                x = objectInfo.x;
+                y = objectInfo.y;
+                rot = objectInfo.rot;
+                // 구현 필요
+                userId = HttpManager.GetInstance().UserId;
+                mapId = HttpManager.GetInstance().MapId;
+            }
         }
-        public void ReadPlace()
+        public void ReadPlace(Action<GetPlaceResInfo> callBack)
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
             info.url = httpManager.SERVER_ADRESS + "/ground-furniture/map?mapId=" + HttpManager.GetInstance().MapId;
             info.onComplete = (DownloadHandler res) =>
             {
                 GetPlaceResInfo dataInfo = JsonUtility.FromJson<GetPlaceResInfo>("{\"data\":" + res.text + "}");
-                foreach (GetPlaceInfo info in dataInfo.data)
+                foreach (PlaceInfo info in dataInfo.data)
                 {
                     print(info.id + "/" + info.userId + "/" + info.mapId + "/" + info.objId + "/" + info.x + "/" + info.y + "/" + info.rot);
                 }
+                callBack(dataInfo);
             };
             StartCoroutine(httpManager.Get(info));
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DumInteractObj : MonoBehaviour, IInteract
+public class DumInteractObj : Interact, IInteract
 {
     public string interacterName = "»óÈ£ÀÛ¿ë´õ¹Ì";
     public string GetInfo()
@@ -17,11 +17,13 @@ public class DumInteractObj : MonoBehaviour, IInteract
     }
     public void HighlightOff()
     {
-        
+        material.SetInt("_On", 0);
+        print("²¨Áü");
     }
 
     public void HighlightOn()
     {
-        
+        material.SetInt("_On", 1);
+        print("ÄÑÁü");
     }
 }

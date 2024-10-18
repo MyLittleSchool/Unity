@@ -39,11 +39,11 @@ namespace SW
                 objectInfo.x = int.Parse(x.text);
                 objectInfo.y = int.Parse(y.text);
                 objectInfo.rot = int.Parse(rot.text);
-                placeManager.CreatePlace(objectInfo);
+                placeManager.CreatePlace(objectInfo, null);
             });
             get.onClick.AddListener(() =>
             {
-                placeManager.ReadPlace();
+                placeManager.ReadPlace(null);
             });
             delete.onClick.AddListener(() =>
             {

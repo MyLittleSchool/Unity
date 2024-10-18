@@ -8,25 +8,33 @@ namespace SW
 {
     public class PlayerInteracter : MonoBehaviour
     {
-        private List<Collider2D> inTrigged;
+        private List<IInteract> inTrigged;
         public GameObject ui;
         public TMP_Text uiText;
         void Start()
         {
-            inTrigged = new List<Collider2D>();
+            inTrigged = new List<IInteract>();
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            inTrigged.Add(collision);
+            inTrigged.Add(collision.GetComponent<IInteract>());
             ui.SetActive(true);
-            uiText.text = inTrigged.First().GetComponent<IInteract>().GetInfo();
+            if (inTrigged.Count == 1)
+            {
+                uiText.text = inTrigged.First().GetInfo();
+                inTrigged.First().HighlightOn();
+            }
         }
         private void OnTriggerExit2D(Collider2D collision)
         {
-            inTrigged.Remove(collision);
+            IInteract i = collision.GetComponent<IInteract>();
+            i.HighlightOff();
+            inTrigged.Remove(i);
+            
             if (inTrigged.Count != 0)
             {
-                uiText.text = inTrigged.First().GetComponent<IInteract>().GetInfo();
+                uiText.text = inTrigged.First().GetInfo();
+                inTrigged.First().HighlightOn();
             }
             else
             {
@@ -37,7 +45,7 @@ namespace SW
         {
             if (Input.GetKeyDown(KeyCode.F) && inTrigged.Count != 0)
             {
-                inTrigged.First().GetComponent<IInteract>().Interact();
+                inTrigged.First().Interact();
             }
         }
     }
