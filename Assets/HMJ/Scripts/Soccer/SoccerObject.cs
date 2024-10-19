@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,42 +12,46 @@ namespace MJ
 
         public GameObject UIPanel;
 
+        private BounceObject bounceObject;
+
         private void Start()
         {
             rigidbody = GetComponent<Rigidbody2D>();
             rigidbody.drag = 0.5f;
+
+            bounceObject = GetComponentInChildren<BounceObject>();
         }
+
         private void Update()
         {
-
+            if (Input.GetKeyDown(KeyCode.Space) && bounceObject && bounceObject.GetBounceBall())
+                KickBall(bounceObject.GetPlayerDirection());
         }
 
-        public void playerCollision()
+        public void KickBall(Vector2 direction)
         {
-            float horizontal = UnityEngine.Input.GetAxis("Horizontal");
-            float vertical = UnityEngine.Input.GetAxis("Vertical");
-
-            Vector2 kickDirection = new Vector2(horizontal, vertical).normalized;
-
-            rigidbody.AddForce(kickDirection * 1.0f, ForceMode2D.Impulse);
+            bounceObject.SetBallBounce(false);
+            rigidbody.AddForce(direction * 1.0f, ForceMode2D.Impulse);
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            if (collision.gameObject.name == "Player")
-                playerCollision();
-        }
+        //private void OnTriggerEnter2D(Collider2D collision)
+        //{
+        //    int layer = LayerMask.NameToLayer("NetCollision");
+        //    if (collision.gameObject.layer == layer)
+        //    {
+        //        UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
+        //        StartCoroutine(ResetSoccerPosition(3.0f));
+        //    }
+        //}
 
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            int layer = LayerMask.NameToLayer("NetCollision");
-            if (collision.gameObject.layer == layer)
-            {
-                transform.position = new Vector3(0.0f, 1.0f, 0.0f);
-                rigidbody.velocity = Vector2.zero;
-                rigidbody.angularVelocity = 0.0f;
-                UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 5.0f);
-            }
-        }
+        //private IEnumerator ResetSoccerPosition(float delayTime)
+        //{
+        //    yield return new WaitForSeconds(delayTime);
+
+        //    transform.position = new Vector3(0.0f, 1.0f, 0.0f);
+        //    rigidbody.velocity = Vector2.zero;
+        //    rigidbody.angularVelocity = 0.0f;
+        //    yield return null;
+        //}
     }
 }
