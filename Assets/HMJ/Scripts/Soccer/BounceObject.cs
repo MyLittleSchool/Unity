@@ -74,11 +74,17 @@ public class BounceObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Player")
-        {
-            bBallBounce = true;
-            StartCoroutine(bounce(0.5f));
-        }
+        //if (collision.gameObject.name == "Player")
+        //{
+        //    bBallBounce = true;
+        //    StartCoroutine(bounce(0.5f));
+        //}
+    }
+
+    public void StartBounce()
+    {
+        bBallBounce = true;
+        StartCoroutine(bounce(0.5f));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -108,6 +114,11 @@ public class BounceObject : MonoBehaviour
     public void SetBallBounce(bool bBounce)
     {
         bBallBounce = bBounce;
+    }
+
+    public bool CheckAroundPlayer(float dis)
+    {
+        return Vector3.Distance(player.transform.position, transform.position) < dis;
     }
 
 }
