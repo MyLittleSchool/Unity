@@ -2,6 +2,7 @@ using MJ;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using static ROCK;
 
@@ -9,10 +10,10 @@ namespace MJ
 {
     public class InputRocks : MonoBehaviour
     {
-        GameObject Player;
+        private GameObject Player;
 
-        static int ROCK_ROW = 10;
-        static int ROCK_COLUMN = 10;
+        public static int ROCK_ROW = 10;
+        public static int ROCK_COLUMN = 10;
 
         static float GRID_SIZE = 0.5f;
 
@@ -21,6 +22,8 @@ namespace MJ
         private ROCK[] rockDatas = new ROCK[ROCK_ROW * ROCK_COLUMN];
 
         private GameObject rockPrefabObject;
+
+        private ROCK.ROCKCOLOR rockColor = ROCKCOLOR.WHITE;
         // Start is called before the first frame update
         void Start()
         {
@@ -33,26 +36,15 @@ namespace MJ
         {
             if (Input.GetKeyDown(KeyCode.Space)) // Space
             {
-                InputRock(CheckRockIdx());
+                InputRock(CheckRockIdx(), rockColor);
             }
         }
 
-        public void InputRock(int idx)
+        public void InputRock(int idx, ROCKCOLOR rockColor)
         {
-            ROCKCOLOR rockColor = rockDatas[idx].GetColor();
-            switch (rockColor)
-            {
-                case ROCKCOLOR.WHITE:
-                    rockDatas[idx].SetColor(ROCKCOLOR.BLACK);
-                    break;
-                case ROCKCOLOR.BLACK:
-                    rockDatas[idx].SetColor(ROCKCOLOR.NONE);
-                    break;
-                case ROCKCOLOR.NONE:
-                    rockDatas[idx].SetColor(ROCKCOLOR.WHITE);
-                    break;
-            }
-            
+            if (idx < 0 || rockDatas.Length <= idx)
+                return;
+            rockDatas[idx].SetColor(rockColor);
         }
 
         public int CheckRockIdx()
@@ -86,6 +78,11 @@ namespace MJ
 
                 rockDatas[i] = rockObject.GetComponent<ROCK>();
             }
+        }
+
+        public void SetRockColor(ROCKCOLOR _rockColor)
+        {
+            rockColor = _rockColor;
         }
 
     }

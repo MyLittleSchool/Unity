@@ -1,34 +1,31 @@
+using MJ;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ROCK;
 
-public class ROCK : MonoBehaviour
+public class RockColor : MonoBehaviour
 {
-    public enum ROCKCOLOR
-    {
-        NONE,
-        WHITE,
-        RED,
-        YELLOW,
-        GREEN,
-        BLUE,
-        BLACK,
-        ROCKDATA_END
-    }
-
     public ROCKCOLOR rockColor;
-    public SpriteRenderer spriteRenderer;
-
+    private SpriteRenderer spriteRenderer;
+    private InputRocks rocksData;
     // Start is called before the first frame update
     void Start()
     {
-        SetColor(ROCKCOLOR.NONE);
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        rocksData = GameObject.Find("RockManager").GetComponentInChildren<InputRocks>();
+        InitColor();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void InitColor()
+    {
+        SetColor(rockColor);
     }
 
     public void SetColor(ROCKCOLOR _rockColor)
@@ -61,9 +58,12 @@ public class ROCK : MonoBehaviour
         }
     }
 
-    public ROCKCOLOR GetColor()
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        return rockColor;
+        if (Input.GetKeyDown(KeyCode.Space) && collision.gameObject.name == "Player")
+        {
+             rocksData.SetRockColor(rockColor);
+        }
     }
 
 }
