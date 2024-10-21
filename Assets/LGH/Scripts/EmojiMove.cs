@@ -8,7 +8,6 @@ namespace GH
         private float emojiWaitTime = 1f;
         private float emojiCurrTime = 0;
         private float emojiUpSpeed = 2;
-        private float emojiAlpha = 5;
         private SpriteRenderer emojiSpriteRenderer;
         void Start()
         {

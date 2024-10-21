@@ -5,6 +5,7 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +15,7 @@ namespace GH
     public class PhotonChatMgr : MonoBehaviour, IChatClientListener
     {
         //Input Chat InputField
-        public InputField inputChat;
-
+        public TMP_InputField inputChat;
         // ChatItem Prefab
         public GameObject chatItemPrefab;
 
@@ -30,6 +30,9 @@ namespace GH
 
         // 일반채팅채널
         public string currChannel = "메타";
+
+        //팻 로그 뷰
+        public GameObject chatLogView;
         void Start()
         {
             // 엔터 쳤을 때 호출되는 함수 등록
@@ -178,6 +181,14 @@ namespace GH
         //누군가 내가 있는 채널에서 나갔을 때 호출되는 함수
         public void OnUserUnsubscribed(string channel, string user)
         {
+           
+        }
+
+        public void ChatLogActive()
+        {
+            // 챗로그창이 꺼져있으면 키고 껴져있으면 킨다.
+            bool chatLogOn = chatLogView.activeSelf ? false : true;
+            chatLogView.SetActive(chatLogOn);
         }
     }
 
