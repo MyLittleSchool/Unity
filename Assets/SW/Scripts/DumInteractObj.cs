@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class DumInteractObj : Interactive
+namespace SW
 {
-    public override void Interact()
+    public class DumInteractObj : Interactive
     {
-        print(interacterName);
+        public override void Interact()
+        {
+            print(interacterName);
+        }
     }
 }

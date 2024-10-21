@@ -43,6 +43,9 @@ namespace MJ
 
         [Header("플레이어 꾸미기 오브젝트")]
         public GameObject PlayerObject;
+
+        [Header("방명록 패널")]
+        public GameObject guestbookPanel;
         #endregion
 
         // Start is called before the first frame update
@@ -114,10 +117,10 @@ namespace MJ
         {
             KakaoLoginPanel.SetActive(false);
         }
-        // Update is called once per frame
-        private void Update()
+        
+        public void OnGuestbookPanel()
         {
-
+            guestbookPanel.SetActive(true);
         }
     }
 }
