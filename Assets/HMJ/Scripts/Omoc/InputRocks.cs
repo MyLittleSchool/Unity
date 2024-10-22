@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static ROCK;
 
 namespace MJ
 {
     public class InputRocks : MonoBehaviour
     {
+        public GameObject UIPanel;
+
         private GameObject Player;
 
         public static int ROCK_ROW = 10;
@@ -19,7 +22,7 @@ namespace MJ
 
         static Vector3 PIVOT = new Vector3(-GRID_SIZE * ROCK_ROW / 2, -GRID_SIZE * ROCK_COLUMN / 2, 0.0f);
 
-        private ROCK[] rockDatas = new ROCK[ROCK_ROW * ROCK_COLUMN];
+        private ROCK[,] rockDatas = new ROCK[ROCK_ROW, ROCK_COLUMN];
 
         private GameObject rockPrefabObject;
 
@@ -36,19 +39,26 @@ namespace MJ
         {
             if (Input.GetKeyDown(KeyCode.Space)) // Space
             {
-                InputRock(CheckRockIdx(), rockColor);
+                int[] Grid = CheckRockIdx();
+                InputRock(Grid[0], Grid[1], rockColor);
+                if (OmocCheck.OmocWin(rockDatas, Grid[0], Grid[1]))
+                {
+                    StartCoroutine(ResetRocks(3.0f));
+                    UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
+                }
             }
         }
 
-        public void InputRock(int idx, ROCKCOLOR rockColor)
+        public void InputRock(int row, int col, ROCKCOLOR rockColor)
         {
-            if (idx < 0 || rockDatas.Length <= idx)
+            if (row < 0 || col < 0 || row >= ROCK_ROW || col >= ROCK_COLUMN)
                 return;
-            rockDatas[idx].SetColor(rockColor);
+            rockDatas[row, col].SetColor(rockColor);
         }
 
-        public int CheckRockIdx()
+        public int[] CheckRockIdx()
         {
+            int[] Grid = new int[2] { -1, -1 };
             Vector3 PivotPos = transform.position + PIVOT;
             Vector3 PlayerPos = Player.transform.position;
 
@@ -56,10 +66,10 @@ namespace MJ
 
             if (Gap.x >= 0 && Gap.y >= 0)
             {
-                return (int)(Gap.y / GRID_SIZE) * ROCK_ROW + (int)(Gap.x / GRID_SIZE);
+                Grid[0] = (int)(Gap.y / GRID_SIZE);
+                Grid[1] = (int)(Gap.x / GRID_SIZE);
             }
-            else
-                return -1;
+            return Grid;
         }
 
         public void LoadRockData()
@@ -71,12 +81,16 @@ namespace MJ
         public void InitRocks()
         {
             LoadRockData();
-            for (int i = 0; i < ROCK_ROW * ROCK_COLUMN; i++)
+            for (int i = 0; i < ROCK_ROW; i++)
             {
-                GameObject rockObject = Instantiate<GameObject>(rockPrefabObject, transform);
-                rockObject.transform.position = new Vector3((i % ROCK_COLUMN) * GRID_SIZE + PIVOT.x + GRID_SIZE * 0.5f, (i / ROCK_ROW) * GRID_SIZE + PIVOT.y + GRID_SIZE * 0.5f, 0.0f);
+                for (int j = 0; j < ROCK_COLUMN; j++)
+                {
+                    GameObject rockObject = Instantiate<GameObject>(rockPrefabObject, transform);
+                    rockObject.transform.position = new Vector3(j * GRID_SIZE + PIVOT.x + GRID_SIZE * 0.5f, i * GRID_SIZE + PIVOT.y + GRID_SIZE * 0.5f, 0.0f);
 
-                rockDatas[i] = rockObject.GetComponent<ROCK>();
+                    rockDatas[i, j] = rockObject.GetComponent<ROCK>();
+
+                }
             }
         }
 
@@ -85,5 +99,18 @@ namespace MJ
             rockColor = _rockColor;
         }
 
+        private IEnumerator ResetRocks(float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+
+            for (int i = 0; i < ROCK_ROW; i++)
+            {
+                for (int j = 0; j < ROCK_COLUMN; j++)
+                {
+                    rockDatas[i, j].SetColor(ROCKCOLOR.NONE);
+                }
+            }
+            yield return null;
+        }
     }
 }

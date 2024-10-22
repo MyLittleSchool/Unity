@@ -5,68 +5,163 @@ using UnityEngine;
 
 public class OmocCheck : MonoBehaviour
 {
+    static public bool OmocWin(ROCK[,] _rockDatas, int row, int col)
+    { // 3 4
+        if (row < 0 || col < 0 || row >= MJ.InputRocks.ROCK_ROW || col >= MJ.InputRocks.ROCK_COLUMN)
+            return false;
+        int horizonN = 0;
+        return HorizontalOmoc(_rockDatas, row, col, horizonN) ||
+               VerticalOmoc(_rockDatas, row, col, horizonN) ||
+               RightDiagonal(_rockDatas, row, col, horizonN) ||
+               LeftDiagonal(_rockDatas, row, col, horizonN);
+    }
 
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-        
-    //}
+    /// <summary>
+    /// 수평 오목 체크
+    /// </summary>
+    /// <param name="_rockDatas"></param>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <param name="n"></param>
+    /// <returns></returns>
+    static public bool HorizontalOmoc(ROCK[,] _rockDatas, int row, int col, int n)
+    {
+        int leftHorizon = LeftHorizontalOmoc(_rockDatas, row, col - 1, 0, _rockDatas[row, col].GetColor());
+        int rightHorizon = RightHorizontalOmoc(_rockDatas, row, col + 1, 0, _rockDatas[row, col].GetColor());
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
+        return (leftHorizon + rightHorizon + 1) >= 5 ? true : false;
+    }
 
-    //public bool OmocCheck(int idx, ROCK[] rockDatas)
-    //{
+    static public int LeftHorizontalOmoc(ROCK[ , ] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (col < 0) return n;
 
-    //    return true;
-    //}
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
 
-    //public int Horizontal(int idx, ROCK[] rockDatas)
-    //{
-    //    int IndexData = idx;
-    //    int n = 0;
-    //    int row = idx / MJ.InputRocks.ROCK_COLUMN;
-    //    int col = idx % MJ.InputRocks.ROCK_COLUMN;
+        return LeftHorizontalOmoc(_rockDatas, row, --col, n, color);
+    }
 
-    //    while(--col > 0)
-    //    {
-    //        ColorCheck(rockDatas[idx].rockColor, rockDatas[idx - 1].rockColor)
-    //            n++;
-    //        else
-    //            break;
-    //    }
-    //    IndexData = idx;
-    //    while (++col > 0)
-    //    {
-    //        if (rockDatas[++IndexData].rockColor == rockDatas[idx].rockColor)
-    //            n++;
-    //        else
-    //            break;
-    //    }
-    //}
-    //public int Vertical(int idx, ROCK[] rockDatas)
-    //{
-    //    int row = idx / MJ.InputRocks.ROCK_COLUMN;
-    //    int col = idx % MJ.InputRocks.ROCK_COLUMN;
-    //}
+    static public int RightHorizontalOmoc(ROCK[ , ] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (col >= MJ.InputRocks.ROCK_COLUMN) return n;
 
-    //public int DiagonalRight(int idx, ROCK[] rockDatas)
-    //{
-    //    int row = idx / MJ.InputRocks.ROCK_COLUMN;
-    //    int col = idx % MJ.InputRocks.ROCK_COLUMN;
-    //}
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
+        return RightHorizontalOmoc(_rockDatas, row, ++col, n, color);
+    }
 
-    //public int DiagonalLeft(int idx, ROCK[] rockDatas)
-    //{
-    //    int row = idx / MJ.InputRocks.ROCK_COLUMN;
-    //    int col = idx % MJ.InputRocks.ROCK_COLUMN;
-    //}
+    /// <summary>
+    /// 수직 오목 체크
+    /// </summary>
+    /// <param name="_rockDatas"></param>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <param name="n"></param>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    /// 
+    static public bool VerticalOmoc(ROCK[,] _rockDatas, int row, int col, int n)
+    {
+        int leftVertical = UpVerticalOmoc(_rockDatas, row - 1, col, 0, _rockDatas[row, col].GetColor());
+        int rightVertical = DownVerticalOmoc(_rockDatas, row + 1, col, 0, _rockDatas[row, col].GetColor());
 
-    //public bool ColorCheck(ROCK.ROCKCOLOR color1, ROCK.ROCKCOLOR color2)
-    //{
-    //    return color1 == color2;
-    //}
+        return (leftVertical + rightVertical + 1) >= 5 ? true : false;
+    }
+
+    static public int UpVerticalOmoc(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (row < 0) return n;
+
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
+
+        return UpVerticalOmoc(_rockDatas, --row, col, n, color);
+    }
+
+    static public int DownVerticalOmoc(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (row >= MJ.InputRocks.ROCK_ROW) return n;
+
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
+        return DownVerticalOmoc(_rockDatas, ++row, col, n, color);
+    }
+
+    /// <summary>
+    /// 오른쪽 대각선 체크
+    /// </summary>
+    /// <param name="_rockDatas"></param>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <param name="n"></param>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    /// 
+
+    static public bool RightDiagonal(ROCK[,] _rockDatas, int row, int col, int n)
+    {
+        int upRightDiagonal = UPRightDiagonal(_rockDatas, row - 1, col + 1, 0, _rockDatas[row, col].GetColor());
+        int downRightDiagonal = DownRightDiagonal(_rockDatas, row + 1, col - 1, 0, _rockDatas[row, col].GetColor());
+
+        return (upRightDiagonal + downRightDiagonal + 1) >= 5 ? true : false;
+    }
+
+    static public int UPRightDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (row < 0 || col >= MJ.InputRocks.ROCK_COLUMN) return n;
+
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
+
+        return UPRightDiagonal(_rockDatas, --row, ++col, n, color);
+    }
+
+    static public int DownRightDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (row >= MJ.InputRocks.ROCK_ROW || col < 0) return n;
+
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
+
+        return DownRightDiagonal(_rockDatas, ++row, --col, n, color);
+    }
+
+    /// <summary>
+    /// 왼쪽 대각선 체크
+    /// </summary>
+    /// <param name="_rockDatas"></param>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <param name="n"></param>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    /// 
+
+    static public bool LeftDiagonal(ROCK[,] _rockDatas, int row, int col, int n)
+    {
+        int upRightDiagonal = UpLeftDiagonal(_rockDatas, row - 1, col - 1, 0, _rockDatas[row, col].GetColor());
+        int downRightDiagonal = DownLeftDiagonal(_rockDatas, row + 1, col + 1, 0, _rockDatas[row, col].GetColor());
+
+        return (upRightDiagonal + downRightDiagonal + 1) >= 5 ? true : false;
+    }
+
+    static public int UpLeftDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (row < 0 || col < 0) return n;
+
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
+
+        return UpLeftDiagonal(_rockDatas, --row, --col, n, color);
+    }
+
+    static public int DownLeftDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    {
+        if (row >= MJ.InputRocks.ROCK_ROW || col >= MJ.InputRocks.ROCK_COLUMN) return n;
+
+        if (_rockDatas[row, col].GetColor() == color) n++;
+        else return n;
+        return DownLeftDiagonal(_rockDatas, ++row, ++col, n, color);
+    }
 }
