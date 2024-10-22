@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GH
 {
@@ -10,35 +11,46 @@ namespace GH
         public List<GameObject> emojiPrefabList = new List<GameObject>();
         public GameObject stingPrefab;
 
+        public Transform emojiTransform;
+        public GameObject emojiButtonPrefab;
+
         //찌르기 방향 값
         private Vector3 stingDir;
 
         void Start()
         {
-
+            //이모지 버튼 생성
+            for(int i = 0; i < emojiPrefabList.Count; i++)
+            {
+                GameObject emoji = Instantiate(emojiButtonPrefab, emojiTransform);
+                EmojiButton emojiBut = emoji.GetComponent<EmojiButton>();
+                emojiBut.EmojiIndex(i);
+                Image emojiImage =  emoji.transform.GetChild(0).gameObject.GetComponent<Image>();
+                emojiImage.sprite = emojiPrefabList[i].GetComponent<SpriteRenderer>().sprite;
+            }
         }
         void Update()
         {
             // 감정 이모지 생성
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                OnEmoji(1);
+                OnEmoji(0);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                OnEmoji(2);
+                OnEmoji(1);
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                OnEmoji(3);
+                OnEmoji(2);
             }
             if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                OnEmoji(4);
+                OnEmoji(3);
             }
             if (Input.GetKeyDown(KeyCode.Alpha5))
             {
-                OnEmoji(5);
+                OnEmoji(4);
             }
 
             // 찌르기 이모지 방향값 설정
@@ -68,9 +80,9 @@ namespace GH
                 OnString(stingDir);
             }
         }
-        private void OnEmoji(int num)
+        public void OnEmoji(int num)
         {
-            GameObject emoji = Instantiate(emojiPrefabList[num - 1]);
+            GameObject emoji = Instantiate(emojiPrefabList[num]);
             emoji.transform.position = transform.position + transform.up;
         }
 
