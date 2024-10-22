@@ -27,10 +27,13 @@ namespace MJ
         private GameObject rockPrefabObject;
 
         private ROCK.ROCKCOLOR rockColor = ROCKCOLOR.WHITE;
+
+        private OmocCheck omocCheck;
         // Start is called before the first frame update
         void Start()
         {
             Player = GameObject.Find("Player");
+            omocCheck = GetComponent<OmocCheck>();
             InitRocks();
         }
 
@@ -41,9 +44,9 @@ namespace MJ
             {
                 int[] Grid = CheckRockIdx();
                 InputRock(Grid[0], Grid[1], rockColor);
-                if (OmocCheck.OmocWin(rockDatas, Grid[0], Grid[1]))
+                if (omocCheck.OmocWin(rockDatas, Grid[0], Grid[1]))
                 {
-                    StartCoroutine(ResetRocks(3.0f));
+                    // StartCoroutine(ResetRocks(3.0f));
                     UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
                 }
             }
