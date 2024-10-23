@@ -1,27 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class DumInteractObj : MonoBehaviour, IInteract
+namespace SW
 {
-    public string interacterName = "상호작용더미";
-    public string GetInfo()
+    public class DumInteractObj : Interactive
     {
-        return interacterName;
-    }
-
-
-    public void Interact()
-    {
-        print(interacterName);
-    }
-    public void HighlightOff()
-    {
-        
-    }
-
-    public void HighlightOn()
-    {
-        
+        public override void Interact()
+        {
+            print(interacterName);
+        }
     }
 }
