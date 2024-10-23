@@ -14,25 +14,24 @@ namespace GH
         public Grid grid;
         public GameObject goldPref;
         public TileBase test;
+        public GameObject tileLine;
         void Start()
         {
         }
         void Update()
         {
+            tilePosition = grid.WorldToCell(playerFrontTileTransform.position);
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                tilePosition = grid.WorldToCell(playerFrontTileTransform.position);
-                if (!tilemap.HasTile(tilePosition + new Vector3Int(0, 1, 0)))
+                if (!tilemap.HasTile(tilePosition ))
                 {
-                    tilemap.SetTile(tilePosition + new Vector3Int(0, 1, 0), test);
+                    tilemap.SetTile(tilePosition , test);
                     GameObject gold = Instantiate(goldPref, tilemap.transform);
-                    gold.transform.position = tilePosition + new Vector3Int(0, 1, 0);
-                    print(tilemap.HasTile(tilePosition + new Vector3Int(0, 1, 0)));
-
+                    gold.transform.position = tilePosition ;
+                    print(tilemap.HasTile(tilePosition));
                 }
-
             }
-
+            tileLine.transform.position = tilePosition ;
             if (Input.GetKeyDown(KeyCode.W))
             {
                 tilePosition = grid.WorldToCell(playerFrontTileTransform.position);

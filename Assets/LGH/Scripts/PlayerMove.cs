@@ -10,34 +10,60 @@ namespace GH
         public float playerSpeed = 5f;
         public Animator playerAnimator;
         private bool moveAniTrriger = false;
-        //해상도
-        //Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        //print(pos);
-        //rt.anchoredPosition = pos;
-        //print(Screen.width + ", " + Screen.height);
+        private float joystickDeg;
 
         //조이스틱
         public VariableJoystick joystick;
 
-        private float vertical;
-        private float horizontal;
-
+        public Vector3 stingDir;
         void Start()
         {
         }
 
-        void Update()
+        private void Update()
         {
-            OnPCMove();
-            OnMobileMove();
+            if (joystick.Vertical != 0 && joystick.Horizontal != 0)
+            {
+                joystickDeg = Mathf.Rad2Deg * Mathf.Atan2(joystick.Vertical, joystick.Horizontal);
+            }
+
+            // 찌르기 이모지 방향값 설정
+            if (joystickDeg > -45 && joystickDeg < 45)
+            {
+                stingDir = transform.right;
+            }
+            else if (joystickDeg > 45 && joystickDeg < 135)
+            {
+                stingDir = transform.up;
+
+
+            }
+            else if (joystickDeg < -45 && joystickDeg > -135)
+            {
+                stingDir = -transform.up;
+
+
+            }
+            else if (joystickDeg > 135 || joystickDeg < -135)
+            {
+                stingDir = -transform.right;
+
+            }
+        }
+
+        void FixedUpdate()
+        {
+            //PC
+            OnMove(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
+            //Mobile
+            OnMove(joystick.Vertical, joystick.Horizontal);
 
         }
 
-        void OnPCMove()
-        {
-            vertical = Input.GetAxisRaw("Vertical");
-            horizontal = Input.GetAxisRaw("Horizontal");
 
+
+        private void OnMove(float vertical, float horizontal)
+        {
             Vector3 playerDir = new Vector3(horizontal, vertical, 0);
 
 
@@ -45,7 +71,7 @@ namespace GH
             {
                 playerDir.Normalize();
             }
-            transform.position += playerDir * playerSpeed * Time.deltaTime;
+            transform.position += playerDir * playerSpeed * Time.fixedDeltaTime;
 
 
 
@@ -61,43 +87,7 @@ namespace GH
 
             }
 
-        }
-
-        void OnMobileMove()
-        {
-            vertical = joystick.Vertical;
-            horizontal = joystick.Horizontal;
-
-            Vector3 playerDir = new Vector3(horizontal, vertical, 0);
-
-
-            if (playerDir.magnitude > 1)
-            {
-                playerDir.Normalize();
-            }
-            transform.position += playerDir * playerSpeed * Time.deltaTime;
-
-
-
-            if (horizontal == 0 && vertical == 0 && moveAniTrriger)
-            {
-                playerAnimator.SetTrigger("Idle");
-                moveAniTrriger = false;
-            }
-            if ((horizontal != 0 || vertical != 0) && !moveAniTrriger)
-            {
-                playerAnimator.SetTrigger("Run");
-                moveAniTrriger = true;
-
-            }
 
         }
-
-        //public void StingDir()
-        //{
-        //    Vector3 dir;
-
-        //    return dir
-        //}
     }
 }

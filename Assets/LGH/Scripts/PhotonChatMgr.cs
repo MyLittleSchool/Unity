@@ -226,8 +226,6 @@ namespace GH
             if (currtMalpungTime < maxMalpungTime)
             {
                 malpungPanel.SetActive(true);
-
-
             }
             else
             {

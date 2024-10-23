@@ -13,14 +13,22 @@ namespace GH
 
         public Transform emojiTransform;
         public GameObject emojiButtonPrefab;
+        public GameObject activatePannel;
 
         //찌르기 방향 값
         private Vector3 stingDir;
 
+        PlayerMove playerMove;
+        // 패널 온 오프
+        bool onActivate = true;
+
         void Start()
         {
+            playerMove = GetComponent<PlayerMove>();
+
+
             //이모지 버튼 생성
-            for(int i = 0; i < emojiPrefabList.Count; i++)
+            for (int i = 0; i < emojiPrefabList.Count; i++)
             {
                 GameObject emoji = Instantiate(emojiButtonPrefab, emojiTransform);
                 EmojiButton emojiBut = emoji.GetComponent<EmojiButton>();
@@ -28,6 +36,9 @@ namespace GH
                 Image emojiImage =  emoji.transform.GetChild(0).gameObject.GetComponent<Image>();
                 emojiImage.sprite = emojiPrefabList[i].GetComponent<SpriteRenderer>().sprite;
             }
+
+            activatePannel.SetActive(false);
+            emojiTransform.gameObject.SetActive(true);
         }
         void Update()
         {
@@ -53,31 +64,12 @@ namespace GH
                 OnEmoji(4);
             }
 
-            // 찌르기 이모지 방향값 설정
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                stingDir = transform.right;
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                stingDir = -transform.right;
-
-            }
-            else if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                stingDir = transform.up;
-
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                stingDir = -transform.up;
-
-            }
+         
 
             //찌르기 이모지 생성
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                OnString(stingDir);
+                OnString();
             }
         }
         public void OnEmoji(int num)
@@ -86,13 +78,32 @@ namespace GH
             emoji.transform.position = transform.position + transform.up;
         }
 
-        private void OnString(Vector3 dir)
+        public void OnString( )
         {
+            stingDir = playerMove.stingDir;
+
             GameObject sting = Instantiate(stingPrefab);
             sting.transform.position = transform.position;
-            sting.transform.right = dir;
+            sting.transform.right = stingDir;
         }
 
+        public void ConversionPanel()
+        {
+            print("aa");
+            if (onActivate)
+            {
+                activatePannel.SetActive(true);
+                emojiTransform.gameObject.SetActive(false);
+                onActivate = false;
+            }
+            else
+            {
+                activatePannel.SetActive(false);
+                emojiTransform.gameObject.SetActive(true);
+                onActivate = true;
+
+            }
+        }
     }
 
 }
