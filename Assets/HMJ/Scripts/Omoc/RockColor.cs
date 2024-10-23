@@ -9,18 +9,22 @@ public class RockColor : MonoBehaviour
     public ROCKCOLOR rockColor;
     private SpriteRenderer spriteRenderer;
     private InputRocks rocksData;
+
+    bool inputSpace;
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rocksData = GameObject.Find("RockManager").GetComponentInChildren<InputRocks>();
+        inputSpace = false;
+
         InitColor();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        KeyInputCheck();
     }
 
     public void InitColor()
@@ -58,11 +62,23 @@ public class RockColor : MonoBehaviour
         }
     }
 
+    public void KeyInputCheck()
+    {
+        inputSpace = false;
+        if (Input.GetKeyDown(KeyCode.Space))
+            inputSpace = true;
+    }
+
+    public void ChangeRockColor()
+    {
+        rocksData.SetRockColor(rockColor);
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (Input.GetKeyDown(KeyCode.Space) && collision.gameObject.name == "Player")
+        if(collision.gameObject.name == "Player" && inputSpace)
         {
-             rocksData.SetRockColor(rockColor);
+            ChangeRockColor();
         }
     }
 

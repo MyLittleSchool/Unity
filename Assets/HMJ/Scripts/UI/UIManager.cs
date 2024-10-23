@@ -80,8 +80,6 @@ namespace MJ
                     AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
                 });
             }
-                
-
         }
 
         public void OnLoginPanel()
