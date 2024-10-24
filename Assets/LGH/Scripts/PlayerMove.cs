@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 namespace GH
 {
@@ -16,47 +17,59 @@ namespace GH
         public VariableJoystick joystick;
 
         public Vector3 stingDir;
+
+
         void Start()
         {
+            joystick = DataManager.instance.Joystick;
+            DataManager.instance.players.Add(gameObject.GetComponent<PhotonView>());
         }
 
         private void Update()
         {
-            if (joystick.Vertical != 0 && joystick.Horizontal != 0)
+            if (GetComponent<PhotonView>().IsMine)
             {
-                joystickDeg = Mathf.Rad2Deg * Mathf.Atan2(joystick.Vertical, joystick.Horizontal);
-            }
 
-            // 찌르기 이모지 방향값 설정
-            if (joystickDeg > -45 && joystickDeg < 45)
-            {
-                stingDir = transform.right;
-            }
-            else if (joystickDeg > 45 && joystickDeg < 135)
-            {
-                stingDir = transform.up;
+                if (joystick.Vertical != 0 && joystick.Horizontal != 0)
+                {
+                    joystickDeg = Mathf.Rad2Deg * Mathf.Atan2(joystick.Vertical, joystick.Horizontal);
+                }
 
-
-            }
-            else if (joystickDeg < -45 && joystickDeg > -135)
-            {
-                stingDir = -transform.up;
+                // 찌르기 이모지 방향값 설정
+                if (joystickDeg > -45 && joystickDeg < 45)
+                {
+                    stingDir = transform.right;
+                }
+                else if (joystickDeg > 45 && joystickDeg < 135)
+                {
+                    stingDir = transform.up;
 
 
-            }
-            else if (joystickDeg > 135 || joystickDeg < -135)
-            {
-                stingDir = -transform.right;
+                }
+                else if (joystickDeg < -45 && joystickDeg > -135)
+                {
+                    stingDir = -transform.up;
 
+
+                }
+                else if (joystickDeg > 135 || joystickDeg < -135)
+                {
+                    stingDir = -transform.right;
+
+                }
             }
         }
 
         void FixedUpdate()
         {
-            //PC
-            OnMove(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
-            //Mobile
-            OnMove(joystick.Vertical, joystick.Horizontal);
+            if (GetComponent<PhotonView>().IsMine)
+            {
+                //PC
+                OnMove(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
+                //Mobile
+                OnMove(joystick.Vertical, joystick.Horizontal);
+
+            }
 
         }
 

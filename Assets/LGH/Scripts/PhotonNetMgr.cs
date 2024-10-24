@@ -14,6 +14,9 @@ namespace GH
 
         //룸 이름
         public string roomName;
+
+        // 방 리스트를 저장할 리스트
+        private List<string> roomNames = new List<string>();
         void Start()
         {
             StartLogin();
@@ -59,17 +62,50 @@ namespace GH
         public override void OnJoinedLobby()
         {
             base.OnJoinedLobby();
-
             //서버 로비에 들어갔음을 알린다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
-
-            CreateRoom();
-
-            JoinRoom();
+       
         }
 
-    
+
+        public override void OnRoomListUpdate(List<RoomInfo> roomList)
+        {
+            base.OnRoomListUpdate(roomList);
+            bool roomCheck = false;
+
+            print(MethodInfo.GetCurrentMethod().Name + " is call!");
+            // 이전 리스트를 지우고 업데이트
+            roomNames.Clear();
+            foreach (RoomInfo room in roomList)
+            {
+                if (!room.RemovedFromList)
+                {
+                    // 룸 이름 저장
+                    roomNames.Add(room.Name);
+                }
+            }
+
+            foreach (string roomN in roomNames)
+            {
+                print("ss");
+                if (roomN == roomName)
+                {
+                    print("dd");
+
+                    JoinRoom();
+                    roomCheck = true;
+                }
+            }
+
+            if (!roomCheck)
+            {
+                CreateRoom();
+
+            }
+
+        }
+
 
         public void CreateRoom()
         {
@@ -78,7 +114,7 @@ namespace GH
             roomOpt.MaxPlayers = 20;
             roomOpt.IsOpen = true;
             roomOpt.IsVisible = true;
-            
+
             PhotonNetwork.CreateRoom(roomName, roomOpt, TypedLobby.Default);
         }
 

@@ -20,6 +20,18 @@ namespace GH
 
         void Update()
         {
+            if(playerMalpungTransform == null)
+            {
+                for (int i = 0; i < DataManager.instance.players.Count; i++)
+                {
+                    if (DataManager.instance.players[i].IsMine)
+                    {
+                        playerMalpungTransform = DataManager.instance.players[i].gameObject.transform;
+                    }
+                }
+            }
+            
+          
             MalpungPos();
             //float childWidth = childRectTransform.sizeDelta.x;
             //float childWidthMax = Mathf.Clamp(childWidth, 0, 500);

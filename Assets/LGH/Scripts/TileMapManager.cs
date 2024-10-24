@@ -15,8 +15,11 @@ namespace GH
         public GameObject goldPref;
         public TileBase test;
         public GameObject tileLine;
+
+
         void Start()
         {
+
         }
         void Update()
         {
