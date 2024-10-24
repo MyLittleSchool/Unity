@@ -37,7 +37,6 @@ namespace GH
         }
         public void ConversionPanel()
         {
-            print("aa");
             if (onActivate)
             {
                 activateButtonPannel.SetActive(true);

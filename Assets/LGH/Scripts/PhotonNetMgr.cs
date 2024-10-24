@@ -88,10 +88,8 @@ namespace GH
 
             foreach (string roomN in roomNames)
             {
-                print("ss");
                 if (roomN == roomName)
                 {
-                    print("dd");
 
                     JoinRoom();
                     roomCheck = true;
