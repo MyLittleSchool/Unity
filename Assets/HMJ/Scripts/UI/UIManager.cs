@@ -18,6 +18,9 @@ namespace MJ
         public UnityEngine.UI.Button kakaoJoinButton;
 
         [Header("닫기 버튼")]
+        public UnityEngine.UI.Button MapRegisterCloseButton;
+        public UnityEngine.UI.Button MapContestCloseButton;
+
         public UnityEngine.UI.Button kakaoLoginCloseButton;
         public UnityEngine.UI.Button kakaoJoinCloseButton;
 
@@ -27,6 +30,9 @@ namespace MJ
 
         [Header("꾸미기 패널 - 선택창(0, 1, 2, 3)")]
         public UnityEngine.UI.Button[] decorationChoiceButton;
+
+        [Header("맵 등록 패널 - 맵 등록 패널 버튼")]
+        public UnityEngine.UI.Button mapRegisterButton;
         #endregion
 
         #region Panel
@@ -46,6 +52,12 @@ namespace MJ
 
         [Header("방명록 패널")]
         public GameObject guestbookPanel;
+
+        [Header("맵 등록 패널")]
+        public GameObject mapRegisterPanel;
+
+        [Header("맵 콘테스트 패널")]
+        public GameObject mapContestPanel;
         #endregion
 
         // Start is called before the first frame update
@@ -63,7 +75,14 @@ namespace MJ
             kakaoLoginCloseButton.onClick.AddListener(OnKakaoLoginClosePanel);
             kakaoJoinCloseButton.onClick.AddListener(OnKakaoJoinClosePanel);
 
-            for(int i = 0; i < decorationEnumButton.Length; i++)
+            mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
+
+            MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
+            MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
+
+            MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
+
+            for (int i = 0; i < decorationEnumButton.Length; i++)
             {
                 int data = i;
                 decorationEnumButton[i].onClick.AddListener(() => DecorationDT.SetPlayerDecorationData((DecorationEnum.DECORATION_DATA)data));
@@ -119,6 +138,28 @@ namespace MJ
         public void OnGuestbookPanel()
         {
             guestbookPanel.SetActive(true);
+        }
+
+        public void OnMapRegisterPanel()
+        {
+            mapRegisterPanel.SetActive(true);
+            mapContestPanel.SetActive(false);
+        }
+
+        public void OnMapContestPanel()
+        {
+            mapRegisterPanel.SetActive(false);
+            mapContestPanel.SetActive(true);
+        }
+
+        public void CloseMapRegisterPanel()
+        {
+            mapRegisterPanel.SetActive(false);
+        }
+
+        public void CloseMapContestPanel()
+        {
+            mapContestPanel.SetActive(false);
         }
     }
 }
