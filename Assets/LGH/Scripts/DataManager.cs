@@ -33,9 +33,15 @@ namespace GH
 
         void Update()
         {
-            if(player == null)
+            PlayerFind();
+        }
+
+        private void PlayerFind()
+        {
+
+            if (player == null)
             {
-                for(int i = 0; i< players.Count; i++)
+                for (int i = 0; i < players.Count; i++)
                 {
                     if (players[i].IsMine)
                     {
@@ -44,7 +50,6 @@ namespace GH
                     }
                 }
             }
-
         }
 
         public void OnSting()
