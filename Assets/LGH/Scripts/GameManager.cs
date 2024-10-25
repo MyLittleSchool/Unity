@@ -19,6 +19,11 @@ namespace GH
             emojiButtonPannel.SetActive(true);
 
             StartCoroutine(SpawnPlayer());
+
+            // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기(per seconds)
+            PhotonNetwork.SerializationRate = 30;
+            // 대부분 데이터 전송 빈도 수 설정하기
+            PhotonNetwork.SendRate = 30;
         }
         void Update()
         {

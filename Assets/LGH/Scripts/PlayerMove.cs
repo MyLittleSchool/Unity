@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 namespace GH
 {
 
-    public class PlayerMove : MonoBehaviour
+    public class PlayerMove : MonoBehaviour, IPunObservable
     {
         public float playerSpeed = 5f;
         public Animator playerAnimator;
@@ -18,11 +19,23 @@ namespace GH
 
         public Vector3 stingDir;
 
+        //포톤 변수값
+        Vector3 myPos;
 
+        //말풍선
+        public GameObject malpungPanel;
+        public TMP_Text malpungText;
         void Start()
         {
             joystick = DataManager.instance.Joystick;
             DataManager.instance.players.Add(gameObject.GetComponent<PhotonView>());
+
+
+            //말풍선 끄기
+            malpungPanel.SetActive(false);
+
+            // 말풍 텍스트 초기화
+            malpungText.text = "";
         }
 
         private void Update()
@@ -64,19 +77,24 @@ namespace GH
         {
             if (GetComponent<PhotonView>().IsMine)
             {
+
                 //PC
                 OnMove(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
                 //Mobile
                 OnMove(joystick.Vertical, joystick.Horizontal);
-
             }
-
+            else
+            {
+                transform.position =  myPos;
+            }
         }
 
 
 
         private void OnMove(float vertical, float horizontal)
         {
+
+
             Vector3 playerDir = new Vector3(horizontal, vertical, 0);
 
 
@@ -87,20 +105,44 @@ namespace GH
             transform.position += playerDir * playerSpeed * Time.fixedDeltaTime;
 
 
-
-            if (horizontal == 0 && vertical == 0 && moveAniTrriger)
+            //애니메이션 손보기
+            if ( horizontal == 0 && vertical == 0)
             {
-                playerAnimator.SetTrigger("Idle");
                 moveAniTrriger = false;
             }
-            if ((horizontal != 0 || vertical != 0) && !moveAniTrriger)
+            else
             {
-                playerAnimator.SetTrigger("Run");
                 moveAniTrriger = true;
 
             }
 
+            if (moveAniTrriger)
+            {
+                playerAnimator.SetBool("Run", true);
+            }
+            else
+            {
+                playerAnimator.SetBool("Run", false);
 
+            }
+
+
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
+            if (stream.IsWriting)
+            {
+                stream.SendNext(transform.position);
+
+            }
+            //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
+            else if (stream.IsReading)
+            {
+                //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
+                myPos = (Vector3)stream.ReceiveNext();
+            }
         }
     }
 }

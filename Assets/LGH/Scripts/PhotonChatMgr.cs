@@ -12,7 +12,7 @@ using UnityEngine.UI;
 namespace GH
 {
 
-    public class PhotonChatMgr : MonoBehaviour, IChatClientListener
+    public class PhotonChatMgr : MonoBehaviour, IChatClientListener, IPunObservable
     {
         //Input Chat InputField
         public TMP_InputField inputChat;
@@ -29,7 +29,7 @@ namespace GH
         ChatClient chatClient;
 
         // 일반채팅채널
-        public string currChannel = "메타";
+        public string currChannel = "판교중학교";
 
         //챗 로그 뷰
         public GameObject chatLogView;
@@ -50,11 +50,7 @@ namespace GH
             // photon chat 서버에 접속
             PhotonChatConnect();
 
-            //말풍선 끄기
-            malpungPanel.SetActive(false);
 
-            // 말풍 텍스트 초기화
-            malpungText.text = "";
         }
 
         void Update()
@@ -65,6 +61,18 @@ namespace GH
                 chatClient.Service();
             }
             //print(chatClient.PublicChannels[currChannel].Subscribers.Count);
+
+            //플레이어의 말풍선을 찾는다.
+            if (malpungPanel == null)
+            {
+                if (DataManager.instance.player != null)
+                {
+                    PlayerMove playerMove = DataManager.instance.player.GetComponent<PlayerMove>();
+                    malpungPanel = playerMove.malpungPanel;
+                    malpungText = playerMove.malpungText;
+                }
+            }
+
 
             OnMalpung();
         }
@@ -233,6 +241,10 @@ namespace GH
             }
         }
 
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+        
+        }
     }
 
 }
