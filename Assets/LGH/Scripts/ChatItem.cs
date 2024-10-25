@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,10 +9,10 @@ namespace GH
 
     public class ChatItem : MonoBehaviour
     {
-        Text chatText;
+        TMP_Text chatText;
         private void Awake()
         {
-            chatText = GetComponent<Text>();
+            chatText = GetComponent<TMP_Text>();
 
         }
         void Start()
