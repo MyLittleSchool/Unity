@@ -25,7 +25,7 @@ public class MapContestScrollUI : ScrollUI
         {
             GameObject item = Instantiate(prefab, content);
             //item.set
-            MapContestDataUI mapContestDataUI = item.GetComponent<MapContestDataUI>();
+            MJ.MapContestDataUI mapContestDataUI = item.GetComponent<MJ.MapContestDataUI>();
             MapRegisterDataUI mapRegisterDataUI = registerObject.GetComponent<MapRegisterDataUI>();
             mapContestDataUI.SetRegisterData(mapRegisterDataUI.GetRegisterData());
             itemlist.Add(item);
