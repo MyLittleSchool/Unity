@@ -15,7 +15,7 @@ namespace SW
         }
         public override void Interact()
         {
-            uiManager.OnGuestbookPanel();
+            // uiManager.OnGuestbookPanel();
         }
 
     }

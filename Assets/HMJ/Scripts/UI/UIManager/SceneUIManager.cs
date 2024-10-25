@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace MJ
 {
-    public class UIManager : MonoBehaviour
+    public class SceneUIManager : MonoBehaviour
     {
         #region Button
         [Header("로그인 버튼")]
