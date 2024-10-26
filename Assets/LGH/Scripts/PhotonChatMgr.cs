@@ -12,7 +12,7 @@ using UnityEngine.UI;
 namespace GH
 {
 
-    public class PhotonChatMgr : MonoBehaviour, IChatClientListener, IPunObservable
+    public class PhotonChatMgr : MonoBehaviourPun , IChatClientListener
     {
         //Input Chat InputField
         public TMP_InputField inputChat;
@@ -38,14 +38,12 @@ namespace GH
         //말풍선
         public GameObject malpungPanel;
         public TMP_Text malpungText;
-        //말풍선 시간
-        private float currtMalpungTime = 5.0f;
-        private float maxMalpungTime = 5.0f;
+        PlayerMalpung playerMalpung;
 
         void Start()
         {
             // 엔터 쳤을 때 호출되는 함수 등록
-            inputChat.onSubmit.AddListener(OnSbmit);
+            inputChat.onSubmit.AddListener(OnSubmit);
 
             // photon chat 서버에 접속
             PhotonChatConnect();
@@ -67,14 +65,11 @@ namespace GH
             {
                 if (DataManager.instance.player != null)
                 {
-                    PlayerMove playerMove = DataManager.instance.player.GetComponent<PlayerMove>();
-                    malpungPanel = playerMove.malpungPanel;
-                    malpungText = playerMove.malpungText;
+                    playerMalpung = DataManager.instance.player.GetComponent<PlayerMalpung>();
+                    malpungPanel = playerMalpung.malpungPanel;
+                    malpungText = playerMalpung.malpungText;
                 }
             }
-
-
-            OnMalpung();
         }
 
         void PhotonChatConnect()
@@ -102,8 +97,11 @@ namespace GH
             chatClient.ConnectUsingSettings(chatAppSettings);
 
         }
-        private void OnSbmit(string s)
+        private void OnSubmit(string s)
         {
+            // 채팅창에 아무것도 없으면 함수를 끝낸다.
+            if (inputChat.text.Length < 1)
+                return;
             // 닉네임의 색을 변경 Color로
             string nickName = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + nick + "</color>";
 
@@ -128,9 +126,8 @@ namespace GH
                 chatClient.PublishMessage(currChannel, chat);
             }
 
-
-            malpungText.text = inputChat.text;
-            currtMalpungTime = 0;
+            //말풍선에 텍스트를 넣는다.
+            playerMalpung.RPC_MalPungText(inputChat.text);
             inputChat.text = "";
         }
 
@@ -224,26 +221,6 @@ namespace GH
             chatHeight = chatLogOn ? 500 : 0;
 
             chatRectTransform.sizeDelta = new Vector2(chatRectTransform.sizeDelta.x, chatHeight);
-        }
-
-        //말풍선 생기기
-        private void OnMalpung()
-        {
-            currtMalpungTime += Time.deltaTime;
-
-            if (currtMalpungTime < maxMalpungTime)
-            {
-                malpungPanel.SetActive(true);
-            }
-            else
-            {
-                malpungPanel.SetActive(false);
-            }
-        }
-
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-        
         }
     }
 

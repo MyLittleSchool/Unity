@@ -43,6 +43,8 @@ namespace GH
         }
         void Update()
         {
+            #region 컴퓨터 감정 표현
+            /*
             if (GetComponent<PhotonView>().IsMine)
             {
                 // 감정 이모지 생성
@@ -75,6 +77,8 @@ namespace GH
                     OnString();
                 }
             }
+            */
+            #endregion
         }
         public void OnEmoji(int num)
         {

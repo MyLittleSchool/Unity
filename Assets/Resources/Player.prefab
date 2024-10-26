@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7988105331848872218}
-  - component: {fileID: 150480224950754493}
-  - component: {fileID: 1485329443615734170}
-  - component: {fileID: 4753485062935924494}
   - component: {fileID: 6008682531103621832}
   - component: {fileID: 5328638213485095092}
+  - component: {fileID: 4753485062935924494}
+  - component: {fileID: 5900289443618957471}
+  - component: {fileID: 1485329443615734170}
+  - component: {fileID: 150480224950754493}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -38,70 +39,6 @@ Transform:
   - {fileID: 7791650297576348078}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &150480224950754493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90022443400985812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64053992a5e36a4498735eb281d0149a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSpeed: 5
-  playerAnimator: {fileID: 7407156489960711880}
-  joystick: {fileID: 0}
-  stingDir: {x: 0, y: 0, z: 0}
-  malpungPanel: {fileID: 2996067782706539518}
-  malpungText: {fileID: 8649524796136013009}
---- !u!114 &1485329443615734170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90022443400985812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec1a4fe27aabd334fb63aab3d30c9ef8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  emojiPrefabList:
-  - {fileID: 3911894469237762577, guid: 1ab4cdb03cd4a154bae032bb8a20f367, type: 3}
-  - {fileID: 1883494232956267647, guid: a47ebde23f9d1ba47b009ed106b8f83b, type: 3}
-  - {fileID: 2146293650632475606, guid: e89a269fcb065d348bf56d824580b0c3, type: 3}
-  - {fileID: 9160411032456052908, guid: f9726dc3ab5330a46a042a334d8b4034, type: 3}
-  - {fileID: 3437390552001893096, guid: 65b02a85ac6ea194c8135708a3a89658, type: 3}
-  stingPrefab: {fileID: 5256388510713710409, guid: a2cf92c7c88416146af1524c2b500aff,
-    type: 3}
-  emojiTransform: {fileID: 0}
-  emojiButtonPrefab: {fileID: 5583794283898255216, guid: bd74882635feb3d4c9d03948f1dedb3e,
-    type: 3}
---- !u!114 &4753485062935924494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90022443400985812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 150480224950754493}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!61 &6008682531103621832
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -174,6 +111,84 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4753485062935924494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90022443400985812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 5900289443618957471}
+  - {fileID: 150480224950754493}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &5900289443618957471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90022443400985812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 861188ff818f55c49a156b2f59654157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  malpungPanel: {fileID: 2996067782706539518}
+  malpungText: {fileID: 8649524796136013009}
+  currtMalpungTime: 5
+--- !u!114 &1485329443615734170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90022443400985812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1a4fe27aabd334fb63aab3d30c9ef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emojiPrefabList:
+  - {fileID: 3911894469237762577, guid: 1ab4cdb03cd4a154bae032bb8a20f367, type: 3}
+  - {fileID: 1883494232956267647, guid: a47ebde23f9d1ba47b009ed106b8f83b, type: 3}
+  - {fileID: 2146293650632475606, guid: e89a269fcb065d348bf56d824580b0c3, type: 3}
+  - {fileID: 9160411032456052908, guid: f9726dc3ab5330a46a042a334d8b4034, type: 3}
+  - {fileID: 3437390552001893096, guid: 65b02a85ac6ea194c8135708a3a89658, type: 3}
+  stingPrefab: {fileID: 5256388510713710409, guid: a2cf92c7c88416146af1524c2b500aff,
+    type: 3}
+  emojiTransform: {fileID: 0}
+  emojiButtonPrefab: {fileID: 5583794283898255216, guid: bd74882635feb3d4c9d03948f1dedb3e,
+    type: 3}
+--- !u!114 &150480224950754493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90022443400985812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64053992a5e36a4498735eb281d0149a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSpeed: 5
+  playerAnimator: {fileID: 7407156489960711880}
+  joystick: {fileID: 0}
+  stingDir: {x: 0, y: 0, z: 0}
 --- !u!1 &1244036633859475523
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +597,6 @@ GameObject:
   - component: {fileID: 4809598933478329190}
   - component: {fileID: 6646123203079472605}
   - component: {fileID: 1588048950939632199}
-  - component: {fileID: 7252807759981732127}
   m_Layer: 5
   m_Name: Malpung_Panel
   m_TagString: Untagged
@@ -689,19 +703,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!114 &7252807759981732127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2996067782706539518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98d9421942a716641bbf037022dfdb14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerMalpungTransform: {fileID: 0}
 --- !u!1 &3604626500438332816
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,7 +715,6 @@ GameObject:
   - component: {fileID: 7654698444791632367}
   - component: {fileID: 22132753523203985}
   - component: {fileID: 197283529636960450}
-  - component: {fileID: 4989079113767567460}
   m_Layer: 5
   m_Name: MalpungCanvas
   m_TagString: Untagged
@@ -763,7 +763,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 32767
   m_TargetDisplay: 0
 --- !u!114 &22132753523203985
 MonoBehaviour:
@@ -805,21 +805,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4989079113767567460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3604626500438332816}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 036770ef92c2b3b499b25401f712736b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  w: 1080
-  h: 1920
-  scaleFactor: 0
 --- !u!1 &3680121608363064106
 GameObject:
   m_ObjectHideFlags: 0

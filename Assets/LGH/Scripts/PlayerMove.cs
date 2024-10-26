@@ -22,20 +22,13 @@ namespace GH
         //Æ÷Åæ º¯¼ö°ª
         Vector3 myPos;
 
-        //¸»Ç³¼±
-        public GameObject malpungPanel;
-        public TMP_Text malpungText;
         void Start()
         {
             joystick = DataManager.instance.Joystick;
             DataManager.instance.players.Add(gameObject.GetComponent<PhotonView>());
 
 
-            //¸»Ç³¼± ²ô±â
-            malpungPanel.SetActive(false);
-
-            // ¸»Ç³ ÅØ½ºÆ® ÃÊ±âÈ­
-            malpungText.text = "";
+     
         }
 
         private void Update()
