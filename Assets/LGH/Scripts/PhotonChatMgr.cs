@@ -20,7 +20,7 @@ namespace GH
         public GameObject chatItemPrefab;
 
         public Color color;
-        public string nick;
+        public string playerName;
 
         // ChatItem의 부모 Transfrom
         public RectTransform contentRectTransform;
@@ -42,6 +42,9 @@ namespace GH
 
         void Start()
         {
+            playerName = DataManager.instance.playerName;
+            //
+            currChannel = DataManager.instance.playerSchool;
             // 엔터 쳤을 때 호출되는 함수 등록
             inputChat.onSubmit.AddListener(OnSubmit);
 
@@ -92,7 +95,7 @@ namespace GH
             // ChatClient 만들자
             chatClient = new ChatClient(this);
             // 닉네임 설정
-            chatClient.AuthValues = new Photon.Chat.AuthenticationValues(nick);
+            chatClient.AuthValues = new Photon.Chat.AuthenticationValues(playerName);
             //연결시도
             chatClient.ConnectUsingSettings(chatAppSettings);
 
@@ -103,7 +106,7 @@ namespace GH
             if (inputChat.text.Length < 1)
                 return;
             // 닉네임의 색을 변경 Color로
-            string nickName = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + nick + "</color>";
+            string nickName = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + playerName + "</color>";
 
 
             //귓속말인지 판단

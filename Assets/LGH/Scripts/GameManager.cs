@@ -2,16 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 namespace GH
 {
     public class GameManager : MonoBehaviourPun
     {
+        public static GameManager instance;
+
         public GameObject activateButtonPannel;
         public GameObject emojiButtonPannel;
+        public Button stingButton;
         // 패널 온 오프
         bool onActivate = true;
 
+        public VariableJoystick Joystick;
+        public Transform emojiTransform;
+
+        private void Awake()
+        {
+            if(instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
 
         void Start()
         {

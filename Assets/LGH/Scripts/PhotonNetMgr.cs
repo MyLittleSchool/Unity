@@ -10,15 +10,17 @@ namespace GH
     public class PhotonNetMgr : MonoBehaviourPunCallbacks
     {
         // 포톤 닉네임
-        public string nickName;
+        private string playerName;
 
         //룸 이름
-        public string roomName;
+        private string roomName;
 
         // 방 리스트를 저장할 리스트
         private List<string> roomNames = new List<string>();
         void Start()
         {
+            playerName = DataManager.instance.playerName;
+            roomName = DataManager.instance.playerSchool;
             StartLogin();
         }
         void Update()
@@ -29,7 +31,7 @@ namespace GH
         {
             // 접속을 위한 설정
             PhotonNetwork.GameVersion = "1.0.0";
-            PhotonNetwork.NickName = nickName;
+            PhotonNetwork.NickName = playerName;
             PhotonNetwork.AutomaticallySyncScene = false;
             // 접속을 서버에 요청
             PhotonNetwork.ConnectUsingSettings();

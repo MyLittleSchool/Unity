@@ -25,7 +25,7 @@ namespace GH
         {
             playerMove = GetComponent<PlayerMove>();
 
-            emojiTransform = DataManager.instance.emojiTransform;
+            emojiTransform = GameManager.instance.emojiTransform;
             if (GetComponent<PhotonView>().IsMine)
             {
                 //이모지 버튼 생성
@@ -39,6 +39,7 @@ namespace GH
                     emojiImage.sprite = emojiPrefabList[i].GetComponent<SpriteRenderer>().sprite;
                 }
             }
+            GameManager.instance.stingButton.onClick.AddListener(OnString);
 
         }
         void Update()

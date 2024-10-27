@@ -24,7 +24,7 @@ namespace GH
 
         void Start()
         {
-            joystick = DataManager.instance.Joystick;
+            joystick = GameManager.instance.Joystick;
             DataManager.instance.players.Add(gameObject.GetComponent<PhotonView>());
 
 

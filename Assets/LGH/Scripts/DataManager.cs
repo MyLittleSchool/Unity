@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace GH
@@ -11,24 +12,28 @@ namespace GH
         public static DataManager instance;
         public List<PhotonView> players = new List<PhotonView>();
         public GameObject player;
+        public string playerName;
+        public string playerSchool;
         private void Awake()
         {
             if (instance == null)
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
+
             }
             else
             {
                 Destroy(gameObject);
             }
+
         }
 
-        public VariableJoystick Joystick;
-        public Transform emojiTransform;
 
         void Start()
         {
-
+            int a = Random.Range(4, 9);
+            print(a);
         }
 
         void Update()
