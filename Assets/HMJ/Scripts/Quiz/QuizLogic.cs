@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using GH;
 
 
 public class QuizLogic : MonoBehaviour
@@ -24,6 +25,7 @@ public class QuizLogic : MonoBehaviour
         QuizReadyState, // 퀴즈 준비중
         QuizRunState, // 퀴즈 실행중
         QuizOverState, // 퀴즈 끝
+        QuizLastState, // 퀴즈 끝
         QuizOrderStat_End
     }
     public TMP_Text text;
@@ -31,16 +33,20 @@ public class QuizLogic : MonoBehaviour
     int idx = 0;
     int quizN = 5;
 
-    float quizTime = 10.0f;
+    float quizTime = 5.0f;
     bool quizClear = false;
 
     public List<QuizData> quizList;
 
 
-    QuizState m_eNextQuizOrder = QuizState.QuizNoneState;
-    QuizState m_eCurQuizOrder = QuizState.QuizReadyState;
+    QuizState m_eNextQuizOrder = QuizState.QuizReadyState;
+    QuizState m_eCurQuizOrder = QuizState.QuizNoneState;
 
+    GameObject player;
 
+    private void Start()
+    {
+    }
     private void Update()
     {
         NextQuizState();
@@ -70,7 +76,7 @@ public class QuizLogic : MonoBehaviour
         if (m_eCurQuizOrder == m_eNextQuizOrder)
             return;
         Debug.Log("상태 변환: " + m_eCurQuizOrder.ToString());
-        switch (m_eCurQuizOrder)
+        switch (m_eNextQuizOrder)
         {
             case QuizState.QuizReadyState:
                 QuizReady();
@@ -79,6 +85,10 @@ public class QuizLogic : MonoBehaviour
                 QuizTimeLimit();
                 break;
             case QuizState.QuizOverState:
+                QuizOverLimit();
+                break;
+            case QuizState.QuizLastState:
+                QuizEnd();
                 break;
             case QuizState.QuizOrderStat_End:
                 break;
@@ -91,30 +101,73 @@ public class QuizLogic : MonoBehaviour
     /// </summary>
     public void QuizTimeLimit()
     {
-        idx %= quizN;
         text.text = quizList[idx].quizText;
+
         StartCoroutine(ProceedQuiz(quizTime));
-        quizClear = true;
     }
 
     public void QuizReady()
     {
         text.text = "잠시 후 퀴즈가 시작됩니다.\n";
         StartCoroutine(ReadyStart(3.0f));
-        m_eNextQuizOrder = QuizState.QuizRunState;
     }
 
+    public void QuizOverLimit()
+    {
+        if (quizClear)
+            text.text = "정답입니다.";
+        else
+            text.text = "정답이 아닙니다.";
+        StartCoroutine(QuizOver(3.0f));
+    }
+
+    public void QuizEnd()
+    {
+        text.text = "퀴즈가 종료되었습니다.";
+        StartCoroutine(QuizLast(3.0f));
+    }
+
+    public void QuizClearCheck()
+    {
+        GameObject player = DataManager.instance.player;
+        Debug.Log("플레이어 x:" + player.transform.position.x);
+        if (((player.transform.position.x > 0) && !quizList[idx].quizBoolean) || ((player.transform.position.x < 0) && quizList[idx].quizBoolean))// x
+            quizClear = true;
+        else
+            quizClear = false;
+    }
     public IEnumerator ProceedQuiz(float _quizTime)
     {
         yield return new WaitForSeconds(_quizTime);
+
+        QuizClearCheck();
+        idx++;
+        idx %= quizN;
+
         m_eNextQuizOrder = QuizState.QuizOverState;
     }
 
     public IEnumerator ReadyStart(float _readyTime)
     {
         yield return new WaitForSeconds(_readyTime);
+        m_eNextQuizOrder = QuizState.QuizRunState;
     }
 
+    public IEnumerator QuizOver(float _overTime)
+    {
+        yield return new WaitForSeconds(_overTime);
+        if(idx + 1 >= quizN)
+            m_eNextQuizOrder = QuizState.QuizLastState;
+        else
+            m_eNextQuizOrder = QuizState.QuizRunState;
+
+    }
+
+    public IEnumerator QuizLast(float _lastTime)
+    {
+        yield return new WaitForSeconds(_lastTime);
+        text.text = "";
+    }
     /// <summary>
     /// 랜덤으로 섞기
     /// </summary>
