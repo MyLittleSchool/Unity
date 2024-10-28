@@ -71,33 +71,32 @@ namespace MJ
         // Start is called before the first frame update
         private void Start()
         {
-            //PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
-            //PlayerAnimation AnimationDT = PlayerObject.GetComponent<PlayerAnimation>();
+            PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
+            PlayerAnimation AnimationDT = PlayerObject.GetComponent<PlayerAnimation>();
 
-            //mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
+            mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
 
-            //MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
-            //MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
+            MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
+            MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
 
-            //MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
+            MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
+            for (int i = 0; i < decorationEnumButton.Length; i++)
+            {
+                int data = i;
+                decorationEnumButton[i].onClick.AddListener(() => DecorationDT.SetPlayerDecorationData((DecorationEnum.DECORATION_DATA)data));
+            }
 
-            //for (int i = 0; i < decorationEnumButton.Length; i++)
-            //{
-            //    int data = i;
-            //    decorationEnumButton[i].onClick.AddListener(() => DecorationDT.SetPlayerDecorationData((DecorationEnum.DECORATION_DATA)data));
-            //}
+            for (int i = 0; i < decorationChoiceButton.Length; i++)
+            {
+                int data = i;
+                decorationChoiceButton[i].onClick.AddListener(() =>
+                {
+                    DecorationDT.SetPlayerSelectDecorationData(DecorationDT.CurDecorationPanel, data);
 
-            //for (int i = 0; i < decorationChoiceButton.Length; i++)
-            //{
-            //    int data = i;
-            //    decorationChoiceButton[i].onClick.AddListener(() =>
-            //    {
-            //        DecorationDT.SetPlayerSelectDecorationData(DecorationDT.CurDecorationPanel, data);
-                    
-            //        AnimationDT.ResetDecorationAnimData(DecorationDT.CurDecorationPanel); 
-            //        AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
-            //    });
-            //}
+                    AnimationDT.ResetDecorationAnimData(DecorationDT.CurDecorationPanel);
+                    AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
+                });
+            }
         }
         
         public void OnGuestbookPanel()

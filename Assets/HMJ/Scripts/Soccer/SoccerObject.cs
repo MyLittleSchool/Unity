@@ -56,7 +56,7 @@ namespace MJ
         {
             if (!Move)
                 return;
-            Vector2 kickDirection = new Vector2(DataManager.instance.Joystick.Horizontal, DataManager.instance.Joystick.Vertical).normalized;
+            Vector2 kickDirection = new Vector2(GameManager.instance.Joystick.Horizontal, GameManager.instance.Joystick.Vertical).normalized;
             rigidbody.AddForce(kickDirection, ForceMode2D.Impulse);
 
             Move = false;
@@ -105,7 +105,7 @@ namespace MJ
 
         public void playerCollision()
         {
-            Vector2 kickDirection = new Vector2(DataManager.instance.Joystick.Horizontal, DataManager.instance.Joystick.Vertical).normalized;
+            Vector2 kickDirection = new Vector2(GameManager.instance.Joystick.Horizontal, GameManager.instance.Joystick.Vertical).normalized;
             kickDirection.y += 0.05f;
             rigidbody.AddForce(kickDirection * 5.0f, ForceMode2D.Impulse);
         }

@@ -90,7 +90,7 @@ namespace MJ
                 for (int j = 0; j < ROCK_COLUMN; j++)
                 {
                     GameObject rockObject = Instantiate<GameObject>(rockPrefabObject, transform);
-                    rockObject.transform.position = new Vector3(j * GRID_SIZE + PIVOT.x + GRID_SIZE * 0.5f, i * GRID_SIZE + PIVOT.y + GRID_SIZE * 0.5f, 0.0f);
+                    rockObject.transform.localPosition = new Vector3(j * GRID_SIZE + PIVOT.x + GRID_SIZE * 0.5f, i * GRID_SIZE + PIVOT.y + GRID_SIZE * 0.5f, 0.0f);
 
                     rockDatas[i, j] = rockObject.GetComponent<ROCK>();
 
