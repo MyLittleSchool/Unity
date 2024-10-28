@@ -26,6 +26,7 @@ namespace SW
                 inTrigged.First().HighlightOn();
                 ui.SetActive(true);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
+
             }
         }
         private void OnTriggerExit2D(Collider2D collision)
@@ -45,6 +46,7 @@ namespace SW
             {
                 uiText.text = "";
                 ui.SetActive(false);
+
             }
         }
         private void Update()

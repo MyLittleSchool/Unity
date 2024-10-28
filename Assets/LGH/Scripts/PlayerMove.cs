@@ -18,6 +18,7 @@ namespace GH
         public VariableJoystick joystick;
 
         public Vector3 stingDir;
+        public Vector3 stingDirPun;
 
         //포톤 변수값
         Vector3 myPos;
@@ -128,6 +129,7 @@ namespace GH
             if (stream.IsWriting)
             {
                 stream.SendNext(transform.position);
+                stream.SendNext(stingDir);
 
             }
             //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
@@ -135,6 +137,7 @@ namespace GH
             {
                 //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
                 myPos = (Vector3)stream.ReceiveNext();
+                stingDirPun = (Vector3)stream.ReceiveNext();
             }
         }
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 namespace GH
 {
@@ -19,8 +20,8 @@ namespace GH
 
         public VariableJoystick Joystick;
         public Transform emojiTransform;
-        public GameObject interacterPrefab;
 
+        public GameObject interacterPrefab;
         private void Awake()
         {
             if(instance == null)

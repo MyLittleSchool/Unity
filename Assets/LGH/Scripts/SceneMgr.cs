@@ -27,4 +27,12 @@ public class SceneMgr : MonoBehaviour
 
         SceneManager.LoadScene(1);
     }
+    public void ClassIn()
+    {
+        DataManager.instance.playerCurrChannel = DataManager.instance.playerName;
+        PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
+
+        SceneManager.LoadScene(2);
+
+    }
 }

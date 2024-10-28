@@ -4,19 +4,39 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Reflection;
+using TMPro;
 
 namespace GH
 {
     public class PhotonNetMgr : MonoBehaviourPunCallbacks
     {
+        //상단 방 이름
+        public TMP_Text topMenuText;
+
         // 포톤 닉네임
         private string playerName;
 
         //룸 이름
-        private string roomName;
+        public string roomName;
 
         // 방 리스트를 저장할 리스트
         private List<string> roomNames = new List<string>();
+
+        public static PhotonNetMgr instance;
+
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
         void Start()
         {
             playerName = DataManager.instance.playerName;
@@ -138,6 +158,9 @@ namespace GH
         public override void OnJoinedRoom()
         {
             base.OnJoinedRoom();
+            topMenuText.text = roomName;
+
+
             // 성공적으로 방이 만들어졌다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
