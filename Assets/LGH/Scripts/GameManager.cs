@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using UnityEngine.Tilemaps;
 
 namespace GH
 {
@@ -18,6 +19,7 @@ namespace GH
 
         public VariableJoystick Joystick;
         public Transform emojiTransform;
+        public GameObject interacterPrefab;
 
         private void Awake()
         {
@@ -39,14 +41,13 @@ namespace GH
             StartCoroutine(SpawnPlayer());
 
             // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기(per seconds)
-            PhotonNetwork.SerializationRate = 30;
+            PhotonNetwork.SerializationRate = 60;
             // 대부분 데이터 전송 빈도 수 설정하기
-            PhotonNetwork.SendRate = 30;
+            PhotonNetwork.SendRate = 60;
         }
         void Update()
         {
                 
-            
         }
         IEnumerator SpawnPlayer()
         {
@@ -56,7 +57,8 @@ namespace GH
             Vector2 randomPos = Random.insideUnitCircle * 2.0f;
             Vector3 initPosition = new Vector3(randomPos.x, randomPos.y, 0);
 
-            PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
+            GameObject p = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
+            Instantiate(interacterPrefab, p.transform);
         }
         public void ConversionPanel()
         {

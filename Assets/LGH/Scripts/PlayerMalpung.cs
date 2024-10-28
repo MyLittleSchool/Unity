@@ -5,14 +5,12 @@ using UnityEngine;
 using Photon.Pun;
 using GH;
 
-public class PlayerMalpung : MonoBehaviourPun, IPunObservable
+public class PlayerMalpung : MonoBehaviourPun
 {
     //말풍선
     public GameObject malpungPanel;
     public TMP_Text malpungText;
     public TMP_Text playerNameText;
-    private string playerName;
-    private string playerNamePun;
 
     //말풍선 시간
     public float currtMalpungTime = 5.0f;
@@ -28,19 +26,7 @@ public class PlayerMalpung : MonoBehaviourPun, IPunObservable
 
         // 말풍 텍스트 초기화
         malpungText.text = "";
-
-        //if (photonView.IsMine)
-        //{
-        //    playerNameText.text = playerName;
-        //}
-        //else
-        //{
-        //    playerNameText.text = playerNamePun;
-        //}
-        playerName = DataManager.instance.playerName;
-
-        Invoke("RPC_NameText", 0.2f);
-
+        playerNameText.text = photonView.Owner.NickName;
     }
 
     // Update is called once per frame
@@ -49,11 +35,6 @@ public class PlayerMalpung : MonoBehaviourPun, IPunObservable
 
         OnMalpung();
         malpungPanel.SetActive(onMalpung);
-
-        
-
-        
-
     }
     
     //말풍선 생기기
@@ -69,9 +50,6 @@ public class PlayerMalpung : MonoBehaviourPun, IPunObservable
             //malpungPanel.SetActive(false);
             onMalpung = false;
         }
-
-
-
     }
 
     [PunRPC]
@@ -81,42 +59,24 @@ public class PlayerMalpung : MonoBehaviourPun, IPunObservable
         currtMalpungTime = 0;
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
-        if (stream.IsWriting)
-        {
-            stream.SendNext(playerName);
-        }
-        //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
-        else if (stream.IsReading)
-        {
-            playerNamePun = (string)stream.ReceiveNext();
-        }
-    }
+    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
+    //    if (stream.IsWriting)
+    //    {
+    //    }
+    //    //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
+    //    else if (stream.IsReading)
+    //    {
+    //    }
+    //}
 
     public void RPC_MalPungText(string value)
     {
-        photonView.RPC("MalPungText", RpcTarget.All, value);
+        photonView.RPC(nameof(MalPungText), RpcTarget.All, value);
     }
 
 
 
-    [PunRPC]
-    public void NameText()
-    {
-        if (photonView.IsMine)
-        {
-            playerNameText.text = playerName;
-        }
-        else
-        {
-            playerNameText.text = playerNamePun;
-        }
-    }
-
-    public void RPC_NameText()
-    {
-        photonView.RPC("NameText", RpcTarget.All);
-    }
+ 
 }

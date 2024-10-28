@@ -32,8 +32,6 @@ namespace GH
 
         void Start()
         {
-            int a = Random.Range(4, 9);
-            print(a);
         }
 
         void Update()
