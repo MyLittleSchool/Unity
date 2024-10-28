@@ -1,4 +1,5 @@
 using GH;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,18 +8,32 @@ using UnityEngine.SceneManagement;
 
 public class SceneMgr : MonoBehaviour
 {
+    public static SceneMgr instance;
     [Header("·Î±×ÀÎ ¾À")]
     public TMP_InputField nameInputField;
     public TMP_InputField schoolInputField;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+
+    }
     void Start()
     {
-        DontDestroyOnLoad(gameObject);   
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void Login()
     {
@@ -32,7 +47,10 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.playerCurrChannel = DataManager.instance.playerName;
         PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
 
-        SceneManager.LoadScene(2);
-
+        //DataManager.instance.player = null;
+        PhotonNetwork.LeaveRoom();
+        //PhotonNetMgr.instance.SuchRoom();
+        //SceneManager.LoadScene(2);
+//PhotonNetMgr.instance.CreateRoom();
     }
 }

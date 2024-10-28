@@ -57,6 +57,8 @@ namespace GH
             PhotonNetwork.ConnectUsingSettings();
         }
 
+        
+
         public override void OnConnected()
         {
             base.OnConnected();
@@ -94,7 +96,6 @@ namespace GH
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
             base.OnRoomListUpdate(roomList);
-            bool roomCheck = false;
 
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
             // 이전 리스트를 지우고 업데이트
@@ -107,6 +108,12 @@ namespace GH
                     roomNames.Add(room.Name);
                 }
             }
+
+            SuchRoom();
+        }
+        public void SuchRoom()
+        {
+            bool roomCheck = false;
 
             foreach (string roomN in roomNames)
             {
@@ -123,9 +130,7 @@ namespace GH
                 CreateRoom();
 
             }
-
         }
-
 
         public void CreateRoom()
         {
@@ -154,6 +159,11 @@ namespace GH
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
         }
+        public override void OnCreateRoomFailed(short returnCode, string message)
+        {
+            base.OnCreateRoomFailed(returnCode, message);
+            JoinRoom();
+        }
 
         public override void OnJoinedRoom()
         {
@@ -175,6 +185,15 @@ namespace GH
 
             //룸 입장에 실패한 이유
             Debug.LogError(message);
+        }
+
+        public override void OnLeftRoom()
+        {
+            base.OnLeftRoom();
+            
+            print(MethodInfo.GetCurrentMethod().Name + " is call!");
+            CreateRoom();
+
         }
     }
 }

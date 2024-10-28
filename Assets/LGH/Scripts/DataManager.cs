@@ -37,7 +37,7 @@ namespace GH
 
         void Update()
         {
-            PlayerFind();
+           // PlayerFind();
         }
 
         private void PlayerFind()

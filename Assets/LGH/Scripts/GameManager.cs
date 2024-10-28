@@ -22,6 +22,8 @@ namespace GH
         public Transform emojiTransform;
 
         public GameObject interacterPrefab;
+
+        public int currtRoomPlayerCnt;
         private void Awake()
         {
             if(instance == null)
@@ -48,7 +50,7 @@ namespace GH
         }
         void Update()
         {
-                
+            //currtRoomPlayerCnt = PhotonNetwork.CurrentRoom.PlayerCount;
         }
         IEnumerator SpawnPlayer()
         {

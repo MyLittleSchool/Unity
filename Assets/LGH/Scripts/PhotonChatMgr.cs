@@ -45,6 +45,7 @@ namespace GH
 
         void Start()
         {
+            DontDestroyOnLoad(gameObject);
             playerName = DataManager.instance.playerName;
             //
             currChannel = DataManager.instance.playerSchool;
