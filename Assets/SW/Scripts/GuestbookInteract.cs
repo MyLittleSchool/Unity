@@ -11,7 +11,7 @@ namespace SW
         protected override void Start()
         {
             base.Start();
-            sceneUIManager = GameObject.Find("SceneUIManager").GetComponent<SceneUIManager>();
+            sceneUIManager = SceneUIManager.GetInstance();
         }
         public override void Interact()
         {
