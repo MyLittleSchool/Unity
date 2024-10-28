@@ -25,7 +25,7 @@ namespace GH
         {
             playerMove = GetComponent<PlayerMove>();
 
-            emojiTransform = DataManager.instance.emojiTransform;
+            emojiTransform = GameManager.instance.emojiTransform;
             if (GetComponent<PhotonView>().IsMine)
             {
                 //이모지 버튼 생성
@@ -39,10 +39,13 @@ namespace GH
                     emojiImage.sprite = emojiPrefabList[i].GetComponent<SpriteRenderer>().sprite;
                 }
             }
+            GameManager.instance.stingButton.onClick.AddListener(OnString);
 
         }
         void Update()
         {
+            #region 컴퓨터 감정 표현
+            /*
             if (GetComponent<PhotonView>().IsMine)
             {
                 // 감정 이모지 생성
@@ -75,6 +78,8 @@ namespace GH
                     OnString();
                 }
             }
+            */
+            #endregion
         }
         public void OnEmoji(int num)
         {

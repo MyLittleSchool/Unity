@@ -9,11 +9,12 @@ namespace GH
     {
         PixelPerfectCamera playerPixelCamera;
         int scrollSpeed = 100;
+        Transform playerTransForm;
 
         enum TouchGesture
         {
             MOVE = 1,
-            ZOOM 
+            ZOOM
         }
 
         private void Start()
@@ -23,7 +24,13 @@ namespace GH
 
         private void Update()
         {
-            CameraZoomInOut();
+            if (DataManager.instance.player != null)
+            {
+                playerTransForm = DataManager.instance.player.transform;
+
+                //CameraZoomInOut();
+                transform.position = new Vector3(playerTransForm.position.x, playerTransForm.position.y, transform.position.z);
+            }
         }
 
         private void CameraZoomInOut()
@@ -37,12 +44,12 @@ namespace GH
 
         private void CameraDrage()
         {
-            
+
         }
 
         private void MobileCameraDrage()
         {
-            if(Input.touchCount == (int)TouchGesture.MOVE)
+            if (Input.touchCount == (int)TouchGesture.MOVE)
             {
                 Touch touch = Input.touches[0];
                 Camera.main.transform.position = new Vector3(
@@ -54,7 +61,7 @@ namespace GH
 
         private void MobileCameraZoomInOut()
         {
-            if(Input.touchCount == (int)TouchGesture.ZOOM)
+            if (Input.touchCount == (int)TouchGesture.ZOOM)
             {
                 Touch touch1 = Input.touches[0];
                 Touch touch2 = Input.touches[1];

@@ -6,16 +6,16 @@ namespace SW
 {
     public class GuestbookInteract : Interactive
     {
-        private UIManager uiManager;
+        private SceneUIManager sceneUIManager;
         // Start is called before the first frame update
         protected override void Start()
         {
             base.Start();
-            uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+            sceneUIManager = SceneUIManager.GetInstance();
         }
         public override void Interact()
         {
-            uiManager.OnGuestbookPanel();
+            sceneUIManager.OnGuestbookPanel();
         }
 
     }
