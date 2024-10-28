@@ -13,6 +13,7 @@ public class Item : MonoBehaviour
         public Texture image;
         public string itemName;
         public int n;
+        public GameObject prefab;
     }
 
     private ItemData itemdata;
@@ -23,10 +24,12 @@ public class Item : MonoBehaviour
     public RawImage image;
     public TMP_Text name;
     public TMP_Text N;
+    public Button button;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        button.onClick.AddListener(SetItemPrefab);
     }
 
     // Update is called once per frame
@@ -40,5 +43,10 @@ public class Item : MonoBehaviour
         itemdata = _itemData;
         image.texture = itemdata.image;
         name.text = itemdata.itemName;
+    }
+
+    public void SetItemPrefab()
+    {
+        InventorySystem.GetInstance().SetChoiceItem(itemdata.prefab);
     }
 }

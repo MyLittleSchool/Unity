@@ -22,6 +22,12 @@ namespace MJ
 
         [Header("맵 등록 패널 - 맵 등록 패널 버튼")]
         public UnityEngine.UI.Button mapRegisterButton;
+
+        [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 버튼")]
+        public UnityEngine.UI.Button InventoryButton;
+
+        [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 끄기 버튼")]
+        public UnityEngine.UI.Button InventoryCloseButton;
         #endregion
 
         #region Panel
@@ -39,6 +45,9 @@ namespace MJ
 
         [Header("맵 콘테스트 패널")]
         public GameObject mapContestPanel;
+
+        [Header("맵 인벤토리 패널")]
+        public GameObject mapInventoryPanel;
         #endregion
 
         #region SingleTone
@@ -97,6 +106,9 @@ namespace MJ
                     AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
                 });
             }
+
+            InventoryButton.onClick.AddListener(OnMapInventoryPanel);
+            InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
         }
         
         public void OnGuestbookPanel()
@@ -116,6 +128,13 @@ namespace MJ
             mapContestPanel.SetActive(true);
         }
 
+        public void OnMapInventoryPanel()
+        {
+            mapInventoryPanel.SetActive(true);
+            InventoryCloseButton.gameObject.SetActive(true);
+            InventoryButton.gameObject.SetActive(false);
+        }
+
         public void CloseMapRegisterPanel()
         {
             mapRegisterPanel.SetActive(false);
@@ -124,6 +143,13 @@ namespace MJ
         public void CloseMapContestPanel()
         {
             mapContestPanel.SetActive(false);
+        }
+
+        public void CloseMapInventoryPanel()
+        {
+            mapInventoryPanel.SetActive(false);
+            InventoryCloseButton.gameObject.SetActive(false);
+            InventoryButton.gameObject.SetActive(true);
         }
     }
 }

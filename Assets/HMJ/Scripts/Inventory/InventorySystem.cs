@@ -7,10 +7,39 @@ using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
+    #region SingleTone
+    private static InventorySystem instence;
+    public static InventorySystem GetInstance()
+    {
+        if (instence == null)
+        {
+            GameObject go = new GameObject();
+            go.name = "InventorySystem";
+            go.AddComponent<InventorySystem>();
+        }
+        return instence;
+    }
+
+    private void Awake()
+    {
+        if (instence == null)
+        {
+            instence = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
     public GameObject itemPrefab;
     public GameObject parentPanel;
     public List<Item.ItemData> items = new List<Item.ItemData>();
 
+    private List<GameObject> itemObjects = new List<GameObject>();
+    public GameObject choiceItem;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +58,13 @@ public class InventorySystem : MonoBehaviour
         {
             GameObject itemGame = Instantiate(itemPrefab, parentPanel.transform);
             itemGame.GetComponent<Item>().SetItemData(item);
+            itemObjects.Add(itemGame);
         }
 
+    }
+
+    public void SetChoiceItem(GameObject itemPrefab)
+    {
+        choiceItem = itemPrefab;
     }
 }
