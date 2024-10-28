@@ -1,3 +1,4 @@
+using GH;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -28,11 +29,12 @@ namespace MJ
         private void Update()
         {
 
-            if (Input.GetKeyDown(KeyCode.Space) && bounceObject && bounceObject.GetBounceBall())
+            if (Input.GetKeyDown(KeyCode.K) && bounceObject && bounceObject.GetBounceBall())
                 KickBall(bounceObject.GetPlayerDirection());
             
 
-            CheckPlayer();
+            if(DataManager.instance.player)
+                CheckPlayer();
             MoveBall();
         }
 
@@ -46,36 +48,31 @@ namespace MJ
         }
 
         public float initialVelocityX = 20f;  // x방향 초기 속도
-        public float initialVelocityY = 5f;   // y방향 초기 속도
+        public float initialVelocityY = 2f;   // y방향 초기 속도
         public float gravity = -9.8f;         // 중력 가속도
-        private float time = 0f;              // 시간 변수
-
+        private float timeX = 0f;              // 시간 변수
+        private float timeY = 0f;              // 시간 변수
         public void MoveBall()
         {
             if (!Move)
                 return;
-            // 시간에 따른 포물선 경로 계산
-            time += Time.deltaTime;
-            float x = initialVelocityX * time;
-            float y = initialVelocityY * time + (0.5f * gravity * Mathf.Pow(time, 2));
+            Vector2 kickDirection = new Vector2(DataManager.instance.Joystick.Horizontal, DataManager.instance.Joystick.Vertical).normalized;
+            rigidbody.AddForce(kickDirection, ForceMode2D.Impulse);
 
-            // 공의 위치 업데이트
-            transform.position = new Vector2(firstPosition.x + x, firstPosition.y + y);
+            Move = false;
         }
 
         public void CheckPlayer()
         {
-            if (bounceObject.CheckAroundPlayer(5.0f) && Input.GetKeyDown(KeyCode.K))
+            if (bounceObject.CheckAroundPlayer(2.0f) && !bounceObject.GetBounceBall() && !Move && Input.GetKeyDown(KeyCode.K))
                 bounceObject.StartBounce();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             int layer = LayerMask.NameToLayer("NetCollision");
-            if (collision.gameObject.name == "Player")
-            {
+            if (collision.gameObject.name.Contains("Player"))
                 playerCollision();
-            }
             else if (collision.gameObject.layer == layer)
             {
                 UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
@@ -101,18 +98,16 @@ namespace MJ
             rigidbody.velocity = Vector2.zero;
             rigidbody.angularVelocity = 0.0f;
             Move = false;
-            time = 0.0f;
+            timeX = 0.0f;
+            timeY = 0.0f;
             yield return null;
         }
 
         public void playerCollision()
         {
-            float horizontal = UnityEngine.Input.GetAxis("Horizontal");
-            float vertical = UnityEngine.Input.GetAxis("Vertical");
-
-            Vector2 kickDirection = new Vector2(horizontal, vertical).normalized;
+            Vector2 kickDirection = new Vector2(DataManager.instance.Joystick.Horizontal, DataManager.instance.Joystick.Vertical).normalized;
             kickDirection.y += 0.05f;
-            rigidbody.AddForce(kickDirection * 3.0f, ForceMode2D.Impulse);
+            rigidbody.AddForce(kickDirection * 5.0f, ForceMode2D.Impulse);
         }
     }
 

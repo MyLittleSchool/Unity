@@ -1,3 +1,4 @@
+using GH;
 using MJ;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +13,6 @@ public class BounceObject : MonoBehaviour
         BallMove_End
     }
 
-
-    private GameObject player;
     float bounceY = 0.0f;
     float bounceSpeed = 2.0f;
     bool bBallBounce = false;
@@ -24,7 +23,6 @@ public class BounceObject : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -46,10 +44,10 @@ public class BounceObject : MonoBehaviour
             switch (ballMove)
             {
                 case BallMove.BallDown:
-                    bounceY -= Time.deltaTime;
+                    bounceY -= Time.deltaTime * bounceSpeed;
                     break;
                 case BallMove.BallUp:
-                    bounceY += Time.deltaTime;
+                    bounceY += Time.deltaTime * bounceSpeed;
                     break;
             }
             ballMoveCheck(yValue);
@@ -84,7 +82,7 @@ public class BounceObject : MonoBehaviour
     public void StartBounce()
     {
         bBallBounce = true;
-        StartCoroutine(bounce(0.5f));
+        StartCoroutine(bounce(1.0f));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -95,8 +93,8 @@ public class BounceObject : MonoBehaviour
 
     public void bouncePlayerObject()
     {
-        Vector3 transformPosition = player.transform.position;
-        transform.position = new Vector3(transformPosition.x, transformPosition.y + bounceY + 0.25f, 0.0f);
+        Vector3 transformPosition = DataManager.instance.player.transform.position;
+        transform.position = new Vector3(transformPosition.x, transformPosition.y + bounceY + 0.5f, 0.0f);
 
         Debug.Log("bounceY: " + bounceY);
     }
@@ -108,7 +106,7 @@ public class BounceObject : MonoBehaviour
 
     public Vector2 GetPlayerDirection()
     {
-        return player.GetComponentInChildren<Rigidbody2D>().velocity.normalized;
+        return DataManager.instance.player.GetComponentInChildren<Rigidbody2D>().velocity.normalized;
     }
 
     public void SetBallBounce(bool bBounce)
@@ -118,7 +116,7 @@ public class BounceObject : MonoBehaviour
 
     public bool CheckAroundPlayer(float dis)
     {
-        return Vector3.Distance(player.transform.position, transform.position) < dis;
+        return Vector3.Distance(DataManager.instance.player.transform.position, transform.position) < dis;
     }
 
 }

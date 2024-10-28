@@ -76,7 +76,7 @@ public class RockColor : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.name == "Player" && inputSpace)
+        if(collision.gameObject.name.Contains("Player") && inputSpace)
         {
             ChangeRockColor();
         }

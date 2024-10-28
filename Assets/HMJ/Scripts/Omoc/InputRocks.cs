@@ -1,3 +1,4 @@
+using GH;
 using MJ;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace MJ
         public static int ROCK_ROW = 10;
         public static int ROCK_COLUMN = 10;
 
-        static float GRID_SIZE = 0.5f;
+        static float GRID_SIZE = 1.0f;
 
         static Vector3 PIVOT = new Vector3(-GRID_SIZE * ROCK_ROW / 2, -GRID_SIZE * ROCK_COLUMN / 2, 0.0f);
 
@@ -63,7 +64,7 @@ namespace MJ
         {
             int[] Grid = new int[2] { -1, -1 };
             Vector3 PivotPos = transform.position + PIVOT;
-            Vector3 PlayerPos = Player.transform.position;
+            Vector3 PlayerPos = DataManager.instance.player.transform.position;
 
             Vector2 Gap = PlayerPos - PivotPos;
 
