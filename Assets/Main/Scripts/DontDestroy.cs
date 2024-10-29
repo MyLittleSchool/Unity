@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class DontDestroy : MonoBehaviour
 {
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+    private static DontDestroy instance;
     void Start()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -15,6 +15,7 @@ namespace GH
         public string playerName;
         public string playerSchool;
         public string playerCurrChannel;
+        public GameObject setTileObj;
         private void Awake()
         {
             if (instance == null)

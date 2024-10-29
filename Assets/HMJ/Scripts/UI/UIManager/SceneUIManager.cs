@@ -1,3 +1,4 @@
+using GH;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -164,6 +165,10 @@ namespace MJ
             mapInventoryPanel.SetActive(true);
             InventoryCloseButton.gameObject.SetActive(true);
             InventoryButton.gameObject.SetActive(false);
+            if (DataManager.instance.player != null)
+            {
+                DataManager.instance.player.GetComponent<SetTile>().setMode = true;
+            }
         }
 
         public void CloseMapRegisterPanel()
@@ -182,6 +187,10 @@ namespace MJ
             mapInventoryPanel.SetActive(false);
             InventoryCloseButton.gameObject.SetActive(false);
             InventoryButton.gameObject.SetActive(true);
+            if(DataManager.instance.player != null)
+            {
+                DataManager.instance.player.GetComponent<SetTile>().setMode = false;
+            }
         }
 
         public void OnMenuButtonClick()
