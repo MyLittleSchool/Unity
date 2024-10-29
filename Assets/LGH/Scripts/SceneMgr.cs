@@ -49,8 +49,8 @@ public class SceneMgr : MonoBehaviour
 
         //DataManager.instance.player = null;
         PhotonNetwork.LeaveRoom();
-        //PhotonNetMgr.instance.SuchRoom();
+        PhotonNetMgr.instance.sceneNum = 2;
         //SceneManager.LoadScene(2);
-//PhotonNetMgr.instance.CreateRoom();
+        //PhotonNetMgr.instance.CreateRoom();
     }
 }

@@ -24,6 +24,8 @@ namespace GH
 
         public static PhotonNetMgr instance;
 
+        public int sceneNum;
+
         private void Awake()
         {
             if (instance == null)
@@ -89,7 +91,7 @@ namespace GH
             //서버 로비에 들어갔음을 알린다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
-       
+            //PhotonNetwork.JoinOrCreateRoom()
         }
 
 
@@ -174,8 +176,8 @@ namespace GH
             // 성공적으로 방이 만들어졌다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
-            // 방에 입장한 친구들은 모두 1번 씬으로 이동하자
-            //PhotonNetwork.LoadLevel();
+
+           
 
         }
 
@@ -192,8 +194,11 @@ namespace GH
             base.OnLeftRoom();
             
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
-            CreateRoom();
+            //CreateRoom();
 
+            //// 방에 입장한 친구들은 모두 1번 씬으로 이동하자
+            PhotonNetwork.LoadLevel(2);
+            GameManager.instance.CoSpwamPlayer();
         }
     }
 }

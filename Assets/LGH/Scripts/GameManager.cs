@@ -23,12 +23,16 @@ namespace GH
 
         public GameObject interacterPrefab;
 
-        public int currtRoomPlayerCnt;
+        public TMP_Text currtRoomPlayerCnt;
+
+        public List<GameObject> emojiList = new List<GameObject>();
+
         private void Awake()
         {
             if(instance == null)
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -41,8 +45,7 @@ namespace GH
             activateButtonPannel.SetActive(false);
             emojiButtonPannel.SetActive(true);
 
-            StartCoroutine(SpawnPlayer());
-
+            CoSpwamPlayer();
             // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기(per seconds)
             PhotonNetwork.SerializationRate = 60;
             // 대부분 데이터 전송 빈도 수 설정하기
@@ -50,7 +53,14 @@ namespace GH
         }
         void Update()
         {
-            //currtRoomPlayerCnt = PhotonNetwork.CurrentRoom.PlayerCount;
+            if(PhotonNetwork.CurrentRoom != null)
+            currtRoomPlayerCnt.text = PhotonNetwork.CurrentRoom.PlayerCount.ToString();
+        }
+
+        public void CoSpwamPlayer()
+        {
+            StartCoroutine(SpawnPlayer());
+
         }
         IEnumerator SpawnPlayer()
         {

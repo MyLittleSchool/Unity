@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace GH
         public Transform emojiTransform;
         public GameObject emojiButtonPrefab;
 
+
         //찌르기 방향 값
         private Vector3 stingDir;
 
@@ -26,6 +28,15 @@ namespace GH
             playerMove = GetComponent<PlayerMove>();
 
             emojiTransform = GameManager.instance.emojiTransform;
+
+            if(GameManager.instance.emojiList.Count != 0)
+            {
+                for(int i = 0; i < GameManager.instance.emojiList.Count; i++)
+                {
+                    Destroy(GameManager.instance.emojiList[i].gameObject);
+                }
+                GameManager.instance.emojiList.Clear();
+            }
             if (GetComponent<PhotonView>().IsMine)
             {
                 //이모지 버튼 생성
@@ -37,6 +48,7 @@ namespace GH
                     emojiBut.playerEmoji = gameObject.GetComponent<PlayerEmoji>();
                     Image emojiImage = emoji.transform.GetChild(0).gameObject.GetComponent<Image>();
                     emojiImage.sprite = emojiPrefabList[i].GetComponent<SpriteRenderer>().sprite;
+                    GameManager.instance.emojiList.Add(emoji);
                 }
             }
             if (photonView.IsMine)
