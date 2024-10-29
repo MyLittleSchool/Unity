@@ -17,8 +17,8 @@ namespace GH
         }
         void Start()
         {
+
         }
-    
 
         void Update()
         {
@@ -26,9 +26,15 @@ namespace GH
         }
         public void SetText(string msg, Color chatColor)
         {
-            chatText.text = msg;
+            string[] text = msg.Split(" ", 2);
+            if (text[0] == DataManager.instance.playerName)
+            {
+                text[0] = "<color=#" + ColorUtility.ToHtmlStringRGB(chatColor) + ">" + text[0] + "</color>";
+            }
+            
 
-            chatText.color = chatColor;
+
+            chatText.text = text[0] + " " + text[1];
         }
     }
 }

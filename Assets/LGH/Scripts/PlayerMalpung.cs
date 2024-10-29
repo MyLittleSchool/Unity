@@ -5,7 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using GH;
 
-public class PlayerMalpung : MonoBehaviourPun
+public class PlayerMalpung : MonoBehaviourPun, IPunObservable
 {
     //말풍선
     public GameObject malpungPanel;
@@ -59,17 +59,17 @@ public class PlayerMalpung : MonoBehaviourPun
         currtMalpungTime = 0;
     }
 
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
-    //    if (stream.IsWriting)
-    //    {
-    //    }
-    //    //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
-    //    else if (stream.IsReading)
-    //    {
-    //    }
-    //}
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
+        if (stream.IsWriting)
+        {
+        }
+        //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
+        else if (stream.IsReading)
+        {
+        }
+    }
 
     public void RPC_MalPungText(string value)
     {
