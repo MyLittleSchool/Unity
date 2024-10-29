@@ -104,7 +104,7 @@ namespace MJ
         {
             yield return new WaitForSeconds(delayTime);
 
-            transform.position = new Vector3(31.5f, 0.5f, 0.0f);
+            transform.position = new Vector3(16.5f, -22.5f, 0.0f);
             rigidbody.velocity = Vector2.zero;
             rigidbody.angularVelocity = 0.0f;
             Move = false;

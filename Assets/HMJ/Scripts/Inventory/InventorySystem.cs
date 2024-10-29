@@ -1,3 +1,4 @@
+using GH;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -66,5 +67,6 @@ public class InventorySystem : MonoBehaviour
     public void SetChoiceItem(GameObject itemPrefab)
     {
         choiceItem = itemPrefab;
+        DataManager.instance.setTileObj = itemPrefab;
     }
 }
