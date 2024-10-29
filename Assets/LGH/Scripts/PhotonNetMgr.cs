@@ -42,7 +42,7 @@ namespace GH
         void Start()
         {
             playerName = DataManager.instance.playerName;
-            roomName = DataManager.instance.playerSchool;
+            roomName = DataManager.instance.playerName;
             StartLogin();
         }
         void Update()

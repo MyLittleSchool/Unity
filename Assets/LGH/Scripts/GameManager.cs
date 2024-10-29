@@ -31,6 +31,7 @@ namespace GH
         public GameObject interracBut;
 
         public bool interMode = false;
+        public bool buttonDown =false;
 
         private void Awake()
         {
@@ -113,8 +114,16 @@ namespace GH
 
         public void ClickInterractionButton()
         {
+           StartCoroutine(nameof(ButtonUp));
             //버튼 눌렀을 때 상호작용
             DataManager.instance.player.GetComponentInChildren<PlayerInteracter>().InteractBut();
+
+        }
+        IEnumerable ButtonUp()
+        {
+            buttonDown = true;
+            yield return null;
+            buttonDown = false;
         }
 
         public void OnTile()

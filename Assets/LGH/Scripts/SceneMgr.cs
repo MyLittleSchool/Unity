@@ -40,7 +40,7 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.playerName = nameInputField.text;
         DataManager.instance.playerSchool = schoolInputField.text;
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
     public void ClassIn()
     {
