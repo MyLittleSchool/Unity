@@ -98,15 +98,31 @@ namespace MJ
         // Start is called before the first frame update
         private void Start()
         {
+            if(mapRegisterButton)
+                mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
+
+            if (MapRegisterCloseButton)
+            {
+                MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
+                MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
+            }
+
+            if(MapContestCloseButton)
+                MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
+
+            if(InventoryButton)
+                InventoryButton.onClick.AddListener(OnMapInventoryPanel);
+            if (InventoryCloseButton)
+                InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
+            if (mapContestButton)
+                mapContestButton.onClick.AddListener(OnMapContestPanel);
+        }
+        
+        public void initDecorationPanel()
+        {
             PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
             PlayerAnimation AnimationDT = PlayerObject.GetComponent<PlayerAnimation>();
 
-            mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
-
-            MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
-            MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
-
-            MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
             for (int i = 0; i < decorationEnumButton.Length; i++)
             {
                 int data = i;
@@ -124,15 +140,7 @@ namespace MJ
                     AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
                 });
             }
-
-            if(InventoryButton)
-                InventoryButton.onClick.AddListener(OnMapInventoryPanel);
-            if (InventoryCloseButton)
-                InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
-            if (mapContestButton)
-                mapContestButton.onClick.AddListener(OnMapContestPanel);
         }
-        
         public void OnGuestbookPanel()
         {
             guestbookPanel.SetActive(true);
