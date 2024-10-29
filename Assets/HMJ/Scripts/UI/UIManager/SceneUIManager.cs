@@ -111,10 +111,12 @@ namespace MJ
                 });
             }
 
-            InventoryButton.onClick.AddListener(OnMapInventoryPanel);
-            InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
-
-            mapContestButton.onClick.AddListener(OnMapContestPanel);
+            if(InventoryButton)
+                InventoryButton.onClick.AddListener(OnMapInventoryPanel);
+            if (InventoryCloseButton)
+                InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
+            if (mapContestButton)
+                mapContestButton.onClick.AddListener(OnMapContestPanel);
         }
         
         public void OnGuestbookPanel()
