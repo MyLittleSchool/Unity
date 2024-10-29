@@ -19,7 +19,7 @@ namespace MJ
 
         private Vector3 firstPosition;
 
-        private float speed = 2.0f;
+        private float speed = 4.0f;
 
         private void Start()
         {

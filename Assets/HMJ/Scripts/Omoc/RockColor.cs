@@ -8,14 +8,15 @@ public class RockColor : MonoBehaviour
 {
     public ROCKCOLOR rockColor;
     private SpriteRenderer spriteRenderer;
-    private InputRocks rocksData;
-
+    private InputRocks rocksData1;
+    private InputRocks rocksData2;
     bool inputSpace;
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        rocksData = GameObject.Find("RockManager").GetComponentInChildren<InputRocks>();
+        rocksData1 = GameObject.Find("RockManager1").GetComponentInChildren<InputRocks>();
+        rocksData2 = GameObject.Find("RockManager2").GetComponentInChildren<InputRocks>();
         inputSpace = false;
 
         InitColor();
@@ -71,7 +72,8 @@ public class RockColor : MonoBehaviour
 
     public void ChangeRockColor()
     {
-        rocksData.SetRockColor(rockColor);
+        rocksData1.SetRockColor(rockColor);
+        rocksData2.SetRockColor(rockColor);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
