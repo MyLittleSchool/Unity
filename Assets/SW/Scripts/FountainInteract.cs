@@ -1,3 +1,5 @@
+using GH;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,14 +16,26 @@ namespace SW
         }
         public override void Interact()
         {
-            if (SceneManager.GetActiveScene().buildIndex == 1)
+            if (gameObject.name == "GoClass")
             {
-                SceneMgr.instance.SquareIn();
+                DataManager.instance.playerCurrChannel = "이규현";
+                PhotonNetMgr.instance.roomName = "이규현";
 
+                PhotonNetwork.LeaveRoom();
+                PhotonNetMgr.instance.sceneNum = 2;
             }
-            else if (SceneManager.GetActiveScene().buildIndex == 3)
+            else
             {
-                SceneMgr.instance.SchoolIn();
+                if (SceneManager.GetActiveScene().buildIndex == 1)
+                {
+                    SceneMgr.instance.SquareIn();
+
+                }
+                else if (SceneManager.GetActiveScene().buildIndex == 3)
+                {
+                    SceneMgr.instance.SchoolIn();
+
+                }
 
             }
             print("분수상호작용");
