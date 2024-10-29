@@ -47,44 +47,52 @@ namespace GH
             tileLine.SetActive(setMode);
             //알파 수정
 
-            if(DataManager.instance.setTileObj != null)
+            if (DataManager.instance.setTileObj != null)
             {
                 setGameObject = DataManager.instance.setTileObj;
             }
             if (setMode)
+            {
+                tilePosition = grid.WorldToCell(playerFrontTileTransform.position);
+                tileLine.transform.position = tilePosition;
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    tilePosition = grid.WorldToCell(playerFrontTileTransform.position);
-                    if (Input.GetKeyDown(KeyCode.Q))
-                    {
-                        if (!tilemap.HasTile(tilePosition))
-                        {
-                            tilemap.SetTile(tilePosition, emptyTilebase);
-                            GameObject setObject = Instantiate(setGameObject, tilemap.transform);
-                            setObject.transform.position = tilePosition;
-                            AddObject(setObject);
-                            print(tilemap.HasTile(tilePosition));
-                        }
-                    }
-                    tileLine.transform.position = tilePosition;
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        if (tilemap.HasTile(tilePosition))
-                        {
-                            tilemap.SetTile(tilePosition, null);
-                            foreach (ObjectInfo obj in objectList)
-                            {
-                                if (obj.position == tilePosition)
-                                {
-                                    Destroy(obj.obj.gameObject);
-                                }
-                            }
-                        }
-                    }
-
-
+                    OnTile();
                 }
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    DeleteTile();
+                }
+
+
+            }
         }
 
+        public void OnTile()
+        {
+            if (!tilemap.HasTile(tilePosition))
+            {
+                tilemap.SetTile(tilePosition, emptyTilebase);
+                GameObject setObject = Instantiate(setGameObject, tilemap.transform);
+                setObject.transform.position = tilePosition;
+                AddObject(setObject);
+                print(tilemap.HasTile(tilePosition));
+            }
+        }
+        public void DeleteTile()
+        {
+            if (tilemap.HasTile(tilePosition))
+            {
+                tilemap.SetTile(tilePosition, null);
+                foreach (ObjectInfo obj in objectList)
+                {
+                    if (obj.position == tilePosition)
+                    {
+                        Destroy(obj.obj.gameObject);
+                    }
+                }
+            }
+        }
         public void SuchGrid()
         {
             grid = GameObject.Find("Grid").GetComponent<Grid>();
