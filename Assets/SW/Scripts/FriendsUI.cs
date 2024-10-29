@@ -12,6 +12,7 @@ namespace SW
         public Button closeButton;
         public RectTransform contents;
         public GameObject friendPrefab;
+        public GameObject recommFriendPrefab;
         public GameObject tabPrefab;
         public Button[] tabButtons;
         public Transform[] contentsTabs;
@@ -99,16 +100,17 @@ namespace SW
             contentsTabs[3] = Instantiate(tabPrefab, contents).transform;
             // 서버 요청
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/임시";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/api/recommendations/run-batch";
             info.body = JsonUtility.ToJson(null);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
-                for (int i = 0; i < _recommFriends.Count; i++)
-                {
-                    GameObject newPanel = Instantiate(friendPrefab, contentsTabs[3]);
-                    newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = _recommFriends[i].nickname;
-                }
+                print(res.text);
+                //for (int i = 0; i < _recommFriends.Count; i++)
+                //{
+                //    GameObject newPanel = Instantiate(friendPrefab, contentsTabs[3]);
+                //    newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = _recommFriends[i].nickname;
+                //}
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
         }
