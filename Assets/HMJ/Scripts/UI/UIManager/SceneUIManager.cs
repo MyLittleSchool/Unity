@@ -22,6 +22,12 @@ namespace MJ
 
         [Header("맵 등록 패널 - 맵 등록 패널 버튼")]
         public UnityEngine.UI.Button mapRegisterButton;
+
+        [Header("메뉴 버튼")]
+        public UnityEngine.UI.Button topMenuButton;
+
+        [Header("친구창 버튼")]
+        public UnityEngine.UI.Button friendsButton;
         #endregion
 
         #region Panel
@@ -39,6 +45,12 @@ namespace MJ
 
         [Header("맵 콘테스트 패널")]
         public GameObject mapContestPanel;
+
+        [Header("메뉴 패널")]
+        public GameObject menuPanel;
+
+        [Header("친구창 패널")]
+        public GameObject friendsPanel;
         #endregion
 
         #region SingleTone
@@ -125,6 +137,15 @@ namespace MJ
         public void CloseMapContestPanel()
         {
             mapContestPanel.SetActive(false);
+        }
+
+        public void OnMenuButtonClick()
+        {
+            menuPanel.SetActive(!menuPanel.activeSelf);
+        }
+        public void OnFriendsPanel()
+        {
+            friendsPanel.SetActive(true);
         }
     }
 }
