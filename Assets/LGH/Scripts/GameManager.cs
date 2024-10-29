@@ -5,6 +5,7 @@ using Photon.Pun;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using TMPro;
+using SW;
 
 namespace GH
 {
@@ -27,6 +28,10 @@ namespace GH
 
         public List<GameObject> emojiList = new List<GameObject>();
 
+        public GameObject interracBut;
+
+        public bool interMode = false;
+
         private void Awake()
         {
             if(instance == null)
@@ -44,7 +49,7 @@ namespace GH
         {
             activateButtonPannel.SetActive(false);
             emojiButtonPannel.SetActive(true);
-
+            interracBut.SetActive(false);
             CoSpwamPlayer();
             // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기(per seconds)
             PhotonNetwork.SerializationRate = 60;
@@ -55,6 +60,7 @@ namespace GH
         {
             if(PhotonNetwork.CurrentRoom != null)
             currtRoomPlayerCnt.text = PhotonNetwork.CurrentRoom.PlayerCount.ToString();
+            InteractionButton();
         }
 
         public void CoSpwamPlayer()
@@ -72,6 +78,12 @@ namespace GH
 
             GameObject p = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
             Instantiate(interacterPrefab, p.transform);
+
+            if (p.GetComponent<PhotonView>().IsMine)
+            {
+                DataManager.instance.player = p;
+            }
+
         }
         public void ConversionPanel()
         {
@@ -88,6 +100,21 @@ namespace GH
                 onActivate = true;
 
             }
+        }
+
+        public void InteractionButton()
+        {
+            if(DataManager.instance.player != null)
+            {
+
+                interracBut.SetActive(interMode);
+            }
+        }
+
+        public void ClickInterractionButton()
+        {
+            //버튼 눌렀을 때 상호작용
+            DataManager.instance.player.GetComponentInChildren<PlayerInteracter>().InteractBut();
         }
     }
 }
