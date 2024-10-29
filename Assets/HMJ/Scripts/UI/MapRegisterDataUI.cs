@@ -48,10 +48,10 @@ public class MapRegisterDataUI : MonoBehaviour, IPointerClickHandler
         PanelImage.color = Color.yellow;
     }
 
-    public void SetRegisterData(MapRegisterData _mapRegisterData)
-    {
-        mapRegisterData = _mapRegisterData;
-    }
+    //public void SetRegisterData(MapRegisterData _mapRegisterData)
+    //{
+    //    mapRegisterData = _mapRegisterData;
+    //}
 
     public MapRegisterData GetRegisterData()
     {

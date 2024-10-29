@@ -34,11 +34,4 @@ public class MapRegisterScrollUI : ScrollUI
     {
         return registerObject;
     }
-
-
-    public override void AddItem()
-    {
-        myMapContestScrollUIcp.AddItem();
-
-    }
 }
