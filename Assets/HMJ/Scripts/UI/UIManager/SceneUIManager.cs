@@ -67,6 +67,8 @@ namespace MJ
         [Header("친구창 패널")]
         public GameObject friendsPanel;
 
+        [Header("채팅 패널")]
+        public GameObject ChatPanel;
         #endregion
 
         #region SingleTone
@@ -165,6 +167,8 @@ namespace MJ
             mapInventoryPanel.SetActive(true);
             InventoryCloseButton.gameObject.SetActive(true);
             InventoryButton.gameObject.SetActive(false);
+            ChatPanel.gameObject.SetActive(false);
+
             if (DataManager.instance.player != null)
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = true;
@@ -187,6 +191,7 @@ namespace MJ
             mapInventoryPanel.SetActive(false);
             InventoryCloseButton.gameObject.SetActive(false);
             InventoryButton.gameObject.SetActive(true);
+            ChatPanel.gameObject.SetActive(true);
             if(DataManager.instance.player != null)
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = false;

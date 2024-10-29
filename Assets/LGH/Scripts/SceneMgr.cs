@@ -71,4 +71,13 @@ public class SceneMgr : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 1;
     }
+
+    public void QuizIn()
+    {
+        DataManager.instance.playerCurrChannel = "ДыБо";
+        PhotonNetMgr.instance.roomName = "ДыБо";
+
+        PhotonNetwork.LeaveRoom();
+        PhotonNetMgr.instance.sceneNum = 4;
+    }
 }
