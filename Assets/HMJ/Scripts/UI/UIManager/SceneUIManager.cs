@@ -23,11 +23,15 @@ namespace MJ
         [Header("맵 등록 패널 - 맵 등록 패널 버튼")]
         public UnityEngine.UI.Button mapRegisterButton;
 
+        [Header("맵 등록 패널 - 맵 콘테스트 패널 버튼")]
+        public UnityEngine.UI.Button mapContestButton;
+
         [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 버튼")]
         public UnityEngine.UI.Button InventoryButton;
 
         [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 끄기 버튼")]
         public UnityEngine.UI.Button InventoryCloseButton;
+
         #endregion
 
         #region Panel
@@ -109,6 +113,8 @@ namespace MJ
 
             InventoryButton.onClick.AddListener(OnMapInventoryPanel);
             InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
+
+            mapContestButton.onClick.AddListener(OnMapContestPanel);
         }
         
         public void OnGuestbookPanel()
@@ -126,6 +132,7 @@ namespace MJ
         {
             mapRegisterPanel.SetActive(false);
             mapContestPanel.SetActive(true);
+            mapContestButton.gameObject.SetActive(false);
         }
 
         public void OnMapInventoryPanel()
@@ -143,6 +150,7 @@ namespace MJ
         public void CloseMapContestPanel()
         {
             mapContestPanel.SetActive(false);
+            mapContestButton.gameObject.SetActive(true);
         }
 
         public void CloseMapInventoryPanel()

@@ -70,14 +70,24 @@ namespace MJ
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+
             int layer = LayerMask.NameToLayer("NetCollision");
+            int layer1 = LayerMask.NameToLayer("OutCollision");
             if (collision.gameObject.name.Contains("Player"))
                 playerCollision();
-            else if (collision.gameObject.layer == layer)
+
+            if (bounceObject.GetBounceBall())
+                return;
+            if (collision.gameObject.layer == layer)
             {
                 UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
-                StartCoroutine(ResetSoccerPosition(3.0f));
+                StartCoroutine(ResetSoccerPosition(2.0f));
             }
+            else if (collision.gameObject.layer == layer1)
+            {
+                StartCoroutine(ResetSoccerPosition(0.5f));
+            }
+
 
         }
         private void OnCollisionEnter2D(Collision2D collision)
@@ -94,7 +104,7 @@ namespace MJ
         {
             yield return new WaitForSeconds(delayTime);
 
-            transform.position = new Vector3(0.0f, 1.0f, 0.0f);
+            transform.position = new Vector3(31.5f, 0.5f, 0.0f);
             rigidbody.velocity = Vector2.zero;
             rigidbody.angularVelocity = 0.0f;
             Move = false;
