@@ -116,5 +116,20 @@ namespace GH
             //버튼 눌렀을 때 상호작용
             DataManager.instance.player.GetComponentInChildren<PlayerInteracter>().InteractBut();
         }
+
+        public void OnTile()
+        {
+            SetTile setTile = DataManager.instance.player.GetComponent<SetTile>();
+            if (setTile.tileObjCheck)
+            {
+                setTile.DeleteTile();
+            }
+            else
+            {
+                setTile.OnTile();
+            }
+        }
+
+       
     }
 }

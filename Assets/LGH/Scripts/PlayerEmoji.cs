@@ -29,7 +29,7 @@ namespace GH
 
             emojiTransform = GameManager.instance.emojiTransform;
 
-            if(GameManager.instance.emojiList.Count != 0)
+            if(photonView.IsMine && GameManager.instance.emojiList.Count != 0)
             {
                 for(int i = 0; i < GameManager.instance.emojiList.Count; i++)
                 {

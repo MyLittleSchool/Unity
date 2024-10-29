@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace SW
             }
 
             //RefreshTab0(friends);
-            //RefreshTab3(recommFriends);
+            RefreshTab3(recommFriends);
             ChangeTab(0);
         }
         private void ClosePanel()
@@ -100,19 +101,17 @@ namespace SW
             contentsTabs[3] = Instantiate(tabPrefab, contents).transform;
             // 서버 요청
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/api/recommendations/run-batch";
-            info.body = JsonUtility.ToJson(null);
-            info.contentType = "application/json";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/ai-recommend/name-list?userId=1";
             info.onComplete = (DownloadHandler res) =>
             {
-                print(res.text);
-                //for (int i = 0; i < _recommFriends.Count; i++)
-                //{
-                //    GameObject newPanel = Instantiate(friendPrefab, contentsTabs[3]);
-                //    newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = _recommFriends[i].nickname;
-                //}
+                List<string> nameList = JsonConvert.DeserializeObject<List<string>>(res.text);
+                foreach (var name in nameList)
+                {
+                    GameObject newPanel = Instantiate(recommFriendPrefab, contentsTabs[3]);
+                    newPanel.GetComponent<RecommFriendPanel>().NickNameText.text = name;
+                }
             };
-            StartCoroutine(HttpManager.GetInstance().Post(info));
+            StartCoroutine(HttpManager.GetInstance().Get(info));
         }
     }
 }
