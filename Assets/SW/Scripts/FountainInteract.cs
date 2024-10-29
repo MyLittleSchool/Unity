@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 namespace SW
 {
     public class FountainInteract : Interactive
     {
 
-        // Start is called before the first frame update
         protected override void Start()
         {
             base.Start();
@@ -14,7 +14,16 @@ namespace SW
         }
         public override void Interact()
         {
-            SceneMgr.instance.SquareIn();
+            if (SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                SceneMgr.instance.SquareIn();
+
+            }
+            else if (SceneManager.GetActiveScene().buildIndex == 3)
+            {
+                SceneMgr.instance.SchoolIn();
+
+            }
             print("분수상호작용");
         }
     }

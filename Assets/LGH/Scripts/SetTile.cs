@@ -33,6 +33,8 @@ namespace GH
 
         public List<ObjectInfo> objectList = new List<ObjectInfo>();
 
+        public bool tileObjCheck;
+
         void Start()
         {
             setMode = false;
@@ -43,7 +45,6 @@ namespace GH
 
         void Update()
         {
-
             tileLine.SetActive(setMode);
             //알파 수정
 
@@ -63,6 +64,7 @@ namespace GH
                 {
                     DeleteTile();
                 }
+                tileObjCheck = tilemap.HasTile(tilePosition);
 
 
             }
