@@ -1,3 +1,4 @@
+using GH;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace SW
                 inTrigged.First().HighlightOn();
                 ui.SetActive(true);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
+                GameManager.instance.interMode = true;
 
             }
         }
@@ -34,7 +36,7 @@ namespace SW
             Interactive i = collision.GetComponent<Interactive>();
             i.HighlightOff();
             inTrigged.Remove(i);
-            
+
             if (inTrigged.Count != 0)
             {
                 uiText.text = inTrigged.First().GetInfo();
@@ -46,6 +48,8 @@ namespace SW
             {
                 uiText.text = "";
                 ui.SetActive(false);
+                GameManager.instance.interMode = false;
+
 
             }
         }
@@ -55,6 +59,16 @@ namespace SW
             {
                 inTrigged.First().Interact();
             }
+        }
+
+        public void InteractBut()
+        {
+            if (inTrigged.Count != 0)
+            {
+                inTrigged.First().Interact();
+
+            }
+
         }
     }
 }

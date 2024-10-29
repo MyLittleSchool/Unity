@@ -14,6 +14,7 @@ namespace SW
         }
         public override void Interact()
         {
+            SceneMgr.instance.SquareIn();
             print("분수상호작용");
         }
     }

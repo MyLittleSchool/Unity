@@ -23,6 +23,8 @@ namespace GH
         //Æ÷Åæ º¯¼ö°ª
         Vector3 myPos;
 
+        public bool interactionMode = false;
+
         void Start()
         {
             joystick = GameManager.instance.Joystick;

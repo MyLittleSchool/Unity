@@ -53,4 +53,22 @@ public class SceneMgr : MonoBehaviour
         //SceneManager.LoadScene(2);
         //PhotonNetMgr.instance.CreateRoom();
     }
+
+    public void SquareIn()
+    {
+        DataManager.instance.playerCurrChannel = "∏∏≥≤¿« ±§¿Â";
+        PhotonNetMgr.instance.roomName = "∏∏≥≤¿« ±§¿Â";
+
+        PhotonNetwork.LeaveRoom();
+        PhotonNetMgr.instance.sceneNum = 3;
+    }
+
+    public void SchoolIn()
+    {
+        DataManager.instance.playerCurrChannel = DataManager.instance.playerSchool;
+        PhotonNetMgr.instance.roomName = DataManager.instance.playerSchool;
+
+        PhotonNetwork.LeaveRoom();
+        PhotonNetMgr.instance.sceneNum = 1;
+    }
 }

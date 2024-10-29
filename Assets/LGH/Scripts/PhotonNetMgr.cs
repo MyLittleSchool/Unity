@@ -197,7 +197,7 @@ namespace GH
             //CreateRoom();
 
             //// 방에 입장한 친구들은 모두 1번 씬으로 이동하자
-            PhotonNetwork.LoadLevel(2);
+            PhotonNetwork.LoadLevel(sceneNum);
             GameManager.instance.CoSpwamPlayer();
         }
     }

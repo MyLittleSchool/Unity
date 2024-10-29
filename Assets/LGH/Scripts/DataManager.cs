@@ -37,10 +37,9 @@ namespace GH
 
         void Update()
         {
-          // PlayerFind();
         }
 
-        private void PlayerFind()
+        public void PlayerFind()
         {
 
             if (player == null)
