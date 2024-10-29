@@ -4,19 +4,41 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Reflection;
+using TMPro;
 
 namespace GH
 {
     public class PhotonNetMgr : MonoBehaviourPunCallbacks
     {
+        //상단 방 이름
+        public TMP_Text topMenuText;
+
         // 포톤 닉네임
         private string playerName;
 
         //룸 이름
-        private string roomName;
+        public string roomName;
 
         // 방 리스트를 저장할 리스트
         private List<string> roomNames = new List<string>();
+
+        public static PhotonNetMgr instance;
+
+        public int sceneNum;
+
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
         void Start()
         {
             playerName = DataManager.instance.playerName;
@@ -36,6 +58,8 @@ namespace GH
             // 접속을 서버에 요청
             PhotonNetwork.ConnectUsingSettings();
         }
+
+        
 
         public override void OnConnected()
         {
@@ -67,14 +91,13 @@ namespace GH
             //서버 로비에 들어갔음을 알린다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
-       
+            //PhotonNetwork.JoinOrCreateRoom()
         }
 
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
             base.OnRoomListUpdate(roomList);
-            bool roomCheck = false;
 
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
             // 이전 리스트를 지우고 업데이트
@@ -87,6 +110,12 @@ namespace GH
                     roomNames.Add(room.Name);
                 }
             }
+
+            SuchRoom();
+        }
+        public void SuchRoom()
+        {
+            bool roomCheck = false;
 
             foreach (string roomN in roomNames)
             {
@@ -103,9 +132,7 @@ namespace GH
                 CreateRoom();
 
             }
-
         }
-
 
         public void CreateRoom()
         {
@@ -134,15 +161,23 @@ namespace GH
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
         }
+        public override void OnCreateRoomFailed(short returnCode, string message)
+        {
+            base.OnCreateRoomFailed(returnCode, message);
+            JoinRoom();
+        }
 
         public override void OnJoinedRoom()
         {
             base.OnJoinedRoom();
+            topMenuText.text = roomName;
+
+
             // 성공적으로 방이 만들어졌다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
-            // 방에 입장한 친구들은 모두 1번 씬으로 이동하자
-            //PhotonNetwork.LoadLevel();
+
+           
 
         }
 
@@ -152,6 +187,18 @@ namespace GH
 
             //룸 입장에 실패한 이유
             Debug.LogError(message);
+        }
+
+        public override void OnLeftRoom()
+        {
+            base.OnLeftRoom();
+            
+            print(MethodInfo.GetCurrentMethod().Name + " is call!");
+            //CreateRoom();
+
+            //// 방에 입장한 친구들은 모두 1번 씬으로 이동하자
+            PhotonNetwork.LoadLevel(2);
+            GameManager.instance.CoSpwamPlayer();
         }
     }
 }

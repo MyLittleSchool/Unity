@@ -1,0 +1,99 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+namespace GH
+{
+    [System.Serializable]
+    public class ObjectInfo
+    {
+        public GameObject obj; // 오브젝트를 저장할 변수
+        public Vector3 position; // 위치를 저장할 변수
+
+        // 생성자
+        public ObjectInfo(GameObject obj, Vector3 position)
+        {
+            this.obj = obj;
+            this.position = position;
+        }
+    }
+
+    public class SetTile : MonoBehaviour
+    {
+        public Tilemap tilemap;
+        public Transform playerFrontTileTransform;
+        private Vector3Int tilePosition;
+        private Grid grid;
+        public GameObject setGameObject;
+        public TileBase emptyTilebase;
+        public GameObject tileLine;
+
+        public bool setMode = false;
+
+        public List<ObjectInfo> objectList = new List<ObjectInfo>();
+
+        void Start()
+        {
+            setMode = false;
+            tileLine.SetActive(false);
+            SuchGrid();
+
+        }
+
+        void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.L)) 
+            {
+                setMode = setMode ? false : true;
+                tileLine.SetActive(setMode);
+            }
+            if (setMode)
+            {
+                tilePosition = grid.WorldToCell(playerFrontTileTransform.position);
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    if (!tilemap.HasTile(tilePosition))
+                    {
+                        tilemap.SetTile(tilePosition, emptyTilebase);
+                        GameObject setObject = Instantiate(setGameObject, tilemap.transform);
+                        setObject.transform.position = tilePosition;
+                        AddObject(setObject);
+                        print(tilemap.HasTile(tilePosition));
+                    }
+                }
+                tileLine.transform.position = tilePosition;
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (tilemap.HasTile(tilePosition))
+                    {
+                        tilemap.SetTile(tilePosition, null);
+                        foreach (ObjectInfo obj in objectList)
+                        {
+                            if(obj.position == tilePosition)
+                            {
+                                Destroy(obj.obj.gameObject);
+                            }
+                        }
+                    }
+                }
+              
+
+            }
+        }
+
+        public void SuchGrid()
+        {
+            grid = GameObject.Find("Grid").GetComponent<Grid>();
+            tilemap = grid.transform.GetChild(0).GetComponent<Tilemap>();
+        }
+
+        public void AddObject(GameObject obj)
+        {
+            Vector3 position = obj.transform.position; // 오브젝트의 현재 위치를 가져옴
+            ObjectInfo newObjectInfo = new ObjectInfo(obj, position); // 새 ObjectInfo 객체 생성
+            objectList.Add(newObjectInfo); // 리스트에 추가
+        }
+    }
+
+}

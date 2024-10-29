@@ -32,6 +32,13 @@ namespace MJ
         [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 끄기 버튼")]
         public UnityEngine.UI.Button InventoryCloseButton;
 
+
+        [Header("메뉴 버튼")]
+        public UnityEngine.UI.Button topMenuButton;
+
+        [Header("친구창 버튼")]
+        public UnityEngine.UI.Button friendsButton;
+
         #endregion
 
         #region Panel
@@ -52,26 +59,33 @@ namespace MJ
 
         [Header("맵 인벤토리 패널")]
         public GameObject mapInventoryPanel;
+
+        [Header("메뉴 패널")]
+        public GameObject menuPanel;
+
+        [Header("친구창 패널")]
+        public GameObject friendsPanel;
+
         #endregion
 
         #region SingleTone
-        private static SceneUIManager instence;
+        private static SceneUIManager instance;
         public static SceneUIManager GetInstance()
         {
-            if (instence == null)
+            if (instance == null)
             {
                 GameObject go = new GameObject();
                 go.name = "SceneUIManager";
                 go.AddComponent<SceneUIManager>();
             }
-            return instence;
+            return instance;
         }
 
         private void Awake()
         {
-            if(instence == null)
+            if(instance == null)
             {
-                instence = this;
+                instance = this;
                 DontDestroyOnLoad(gameObject);
             }
             else
@@ -160,6 +174,15 @@ namespace MJ
             mapInventoryPanel.SetActive(false);
             InventoryCloseButton.gameObject.SetActive(false);
             InventoryButton.gameObject.SetActive(true);
+        }
+
+        public void OnMenuButtonClick()
+        {
+            menuPanel.SetActive(!menuPanel.activeSelf);
+        }
+        public void OnFriendsPanel()
+        {
+            friendsPanel.SetActive(true);
         }
     }
 }

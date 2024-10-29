@@ -12,7 +12,7 @@ using UnityEngine.UI;
 namespace GH
 {
 
-    public class PhotonChatMgr : MonoBehaviourPun , IChatClientListener
+    public class PhotonChatMgr : MonoBehaviourPun, IChatClientListener
     {
         //Input Chat InputField
         public TMP_InputField inputChat;
@@ -40,8 +40,12 @@ namespace GH
         public TMP_Text malpungText;
         PlayerMalpung playerMalpung;
 
+        public RectTransform chatMainPanelRecttransform;
+        public RectTransform chatPanelRecttransform;
+
         void Start()
         {
+            DontDestroyOnLoad(gameObject);
             playerName = DataManager.instance.playerName;
             //
             currChannel = DataManager.instance.playerSchool;
@@ -106,19 +110,27 @@ namespace GH
             if (inputChat.text.Length < 1)
                 return;
             // 닉네임의 색을 변경 Color로
-            string nickName = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + playerName + "</color>";
+            //string nickName;
+            //if (playerName == DataManager.instance.playerName)
+            //{
+            //    nickName = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + playerName + "</color>";
+            //}
+            //else
+            //{
+            //    nickName = playerName;
+            //}
 
 
             //귓속말인지 판단
             // /w 아이디 메시지면 귓속말
             string[] text = s.Split(" ", 3);
-            string chat = nickName + " : " + s;
+            string chat = playerName + " : " + s;
 
             //전체 채팅 구성을 만들자.
             if (text[0] == "/w")
             {
 
-                chat = nickName + " : " + text[2];
+                chat = playerName + " : " + text[2];
                 //귓속말 보내기
                 chatClient.SendPrivateMessage(text[1], chat);
             }
@@ -175,7 +187,7 @@ namespace GH
             for (int i = 0; i < senders.Length; i++)
             {
                 // 채팅 아이템 만들어서 스크롤 뷰에 올리기
-                CreateChatItem(messages[i].ToString(), Color.black);
+                CreateChatItem(messages[i].ToString(), color);
             }
         }
 
@@ -183,7 +195,7 @@ namespace GH
         public void OnPrivateMessage(string sender, object message, string channelName)
         {
             //채팅 아이템 만들어서 스크롤 뷰에 붙이자
-            CreateChatItem(message.ToString(), new Color32(255, 0, 255, 255));
+            CreateChatItem(message.ToString(), color);
         }
 
         //채널을 참여할 때
@@ -221,9 +233,16 @@ namespace GH
             chatLogOn = chatLogOn ? false : true;
 
             //챗 로그의 높이로 챗 로그를 활성화 * 엑티브를 끄면 스크립트를 못가져와서 에러가 난다.
-            chatHeight = chatLogOn ? 500 : 0;
-
+            chatHeight = chatLogOn ? 820 : 0;
+            //chatLogView.GetComponentAtIndex<Image>(0).raycastTarget = chatLogOn ? true : false;
+            chatRectTransform.GetChild(0).GetComponent<Image>().raycastTarget = chatLogOn ? true : false;
             chatRectTransform.sizeDelta = new Vector2(chatRectTransform.sizeDelta.x, chatHeight);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(contentRectTransform);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(chatMainPanelRecttransform);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(chatPanelRecttransform);
+
+
+
         }
     }
 

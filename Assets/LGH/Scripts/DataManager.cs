@@ -14,6 +14,7 @@ namespace GH
         public GameObject player;
         public string playerName;
         public string playerSchool;
+        public string playerCurrChannel;
         private void Awake()
         {
             if (instance == null)
@@ -36,7 +37,7 @@ namespace GH
 
         void Update()
         {
-            PlayerFind();
+          // PlayerFind();
         }
 
         private void PlayerFind()
@@ -55,11 +56,8 @@ namespace GH
             }
         }
 
-        public void OnSting()
-        {
-            PlayerEmoji playerEmoji = player.GetComponent<PlayerEmoji>();
-            playerEmoji.OnString();
-        }
+   
+      
     }
 
 }
