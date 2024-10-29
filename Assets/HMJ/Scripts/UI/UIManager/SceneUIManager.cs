@@ -10,7 +10,6 @@ namespace MJ
     public class SceneUIManager : MonoBehaviour
     {
         #region Button
-
         [Header("´Ý±â ¹öÆ°")]
         public UnityEngine.UI.Button MapRegisterCloseButton;
         public UnityEngine.UI.Button MapContestCloseButton;
@@ -99,7 +98,49 @@ namespace MJ
         // Start is called before the first frame update
         private void Start()
         {
-            if(mapRegisterButton)
+            //if(mapRegisterButton)
+            //    mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
+
+            //if (MapRegisterCloseButton)
+            //{
+            //    MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
+            //    MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
+            //}
+
+            //if(MapContestCloseButton)
+            //    MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
+
+            //if (!InventoryButton)
+            //    InventoryButton = GameObject.Find("MJCanvas/MapContestOnOffPanel/Button_Panel/Button").GetComponent<UnityEngine.UI.Button>();
+            //InventoryButton.onClick.AddListener(OnMapInventoryPanel);
+
+            //if (!InventoryCloseButton)
+            //    InventoryCloseButton = GameObject.Find("MJCanvas/InventoryOnOffPanel/Button_Panel/Button_Panel (1)/Button").GetComponent<UnityEngine.UI.Button>();
+            //InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
+
+            //if (mapContestButton)
+            //    mapContestButton.onClick.AddListener(OnMapContestPanel);
+        }
+
+        public void RestartSetting(
+            UnityEngine.UI.Button _mapContestCloseButton,
+            UnityEngine.UI.Button _mapRegisterCloseButton,
+            UnityEngine.UI.Button _mapRegisterButton,
+            UnityEngine.UI.Button _InventoryButton,
+            UnityEngine.UI.Button _InventoryCloseButton,
+            UnityEngine.UI.Button _mapContestButton,
+            GameObject _mapContestPanel,
+            GameObject _mapRegisterPanel
+            )
+        {
+            MapContestCloseButton = _mapContestCloseButton;
+            MapRegisterCloseButton = _mapRegisterCloseButton;
+            mapRegisterButton = _mapRegisterButton;
+            InventoryButton = _InventoryButton;
+            InventoryCloseButton = _InventoryCloseButton;
+            mapContestButton = _mapContestButton;
+
+            if (mapRegisterButton)
                 mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
 
             if (MapRegisterCloseButton)
@@ -108,15 +149,18 @@ namespace MJ
                 MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
             }
 
-            if(MapContestCloseButton)
+            if (MapContestCloseButton)
                 MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
 
-            if(InventoryButton)
-                InventoryButton.onClick.AddListener(OnMapInventoryPanel);
-            if (InventoryCloseButton)
-                InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
+            InventoryButton.onClick.AddListener(OnMapInventoryPanel);
+
+            InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
+
             if (mapContestButton)
                 mapContestButton.onClick.AddListener(OnMapContestPanel);
+
+            mapContestPanel = _mapContestPanel;
+            mapRegisterPanel = _mapRegisterPanel;
         }
         
         public void initDecorationPanel()

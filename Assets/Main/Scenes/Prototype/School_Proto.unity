@@ -3776,6 +3776,7 @@ GameObject:
   - component: {fileID: 1227823441}
   - component: {fileID: 1227823440}
   - component: {fileID: 1227823439}
+  - component: {fileID: 1227823443}
   m_Layer: 5
   m_Name: MJCanvas
   m_TagString: Untagged
@@ -3868,6 +3869,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1227823443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227823438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9821d5748f2a7c429541634c038a15f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MapRegisterCloseButton: {fileID: 1703133525}
+  MapContestCloseButton: {fileID: 2112987324}
+  mapRegisterButton: {fileID: 1703133527}
+  mapContestButton: {fileID: 1832581910}
+  InventoryButton: {fileID: 1726883999}
+  InventoryCloseButton: {fileID: 1726883998}
+  mapRegisterPanel: {fileID: 1703133526}
+  mapContestPanel: {fileID: 1703133528}
 --- !u!1 &1285061393
 GameObject:
   m_ObjectHideFlags: 0
@@ -90683,6 +90704,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1227823442}
     m_Modifications:
+    - target: {fileID: 353081164046085476, guid: ac4759496d28e994885c94472b437335,
+        type: 3}
+      propertyPath: m_Name
+      value: MapContestButton
+      objectReference: {fileID: 0}
     - target: {fileID: 1018416989956977137, guid: ac4759496d28e994885c94472b437335,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -90973,7 +90999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapRegisterCloseButton: {fileID: 1703133525}
-  MapContestCloseButton: {fileID: 0}
+  MapContestCloseButton: {fileID: 2112987324}
   decorationEnumButton: []
   decorationChoiceButton: []
   mapRegisterButton: {fileID: 1703133527}
@@ -91588,6 +91614,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2096094807}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2112987324 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7579265663074112090, guid: 1d19a572730ad6140933086f52a6f4b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1703133523}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &401418594055266741
 MonoBehaviour:
   m_ObjectHideFlags: 0
