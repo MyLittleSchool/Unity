@@ -15,9 +15,12 @@ namespace MJ
 
         private BounceObject bounceObject;
 
-        bool Move = false;
+        private bool Move = false;
 
-        Vector3 firstPosition;
+        private Vector3 firstPosition;
+
+        private float speed = 2.0f;
+
         private void Start()
         {
             rigidbody = GetComponent<Rigidbody2D>();
@@ -31,11 +34,11 @@ namespace MJ
 
             if (Input.GetKeyDown(KeyCode.K) && bounceObject && bounceObject.GetBounceBall())
                 KickBall(bounceObject.GetPlayerDirection());
-            
 
-            if(DataManager.instance.player)
+            if (DataManager.instance.player)
                 CheckPlayer();
             MoveBall();
+            DistanseCheck();
         }
 
         public void KickBall(Vector2 direction)
@@ -72,7 +75,7 @@ namespace MJ
         {
 
             int layer = LayerMask.NameToLayer("NetCollision");
-            int layer1 = LayerMask.NameToLayer("OutCollision");
+            //int layer1 = LayerMask.NameToLayer("OutCollision");
             if (collision.gameObject.name.Contains("Player"))
                 playerCollision();
 
@@ -82,10 +85,6 @@ namespace MJ
             {
                 UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
                 StartCoroutine(ResetSoccerPosition(2.0f));
-            }
-            else if (collision.gameObject.layer == layer1)
-            {
-                StartCoroutine(ResetSoccerPosition(0.5f));
             }
 
 
@@ -117,7 +116,13 @@ namespace MJ
         {
             Vector2 kickDirection = new Vector2(GameManager.instance.Joystick.Horizontal, GameManager.instance.Joystick.Vertical).normalized;
             kickDirection.y += 0.05f;
-            rigidbody.AddForce(kickDirection * 5.0f, ForceMode2D.Impulse);
+            rigidbody.AddForce(kickDirection * speed, ForceMode2D.Impulse);
+        }
+
+        public void DistanseCheck()
+        {
+            if(Vector3.Distance(new Vector3(16.5f, -22.5f, 0.0f), transform.position) > 10.0f)
+                StartCoroutine(ResetSoccerPosition(0.5f));
         }
     }
 
