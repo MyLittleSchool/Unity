@@ -40,7 +40,7 @@ namespace MJ
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space)) // Space
+            if (Input.GetKey(KeyCode.Space)) // Space
             {
                 int[] Grid = CheckRockIdx();
                 InputRock(Grid[0], Grid[1], rockColor);

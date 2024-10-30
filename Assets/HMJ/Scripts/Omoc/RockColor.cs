@@ -66,7 +66,7 @@ public class RockColor : MonoBehaviour
     public void KeyInputCheck()
     {
         inputSpace = false;
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
             inputSpace = true;
     }
 
