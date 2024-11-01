@@ -7,6 +7,7 @@ public class MapRegisterScrollUI : ScrollUI
 {
     public MapContestScrollUI myMapContestScrollUIcp;
     private GameObject registerObject;
+    private Capture CaptureComponent;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -33,5 +34,10 @@ public class MapRegisterScrollUI : ScrollUI
     public GameObject GetRegisterGameObject()
     {
         return registerObject;
+    }
+
+    public void SetPrefabImage()
+    {
+        CaptureComponent.CaptureRenderTexture();
     }
 }
