@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class MapRegisterScrollUI : ScrollUI
 {
@@ -12,6 +13,8 @@ public class MapRegisterScrollUI : ScrollUI
     protected virtual void Start()
     {
         base.Start();
+
+        CaptureComponent = GetComponent<Capture>();
     }
 
     // Update is called once per frame
@@ -36,8 +39,20 @@ public class MapRegisterScrollUI : ScrollUI
         return registerObject;
     }
 
-    public void SetPrefabImage()
+    public override void AddItem() 
     {
-        CaptureComponent.CaptureRenderTexture();
+        Sprite spriteData = SetPrefabImage();
+
+        prefab.GetComponent<MapRegisterDataUI>().SetRegisterImageData(spriteData);
+        GameObject item = Instantiate(prefab, content);
+
+        itemlist.Add(item);
+        // item.GetComponent<Image>().settex
+        imageList.Add(item.GetComponent<Image>());
+    }
+
+    public Sprite SetPrefabImage()
+    {
+        return CaptureComponent.CaptureRenderTexture();
     }
 }

@@ -57,4 +57,9 @@ public class MapRegisterDataUI : MonoBehaviour, IPointerClickHandler
     {
         return mapRegisterData;
     }
+
+    public void SetRegisterImageData(Sprite _spriteImage)
+    {
+        mapRegisterData.mapImage.texture = _spriteImage.texture;
+    }
 }

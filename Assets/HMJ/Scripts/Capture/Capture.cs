@@ -8,7 +8,7 @@ public class Capture : MonoBehaviour
 {
     public RenderTexture m_CaptureRenderTexture;
 
-    public string CaptureRenderTexture()
+    public Sprite CaptureRenderTexture()
     {
         // 렌더 텍스쳐 크기만큼 2d 텍스쳐 생성
         Texture2D texture = new Texture2D(m_CaptureRenderTexture.width, m_CaptureRenderTexture.height);
@@ -21,13 +21,15 @@ public class Capture : MonoBehaviour
 
         
         byte[] bytes = texture.EncodeToPNG();
-        string path = Application.dataPath + "/" + DateTime.Now.ToString(("yyyy_MM_dd_HH_mm_ss_")) + DataManager.instance.playerName + ".png";
-        System.IO.File.WriteAllBytes(path, bytes);
+        string path = "MapImage/" + DateTime.Now.ToString(("yyyy_MM_dd_HH_mm_ss_")) + DataManager.instance.playerName + ".png";
+        System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/" + path, bytes);
 
-        Debug.Log(Application.dataPath);
+        Texture2D textureData = new Texture2D(2, 2);
+        textureData.LoadImage(bytes); // PNG -> Texture로 로드
+
         RenderTexture.active = null;
 
-        return path;
+        return Sprite.Create(textureData, new Rect(0, 0, textureData.width, textureData.height), new Vector2(0.5f, 0.5f));
 
     }
     // Start is called before the first frame update
