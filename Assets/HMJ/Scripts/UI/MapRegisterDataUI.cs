@@ -12,14 +12,20 @@ public class MapRegisterDataUI : MonoBehaviour, IPointerClickHandler
     [Serializable]
     public struct MapRegisterData
     {
-        public TMP_Text title;
-        public TMP_Text Description;
+        public string title;
+        public string Description;
         public RawImage mapImage;
     }
 
     public MapRegisterScrollUI myMapRegisterScrollUIcp;
     private Image PanelImage;
     public MapRegisterData mapRegisterData;
+
+    /// <summary>
+    /// 현재 제목 및 설명
+    /// </summary>
+    public TMP_InputField TitleText;
+    public TMP_InputField DescriptionText;
     // Start is called before the first frame update
     void Start()
     {
@@ -61,5 +67,15 @@ public class MapRegisterDataUI : MonoBehaviour, IPointerClickHandler
     public void SetRegisterImageData(Sprite _spriteImage)
     {
         mapRegisterData.mapImage.texture = _spriteImage.texture;
+    }
+
+    public void SetTitleText()
+    {
+        mapRegisterData.title = TitleText.text;
+    }
+
+    public void SetDescriptionText()
+    {
+        mapRegisterData.Description = DescriptionText.text;
     }
 }

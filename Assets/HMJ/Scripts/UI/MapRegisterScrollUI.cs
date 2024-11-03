@@ -36,11 +36,15 @@ public class MapRegisterScrollUI : ScrollUI
 
     public GameObject GetRegisterGameObject()
     {
-        return registerObject;
+        return content.GetChild(0).gameObject;
     }
 
     public override void AddItem() 
     {
+        itemlist.Clear();
+        imageList.Clear();
+        content.DetachChildren();
+
         Sprite spriteData = SetPrefabImage();
 
         prefab.GetComponent<MapRegisterDataUI>().SetRegisterImageData(spriteData);

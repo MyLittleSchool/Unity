@@ -43,8 +43,8 @@ namespace MJ
 
         public void SetRegisterData(MapRegisterDataUI.MapRegisterData _mapRegisterData)
         {
-            mapContestData.title.text = _mapRegisterData.title.text;
-            mapContestData.Description.text = _mapRegisterData.Description.text;
+            mapContestData.title.text = _mapRegisterData.title;
+            mapContestData.Description.text = _mapRegisterData.Description;
             mapContestData.mapImage.texture = _mapRegisterData.mapImage.texture;
         }
 

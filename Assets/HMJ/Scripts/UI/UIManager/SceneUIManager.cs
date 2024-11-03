@@ -26,6 +26,10 @@ namespace MJ
         [Header("맵 등록 패널 - 맵 콘테스트 패널 버튼")]
         public UnityEngine.UI.Button mapContestButton;
 
+        [Header("맵 등록 패널 - 맵 등록 여부 패널 버튼")]
+        public UnityEngine.UI.Button MapConfirmYesButton;
+        public UnityEngine.UI.Button MapConfirmNoButton;
+
         [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 버튼")]
         public UnityEngine.UI.Button InventoryButton;
 
@@ -53,6 +57,9 @@ namespace MJ
 
         [Header("맵 등록 패널")]
         public GameObject mapRegisterPanel;
+
+        [Header("맵 등록 여부 패널")]
+        public GameObject mapConfirmPanel;
 
         [Header("맵 콘테스트 패널")]
         public GameObject mapContestPanel;
@@ -131,8 +138,11 @@ namespace MJ
             UnityEngine.UI.Button _InventoryButton,
             UnityEngine.UI.Button _InventoryCloseButton,
             UnityEngine.UI.Button _mapContestButton,
+            UnityEngine.UI.Button _mapConfirmYesButton,
+            UnityEngine.UI.Button _mapConfirmNoButton,
             GameObject _mapContestPanel,
-            GameObject _mapRegisterPanel
+            GameObject _mapRegisterPanel,
+            GameObject _mapConfirmPanel
             )
         {
             MapContestCloseButton = _mapContestCloseButton;
@@ -141,6 +151,8 @@ namespace MJ
             InventoryButton = _InventoryButton;
             InventoryCloseButton = _InventoryCloseButton;
             mapContestButton = _mapContestButton;
+            MapConfirmYesButton = _mapConfirmYesButton;
+            MapConfirmNoButton = _mapConfirmNoButton;
 
             if (mapRegisterButton)
                 mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
@@ -159,10 +171,15 @@ namespace MJ
             InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
 
             if (mapContestButton)
-                mapContestButton.onClick.AddListener(OnMapContestPanel);
+                mapContestButton.onClick.AddListener(OnMapConfirmPanel);
+
+            MapConfirmYesButton.onClick.AddListener(OnMapRegisterPanel);
+            MapConfirmYesButton.onClick.AddListener(OffMapConfirmPanel);
+            MapConfirmNoButton.onClick.AddListener(OffMapConfirmPanel);
 
             mapContestPanel = _mapContestPanel;
             mapRegisterPanel = _mapRegisterPanel;
+            mapConfirmPanel = _mapConfirmPanel;
         }
         
         public void initDecorationPanel()
@@ -242,6 +259,16 @@ namespace MJ
             }
         }
 
+        public void OnMapConfirmPanel()
+        {
+            mapConfirmPanel.SetActive(true);
+        }
+
+        public void OffMapConfirmPanel()
+        {
+            mapConfirmPanel.SetActive(false);
+        }
+
         public void OnMenuButtonClick()
         {
             menuPanel.SetActive(!menuPanel.activeSelf);
@@ -249,6 +276,13 @@ namespace MJ
         public void OnFriendsPanel()
         {
             friendsPanel.SetActive(true);
+        }
+
+        public void OffAllMapPanel()
+        {
+            mapContestPanel.SetActive(false);
+            mapRegisterPanel.SetActive(false);
+            mapConfirmPanel.SetActive(false);
         }
     }
 }
