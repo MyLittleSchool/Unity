@@ -37,10 +37,16 @@ public class SceneMgr : MonoBehaviour
     }
     public void Login()
     {
-        DataManager.instance.playerName = nameInputField.text;
-        DataManager.instance.playerSchool = schoolInputField.text;
 
-        SceneManager.LoadScene(2);
+
+
+
+
+        //¾À ³Ñ¾î°¡±â
+        //DataManager.instance.playerName = nameInputField.text;
+        //DataManager.instance.playerSchool = schoolInputField.text;
+
+        //SceneManager.LoadScene(2);
     }
     public void ClassIn()
     {
