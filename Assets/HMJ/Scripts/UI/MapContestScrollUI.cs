@@ -1,3 +1,4 @@
+using MJ;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,7 @@ public class MapContestScrollUI : ScrollUI
             mapContestDataUI.SetRegisterData(mapRegisterDataUI.GetRegisterData());
             itemlist.Add(item);
             imageList.Add(item.GetComponent<Image>());
+            SceneUIManager.GetInstance().OnMapSuccessRegisterPanel();
         }
 
 

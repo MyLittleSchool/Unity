@@ -30,6 +30,9 @@ namespace MJ
         public UnityEngine.UI.Button MapConfirmYesButton;
         public UnityEngine.UI.Button MapConfirmNoButton;
 
+        [Header("맵 등록 성공 패널 끄기")]
+        public UnityEngine.UI.Button MapRegisterSuccessCloseButton;
+
         [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 버튼")]
         public UnityEngine.UI.Button InventoryButton;
 
@@ -63,6 +66,9 @@ namespace MJ
 
         [Header("맵 콘테스트 패널")]
         public GameObject mapContestPanel;
+
+        [Header("맵 등록 성공 패널")]
+        public GameObject mapSuccessRegisterPanel;
 
         [Header("맵 인벤토리 패널")]
         public GameObject mapInventoryPanel;
@@ -140,9 +146,12 @@ namespace MJ
             UnityEngine.UI.Button _mapContestButton,
             UnityEngine.UI.Button _mapConfirmYesButton,
             UnityEngine.UI.Button _mapConfirmNoButton,
+            UnityEngine.UI.Button _mapRegisterSuccessCloseButton,
+            
             GameObject _mapContestPanel,
             GameObject _mapRegisterPanel,
-            GameObject _mapConfirmPanel
+            GameObject _mapConfirmPanel,
+            GameObject _mapSuccessRegisterPanel
             )
         {
             MapContestCloseButton = _mapContestCloseButton;
@@ -153,10 +162,12 @@ namespace MJ
             mapContestButton = _mapContestButton;
             MapConfirmYesButton = _mapConfirmYesButton;
             MapConfirmNoButton = _mapConfirmNoButton;
+            MapRegisterSuccessCloseButton = _mapRegisterSuccessCloseButton;
 
             if (mapRegisterButton)
+            {
                 mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
-
+            }
             if (MapRegisterCloseButton)
             {
                 MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
@@ -180,12 +191,17 @@ namespace MJ
             if (MapConfirmNoButton)
                 MapConfirmNoButton.onClick.AddListener(OffMapConfirmPanel);
 
-            if(_mapContestPanel)
+            if (MapRegisterSuccessCloseButton)
+                MapRegisterSuccessCloseButton.onClick.AddListener(OffMapSuccessRegisterPanel);
+
+            if (_mapContestPanel)
                 mapContestPanel = _mapContestPanel;
             if (_mapRegisterPanel)
                 mapRegisterPanel = _mapRegisterPanel;
             if (_mapConfirmPanel)
                 mapConfirmPanel = _mapConfirmPanel;
+            if (_mapSuccessRegisterPanel)
+                mapSuccessRegisterPanel = _mapSuccessRegisterPanel;
         }
         
         public void initDecorationPanel()
@@ -275,10 +291,21 @@ namespace MJ
             mapConfirmPanel.SetActive(false);
         }
 
+        public void OnMapSuccessRegisterPanel()
+        {
+            mapSuccessRegisterPanel.SetActive(true);
+        }
+
+        public void OffMapSuccessRegisterPanel()
+        {
+            mapSuccessRegisterPanel.SetActive(false);
+        }
+
         public void OnMenuButtonClick()
         {
             menuPanel.SetActive(!menuPanel.activeSelf);
         }
+
         public void OnFriendsPanel()
         {
             friendsPanel.SetActive(true);
@@ -286,11 +313,14 @@ namespace MJ
 
         public void OffAllMapPanel()
         {
-            if (!(mapContestPanel && mapRegisterPanel && mapConfirmPanel))
-                return;
-            mapContestPanel.SetActive(false);
-            mapRegisterPanel.SetActive(false);
-            mapConfirmPanel.SetActive(false);
+            if(mapContestPanel)
+                mapContestPanel.SetActive(false);
+            if (mapRegisterPanel)
+                mapRegisterPanel.SetActive(false);
+            if (mapConfirmPanel)
+                mapConfirmPanel.SetActive(false);
+            if(mapSuccessRegisterPanel)
+                mapSuccessRegisterPanel.SetActive(false);
         }
     }
 }

@@ -19,11 +19,18 @@ public class MJCanvasUI : MonoBehaviour
     [Header("맵 등록 패널 - 맵 콘테스트 패널 버튼")]
     public UnityEngine.UI.Button mapContestButton;
 
+    [Header("맵 등록 성공 패널 끄기")]
+    public UnityEngine.UI.Button MapRegisterSuccessCloseButton;
+
     [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 버튼")]
     public UnityEngine.UI.Button InventoryButton;
 
     [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 끄기 버튼")]
     public UnityEngine.UI.Button InventoryCloseButton;
+
+
+    [Header("맵 등록 성공 패널")]
+    public GameObject mapSuccessRegisterPanel;
 
     [Header("맵 등록 패널")]
     public GameObject mapRegisterPanel;
@@ -37,7 +44,7 @@ public class MJCanvasUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SceneUIManager.GetInstance().RestartSetting(MapContestCloseButton, MapRegisterCloseButton, mapRegisterButton, InventoryButton, InventoryCloseButton, mapContestButton, MapConfirmYesButton, MapConfirmNoButton, mapContestPanel, mapRegisterPanel, mapConfirmPanel);
+        SceneUIManager.GetInstance().RestartSetting(MapContestCloseButton, MapRegisterCloseButton, mapRegisterButton, InventoryButton, InventoryCloseButton, mapContestButton, MapConfirmYesButton, MapConfirmNoButton, MapRegisterSuccessCloseButton, mapContestPanel, mapRegisterPanel, mapConfirmPanel, mapSuccessRegisterPanel);
         SceneUIManager.GetInstance().OffAllMapPanel();
     }
 
