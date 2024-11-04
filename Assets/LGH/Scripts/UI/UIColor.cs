@@ -9,8 +9,8 @@ public class UIColor : MonoBehaviour
     private Image underLine;
     private TMP_Dropdown dropdown;
     private TMP_InputField inputField;
-    private Color focuseColor = new Color32 (242, 136, 75, 255);
-    private Color noneFouseColor = new Color32 (0, 0, 0, 41);
+    private Color focuseColor = new Color32(242, 136, 75, 255);
+    private Color noneFouseColor = new Color32(0, 0, 0, 41);
     void Start()
     {
         underLine = GetComponent<Image>();
@@ -20,22 +20,29 @@ public class UIColor : MonoBehaviour
 
     void Update()
     {
-        if (inputField != null && inputField.isFocused)
+        if (inputField != null)
         {
-            underLine.color = focuseColor;
-        }
-        else
-        {
-            underLine.color = noneFouseColor;
+
+            if (inputField.isFocused)
+            {
+                underLine.color = focuseColor;
+            }
+            else
+            {
+                underLine.color = noneFouseColor;
+            }
         }
 
-        if (dropdown != null && dropdown.value != 0)
+        if (dropdown != null)
         {
-            underLine.color = focuseColor;
-        }
-        else
-        {
-            underLine.color = noneFouseColor;
+            if (dropdown.value != 0)
+            {
+                underLine.color = focuseColor;
+            }
+            else
+            {
+                underLine.color = noneFouseColor;
+            }
         }
     }
 }
