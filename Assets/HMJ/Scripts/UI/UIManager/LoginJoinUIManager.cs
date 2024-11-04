@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace GH
 {
-    public class UIManager : MonoBehaviour
+    public class LoginJoinUIManager : MonoBehaviour
     {
         public enum Loginstep
         {
@@ -63,6 +64,14 @@ namespace GH
         [Header("6. 관심사 리스트")]
         public List<string> interests;
 
+        [Header("6. 관심사 버튼 프리팹")]
+        public GameObject interestButtonPrefab;
+
+        [Header("6. 관심사 버튼 생성위치")]
+        public Transform interestButtonTransform;
+
+        [Header("6. 관심사 띄우는 배열")]
+        public Queue<String> interestsQueue = new Queue<String>(5);
 
         private void Start()
         {
@@ -93,6 +102,8 @@ namespace GH
             checkIDButton.onClick.AddListener(CheckID);
             checkIDText.gameObject.SetActive(false);
 
+            //6 페이지
+            InterestButtonCreate();
         }
 
         private void Update()
@@ -156,7 +167,14 @@ namespace GH
             }
         }
 
-
+        private void InterestButtonCreate()
+        {
+            for (int i = 0; i < interests.Count; i++)
+            {
+                Button interestButton = Instantiate(interestButtonPrefab, interestButtonTransform).GetComponent<Button>();
+                interestButton.GetComponentInChildren<TMP_Text>().text = interests[i];
+            }
+        }
 
     }
 }

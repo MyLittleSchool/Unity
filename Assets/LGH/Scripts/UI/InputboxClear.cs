@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class InputboxClear : MonoBehaviour
+namespace GH
 {
-    private Button xButton;
-    private TMP_InputField inputFields;
 
-    void Start()
+    public class InputboxClear : MonoBehaviour
     {
-        xButton = GetComponent<Button>();
-        inputFields = GetComponentInParent<TMP_InputField>();
-        xButton.onClick.AddListener(TextClear);
+        private Button xButton;
+        private TMP_InputField inputFields;
+
+        void Start()
+        {
+            xButton = GetComponent<Button>();
+            inputFields = GetComponentInParent<TMP_InputField>();
+            xButton.onClick.AddListener(TextClear);
+        }
+
+
+        private void TextClear()
+        {
+            inputFields.text = "";
+        }
     }
 
-  
-    private void TextClear()
-    {
-        inputFields.text = "";
-    }
 }
