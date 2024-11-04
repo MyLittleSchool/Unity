@@ -1,10 +1,11 @@
 using GH;
 using MJ;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BounceObject : MonoBehaviour
+public class BounceObject : MonoBehaviour, IPunObservable
 {
     enum BallMove
     { 
@@ -19,10 +20,12 @@ public class BounceObject : MonoBehaviour
 
     BallMove ballMove = BallMove.BallUp;
 
+    private PhotonView pv;
     public SoccerObject soccerObject;
     // Start is called before the first frame update
     private void Start()
     {
+        pv = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
@@ -119,4 +122,15 @@ public class BounceObject : MonoBehaviour
         return Vector3.Distance(DataManager.instance.player.transform.position, transform.position) < dis;
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(bBallBounce);
+        }
+        else if (stream.IsReading)
+        {
+            bBallBounce = !(bool)stream.ReceiveNext();
+        }
+    }
 }

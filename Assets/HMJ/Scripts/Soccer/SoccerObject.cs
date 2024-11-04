@@ -3,6 +3,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -20,7 +21,8 @@ namespace MJ
 
         private bool Move = false;
 
-        private Vector3 firstPosition;
+        private PhotonView pv;
+        // private Vector3 firstPosition;
 
         private float speed = 4.0f;
 
@@ -33,23 +35,28 @@ namespace MJ
             rigidbody.drag = 0.5f;
 
             bounceObject = GetComponentInChildren<BounceObject>();
+            pv = GetComponent<PhotonView>();
         }
+
 
         private void Update()
         {
-
-            if (Input.GetKeyDown(KeyCode.K) && bounceObject && bounceObject.GetBounceBall())
+            if (pv.IsMine)
+            {
+                if (Input.GetKeyDown(KeyCode.K) && bounceObject && bounceObject.GetBounceBall())
                 KickBall(bounceObject.GetPlayerDirection());
 
-            if (DataManager.instance.player)
-                CheckPlayer();
-            MoveBall();
-            DistanseCheck();
+                if (DataManager.instance.player)
+                    CheckPlayer();
+
+                MoveBall();
+                DistanseCheck();
+            }
         }
 
         private void FixedUpdate()
         {
-            if (GetComponent<PhotonView>().IsMine)
+            if (pv.IsMine)
             {
 
             }
@@ -64,20 +71,19 @@ namespace MJ
             bounceObject.SetBallBounce(false);
             Move = true;
             initialVelocityX = direction.x * 10.0f;
-            firstPosition = transform.position;
-            // rigidbody.AddForce(direction * 1.0f, ForceMode2D.Impulse);
         }
 
         public float initialVelocityX = 20f;  // x방향 초기 속도
         public float initialVelocityY = 2f;   // y방향 초기 속도
         public float gravity = -9.8f;         // 중력 가속도
-        private float timeX = 0f;              // 시간 변수
-        private float timeY = 0f;              // 시간 변수
         public void MoveBall()
         {
-            if (!Move)
+            if (!Move || !pv.IsMine)
                 return;
+            // 현재 플레이어의 조이스틱을 가져와야한다.
+
             Vector2 kickDirection = new Vector2(GameManager.instance.Joystick.Horizontal, GameManager.instance.Joystick.Vertical).normalized;
+
             rigidbody.AddForce(kickDirection, ForceMode2D.Impulse);
 
             Move = false;
@@ -85,6 +91,7 @@ namespace MJ
 
         public void CheckPlayer()
         {
+            
             if (bounceObject.CheckAroundPlayer(2.0f) && !bounceObject.GetBounceBall() && !Move && Input.GetKeyDown(KeyCode.K))
                 bounceObject.StartBounce();
         }
@@ -94,14 +101,18 @@ namespace MJ
 
             int layer = LayerMask.NameToLayer("NetCollision");
             //int layer1 = LayerMask.NameToLayer("OutCollision");
-            if (collision.gameObject.name.Contains("Player"))
+            if (collision.gameObject.name.Contains("Player") && collision.gameObject.GetComponent<PhotonView>().IsMine)
+            {
+                GetComponent<PhotonView>().RequestOwnership();
                 playerCollision();
+            }
+                
 
             if (bounceObject.GetBounceBall())
                 return;
             if (collision.gameObject.layer == layer)
             {
-                UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
+                //UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
                 StartCoroutine(ResetSoccerPosition(2.0f));
             }
 
@@ -125,8 +136,6 @@ namespace MJ
             rigidbody.velocity = Vector2.zero;
             rigidbody.angularVelocity = 0.0f;
             Move = false;
-            timeX = 0.0f;
-            timeY = 0.0f;
             yield return null;
         }
 
@@ -148,7 +157,6 @@ namespace MJ
             if (stream.IsWriting)
             {
                 stream.SendNext(transform.position);
-
             }
             else if (stream.IsReading)
             {
