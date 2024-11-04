@@ -71,7 +71,7 @@ namespace GH
             //플레이어의 말풍선을 찾는다.
             if (malpungPanel == null)
             {
-                if (DataManager.instance != null)
+                if (DataManager.instance && DataManager.instance.player)
                 {
                     playerMalpung = DataManager.instance.player.GetComponent<PlayerMalpung>();
                     malpungPanel = playerMalpung.malpungPanel;

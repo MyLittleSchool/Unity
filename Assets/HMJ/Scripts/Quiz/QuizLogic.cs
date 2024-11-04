@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using GH;
+using Photon.Pun;
 
 
 public class QuizLogic : MonoBehaviour
@@ -36,19 +37,24 @@ public class QuizLogic : MonoBehaviour
     float quizTime = 5.0f;
     bool quizClear = false;
 
+    int minimumPlayer = 2;
+
     public List<QuizData> quizList;
 
 
-    QuizState m_eNextQuizOrder = QuizState.QuizReadyState;
+    QuizState m_eNextQuizOrder = QuizState.QuizNoneState;
     QuizState m_eCurQuizOrder = QuizState.QuizNoneState;
 
     GameObject player;
+
+    List<int> correctAnswers;
 
     private void Start()
     {
     }
     private void Update()
     {
+        StartQuiz();
         NextQuizState();
     }
     /// <summary>
@@ -66,6 +72,19 @@ public class QuizLogic : MonoBehaviour
     public void RandomQuiz()
     {
         shuffleQuizList();
+    }
+
+    public void StartQuiz()
+    {
+        if(m_eNextQuizOrder == QuizState.QuizNoneState)
+        {
+            if(PhotonNetwork.CurrentRoom.PlayerCount >= minimumPlayer)
+                m_eNextQuizOrder = QuizState.QuizReadyState;
+            else
+            {
+                text.text = minimumPlayer.ToString() + "인 이상 모여야 퀴즈가 시작됩니다.";
+            }
+        }
     }
 
     /// <summary>
