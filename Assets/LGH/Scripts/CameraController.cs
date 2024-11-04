@@ -24,7 +24,7 @@ namespace GH
 
         private void Update()
         {
-            if (DataManager.instance.player != null)
+            if (DataManager.instance != null)
             {
                 playerTransForm = DataManager.instance.player.transform;
 

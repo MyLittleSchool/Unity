@@ -105,7 +105,7 @@ namespace GH
 
         public void InteractionButton()
         {
-            if(DataManager.instance.player != null)
+            if(DataManager.instance != null)
             {
 
                 interracBut.SetActive(interMode);
