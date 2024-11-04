@@ -173,13 +173,19 @@ namespace MJ
             if (mapContestButton)
                 mapContestButton.onClick.AddListener(OnMapConfirmPanel);
 
-            MapConfirmYesButton.onClick.AddListener(OnMapRegisterPanel);
-            MapConfirmYesButton.onClick.AddListener(OffMapConfirmPanel);
-            MapConfirmNoButton.onClick.AddListener(OffMapConfirmPanel);
+            if(MapConfirmYesButton)
+                MapConfirmYesButton.onClick.AddListener(OnMapRegisterPanel);
+            if (MapConfirmYesButton)
+                MapConfirmYesButton.onClick.AddListener(OffMapConfirmPanel);
+            if (MapConfirmNoButton)
+                MapConfirmNoButton.onClick.AddListener(OffMapConfirmPanel);
 
-            mapContestPanel = _mapContestPanel;
-            mapRegisterPanel = _mapRegisterPanel;
-            mapConfirmPanel = _mapConfirmPanel;
+            if(_mapContestPanel)
+                mapContestPanel = _mapContestPanel;
+            if (_mapRegisterPanel)
+                mapRegisterPanel = _mapRegisterPanel;
+            if (_mapConfirmPanel)
+                mapConfirmPanel = _mapConfirmPanel;
         }
         
         public void initDecorationPanel()
@@ -280,6 +286,8 @@ namespace MJ
 
         public void OffAllMapPanel()
         {
+            if (!(mapContestPanel && mapRegisterPanel && mapConfirmPanel))
+                return;
             mapContestPanel.SetActive(false);
             mapRegisterPanel.SetActive(false);
             mapConfirmPanel.SetActive(false);

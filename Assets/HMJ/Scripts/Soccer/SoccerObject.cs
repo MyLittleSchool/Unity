@@ -1,13 +1,16 @@
 using GH;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+// using static UnityEditor.PlayerSettings;
 
 namespace MJ
 {
-    public class SoccerObject : MonoBehaviour
+    public class SoccerObject : MonoBehaviour, IPunObservable
     {
         Rigidbody2D rigidbody;
 
@@ -20,6 +23,9 @@ namespace MJ
         private Vector3 firstPosition;
 
         private float speed = 4.0f;
+
+        //Æ÷Åæ º¯¼ö°ª
+        Vector3 myPos;
 
         private void Start()
         {
@@ -39,6 +45,18 @@ namespace MJ
                 CheckPlayer();
             MoveBall();
             DistanseCheck();
+        }
+
+        private void FixedUpdate()
+        {
+            if (GetComponent<PhotonView>().IsMine)
+            {
+
+            }
+            else
+            {
+                transform.position = myPos;
+            }
         }
 
         public void KickBall(Vector2 direction)
@@ -123,6 +141,19 @@ namespace MJ
         {
             if(Vector3.Distance(new Vector3(16.5f, -22.5f, 0.0f), transform.position) > 10.0f)
                 StartCoroutine(ResetSoccerPosition(0.5f));
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(transform.position);
+
+            }
+            else if (stream.IsReading)
+            {
+                myPos = (Vector3)stream.ReceiveNext();
+            }
         }
     }
 
