@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using TMPro;
 using GH;
 using Photon.Pun;
+using System.Numerics;
 
 
 public class QuizLogic : MonoBehaviour
@@ -78,8 +79,10 @@ public class QuizLogic : MonoBehaviour
     {
         if(m_eNextQuizOrder == QuizState.QuizNoneState)
         {
-            if(PhotonNetwork.CurrentRoom.PlayerCount >= minimumPlayer)
+            if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount >= minimumPlayer)
+            {
                 m_eNextQuizOrder = QuizState.QuizReadyState;
+            }
             else
             {
                 text.text = minimumPlayer.ToString() + "인 이상 모여야 퀴즈가 시작됩니다.";

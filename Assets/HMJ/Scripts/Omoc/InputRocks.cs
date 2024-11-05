@@ -6,7 +6,11 @@ using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Photon.Pun;
+
 using static ROCK;
+using static UnityEngine.Rendering.DebugUI.Table;
+using TMPro;
 
 namespace MJ
 {
@@ -30,9 +34,12 @@ namespace MJ
         private ROCK.ROCKCOLOR rockColor = ROCKCOLOR.WHITE;
 
         private OmocCheck omocCheck;
+
+        private PhotonView pv;
         // Start is called before the first frame update
         void Start()
         {
+            pv = GetComponent<PhotonView>();
             omocCheck = GetComponent<OmocCheck>();
             InitRocks();
         }
@@ -43,20 +50,37 @@ namespace MJ
             if (Input.GetKey(KeyCode.Space)) // Space
             {
                 int[] Grid = CheckRockIdx();
-                InputRock(Grid[0], Grid[1], rockColor);
+                SendInputRock(Grid[0], Grid[1], (int)rockColor);
                 if (omocCheck.OmocWin(rockDatas, Grid[0], Grid[1]))
-                {
-                    // StartCoroutine(ResetRocks(3.0f));
-                    UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
-                }
+                    SendOmocWin(Grid[0], Grid[1]);
             }
         }
+        public void SendInputRock(int row, int col, int rockColor)
+        {
+            pv.RPC("InputRock", RpcTarget.AllBuffered, row, col, rockColor);
+        }
 
-        public void InputRock(int row, int col, ROCKCOLOR rockColor)
+        public void SendOmocWin(int row, int col)
+        {
+            pv.RPC("OmocWinPlayUI", RpcTarget.All, DataManager.instance.playerName, row, col);
+        }
+
+        [PunRPC]
+        public void OmocWinPlayUI(string playerName, int row, int col)
+        {
+            omocCheck.OmocWin(rockDatas, row, col);
+
+            FadeOutUI fadeOutUI = UIPanel.GetComponentInChildren<FadeOutUI>();
+            fadeOutUI.GetComponentInChildren<TMP_Text>().text = playerName + " 오목 성공!";
+            UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
+        }
+
+        [PunRPC]
+        public void InputRock(int row, int col, int rockColor)
         {
             if (row < 0 || col < 0 || row >= ROCK_ROW || col >= ROCK_COLUMN)
                 return;
-            rockDatas[row, col].SetColor(rockColor);
+            rockDatas[row, col].SetColor((ROCKCOLOR)rockColor);
         }
 
         public int[] CheckRockIdx()
