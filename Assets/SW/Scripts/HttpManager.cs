@@ -21,8 +21,6 @@ public struct PostInfoArray
 public class HttpManager : MonoBehaviour
 {
     static HttpManager instance;
-    public int UserId { get; } = 1;
-    public int MapId { get; } = 1;
     public static HttpManager GetInstance()
     {
         if (instance == null)
