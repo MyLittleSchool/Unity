@@ -33,4 +33,11 @@ namespace SW
             });
         }
     }
+    public class School
+    {
+        public int id;
+        public string schoolName;
+        public int backgroundColorId;
+        public List<PlaceManager.ObjectInfo> furnitureList;
+    }
 }

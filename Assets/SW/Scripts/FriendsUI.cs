@@ -72,7 +72,7 @@ namespace SW
             }
         }
 
-        public void RefreshTab0(List<Friend> _friends)
+        public void RefreshFriends(List<Friend> _friends)
         {
             // ªË¡¶
             Destroy(contentsTabs[0].gameObject);
@@ -113,5 +113,6 @@ namespace SW
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }
+
     }
 }
