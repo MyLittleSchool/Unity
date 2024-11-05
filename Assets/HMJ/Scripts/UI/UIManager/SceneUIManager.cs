@@ -48,6 +48,12 @@ namespace MJ
         [Header("나의 프로필 버튼")]
         public Button myProfileButton;
 
+        [Header("나의 프로필 편집 버튼")]
+        public Button myProfileEditButton;
+
+        [Header("나의 프로필 편집 저장 버튼")]
+        public Button myProfileSaveButton;
+
         #endregion
 
         #region Panel
@@ -90,6 +96,8 @@ namespace MJ
         [Header("나의 프로필 편집 패널")]
         public GameObject myProfileEditPanel;
 
+
+
         #endregion
 
         #region SingleTone
@@ -107,7 +115,7 @@ namespace MJ
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -123,6 +131,13 @@ namespace MJ
         private void Start()
         {
             myProfileButton.onClick.AddListener(OnOffMyProfile);
+            myProfileEditButton.onClick.AddListener(OnMyProfileEdit);
+            myProfileSaveButton.onClick.AddListener(OffMyProfileEdit);
+
+            myProfileEditPanel.SetActive(false);
+            myProfilePanel.SetActive(false);
+
+
         }
 
         public void RestartSetting(
@@ -135,7 +150,7 @@ namespace MJ
             Button _mapConfirmYesButton,
             Button _mapConfirmNoButton,
             Button _mapRegisterSuccessCloseButton,
-            
+
             GameObject _mapContestPanel,
             GameObject _mapRegisterPanel,
             GameObject _mapConfirmPanel,
@@ -172,7 +187,7 @@ namespace MJ
             if (mapContestButton)
                 mapContestButton.onClick.AddListener(OnMapConfirmPanel);
 
-            if(MapConfirmYesButton)
+            if (MapConfirmYesButton)
                 MapConfirmYesButton.onClick.AddListener(OnMapRegisterPanel);
             if (MapConfirmYesButton)
                 MapConfirmYesButton.onClick.AddListener(OffMapConfirmPanel);
@@ -191,7 +206,7 @@ namespace MJ
             if (_mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel = _mapSuccessRegisterPanel;
         }
-        
+
         public void initDecorationPanel()
         {
             PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
@@ -263,7 +278,7 @@ namespace MJ
             InventoryCloseButton.gameObject.SetActive(false);
             InventoryButton.gameObject.SetActive(true);
             ChatPanel.gameObject.SetActive(true);
-            if(DataManager.instance.player != null)
+            if (DataManager.instance.player != null)
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = false;
             }
@@ -301,13 +316,13 @@ namespace MJ
 
         public void OffAllMapPanel()
         {
-            if(mapContestPanel)
+            if (mapContestPanel)
                 mapContestPanel.SetActive(false);
             if (mapRegisterPanel)
                 mapRegisterPanel.SetActive(false);
             if (mapConfirmPanel)
                 mapConfirmPanel.SetActive(false);
-            if(mapSuccessRegisterPanel)
+            if (mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel.SetActive(false);
         }
 
@@ -317,8 +332,20 @@ namespace MJ
             myProfilePanel.SetActive(!myProfilePanel.activeSelf);
 
             Image myProfileImage = myProfileButton.GetComponentInChildren<Image>();
-            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32 (242, 136, 75, 255) : new Color32(29, 27, 32, 255);
+            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(29, 27, 32, 255);
             myProfileImage.color = myprofileColor;
+
+        }
+        public void OnMyProfileEdit()
+        {
+            myProfileEditPanel.SetActive(true);
+            myProfilePanel.SetActive(false);
+        }
+
+        public void OffMyProfileEdit()
+        {
+            myProfileEditPanel.SetActive(false);
+            myProfilePanel.SetActive(true);
 
         }
     }

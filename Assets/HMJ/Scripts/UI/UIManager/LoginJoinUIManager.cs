@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using static HttpManager;
 
 namespace GH
 {
+
+
     public class LoginJoinUIManager : MonoBehaviour
     {
         public enum Loginstep
@@ -24,6 +28,8 @@ namespace GH
 
         public Loginstep currentLoginstep;
 
+        public UserInfo currentJoinInfo;
+
         #region Button
         [Header("다음 버튼 리스트")]
         public List<Button> nextButtons;
@@ -34,9 +40,11 @@ namespace GH
         [Header("4. 중복 버튼")]
         public Button checkIDButton;
 
-
         [Header("4. 인증 확인 버튼")]
         public Button checkNumButton;
+
+        [Header("7. 인증 확인 버튼")]
+        public Button joinButton;
 
         #endregion
 
@@ -47,7 +55,7 @@ namespace GH
         #endregion
 
         [Header("인덱스 슬라이더")]
-        private Slider indexSlider;
+        public Slider indexSlider;
 
         [Header("4. 중복 아이디 텍스트")]
         public TMP_Text checkIDText;
@@ -73,9 +81,13 @@ namespace GH
         [Header("6. 관심사 띄우는 배열")]
         public Queue<String> interestsQueue = new Queue<String>(5);
 
+        [Header("통신 인풋필드 리스트")]
+        // 0 - 이름, 1 - 이메일, 2 - PassWord, 3 - 생년월일
+        public List<TMP_InputField> joinInfoInfoList;
+
+
         private void Start()
         {
-            indexSlider = GameObject.Find("Index_Slider").GetComponent<Slider>();
 
             // 초기 패널 엑티브 적용
             for (int i = 0; i < logins.Count; i++)
@@ -104,6 +116,9 @@ namespace GH
 
             //6 페이지
             InterestButtonCreate();
+
+            //7페이지
+            joinButton.onClick.AddListener(UserJoin);
         }
 
         private void Update()
@@ -114,6 +129,26 @@ namespace GH
 
         public void NextStep()
         {
+            switch (currentLoginstep)
+            {
+                case Loginstep.NAME:
+
+                    break;
+
+                case Loginstep.EMAIL:
+                    break;
+
+                case Loginstep.PASSWORD:
+                    break;
+
+                case Loginstep.INTEREST:
+                    break;
+                    
+                case Loginstep.PERSONAL:
+                    break;
+
+            }
+
             for (int i = 0; i < logins.Count; i++)
             {
 
@@ -174,6 +209,33 @@ namespace GH
                 Button interestButton = Instantiate(interestButtonPrefab, interestButtonTransform).GetComponent<Button>();
                 interestButton.GetComponentInChildren<TMP_Text>().text = interests[i];
             }
+        }
+
+
+
+        //통신 코드
+        private void UserJoin()
+        {
+            UserInfo joinInfo = new UserInfo();
+            joinInfo.email = "aa@naver.com";
+            joinInfo.nickname = "이규현";
+            joinInfo.gender = true;
+            joinInfo.password = "asd123";
+            joinInfo.interest = new Queue<string>(5);
+            joinInfo.interest.Enqueue("공부");
+            joinInfo.interest.Enqueue("게임");
+            joinInfo.interest.Enqueue("영화");
+
+
+            HttpInfo info = new HttpInfo();
+            info.url = "http://125.132.216.190:5544/user";
+            info.body = JsonUtility.ToJson(joinInfo);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+            StartCoroutine(HttpManager.GetInstance().Post(info));
         }
 
     }
