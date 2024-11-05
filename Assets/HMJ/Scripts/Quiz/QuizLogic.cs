@@ -48,10 +48,15 @@ public class QuizLogic : MonoBehaviour
 
     GameObject player;
 
-    List<int> correctAnswers;
+    PhotonView pv;
+
+    Dictionary<string, int> correctAnswers = new Dictionary<string, int>();
+
+    string winnerData;
 
     private void Start()
     {
+        pv = GetComponent<PhotonView>();
     }
     private void Update()
     {
@@ -80,13 +85,9 @@ public class QuizLogic : MonoBehaviour
         if(m_eNextQuizOrder == QuizState.QuizNoneState)
         {
             if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount >= minimumPlayer)
-            {
                 m_eNextQuizOrder = QuizState.QuizReadyState;
-            }
             else
-            {
                 text.text = minimumPlayer.ToString() + "인 이상 모여야 퀴즈가 시작됩니다.";
-            }
         }
     }
 
@@ -154,10 +155,29 @@ public class QuizLogic : MonoBehaviour
         GameObject player = DataManager.instance.player;
         Debug.Log("플레이어 x:" + player.transform.position.x);
         if (((player.transform.position.x > 0) && !quizList[idx].quizBoolean) || ((player.transform.position.x < 0) && quizList[idx].quizBoolean))// x
+        {
             quizClear = true;
+            SendMasterQuizClearCheck();
+        }   
         else
             quizClear = false;
+
     }
+    
+    public void SendMasterQuizClearCheck()
+    {
+        pv.RPC("SendQuizClearCheck", RpcTarget.MasterClient, DataManager.instance.playerName);
+    }
+
+    [PunRPC]
+    public void SendQuizClearCheck(string _playerName)
+    {
+        if (correctAnswers.ContainsKey(_playerName))
+            correctAnswers[_playerName]++;
+        else
+            correctAnswers.Add(_playerName, 1);
+    }
+
     public IEnumerator ProceedQuiz(float _quizTime)
     {
         yield return new WaitForSeconds(_quizTime);
@@ -187,8 +207,56 @@ public class QuizLogic : MonoBehaviour
 
     public IEnumerator QuizLast(float _lastTime)
     {
+        // 우승자 rpc로 뿌리기
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SettingWinnerData();
+            SendAllQuizWinnerData();
+        }
         yield return new WaitForSeconds(_lastTime);
-        text.text = "";
+
+        text.text = winnerData;
+    }
+
+    public void SendAllQuizWinnerData()
+    {
+        pv.RPC("SendWinnerData", RpcTarget.Others, winnerData);
+    }
+
+    [PunRPC]
+    public void SendWinnerData(string _winnerData)
+    {
+        winnerData = _winnerData;
+    }
+
+    public void SettingWinnerData()
+    {
+        List<KeyValuePair<String, int>> keyValueDataList = FindMaxPlayerKeyValue();
+
+        foreach (KeyValuePair<String, int> item in keyValueDataList)
+        {
+            winnerData += item.Key + "님 (" + item.Value + "번 정답)\n";
+        }
+        winnerData += "최종 퀴즈 우승하셨습니다.";
+    }
+
+    
+    public List<KeyValuePair<String, int>> FindMaxPlayerKeyValue()
+    {
+        int max = 0;
+        List<KeyValuePair<String, int>> itemData = new List<KeyValuePair<String, int>>();
+        foreach (KeyValuePair<String, int> item in correctAnswers)
+        {
+            if(max < item.Value)
+            {
+                max = item.Value;
+                itemData.Clear();
+                itemData.Add(item);
+            }
+            else if(max == item.Value && max != 0)
+                itemData.Add(item);
+        }
+        return itemData;
     }
     /// <summary>
     /// 랜덤으로 섞기
