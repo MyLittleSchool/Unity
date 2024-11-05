@@ -14,6 +14,8 @@ namespace GH
 
     public class LoginJoinUIManager : MonoBehaviour
     {
+        public string iP;
+        public string port;
         public enum Loginstep
         {
             START,
@@ -132,7 +134,7 @@ namespace GH
             switch (currentLoginstep)
             {
                 case Loginstep.NAME:
-
+                    currentJoinInfo.name = joinInfoInfoList[0].text;
                     break;
 
                 case Loginstep.EMAIL:
@@ -217,18 +219,16 @@ namespace GH
         private void UserJoin()
         {
             UserInfo joinInfo = new UserInfo();
-            joinInfo.email = "aa@naver.com";
-            joinInfo.nickname = "이규현";
+            joinInfo.email = "aaa@naver.com";
+            joinInfo.name = "이규현";
+            joinInfo.birthday = "20241231";
             joinInfo.gender = true;
             joinInfo.password = "asd123";
-            joinInfo.interest = new Queue<string>(5);
-            joinInfo.interest.Enqueue("공부");
-            joinInfo.interest.Enqueue("게임");
-            joinInfo.interest.Enqueue("영화");
+            joinInfo.interest = new List<string>() {"공부", "영화", "게임" };
 
 
             HttpInfo info = new HttpInfo();
-            info.url = "http://125.132.216.190:5544/user";
+            info.url = "http://" + iP +":"+port+"/user";
             info.body = JsonUtility.ToJson(joinInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>

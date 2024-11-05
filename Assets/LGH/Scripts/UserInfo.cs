@@ -9,11 +9,16 @@ namespace GH
     {
         public string socialId;
         public string email;
-        public string nickname;
+        public string name;
         public string birthday;
         public bool gender;
         public string password;
-        public Queue<string> interest;
+        public List<string> interest;
+        public int grade;
+        public string phone;
+        public int level;
+        public int exp;
+        public int maxExp;
     }
 
     [System.Serializable]
