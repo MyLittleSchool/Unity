@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace MJ
 {
@@ -46,6 +45,9 @@ namespace MJ
         [Header("친구창 버튼")]
         public UnityEngine.UI.Button friendsButton;
 
+        [Header("나의 프로필 버튼")]
+        public Button myProfileButton;
+
         #endregion
 
         #region Panel
@@ -81,6 +83,13 @@ namespace MJ
 
         [Header("채팅 패널")]
         public GameObject ChatPanel;
+
+        [Header("나의 프로필 패널")]
+        public GameObject myProfilePanel;
+
+        [Header("나의 프로필 편집 패널")]
+        public GameObject myProfileEditPanel;
+
         #endregion
 
         #region SingleTone
@@ -113,40 +122,19 @@ namespace MJ
         // Start is called before the first frame update
         private void Start()
         {
-            //if(mapRegisterButton)
-            //    mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
-
-            //if (MapRegisterCloseButton)
-            //{
-            //    MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
-            //    MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
-            //}
-
-            //if(MapContestCloseButton)
-            //    MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
-
-            //if (!InventoryButton)
-            //    InventoryButton = GameObject.Find("MJCanvas/MapContestOnOffPanel/Button_Panel/Button").GetComponent<UnityEngine.UI.Button>();
-            //InventoryButton.onClick.AddListener(OnMapInventoryPanel);
-
-            //if (!InventoryCloseButton)
-            //    InventoryCloseButton = GameObject.Find("MJCanvas/InventoryOnOffPanel/Button_Panel/Button_Panel (1)/Button").GetComponent<UnityEngine.UI.Button>();
-            //InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
-
-            //if (mapContestButton)
-            //    mapContestButton.onClick.AddListener(OnMapContestPanel);
+            myProfileButton.onClick.AddListener(OnOffMyProfile);
         }
 
         public void RestartSetting(
-            UnityEngine.UI.Button _mapContestCloseButton,
-            UnityEngine.UI.Button _mapRegisterCloseButton,
-            UnityEngine.UI.Button _mapRegisterButton,
-            UnityEngine.UI.Button _InventoryButton,
-            UnityEngine.UI.Button _InventoryCloseButton,
-            UnityEngine.UI.Button _mapContestButton,
-            UnityEngine.UI.Button _mapConfirmYesButton,
-            UnityEngine.UI.Button _mapConfirmNoButton,
-            UnityEngine.UI.Button _mapRegisterSuccessCloseButton,
+            Button _mapContestCloseButton,
+            Button _mapRegisterCloseButton,
+            Button _mapRegisterButton,
+            Button _InventoryButton,
+            Button _InventoryCloseButton,
+            Button _mapContestButton,
+            Button _mapConfirmYesButton,
+            Button _mapConfirmNoButton,
+            Button _mapRegisterSuccessCloseButton,
             
             GameObject _mapContestPanel,
             GameObject _mapRegisterPanel,
@@ -321,6 +309,17 @@ namespace MJ
                 mapConfirmPanel.SetActive(false);
             if(mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel.SetActive(false);
+        }
+
+        public void OnOffMyProfile()
+        {
+            //버튼으로 키고 끄기
+            myProfilePanel.SetActive(!myProfilePanel.activeSelf);
+
+            Image myProfileImage = myProfileButton.GetComponentInChildren<Image>();
+            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32 (242, 136, 75, 255) : new Color32(29, 27, 32, 255);
+            myProfileImage.color = myprofileColor;
+
         }
     }
 }

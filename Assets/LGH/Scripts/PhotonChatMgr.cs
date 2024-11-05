@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using Photon.Chat;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
 using System;
 using System.Collections;
@@ -54,7 +55,7 @@ namespace GH
 
             // photon chat 서버에 접속
             PhotonChatConnect();
-
+            
 
         }
 
@@ -70,7 +71,7 @@ namespace GH
             //플레이어의 말풍선을 찾는다.
             if (malpungPanel == null)
             {
-                if (DataManager.instance.player != null)
+                if (DataManager.instance != null)
                 {
                     playerMalpung = DataManager.instance.player.GetComponent<PlayerMalpung>();
                     malpungPanel = playerMalpung.malpungPanel;

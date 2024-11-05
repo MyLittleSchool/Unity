@@ -29,6 +29,8 @@ namespace GH
             {
                 Destroy(gameObject);
             }
+            Screen.SetResolution(360, 800, false);
+            Screen.fullScreen = false;
 
         }
         public void PlayerFind()
