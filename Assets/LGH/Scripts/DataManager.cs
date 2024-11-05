@@ -15,6 +15,7 @@ namespace GH
         public string playerName;
         public string playerSchool;
         public string playerCurrChannel;
+        public int mapId;
         public GameObject setTileObj;
         private void Awake()
         {
@@ -30,16 +31,6 @@ namespace GH
             }
 
         }
-
-
-        void Start()
-        {
-        }
-
-        void Update()
-        {
-        }
-
         public void PlayerFind()
         {
 

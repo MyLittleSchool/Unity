@@ -40,9 +40,13 @@ namespace SW
             public string accessToken;
         }
         public AuthData UserAuthData { get; private set; }
+        public int MapId { get; set; } = 1;
 
         private void Start()
         {
+            AuthData testAuth = new AuthData();
+            testAuth.id = 1;
+            UserAuthData = testAuth;
             return;
             redirectUri = HttpManager.GetInstance().SERVER_ADRESS + "/login/oauth2/code/kakao";
             serverUrl = HttpManager.GetInstance().SERVER_ADRESS + "/kakaoLoginLog";
