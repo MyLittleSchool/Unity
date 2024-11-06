@@ -89,6 +89,7 @@ namespace SW
                 print(receiverList);
                 print(receiverList.success);
                 print(receiverList.response);
+                print(receiverList.error);
                 if (receiverList.response != null)
                 {
                     for (int i = 0; i < receiverList.response.Length; i++)
@@ -137,12 +138,14 @@ namespace SW
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }
 
+        [Serializable]
         public class FriendshipList
         {
             public bool success;
             public Friendship[] response;
             public Error error;
         }
+        [Serializable]
         public class Friendship
         {
             public int id;
@@ -150,6 +153,7 @@ namespace SW
             public UserInfo receiver;
             public bool accepted;
         }
+        [Serializable]
         public class Error
         {
             public string message;
