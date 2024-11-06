@@ -5,11 +5,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Reflection;
 using TMPro;
+using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 namespace GH
 {
-    public class PhotonNetMgr : MonoBehaviourPunCallbacks
+    public class PhotonNetMgr : MonoBehaviourPunCallbacks 
     {
+
         //상단 방 이름
         public TMP_Text topMenuText;
 
@@ -175,9 +178,14 @@ namespace GH
 
             // 성공적으로 방이 만들어졌다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
+            GameObject joyStick = GameObject.Find("Variable Joystick");
+
+            if (joyStick != null)
+            {
+                joyStick.GetComponent<Joystick>().ResetJoystick();
+            }
 
 
-           
 
         }
 
@@ -195,10 +203,14 @@ namespace GH
             
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
             //CreateRoom();
-
             //// 방에 입장한 친구들은 모두 1번 씬으로 이동하자
+          
             PhotonNetwork.LoadLevel(sceneNum);
             GameManager.instance.CoSpwamPlayer();
+
+
         }
+
     }
+    
 }

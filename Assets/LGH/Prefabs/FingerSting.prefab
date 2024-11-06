@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8853662123142080828}
   - component: {fileID: 8473552755928179652}
-  - component: {fileID: 7081154452826774692}
   m_Layer: 0
   m_Name: model
   m_TagString: Untagged
@@ -85,18 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7081154452826774692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391538222108411329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b00969f9578746f4e941f5bb724315c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5256388510713710409
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7645374321280873418}
   - component: {fileID: 4808163524718215300}
+  - component: {fileID: 163754850498544956}
   m_Layer: 6
   m_Name: FingerSting
   m_TagString: Untagged
@@ -175,3 +163,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.67026114, y: 0.890087}
   m_EdgeRadius: 0
+--- !u!114 &163754850498544956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5256388510713710409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00969f9578746f4e941f5bb724315c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stingPlayer: 

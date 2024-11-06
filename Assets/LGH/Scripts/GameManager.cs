@@ -76,12 +76,12 @@ namespace GH
 
             Vector3 initPosition = new Vector3(0, 0, 0);
 
-            GameObject p = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
-            Instantiate(interacterPrefab, p.transform);
+            GameObject spwanPlayer = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
+            Instantiate(interacterPrefab, spwanPlayer.transform);
 
-            if (p.GetComponent<PhotonView>().IsMine)
+            if (spwanPlayer.GetComponent<PhotonView>().IsMine)
             {
-                DataManager.instance.player = p;
+                DataManager.instance.player = spwanPlayer;
             }
 
         }

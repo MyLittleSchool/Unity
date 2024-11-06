@@ -54,8 +54,8 @@ namespace GH
         public Button joinButton;
 
         [Header("7. 남자 버튼")]
-        public Button menButton; 
-        
+        public Button menButton;
+
         [Header("7. 여자 버튼")]
         public Button womenButton;
 
@@ -120,9 +120,9 @@ namespace GH
 
         private Color32 selectColor = new Color32(242, 136, 75, 255);
         private Color32 noneSelectColor = new Color32(242, 242, 242, 255);
-        
 
 
+        public TMP_InputField schoolInputField;
 
         private void Start()
         {
@@ -346,7 +346,7 @@ namespace GH
             joinInfo.gender = gender;
             joinInfo.password = currentJoinInfo.password;
             joinInfo.interest = selectedInterest;
-            
+
 
             HttpInfo info = new HttpInfo();
             info.url = "http://" + iP + ":" + port + "/user";
@@ -384,6 +384,16 @@ namespace GH
             if (getUserInfo.data.password == loginList[1].text)
             {
                 AuthManager.GetInstance().userAuthData.userInfo = getUserInfo.data;
+                //씬 넘어가기
+                DataManager.instance.playerName = getUserInfo.data.name;
+                if (schoolInputField.text.Length > 2)
+                {
+                    DataManager.instance.playerSchool = schoolInputField.text;
+                }
+                else
+                {
+                    DataManager.instance.playerSchool = "판교중학교";
+                }
                 SceneManager.LoadScene(2);
             }
             else
