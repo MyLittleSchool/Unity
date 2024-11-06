@@ -10,8 +10,8 @@ namespace SW
         public UserRPC userRPC;
         public void OnFriendReqButtonClick()
         {
-            int myId = AuthManager.GetInstance().userAuthData.userInfo.userId;
-            int targetId = userRPC.userInfo.userId;
+            int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
+            int targetId = userRPC.userInfo.id;
             HttpManager httpManager = HttpManager.GetInstance();
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
             info.url = httpManager.SERVER_ADRESS + "/friendship/request?arg0=" + myId + "&arg1=" + targetId;

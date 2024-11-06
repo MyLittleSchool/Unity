@@ -7,7 +7,7 @@ namespace GH
     [System.Serializable]
     public struct UserInfo
     {
-        public int userId;
+        public int id;
         public string socialId;
         public string name;
         public int grade;

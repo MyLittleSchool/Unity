@@ -12,7 +12,7 @@ namespace SW
         public UserInfo userInfo;
         private void Awake()
         {
-            DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.userId;
+            DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
         }
         private void Start()
         {

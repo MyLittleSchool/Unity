@@ -80,8 +80,8 @@ namespace SW
             contentsTabs[0] = Instantiate(tabPrefab, contents).transform;
             // 서버 요청
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            print(AuthManager.GetInstance().userAuthData.userInfo.userId);
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-receiver-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.userId;
+            print(AuthManager.GetInstance().userAuthData.userInfo.id);
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-receiver-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler res) =>
             {
                 print(res.text);
@@ -98,7 +98,7 @@ namespace SW
                     }
                 }
                 HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
-                info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-requester-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.userId;
+                info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-requester-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
                 info2.onComplete = (DownloadHandler res2) =>
                 {
                     print(res2.text);

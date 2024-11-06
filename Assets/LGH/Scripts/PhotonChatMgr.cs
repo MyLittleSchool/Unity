@@ -259,7 +259,7 @@ namespace GH
             //chatLogInfo.timestamp
             chatLogInfo.channel = currChannel;
             chatLogInfo.chatType = "PRIVATE";
-            chatLogInfo.senderId = AuthManager.GetInstance().userAuthData.userInfo.userId;
+            chatLogInfo.senderId = AuthManager.GetInstance().userAuthData.userInfo.id;
 
              HttpInfo info = new HttpInfo();
             info.url = "http://125.132.216.190:5544/chat-log";
