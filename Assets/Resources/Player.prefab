@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 150480224950754493}
   - component: {fileID: -4655146129839858024}
   - component: {fileID: 8884604780503016076}
+  - component: {fileID: -8963545018019622998}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -176,7 +177,7 @@ MonoBehaviour:
     type: 3}
   emojiButtonPrefab: {fileID: 5583794283898255216, guid: bd74882635feb3d4c9d03948f1dedb3e,
     type: 3}
-  modelTransform: {fileID: 2752343111512551693}
+  modelTransform: {fileID: 0}
 --- !u!114 &150480224950754493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,6 +230,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userInfoData:
+    userId: 0
+    socialId: 
+    name: 
+    grade: 0
+    birthday: 
+    gender: 0
+    email: 
+    password: 
+    phone: 
+    interest: []
+    schoolId: 0
+    level: 0
+    exp: 0
+    maxExp: 0
+--- !u!114 &-8963545018019622998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90022443400985812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ddf5e23a679f9b40acb244f15f89955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerUI: {fileID: 0}
+  playerPanel: {fileID: 0}
+  userInfo:
     userId: 0
     socialId: 
     name: 

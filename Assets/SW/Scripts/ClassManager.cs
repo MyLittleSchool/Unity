@@ -15,10 +15,15 @@ namespace SW
         }
         private IEnumerator LoadFurniture()
         {
+            while (!PhotonNetwork.InRoom)  // 룸입장대기
+            {
+                yield return null;
+            }
             if (!PhotonNetwork.IsMasterClient) yield break; // 방장일 때만
             DataManager dataManager = DataManager.instance;
             while (dataManager.player == null)  // 플레이어 생성 대기
             {
+                print(dataManager.player == null);
                 yield return null;
             }
             SetTile setTile = dataManager.player.GetComponent<SetTile>();

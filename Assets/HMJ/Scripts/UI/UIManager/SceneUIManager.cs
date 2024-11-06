@@ -1,4 +1,5 @@
 using GH;
+using SW;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -96,7 +97,8 @@ namespace MJ
         [Header("나의 프로필 편집 패널")]
         public GameObject myProfileEditPanel;
 
-
+        [Header("플레이어 목록 패널")]
+        public GameObject playerList;
 
         #endregion
 
@@ -312,6 +314,7 @@ namespace MJ
         public void OnFriendsPanel()
         {
             friendsPanel.SetActive(true);
+            friendsPanel.GetComponent<FriendsUI>().RefreshFriends();
         }
 
         public void OffAllMapPanel()
