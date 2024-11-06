@@ -1,3 +1,4 @@
+using SW;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace GH
         public int level;
         public int exp;
         public int maxExp;
+        public School school;
     }
 
     [System.Serializable]
