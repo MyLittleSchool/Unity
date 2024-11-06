@@ -49,12 +49,8 @@ namespace MJ
                     if(bounceObject && bounceObject.GetBounceBall())
                         KickBall(bounceObject.GetPlayerDirection());
                     else if(DataManager.instance.player)
-                    {
                         CheckPlayer();
-                    }
                 }
-                    
-
                 MoveBall();
                 DistanseCheck();
             }
