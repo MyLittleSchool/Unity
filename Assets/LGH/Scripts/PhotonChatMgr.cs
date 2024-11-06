@@ -3,12 +3,17 @@ using Photon.Chat;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
+using SW;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Analytics;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using static HttpManager;
 
 namespace GH
 {
@@ -55,7 +60,7 @@ namespace GH
 
             // photon chat 서버에 접속
             PhotonChatConnect();
-            
+
 
         }
 
@@ -107,6 +112,7 @@ namespace GH
         }
         private void OnSubmit(string s)
         {
+            ChatLogSeverPost(s);
             // 채팅창에 아무것도 없으면 함수를 끝낸다.
             if (inputChat.text.Length < 1)
                 return;
@@ -245,6 +251,38 @@ namespace GH
 
 
         }
+
+        public void ChatLogSeverPost(string s)
+        {
+            ChatLogInfo chatLogInfo = new ChatLogInfo();
+            chatLogInfo.message = s;
+            //chatLogInfo.timestamp
+            chatLogInfo.channel = currChannel;
+            chatLogInfo.chatType = "PRIVATE";
+            chatLogInfo.senderId = AuthManager.GetInstance().userAuthData.userInfo.userId;
+
+             HttpInfo info = new HttpInfo();
+            info.url = "http://125.132.216.190:5544/chat-log";
+            info.body = JsonUtility.ToJson(chatLogInfo);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+            StartCoroutine(HttpManager.GetInstance().Post(info));
+        }
+    }
+
+    [Serializable]
+    public struct ChatLogInfo
+    {
+        public int senderId;
+        public int receiverId;
+        public string message;
+        public string timestamp;
+        public string channel;
+        public string chatType;
+
     }
 
 }
