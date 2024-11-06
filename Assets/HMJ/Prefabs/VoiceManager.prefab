@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2624624824022263409}
   - component: {fileID: 6854862736781731281}
   - component: {fileID: 7571022397518735612}
+  - component: {fileID: 8344869470509391136}
   m_Layer: 0
   m_Name: VoiceManager
   m_TagString: Untagged
@@ -50,7 +51,8 @@ MonoBehaviour:
   ApplyDontDestroyOnLoad: 1
   runInBackground: 1
   statsResetInterval: 1000
-  speakerPrefab: {fileID: 0}
+  speakerPrefab: {fileID: 90022443400985812, guid: 213485c62e345c24fbf5175de1752c1a,
+    type: 3}
   primaryRecorder: {fileID: 7571022397518735612}
   usePrimaryRecorder: 0
   cppCompatibilityMode: 0
@@ -92,7 +94,7 @@ MonoBehaviour:
   interestGroup: 0
   useTargetPlayers: 0
   targetPlayers: 
-  debugEchoMode: 1
+  debugEchoMode: 0
   reliableMode: 0
   encrypt: 0
   transmitEnabled: 1
@@ -117,3 +119,15 @@ MonoBehaviour:
   useOnAudioFilterRead: 0
   useMicrophoneTypeFallback: 1
   recordWhenJoined: 1
+--- !u!114 &8344869470509391136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6680102495922377721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe5394ec399ca4a848cd1d5cfc7e82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

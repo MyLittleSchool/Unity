@@ -2,6 +2,7 @@ using MJ;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MJCanvasUI : MonoBehaviour
 {
@@ -28,6 +29,11 @@ public class MJCanvasUI : MonoBehaviour
     [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 끄기 버튼")]
     public UnityEngine.UI.Button InventoryCloseButton;
 
+    [Header("사운드 버튼 - 헤드셋")]
+    public UnityEngine.UI.Button HeadSetOnOffButton;
+
+    [Header("사운드 버튼 - 마이크")]
+    public UnityEngine.UI.Button MicroPhoneOnOffButton;
 
     [Header("맵 등록 성공 패널")]
     public GameObject mapSuccessRegisterPanel;
@@ -41,16 +47,54 @@ public class MJCanvasUI : MonoBehaviour
     [Header("맵 등록 여부 패널")]
     public GameObject mapConfirmPanel;
 
+    [Header("헤드셋X 패널")]
+    public GameObject HeadSetXPanel;
+
+    [Header("마이크X 패널")]
+    public GameObject MirocoPhoneXPanel;
+
     // Start is called before the first frame update
     void Start()
     {
         SceneUIManager.GetInstance().RestartSetting(MapContestCloseButton, MapRegisterCloseButton, mapRegisterButton, InventoryButton, InventoryCloseButton, mapContestButton, MapConfirmYesButton, MapConfirmNoButton, MapRegisterSuccessCloseButton, mapContestPanel, mapRegisterPanel, mapConfirmPanel, mapSuccessRegisterPanel);
         SceneUIManager.GetInstance().OffAllMapPanel();
+
+        SettingSoundPanel();
+    }
+    
+    public void SettingSoundPanel()
+    {
+        if (!HeadSetOnOffButton || !MicroPhoneOnOffButton)
+            return;
+
+        SoundImageSetting();
+
+        HeadSetOnOffButton.onClick.AddListener(VoiceManager.instance.HeadSetOnOff);
+        HeadSetOnOffButton.onClick.AddListener(SoundImageSetting);
+
+        MicroPhoneOnOffButton.onClick.AddListener(VoiceManager.instance.MicrophoneOnOff);
+        MicroPhoneOnOffButton.onClick.AddListener(SoundImageSetting);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+    }
+
+    public void HeadSetImageSetting()
+    {
+        HeadSetXPanel.GetComponent<Image>().enabled = !VoiceManager.instance.GetHeadSetOnOff();
+    }
+
+    public void MirocoPhoneSetting()
+    {
+        MirocoPhoneXPanel.GetComponent<Image>().enabled = !VoiceManager.instance.GetMicrophoneOnOff();
+    }
+
+    public void SoundImageSetting()
+    {
+        HeadSetImageSetting();
+        MirocoPhoneSetting();
     }
 }
+
