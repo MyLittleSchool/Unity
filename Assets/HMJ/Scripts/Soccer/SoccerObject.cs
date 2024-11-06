@@ -29,6 +29,7 @@ namespace MJ
         //Æ÷Åæ º¯¼ö°ª
         Vector3 myPos;
 
+        bool bPlayerCollision = false;
         private void Start()
         {
             rigidbody = GetComponent<Rigidbody2D>();
@@ -43,11 +44,16 @@ namespace MJ
         {
             if (pv.IsMine)
             {
-                if (Input.GetKeyDown(KeyCode.K) && bounceObject && bounceObject.GetBounceBall())
-                KickBall(bounceObject.GetPlayerDirection());
-
-                if (DataManager.instance.player)
-                    CheckPlayer();
+                if(Input.GetKeyDown(KeyCode.K))
+                {
+                    if(bounceObject && bounceObject.GetBounceBall())
+                        KickBall(bounceObject.GetPlayerDirection());
+                    else if(DataManager.instance.player)
+                    {
+                        CheckPlayer();
+                    }
+                }
+                    
 
                 MoveBall();
                 DistanseCheck();
@@ -56,6 +62,14 @@ namespace MJ
 
         private void FixedUpdate()
         {
+            if (bPlayerCollision)
+            {
+                pv.RequestOwnership();
+                rigidbody.velocity = Vector2.zero;
+                rigidbody.angularVelocity = 0.0f;
+                playerCollision();
+                bPlayerCollision = false;
+            }
             if (pv.IsMine)
             {
 
@@ -91,9 +105,8 @@ namespace MJ
 
         public void CheckPlayer()
         {
-            
-            if (bounceObject.CheckAroundPlayer(2.0f) && !bounceObject.GetBounceBall() && !Move && Input.GetKeyDown(KeyCode.K))
-                bounceObject.StartBounce();
+            bounceObject.StartBounce();
+            pv.RequestOwnership();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -101,10 +114,9 @@ namespace MJ
 
             int layer = LayerMask.NameToLayer("NetCollision");
             //int layer1 = LayerMask.NameToLayer("OutCollision");
-            if (collision.gameObject.name.Contains("Player") && collision.gameObject.GetComponent<PhotonView>().IsMine)
+            if (collision.gameObject.name.Contains("Player") && (collision.gameObject.GetComponent<PhotonView>().IsMine))
             {
-                GetComponent<PhotonView>().RequestOwnership();
-                playerCollision();
+                bPlayerCollision = true;
             }
                 
 
@@ -118,15 +130,7 @@ namespace MJ
 
 
         }
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
 
-        }
-
-        private void OnCollisionStay2D(Collision2D collision)
-        {
-
-        }
 
         private IEnumerator ResetSoccerPosition(float delayTime)
         {
@@ -159,7 +163,7 @@ namespace MJ
                 stream.SendNext(transform.position);
             }
             else if (stream.IsReading)
-            {
+            {              
                 myPos = (Vector3)stream.ReceiveNext();
             }
         }

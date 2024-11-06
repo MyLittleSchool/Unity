@@ -1131,6 +1131,7 @@ Transform:
   - {fileID: 539027014}
   - {fileID: 1986700783}
   - {fileID: 553477116}
+  - {fileID: 1202662463}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &362427631
@@ -29313,6 +29314,107 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &1202662462
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 248625552}
+    m_Modifications:
+    - target: {fileID: 1598695712602588417, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1598695712602588417, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1598695712602588417, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: ObservedComponents.Array.data[1]
+      value: 
+      objectReference: {fileID: 1202662464}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.2999992
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5471077687884272099, guid: 91e439032e21323499978726a961636a,
+        type: 3}
+      propertyPath: m_Name
+      value: Soccer
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 91e439032e21323499978726a961636a, type: 3}
+--- !u!4 &1202662463 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3324199599903282725, guid: 91e439032e21323499978726a961636a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1202662462}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1202662464 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1645406327314206134, guid: 91e439032e21323499978726a961636a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1202662462}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 595c8c19d1abc3a4293d894a680b2dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1319161931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30544,7 +30646,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2088468870
 Transform:
   m_ObjectHideFlags: 0

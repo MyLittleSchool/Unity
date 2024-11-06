@@ -36,7 +36,7 @@ public class BounceObject : MonoBehaviour, IPunObservable
     }
     private void LateUpdate()
     {
-        if(bBallBounce)
+        if (bBallBounce && pv.IsMine)
             bouncePlayerObject();
     }
 
@@ -124,13 +124,13 @@ public class BounceObject : MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(bBallBounce);
-        }
-        else if (stream.IsReading)
-        {
-            bBallBounce = !(bool)stream.ReceiveNext();
-        }
+        //if (stream.IsWriting)
+        //{
+        //    stream.SendNext(bBallBounce);
+        //}
+        //else if (stream.IsReading)
+        //{
+        //    bBallBounce = !(bool)stream.ReceiveNext();
+        //}
     }
 }
