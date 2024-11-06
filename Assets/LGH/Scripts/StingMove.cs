@@ -8,7 +8,7 @@ namespace GH
         private SpriteRenderer stingSpriteRenderer;
         private float stringSpeed = 3;
         private float stringAlpha = 2f;
-
+        public string stingPlayer;
         void Start()
         {
             stingSpriteRenderer = GetComponent<SpriteRenderer>();

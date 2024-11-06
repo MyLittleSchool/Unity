@@ -1,3 +1,4 @@
+using GH;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,18 +36,13 @@ namespace SW
         [System.Serializable]
         public struct AuthData
         {
-            public int id;
-            public string state;
-            public string accessToken;
+            public UserInfo userInfo;
         }
-        public AuthData UserAuthData { get; private set; }
+        public AuthData userAuthData;
         public int MapId { get; set; } = 1;
 
         private void Start()
         {
-            AuthData testAuth = new AuthData();
-            testAuth.id = 1;
-            UserAuthData = testAuth;
             return;
             redirectUri = HttpManager.GetInstance().SERVER_ADRESS + "/login/oauth2/code/kakao";
             serverUrl = HttpManager.GetInstance().SERVER_ADRESS + "/kakaoLoginLog";
@@ -99,10 +95,8 @@ namespace SW
                 {
                     Debug.Log("Authorization Code successfully sent to server.");
                     Debug.Log(www.downloadHandler.text);
-                    UserAuthData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
-                    print(UserAuthData.id);
-                    print(UserAuthData.state);
-                    print(UserAuthData.accessToken);
+                    userAuthData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
+                   
                     break;
                 }
 

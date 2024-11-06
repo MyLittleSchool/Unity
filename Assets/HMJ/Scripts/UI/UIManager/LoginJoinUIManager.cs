@@ -1,10 +1,13 @@
+using SW;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static HttpManager;
 
@@ -32,6 +35,8 @@ namespace GH
 
         public UserInfo currentJoinInfo;
 
+        public UserInfoData getUserInfo;
+
         #region Button
         [Header("다음 버튼 리스트")]
         public List<Button> nextButtons;
@@ -45,8 +50,14 @@ namespace GH
         [Header("4. 인증 확인 버튼")]
         public Button checkNumButton;
 
-        [Header("7. 인증 확인 버튼")]
+        [Header("7. 가입 완료 버튼")]
         public Button joinButton;
+
+        [Header("7. 남자 버튼")]
+        public Button menButton; 
+        
+        [Header("7. 여자 버튼")]
+        public Button womenButton;
 
         #endregion
 
@@ -80,12 +91,37 @@ namespace GH
         [Header("6. 관심사 버튼 생성위치")]
         public Transform interestButtonTransform;
 
-        [Header("6. 관심사 띄우는 배열")]
-        public Queue<String> interestsQueue = new Queue<String>(5);
+        [Header("6. 관심사 띄우는 텍스트")]
+        public TMP_Text interestText;
+
+        [Header("6. 선택된 관심사 리스트")]
+        public List<string> selectedInterest;
+
+        [Header("6. 관심사 딕셔너리")]
+        private Dictionary<string, GameObject> buttonList = new Dictionary<string, GameObject>();
+
+        [Header("7. 남녀성별")]
+        public bool gender;
 
         [Header("통신 인풋필드 리스트")]
         // 0 - 이름, 1 - 이메일, 2 - PassWord, 3 - 생년월일
         public List<TMP_InputField> joinInfoInfoList;
+
+        [Header("로그인 인풋필드 리스트")]
+        // 0 - 이메일. 1 - 비밀번호
+        public List<TMP_InputField> loginList;
+
+        [Header("로그인 버튼")]
+        public Button loginButton;
+
+        [Header("비밀번호 틀림 텍스트")]
+        public GameObject PWCheckText;
+
+
+        private Color32 selectColor = new Color32(242, 136, 75, 255);
+        private Color32 noneSelectColor = new Color32(242, 242, 242, 255);
+        
+
 
 
         private void Start()
@@ -119,14 +155,38 @@ namespace GH
             //6 페이지
             InterestButtonCreate();
 
+
             //7페이지
             joinButton.onClick.AddListener(UserJoin);
+            menButton.onClick.AddListener(ClickMen);
+            womenButton.onClick.AddListener(ClickWomen);
+
+
+            //로그인 버트
+            loginButton.onClick.AddListener(UserLogin);
+
+            PWCheckText.SetActive(false);
+
         }
 
         private void Update()
         {
+            switch (currentLoginstep)
+            {
+                case Loginstep.NAME:
+                    break;
+
+                case Loginstep.EMAIL:
+                    break;
+
+                case Loginstep.PASSWORD:
+                    PWCheck();
+                    break;
+
+                case Loginstep.INTEREST:
+                    break;
+            }
             Slider();
-            PWCheck();
         }
 
         public void NextStep()
@@ -138,16 +198,16 @@ namespace GH
                     break;
 
                 case Loginstep.EMAIL:
+                    currentJoinInfo.email = joinInfoInfoList[1].text;
                     break;
 
                 case Loginstep.PASSWORD:
+                    currentJoinInfo.password = joinInfoInfoList[2].text;
                     break;
 
                 case Loginstep.INTEREST:
                     break;
-                    
-                case Loginstep.PERSONAL:
-                    break;
+
 
             }
 
@@ -192,14 +252,14 @@ namespace GH
 
         public void PWCheck()
         {
-            if (pWInputField.text == pWCheckInputField.text)
+            if (pWCheckInputField.text.Length > 0 && pWInputField.text == pWCheckInputField.text)
             {
-                nextButtons[5].GetComponent<Image>().color = new Color32(242, 136, 75, 255);
+                nextButtons[5].GetComponent<Image>().color = selectColor;
                 nextButtons[5].interactable = true;
             }
             else
             {
-                nextButtons[5].GetComponent<Image>().color = new Color32(242, 242, 242, 255);
+                nextButtons[5].GetComponent<Image>().color = noneSelectColor;
                 nextButtons[5].interactable = false;
             }
         }
@@ -208,27 +268,88 @@ namespace GH
         {
             for (int i = 0; i < interests.Count; i++)
             {
-                Button interestButton = Instantiate(interestButtonPrefab, interestButtonTransform).GetComponent<Button>();
+                GameObject interestButton = Instantiate(interestButtonPrefab, interestButtonTransform);
                 interestButton.GetComponentInChildren<TMP_Text>().text = interests[i];
+                buttonList.Add(interests[i], interestButton);
             }
         }
 
+        public void InterestSlect(string key, Image image)
+        {
+            bool test = false;
+            interestText.text = "";
+
+            if (selectedInterest.Count > 0)
+            {
+
+                // 중복 체크
+                for (int i = 0; i < selectedInterest.Count; i++)
+                {
+                    if (selectedInterest[i] == key)
+                    {
+                        test = true;
+                        print("11");
+
+                        image.color = noneSelectColor;
+                        selectedInterest.RemoveAt(i);
+                        break;
+                    }
+                    else
+                    {
+                        test = false;
+                        print("22");
+
+                    }
+                    // interestText.text += "#" + selectedInterest[i] + " ";
+                }
+                if (!test)
+                {
+                    image.color = selectColor;
+
+                    if (selectedInterest.Count < 5)
+                    {
+                        selectedInterest.Add(key);
+                    }
+                    else
+                    {
+                        buttonList[selectedInterest[0]].GetComponent<Image>().color = noneSelectColor;
+                        selectedInterest.RemoveAt(0);
+                        selectedInterest.Add(key);
+                    }
+                }
+
+                for (int i = 0; i < selectedInterest.Count; i++)
+                {
+                    interestText.text += "#" + selectedInterest[i] + " ";
+
+                }
+            }
+            else
+            {
+                image.color = new Color32(242, 136, 75, 255);
+                selectedInterest.Add(key);
+                interestText.text += "#" + key + " ";
+            }
+
+        }
 
 
         //통신 코드
         private void UserJoin()
         {
-            UserInfo joinInfo = new UserInfo();
-            joinInfo.email = "aaa@naver.com";
-            joinInfo.name = "이규현";
-            joinInfo.birthday = "20241231";
-            joinInfo.gender = true;
-            joinInfo.password = "asd123";
-            joinInfo.interest = new List<string>() {"공부", "영화", "게임" };
+            currentJoinInfo.birthday = joinInfoInfoList[3].text;
 
+            UserInfo joinInfo = new UserInfo();
+            joinInfo.email = currentJoinInfo.email;
+            joinInfo.name = currentJoinInfo.name;
+            joinInfo.birthday = currentJoinInfo.birthday;
+            joinInfo.gender = gender;
+            joinInfo.password = currentJoinInfo.password;
+            joinInfo.interest = selectedInterest;
+            
 
             HttpInfo info = new HttpInfo();
-            info.url = "http://" + iP +":"+port+"/user";
+            info.url = "http://" + iP + ":" + port + "/user";
             info.body = JsonUtility.ToJson(joinInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -236,6 +357,56 @@ namespace GH
                 print(downloadHandler.text);
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
+
+            logins[7].SetActive(false);
+            logins[2].SetActive(true);
+        }
+
+        private void UserLogin()
+        {
+            print("버튼 클릭");
+            HttpInfo info = new HttpInfo();
+            info.url = "http://" + iP + ":" + port + "/user/email?email=" + loginList[0].text;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                print(jsonData);
+                //jsonData를 PostInfoArray 형으로 바꾸자.
+                getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+            StartCoroutine(nameof(login));
+
+        }
+        IEnumerator login()
+        {
+            yield return new WaitForSeconds(0.5f);
+            if (getUserInfo.data.password == loginList[1].text)
+            {
+                AuthManager.GetInstance().userAuthData.userInfo = getUserInfo.data;
+                SceneManager.LoadScene(2);
+            }
+            else
+            {
+                PWCheckText.SetActive(true);
+                print("비밀번호가 다릅니다");
+                yield return new WaitForSeconds(3f);
+                PWCheckText.SetActive(false);
+
+            }
+        }
+
+        private void ClickMen()
+        {
+            menButton.GetComponent<Image>().color = selectColor;
+            womenButton.GetComponent<Image>().color = noneSelectColor;
+            gender = true;
+        }
+        private void ClickWomen()
+        {
+            menButton.GetComponent<Image>().color = noneSelectColor;
+            womenButton.GetComponent<Image>().color = selectColor;
+            gender = false;
         }
 
     }
