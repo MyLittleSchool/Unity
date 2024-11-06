@@ -72,7 +72,7 @@ namespace SW
             }
         }
 
-        public void RefreshFriends(List<Friend> _friends)
+        public void RefreshFriends()
         {
             // 삭제
             Destroy(contentsTabs[0].gameObject);
@@ -80,24 +80,36 @@ namespace SW
             contentsTabs[0] = Instantiate(tabPrefab, contents).transform;
             // 서버 요청
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-receiver-accepted?receiverId=" + AuthManager.GetInstance().UserAuthData.id;
+            print(AuthManager.GetInstance().userAuthData.userInfo.userId);
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-receiver-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.userId;
             info.onComplete = (DownloadHandler res) =>
             {
-                HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
-                info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-requester-accepted?requesterId=" + AuthManager.GetInstance().UserAuthData.id;
-                info2.onComplete = (DownloadHandler res2) =>
+                print(res.text);
+                FriendshipList receiverList = JsonUtility.FromJson<FriendshipList>(res.text);
+                print(receiverList);
+                print(receiverList.success);
+                print(receiverList.response);
+                if (receiverList.response != null)
                 {
-                    FriendshipList receiverList = JsonUtility.FromJson<FriendshipList>(res.text);
-                    FriendshipList requesterList = JsonUtility.FromJson<FriendshipList>(res2.text);
                     for (int i = 0; i < receiverList.response.Length; i++)
                     {
                         GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
                         newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = receiverList.response[i].requester.name;
                     }
-                    for (int i = 0; i < requesterList.response.Length; i++)
+                }
+                HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
+                info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-requester-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.userId;
+                info2.onComplete = (DownloadHandler res2) =>
+                {
+                    print(res2.text);
+                    FriendshipList requesterList = JsonUtility.FromJson<FriendshipList>(res2.text);
+                    if (requesterList.response != null)
                     {
-                        GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
-                        newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = receiverList.response[i].receiver.name;
+                        for (int i = 0; i < requesterList.response.Length; i++)
+                        {
+                            GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
+                            newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = receiverList.response[i].receiver.name;
+                        }
                     }
                 };
                 StartCoroutine(HttpManager.GetInstance().Get(info2));

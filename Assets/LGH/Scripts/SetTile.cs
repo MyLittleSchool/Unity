@@ -89,6 +89,7 @@ namespace GH
                 objectInfo.x = tilePosition.x;
                 objectInfo.y = tilePosition.y;
                 //objectInfo.rot =
+                objectInfo.mapId = DataManager.instance.mapId;
                 PlaceManager.GetInstance().CreatePlace(objectInfo, (PlaceManager.PlaceInfo callBack) =>
                 {
                     obj.id = callBack.id;

@@ -41,6 +41,7 @@ namespace SW
             public int x, y; // 좌표
             public int rot; // 회전
             public bool flip; // 반전
+            public int mapId; // 맵아이디
         }
         [Serializable] // 배치 요청 파라미터
         public class SetPlaceInfo : ObjectInfo
@@ -52,6 +53,7 @@ namespace SW
                 y = objectInfo.y;
                 rot = objectInfo.rot;
                 flip = objectInfo.flip;
+                mapId = objectInfo.mapId;
             }
         }
 
@@ -93,6 +95,7 @@ namespace SW
         public void ReadPlace(int mapId, Action<GetPlaceResInfo> callBack)
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            print(mapId);
             info.url = httpManager.SERVER_ADRESS + "/furniture/list/map?mapId=" + (mapId == -1 ? AuthManager.GetInstance().MapId : mapId);
             info.onComplete = (DownloadHandler res) =>
             {

@@ -5824,7 +5824,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7317297467709347389}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7317297467709347390}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9abe47d9920bccd4bb6736cd93e5d62e, type: 3}
@@ -13309,7 +13309,6 @@ MonoBehaviour:
   topMenuText: {fileID: 408033423}
   roomName: 
   sceneNum: 0
-  playerListComp: {fileID: 0}
 --- !u!1 &1138614462
 GameObject:
   m_ObjectHideFlags: 0
@@ -16174,6 +16173,7 @@ MonoBehaviour:
   ChatPanel: {fileID: 1285061393}
   myProfilePanel: {fileID: 0}
   myProfileEditPanel: {fileID: 0}
+  playerList: {fileID: 7317297467709347390}
 --- !u!4 &1955180374
 Transform:
   m_ObjectHideFlags: 0
@@ -17442,6 +17442,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff518cc4804f1bd45a849a8dceb280fe, type: 3}
+--- !u!1 &7317297467709347390 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5047017970299363721, guid: ff518cc4804f1bd45a849a8dceb280fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 7317297467709347389}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7336559550450831749
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 3557374524761843650}
   - component: {fileID: 8773981166754380551}
   - component: {fileID: 3849263289436553161}
+  - component: {fileID: 4397539848236065438}
   m_Layer: 5
   m_Name: PlayerPanel
   m_TagString: Untagged
@@ -216,6 +217,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4397539848236065438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415926891279029512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f670246241a92b42aa503dbb6875fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userRPC: {fileID: 0}
 --- !u!1 &1001797953333252072
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1340877079029120671
 RectTransform:
   m_ObjectHideFlags: 0
@@ -471,7 +485,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2949039809328564183}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4397539848236065438}
+        m_TargetAssemblyTypeName: SW.PlayerPanel, Assembly-CSharp
+        m_MethodName: OnFriendReqButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2880929856054107403
 GameObject:
   m_ObjectHideFlags: 0

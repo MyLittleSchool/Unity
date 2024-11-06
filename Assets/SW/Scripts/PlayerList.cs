@@ -9,19 +9,6 @@ namespace SW
     public class PlayerList : MonoBehaviourPun
     {
         public static PlayerList instance;
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
 
         public RectTransform contentPanel;
         public GameObject playerPanelPrefab;
@@ -41,16 +28,20 @@ namespace SW
         {
             GameObject newPanel = Instantiate(playerPanelPrefab, contentPanel);
             newPanel.transform.Find("NicknameText").GetComponent<TMP_Text>().text = PhotonNetwork.LocalPlayer.NickName;
+            for (int i = 4; i < newPanel.transform.childCount; i++)
+            {
+                newPanel.transform.GetChild(i).gameObject.SetActive(false);
+            }
         }
         public void GetJoin(int actorNumber, ref GameObject ui)
         {
             ui = Instantiate(playerPanelPrefab, contentPanel);
             ui.transform.Find("NicknameText").GetComponent<TMP_Text>().text = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).NickName;
         }
-        public void JoinRes(int actorNumber)
+        public void JoinRes(int actorNumber, ref GameObject ui)
         {
-            GameObject newPanel = Instantiate(playerPanelPrefab, contentPanel);
-            newPanel.transform.Find("NicknameText").GetComponent<TMP_Text>().text = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).NickName;
+            ui = Instantiate(playerPanelPrefab, contentPanel);
+            ui.transform.Find("NicknameText").GetComponent<TMP_Text>().text = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).NickName;
         }
     }
 }
