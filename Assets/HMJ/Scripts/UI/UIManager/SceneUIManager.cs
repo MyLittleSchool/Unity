@@ -7,6 +7,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static HttpManager;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.Analytics;
+using UnityEngine.Networking;
 
 namespace MJ
 {
@@ -158,8 +162,12 @@ namespace MJ
         private Color32 selectColor = new Color32(242, 136, 75, 255);
         private Color32 noneSelectColor = new Color32(242, 242, 242, 255);
 
-        public string profileLvNick;
-        public string profileInterest;
+        public TMP_Text profileLvNick;
+        public TMP_Text profileInterest;
+        public TMP_Text profileMyMessage;
+
+        public UserInfo currentuserInfo;
+
         #endregion
 
         private void Start()
@@ -173,8 +181,7 @@ namespace MJ
 
             InterestButtonCreate();
 
-            profileLvNick = AuthManager.GetInstance().userAuthData.userInfo.level + " | " + AuthManager.GetInstance().userAuthData.userInfo.name;
-            
+            SetProfile();
         }
         private void Update()
         {
@@ -390,7 +397,7 @@ namespace MJ
         {
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(true);
-
+            ProfileEditSave();
         }
 
         public void ProfileEditCount()
@@ -490,5 +497,44 @@ namespace MJ
             }
 
         }
+
+        private void ProfileEditSave()
+        {
+            UserInfo joinInfo = new UserInfo();
+            joinInfo.name = nickNameInputField.text;
+            joinInfo.interest = selectedInterest;
+            joinInfo.statusMesasge = myMessageInputField.text;
+
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/profile";
+            info.body = JsonUtility.ToJson(joinInfo);
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+            StartCoroutine(HttpManager.GetInstance().Patch(info));
+
+            currentuserInfo = AuthManager.GetInstance().userAuthData.userInfo;
+            currentuserInfo.name = nickNameInputField.text;
+            currentuserInfo.interest = selectedInterest;
+            currentuserInfo.statusMesasge = myMessageInputField.text;
+
+            AuthManager.GetInstance().userAuthData.userInfo = currentuserInfo;
+            SetProfile();
+        }
+
+        private void SetProfile()
+        {
+            UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
+            profileLvNick.text = userInfo.level + " | " + userInfo.name;
+            for(int i = 0; i < userInfo.interest.Count; i++)
+            {
+                profileInterest.text += "#" + userInfo.interest[i] + " ";
+            }
+            //¸Þ½ÃÁö
+            //profileMyMessage =
+
+        }
+
     }
 }

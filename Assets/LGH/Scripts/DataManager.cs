@@ -21,6 +21,8 @@ namespace GH
         public GameObject setTileObj;
         public int setTileObjId;
 
+
+
         [Header("6. 관심사 리스트")]
         public List<string> interests;
         private void Awake()

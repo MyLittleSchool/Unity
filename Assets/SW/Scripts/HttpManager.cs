@@ -91,6 +91,17 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+    public IEnumerator Patch(HttpInfo info)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Put(info.url, info.body))
+        {
+            // 서버에 요청 보내기
+            yield return webRequest.SendWebRequest();
+
+            // 서버에게 응답이 왔다.
+            DoneRequest(webRequest, info);
+        }
+    }
     public IEnumerator Delete(HttpInfo info)
     {
         string url = info.url;

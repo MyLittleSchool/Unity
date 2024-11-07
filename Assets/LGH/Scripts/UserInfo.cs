@@ -17,6 +17,7 @@ namespace GH
         public string password;
         public string phone;
         public List<string> interest;
+        public string statusMesasge;
         public int schoolId;
         public int level;
         public int exp;
