@@ -1,5 +1,6 @@
 using GH;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace SW
             SetTile setTile = dataManager.player.GetComponent<SetTile>();
             PlaceManager placeManager = GetInstance();
             // 배치 로딩
-            placeManager.ReadPlace(DataManager.instance.mapId, (GetPlaceResInfo res) =>
+            placeManager.ReadPlace(DataManager.instance.mapId, DataManager.instance.mapType, (GetPlaceResInfo res) =>
             {
                 foreach (PlaceInfo info in res.response)
                 {
@@ -38,10 +39,12 @@ namespace SW
             });
         }
     }
+    [Serializable]
     public class School
     {
-        public int id;
+        public int schoolId;
         public string schoolName;
+        public string location;
         public int backgroundColorId;
         public List<PlaceManager.ObjectInfo> furnitureList;
     }

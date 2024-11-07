@@ -16,6 +16,8 @@ namespace GH
         public string playerSchool;
         public string playerCurrChannel;
         public int mapId;
+        public enum MapType { MyClassroom, School }
+        public MapType mapType;
         public GameObject setTileObj;
         public int setTileObjId;
 

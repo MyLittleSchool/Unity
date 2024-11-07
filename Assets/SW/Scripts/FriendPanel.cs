@@ -6,8 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace SW
 {
-    public class RecommFriendPanel : MonoBehaviour
+    public class FriendPanel : MonoBehaviour
     {
+        public int id;
+        public int friendshipId;
         public Image ProfileImage;
         public TMP_Text NickNameText;
         public TMP_Text SimilarityText;

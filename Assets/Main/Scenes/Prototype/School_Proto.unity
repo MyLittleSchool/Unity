@@ -1382,12 +1382,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapRegisterCloseButton: {fileID: 1703133525}
   MapContestCloseButton: {fileID: 2112987324}
+  MapConfirmYesButton: {fileID: 0}
+  MapConfirmNoButton: {fileID: 0}
   mapRegisterButton: {fileID: 1703133527}
   mapContestButton: {fileID: 1832581910}
+  MapRegisterSuccessCloseButton: {fileID: 0}
   InventoryButton: {fileID: 1726883999}
   InventoryCloseButton: {fileID: 1726883998}
+  mapSuccessRegisterPanel: {fileID: 0}
   mapRegisterPanel: {fileID: 1703133526}
   mapContestPanel: {fileID: 1703133528}
+  mapConfirmPanel: {fileID: 0}
 --- !u!1 &1338558253
 GameObject:
   m_ObjectHideFlags: 0
@@ -87724,7 +87729,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15.44
+  orthographic size: 16
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -87747,7 +87752,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3328556831859297096}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
   m_Name: 
