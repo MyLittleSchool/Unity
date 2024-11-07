@@ -92,7 +92,7 @@ namespace GH
                 // Ελ½Ε
                 ObjectInfo obj = objectList.Last();
                 PlaceManager.ObjectInfo objectInfo = new PlaceManager.ObjectInfo();
-                //objectInfo.objId = 
+                objectInfo.objId = setObjectId;
                 objectInfo.x = tilePosition.x;
                 objectInfo.y = tilePosition.y;
                 //objectInfo.rot =

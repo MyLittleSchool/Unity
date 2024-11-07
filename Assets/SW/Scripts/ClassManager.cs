@@ -29,6 +29,7 @@ namespace SW
             }
             SetTile setTile = dataManager.player.GetComponent<SetTile>();
             PlaceManager placeManager = GetInstance();
+            print(123123123);
             // 배치 로딩
             placeManager.ReadPlace(DataManager.instance.mapId, DataManager.instance.mapType, (GetPlaceResInfo res) =>
             {
