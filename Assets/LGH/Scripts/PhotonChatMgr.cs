@@ -1,16 +1,11 @@
 using ExitGames.Client.Photon;
 using Photon.Chat;
 using Photon.Pun;
-using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
 using SW;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Analytics;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using static HttpManager;

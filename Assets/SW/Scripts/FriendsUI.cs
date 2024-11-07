@@ -12,6 +12,7 @@ namespace SW
     public class FriendsUI : MonoBehaviour
     {
         public Button closeButton;
+        public Button modifyButton;
         public RectTransform contents;
         public GameObject friendPrefab;
         public GameObject requestedPrefab;
@@ -82,16 +83,10 @@ namespace SW
             contentsTabs[0] = Instantiate(tabPrefab, contents).transform;
             // 서버 요청
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            print(AuthManager.GetInstance().userAuthData.userInfo.id);
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-receiver-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list?userId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler res) =>
             {
-                print(res.text);
                 FriendshipList receiverList = JsonUtility.FromJson<FriendshipList>(res.text);
-                print(receiverList);
-                print(receiverList.success);
-                print(receiverList.response);
-                print(receiverList.error);
                 if (receiverList.response != null)
                 {
                     for (int i = 0; i < receiverList.response.Length; i++)
@@ -100,22 +95,6 @@ namespace SW
                         newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = receiverList.response[i].requester.name;
                     }
                 }
-                HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
-                info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-requester-accepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
-                info2.onComplete = (DownloadHandler res2) =>
-                {
-                    print(res2.text);
-                    FriendshipList requesterList = JsonUtility.FromJson<FriendshipList>(res2.text);
-                    if (requesterList.response != null)
-                    {
-                        for (int i = 0; i < requesterList.response.Length; i++)
-                        {
-                            GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
-                            newPanel.transform.GetChild(2).GetComponent<TMP_Text>().text = receiverList.response[i].receiver.name;
-                        }
-                    }
-                };
-                StartCoroutine(HttpManager.GetInstance().Get(info2));
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
 
