@@ -72,12 +72,14 @@ namespace GH
 
         public void OnTile()
         {
-            if (!tilemap.HasTile(tilePosition))
+            if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
             {
                 tilemap.SetTile(tilePosition, emptyTilebase);
                 GameObject setObject = Instantiate(setGameObject, tilemap.transform);
                 setObject.transform.position = tilePosition;
                 AddObject(setObject);
+
+                InventorySystem.GetInstance().UseItem();
                 print(tilemap.HasTile(tilePosition));
             }
         }

@@ -29,6 +29,9 @@ public class MJCanvasUI : MonoBehaviour
     [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 끄기 버튼")]
     public UnityEngine.UI.Button InventoryCloseButton;
 
+    [Header("맵 인벤토리 에러 패널 - 맵 인벤토리 에러 패널 끄기 버튼")]
+    public UnityEngine.UI.Button InventoryErrorCloseButton;
+
     [Header("사운드 버튼 - 헤드셋")]
     public UnityEngine.UI.Button HeadSetOnOffButton;
 
@@ -53,10 +56,13 @@ public class MJCanvasUI : MonoBehaviour
     [Header("마이크X 패널")]
     public GameObject MirocoPhoneXPanel;
 
+    [Header("맵 인벤토리 에러 패널 - 아이템 개수 부족")]
+    public GameObject mapInventoryErrorPanel;
+
     // Start is called before the first frame update
     void Start()
     {
-        SceneUIManager.GetInstance().RestartSetting(MapContestCloseButton, MapRegisterCloseButton, mapRegisterButton, InventoryButton, InventoryCloseButton, mapContestButton, MapConfirmYesButton, MapConfirmNoButton, MapRegisterSuccessCloseButton, mapContestPanel, mapRegisterPanel, mapConfirmPanel, mapSuccessRegisterPanel);
+        SceneUIManager.GetInstance().RestartSetting(MapContestCloseButton, MapRegisterCloseButton, mapRegisterButton, InventoryButton, InventoryCloseButton, mapContestButton, MapConfirmYesButton, MapConfirmNoButton, MapRegisterSuccessCloseButton, InventoryErrorCloseButton, mapContestPanel, mapRegisterPanel, mapConfirmPanel, mapSuccessRegisterPanel, mapInventoryErrorPanel);
         SceneUIManager.GetInstance().OffAllMapPanel();
 
         SettingSoundPanel();

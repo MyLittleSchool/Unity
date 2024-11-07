@@ -113,9 +113,9 @@ RectTransform:
   - {fileID: 6486945102565037694}
   m_Father: {fileID: 6188198851993026624}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -160, y: 95}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4823477624437904476
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.64
 --- !u!114 &463166305927893928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,7 +199,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4716941047977355817}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GH.GameManager, Assembly-CSharp
+        m_MethodName: OnTile
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5647291299743541508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 4, y: 4}
+  m_EffectDistance: {x: 2, y: 2}
   m_UseGraphicAlpha: 1
 --- !u!1 &2349718642985501418
 GameObject:
@@ -227,7 +239,7 @@ GameObject:
   - component: {fileID: 4316531846472198044}
   - component: {fileID: 8656020427242641331}
   m_Layer: 5
-  m_Name: Button_Panel (1)
+  m_Name: Button_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,8 +262,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 670}
-  m_SizeDelta: {x: 0, y: 150}
+  m_AnchoredPosition: {x: 551.4846, y: 1121.5817}
+  m_SizeDelta: {x: -1102.9692, y: 159.5033}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4316531846472198044
 CanvasRenderer:
@@ -326,8 +338,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 300}
-  m_SizeDelta: {x: 0, y: 600}
+  m_AnchoredPosition: {x: 0, y: 480}
+  m_SizeDelta: {x: -4, y: 1123.7148}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1121848627090656129
 CanvasRenderer:
@@ -350,14 +362,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.9490196}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 5ef6a339aa23d594c8d49363660030d3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -366,7 +378,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.32
 --- !u!114 &3629834028182234264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,7 +399,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 170, y: 170}
+  m_CellSize: {x: 320, y: 320}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 4
@@ -409,7 +421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1801649470765663672
 RectTransform:
   m_ObjectHideFlags: 0
@@ -487,11 +499,12 @@ MonoBehaviour:
   - image: {fileID: 2800000, guid: 959e01d94672d004283e2b05cd0c3a0a, type: 3}
     itemName: "\uBC9A\uAF43 \uB364\uBD881"
     n: 3
-    prefab: {fileID: 0}
+    prefab: {fileID: 8537534300084629076, guid: adfe37359bebb16429f31ce71204ab70,
+      type: 3}
   - image: {fileID: 2800000, guid: 3c99beff08d420442940a5c3d7564cfc, type: 3}
     itemName: "\uBC9A\uAF43 \uB364\uBD882"
     n: 3
-    prefab: {fileID: 8255221383308681626, guid: a9d7ae26120c71341961f2632875449c,
+    prefab: {fileID: 9000281107522519974, guid: abf8be42351c61946af6597afd48f9ec,
       type: 3}
   - image: {fileID: 2800000, guid: 8968fca88da713649b64b10eb5067cbe, type: 3}
     itemName: "\uBC9A\uAF43 \uB364\uBD883"
@@ -504,31 +517,22 @@ MonoBehaviour:
   - image: {fileID: 2800000, guid: 2df0001d9f2bef84f9e8e8e25da49a68, type: 3}
     itemName: "\uD30C\uB77C\uC194"
     n: 3
-    prefab: {fileID: 0}
+    prefab: {fileID: 6458137835234108334, guid: 8990940d933625444842dda6544c386e,
+      type: 3}
   - image: {fileID: 2800000, guid: 2754cc330c1312a439b0a7bc1db5ab39, type: 3}
     itemName: "\uC0AC\uB2E4\uB9AC"
-    n: 3
-    prefab: {fileID: 0}
-  - image: {fileID: 2800000, guid: 6a6974159a94b1644aebb2c9eadee9f6, type: 3}
-    itemName: "\uBC9A\uAF43 \uB098\uBB341"
-    n: 3
-    prefab: {fileID: 0}
-  - image: {fileID: 2800000, guid: d35c1e8b7b2c2f44f82210ebc0f22bdc, type: 3}
-    itemName: "\uBC9A\uAF43 \uB098\uBB342"
-    n: 3
-    prefab: {fileID: 0}
-  - image: {fileID: 2800000, guid: a6838677825c60941b0d92d9998c5ce7, type: 3}
-    itemName: "\uBC9A\uAF43 \uB098\uBB343"
     n: 3
     prefab: {fileID: 0}
   - image: {fileID: 2800000, guid: 29aaa4e2ddfb6ae42a8cf6915fb0f17b, type: 3}
     itemName: "\uC9C0\uAD6C\uBCF8"
     n: 3
-    prefab: {fileID: 0}
+    prefab: {fileID: 2984109345081430473, guid: b7118c1acb0d2274abd9a971eefd3068,
+      type: 3}
   - image: {fileID: 2800000, guid: 1ce42baab6bf3064285a89bf97390ef5, type: 3}
     itemName: "\uC7A5\uC2DD\uB098\uBB34"
     n: 3
-    prefab: {fileID: 0}
+    prefab: {fileID: 2819610249538432222, guid: d2108eb2ea3144b42ba1fc5f3b37979f,
+      type: 3}
   - image: {fileID: 2800000, guid: b76c12600e8a73b499bb3624be7581e9, type: 3}
     itemName: "\uC5F0\uD544"
     n: 3
@@ -547,7 +551,7 @@ GameObject:
   - component: {fileID: 5102625223058151308}
   - component: {fileID: 1571937194198100912}
   m_Layer: 5
-  m_Name: Button_Panel
+  m_Name: CategoryButton_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -571,8 +575,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1280, y: 670}
-  m_SizeDelta: {x: 2560, y: 150}
+  m_AnchoredPosition: {x: 300, y: 1100}
+  m_SizeDelta: {x: 505, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2492373689153921869
 CanvasRenderer:
@@ -630,7 +634,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: -2000
+  m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -921,7 +925,7 @@ GameObject:
   - component: {fileID: 310817373726999301}
   - component: {fileID: 5957591273918552421}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: ClassButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -942,9 +946,9 @@ RectTransform:
   - {fileID: 6785709941146611564}
   m_Father: {fileID: 8605981112720647656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 405, y: -75}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1813982083534900908
@@ -975,7 +979,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 5ef6a339aa23d594c8d49363660030d3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -984,7 +988,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 1.9
 --- !u!114 &5957591273918552421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1177,7 +1181,7 @@ GameObject:
   - component: {fileID: 3428731089267734949}
   - component: {fileID: 8594991732910857707}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CommonButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1198,9 +1202,9 @@ RectTransform:
   - {fileID: 6815450048431088841}
   m_Father: {fileID: 8605981112720647656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 125, y: -75}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2202521167750876551
@@ -1231,7 +1235,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 5ef6a339aa23d594c8d49363660030d3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1240,7 +1244,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 1.9
 --- !u!114 &8594991732910857707
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,10 +1,12 @@
 using GH;
+using MJ;
 using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Item;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -37,10 +39,12 @@ public class InventorySystem : MonoBehaviour
 
     public GameObject itemPrefab;
     public GameObject parentPanel;
-    public List<Item.ItemData> items = new List<Item.ItemData>();
-
     private List<GameObject> itemObjects = new List<GameObject>();
-    public GameObject choiceItem;
+
+    public List<Item.ItemData> items = new List<Item.ItemData>();
+    public List<Item> itemComponents = new List<Item>();
+
+    public ItemData choiceItem;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,15 +62,34 @@ public class InventorySystem : MonoBehaviour
         foreach (Item.ItemData item in items)
         {
             GameObject itemGame = Instantiate(itemPrefab, parentPanel.transform);
+            itemComponents.Add(itemGame.GetComponent<Item>());
             itemGame.GetComponent<Item>().SetItemData(item);
             itemObjects.Add(itemGame);
         }
 
     }
 
-    public void SetChoiceItem(GameObject itemPrefab)
+    public void SetChoiceItem(ItemData _itemData)
     {
-        choiceItem = itemPrefab;
-        DataManager.instance.setTileObj = itemPrefab;
+        choiceItem = _itemData;
+        if(!CheckItem())
+        {
+            // UI ¶ç¿ì±â
+            SceneUIManager.GetInstance().OnMapInventoryErrorPanel();
+            return;
+        }
+        DataManager.instance.setTileObj = choiceItem.prefab;
+    }
+
+    public void UseItem()
+    {
+        int idx = items.IndexOf(choiceItem);
+        --items[idx].n;
+        itemComponents[idx].UpdateItemData();
+    }
+
+    public bool CheckItem()
+    {
+        return choiceItem.n > 0;
     }
 }

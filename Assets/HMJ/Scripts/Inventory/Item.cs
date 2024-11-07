@@ -4,20 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static Item;
 
 public class Item : MonoBehaviour
 {
-    [Serializable]
-    public struct ItemData
-    {
-        public Texture image;
-        public string itemName;
-        public int n;
-        public GameObject prefab;
-    }
-
-    private ItemData itemdata;
-
     /// <summary>
     /// 인스펙터 연결 데이터
     /// </summary>
@@ -25,6 +15,27 @@ public class Item : MonoBehaviour
     public TMP_Text name;
     public TMP_Text N;
     public Button button;
+
+    [Serializable]
+    public class ItemData
+    {
+        public Texture image;
+        public string itemName;
+        public int n;
+        public GameObject prefab;
+
+        public int N
+        {
+            get { return n; }
+            set
+            {
+                n = value;
+            }
+        }
+    }
+
+    private ItemData itemdata;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +46,6 @@ public class Item : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void SetItemData(ItemData _itemData)
@@ -45,8 +55,14 @@ public class Item : MonoBehaviour
         name.text = itemdata.itemName;
     }
 
+    public void UpdateItemData()
+    {
+        image.texture = itemdata.image;
+        name.text = itemdata.itemName;
+        N.text = itemdata.N.ToString();
+    }
     public void SetItemPrefab()
     {
-        InventorySystem.GetInstance().SetChoiceItem(itemdata.prefab);
+        InventorySystem.GetInstance().SetChoiceItem(itemdata);
     }
 }

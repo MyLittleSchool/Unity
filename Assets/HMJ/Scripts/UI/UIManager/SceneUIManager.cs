@@ -38,6 +38,8 @@ namespace MJ
         [Header("맵 인벤토리 패널 - 맵 인벤토리 패널 끄기 버튼")]
         public UnityEngine.UI.Button InventoryCloseButton;
 
+        [Header("맵 인벤토리 에러 패널 - 맵 인벤토리 에러 패널 끄기 버튼")]
+        public UnityEngine.UI.Button InventoryErrorCloseButton;
 
         [Header("메뉴 버튼")]
         public UnityEngine.UI.Button topMenuButton;
@@ -74,6 +76,9 @@ namespace MJ
 
         [Header("맵 인벤토리 패널")]
         public GameObject mapInventoryPanel;
+
+        [Header("맵 인벤토리 에러 패널 - 아이템 개수 부족")]
+        public GameObject mapInventoryErrorPanel;
 
         [Header("메뉴 패널")]
         public GameObject menuPanel;
@@ -135,11 +140,13 @@ namespace MJ
             Button _mapConfirmYesButton,
             Button _mapConfirmNoButton,
             Button _mapRegisterSuccessCloseButton,
-            
+            Button _InventoryErrorCloseButton,
+
             GameObject _mapContestPanel,
             GameObject _mapRegisterPanel,
             GameObject _mapConfirmPanel,
-            GameObject _mapSuccessRegisterPanel
+            GameObject _mapSuccessRegisterPanel,
+            GameObject _mapInventoryErrorPanel
             )
         {
             MapContestCloseButton = _mapContestCloseButton;
@@ -151,6 +158,8 @@ namespace MJ
             MapConfirmYesButton = _mapConfirmYesButton;
             MapConfirmNoButton = _mapConfirmNoButton;
             MapRegisterSuccessCloseButton = _mapRegisterSuccessCloseButton;
+            mapInventoryErrorPanel = _mapInventoryErrorPanel;
+            InventoryErrorCloseButton = _InventoryErrorCloseButton;
 
             if (mapRegisterButton)
             {
@@ -181,6 +190,9 @@ namespace MJ
 
             if (MapRegisterSuccessCloseButton)
                 MapRegisterSuccessCloseButton.onClick.AddListener(OffMapSuccessRegisterPanel);
+
+            if (InventoryErrorCloseButton)
+                InventoryErrorCloseButton.onClick.AddListener(OffMapInventoryErrorPanel);
 
             if (_mapContestPanel)
                 mapContestPanel = _mapContestPanel;
@@ -320,6 +332,16 @@ namespace MJ
             Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32 (242, 136, 75, 255) : new Color32(29, 27, 32, 255);
             myProfileImage.color = myprofileColor;
 
+        }
+
+        public void OffMapInventoryErrorPanel()
+        {
+            mapInventoryErrorPanel.SetActive(false);
+        }
+
+        public void OnMapInventoryErrorPanel()
+        {
+            mapInventoryErrorPanel.SetActive(true);
         }
     }
 }
