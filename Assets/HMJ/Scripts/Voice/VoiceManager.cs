@@ -14,7 +14,7 @@ public class VoiceManager : MonoBehaviour
 
     
     private Photon.Voice.Unity.Recorder record;
-    private List<Speaker> playerSpeakers = new List<Speaker>();
+    private List<AudioSource> playerAudioSources = new List<AudioSource>();
     bool bSpeaker = true;
     private void Awake()
     {
@@ -56,8 +56,8 @@ public class VoiceManager : MonoBehaviour
         SettingPlayerSpeaker();
 
         bSpeaker = !bSpeaker;
-        foreach (Speaker speaker in playerSpeakers)
-            speaker.enabled = bSpeaker;
+        foreach (AudioSource audioSource in playerAudioSources)
+            audioSource.mute = bSpeaker;
         if (!bSpeaker)
             record.TransmitEnabled = false;
     }
@@ -69,11 +69,11 @@ public class VoiceManager : MonoBehaviour
 
     public void SettingPlayerSpeaker()
     {
-        playerSpeakers.Clear();
+        playerAudioSources.Clear();
         foreach (PhotonView photonview in PhotonNetwork.PhotonViews)
         {
             if(photonview.gameObject)
-                playerSpeakers.Add(photonview.gameObject.GetComponent<Speaker>());
+                playerAudioSources.Add(photonview.gameObject.GetComponent<AudioSource>());
         }
     }
 
