@@ -13,7 +13,7 @@ namespace GH
         public List<GameObject> emojiPrefabList = new List<GameObject>();
         public GameObject stingPrefab;
 
-        public Transform emojiTransform;
+        private Transform emojiTransform;
         public GameObject emojiButtonPrefab;
 
 
@@ -22,6 +22,9 @@ namespace GH
 
         PlayerMove playerMove;
 
+        // 모델 위치값
+        public Transform modelTransform;
+
 
         void Start()
         {
@@ -29,9 +32,9 @@ namespace GH
 
             emojiTransform = GameManager.instance.emojiTransform;
 
-            if(photonView.IsMine && GameManager.instance.emojiList.Count != 0)
+            if (photonView.IsMine && GameManager.instance.emojiList.Count != 0)
             {
-                for(int i = 0; i < GameManager.instance.emojiList.Count; i++)
+                for (int i = 0; i < GameManager.instance.emojiList.Count; i++)
                 {
                     Destroy(GameManager.instance.emojiList[i].gameObject);
                 }
@@ -60,6 +63,7 @@ namespace GH
         }
         void Update()
         {
+
             #region 컴퓨터 감정 표현
             /*
             if (GetComponent<PhotonView>().IsMine)
@@ -113,19 +117,23 @@ namespace GH
         [PunRPC]
         public void OnString()
         {
+            GameObject sting = Instantiate(stingPrefab);
+            StingMove strgMove = sting.GetComponent<StingMove>();
+            string playerStingName = "";
             if (photonView.IsMine)
             {
                 stingDir = GetComponent<PlayerMove>().stingDir;
-
+                playerStingName = photonView.Owner.NickName;
             }
             else
             {
                 stingDir = GetComponent<PlayerMove>().stingDirPun;
+                playerStingName = "test";
 
             }
-            GameObject sting = Instantiate(stingPrefab);
             sting.transform.position = transform.position;
             sting.transform.right = stingDir;
+            strgMove.stingPlayer = playerStingName;
 
         }
 
@@ -147,6 +155,19 @@ namespace GH
             else if (stream.IsReading)
             {
                 //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
+            }
+        }
+
+        // 콜라이더 엔터로 찌르기가 들어오면
+        // 매프레임을 랜덤값으로 float 0~0.2로 x y값을 부여하고
+        // 1초 뒤에 다시 000으로 돌아온다.
+        
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            StingMove stingMove = collision.GetComponent<StingMove>();
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Sting") && stingMove.stingPlayer != photonView.Owner.NickName)
+            {
+                modelTransform.localPosition = new Vector3(Random.Range(0, 0.15f), Random.Range(0, 0.15f), 0);
             }
         }
     }

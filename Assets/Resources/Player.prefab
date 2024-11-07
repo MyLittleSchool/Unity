@@ -16,9 +16,8 @@ GameObject:
   - component: {fileID: 1485329443615734170}
   - component: {fileID: 150480224950754493}
   - component: {fileID: -4655146129839858024}
-  - component: {fileID: 7031061561831403206}
-  - component: {fileID: 6553659606358259227}
-  - component: {fileID: 7494179969583602551}
+  - component: {fileID: 8884604780503016076}
+  - component: {fileID: -8963545018019622998}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -176,9 +175,9 @@ MonoBehaviour:
   - {fileID: 3437390552001893096, guid: 65b02a85ac6ea194c8135708a3a89658, type: 3}
   stingPrefab: {fileID: 5256388510713710409, guid: a2cf92c7c88416146af1524c2b500aff,
     type: 3}
-  emojiTransform: {fileID: 0}
   emojiButtonPrefab: {fileID: 5583794283898255216, guid: bd74882635feb3d4c9d03948f1dedb3e,
     type: 3}
+  modelTransform: {fileID: 0}
 --- !u!114 &150480224950754493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +217,8 @@ MonoBehaviour:
   setMode: 0
   objectList: []
   tileObjCheck: 0
---- !u!114 &7031061561831403206
+  setObjectId: 0
+--- !u!114 &8884604780503016076
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,106 +227,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 90022443400985812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
+  m_Script: {fileID: 11500000, guid: c00a197c063ae7b41bb5cabb19b747e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!82 &6553659606358259227
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90022443400985812}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &7494179969583602551
+  userInfoData:
+    id: 0
+    socialId: 
+    name: 
+    grade: 0
+    birthday: 
+    gender: 0
+    email: 
+    password: 
+    phone: 
+    interest: []
+    schoolId: 0
+    level: 0
+    exp: 0
+    maxExp: 0
+    school:
+      schoolId: 0
+      schoolName: 
+      location: 
+      backgroundColorId: 0
+      furnitureList: []
+--- !u!114 &-8963545018019622998
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -335,15 +260,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 90022443400985812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd7fea91fe63f4e1b884ef1e16a975c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ddf5e23a679f9b40acb244f15f89955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playDelayConfig:
-    Low: 200
-    High: 200
-    Max: 1000
-    SpeedUpPerc: 5
-  restartOnDeviceChange: 1
+  playerUI: {fileID: 0}
+  playerPanel: {fileID: 0}
+  userInfo:
+    id: 0
+    socialId: 
+    name: 
+    grade: 0
+    birthday: 
+    gender: 0
+    email: 
+    password: 
+    phone: 
+    interest: []
+    schoolId: 0
+    level: 0
+    exp: 0
+    maxExp: 0
+    school:
+      schoolId: 0
+      schoolName: 
+      location: 
+      backgroundColorId: 0
+      furnitureList: []
 --- !u!1 &1244036633859475523
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +486,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\uC774\uADDC\uD604"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6524d2b5a89fb1d45a4a17dff2b54e1f, type: 2}
   m_sharedMaterial: {fileID: 2056741148348037280, guid: 6524d2b5a89fb1d45a4a17dff2b54e1f,

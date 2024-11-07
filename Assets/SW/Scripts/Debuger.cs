@@ -43,7 +43,7 @@ namespace SW
             });
             get.onClick.AddListener(() =>
             {
-                placeManager.ReadPlace(null);
+                //placeManager.ReadPlace(-1, null);
             });
             delete.onClick.AddListener(() =>
             {

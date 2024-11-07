@@ -15,7 +15,16 @@ namespace GH
         public string playerName;
         public string playerSchool;
         public string playerCurrChannel;
+        public int mapId;
+        public enum MapType { MyClassroom, School }
+        public MapType mapType;
         public GameObject setTileObj;
+        public int setTileObjId;
+
+
+
+        [Header("6. 관심사 리스트")]
+        public List<string> interests;
         private void Awake()
         {
             if (instance == null)
@@ -32,16 +41,6 @@ namespace GH
             Screen.fullScreen = false;
 
         }
-
-
-        void Start()
-        {
-        }
-
-        void Update()
-        {
-        }
-
         public void PlayerFind()
         {
 

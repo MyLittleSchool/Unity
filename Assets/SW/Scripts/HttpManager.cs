@@ -21,8 +21,6 @@ public struct PostInfoArray
 public class HttpManager : MonoBehaviour
 {
     static HttpManager instance;
-    public int UserId { get; } = 1;
-    public int MapId { get; } = 1;
     public static HttpManager GetInstance()
     {
         if (instance == null)
@@ -85,6 +83,17 @@ public class HttpManager : MonoBehaviour
     public IEnumerator Post(HttpInfo info)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, info.body, info.contentType))
+        {
+            // 서버에 요청 보내기
+            yield return webRequest.SendWebRequest();
+
+            // 서버에게 응답이 왔다.
+            DoneRequest(webRequest, info);
+        }
+    }
+    public IEnumerator Patch(HttpInfo info)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Put(info.url, info.body))
         {
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();

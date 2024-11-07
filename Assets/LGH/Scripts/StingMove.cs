@@ -8,10 +8,10 @@ namespace GH
         private SpriteRenderer stingSpriteRenderer;
         private float stringSpeed = 3;
         private float stringAlpha = 2f;
-
+        public string stingPlayer;
         void Start()
         {
-            stingSpriteRenderer = GetComponent<SpriteRenderer>();
+            stingSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
         void Update()
@@ -23,7 +23,7 @@ namespace GH
             transform.position += transform.right * stringSpeed * Time.deltaTime;
             stingSpriteRenderer.color -= new Color(0, 0, 0, 1) * stringAlpha * Time.deltaTime;
 
-            Destroy(transform.parent.gameObject, 1f);
+            Destroy(transform.gameObject, 1f);
         }
     }
 }

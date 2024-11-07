@@ -1,8 +1,16 @@
 using GH;
+using SW;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using static HttpManager;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.Analytics;
+using UnityEngine.Networking;
 
 namespace MJ
 {
@@ -50,6 +58,12 @@ namespace MJ
         [Header("나의 프로필 버튼")]
         public Button myProfileButton;
 
+        [Header("나의 프로필 편집 버튼")]
+        public Button myProfileEditButton;
+
+        [Header("나의 프로필 편집 저장 버튼")]
+        public Button myProfileSaveButton;
+
         #endregion
 
         #region Panel
@@ -95,6 +109,9 @@ namespace MJ
         [Header("나의 프로필 편집 패널")]
         public GameObject myProfileEditPanel;
 
+        [Header("플레이어 목록 패널")]
+        public GameObject playerList;
+
         #endregion
 
         #region SingleTone
@@ -112,7 +129,7 @@ namespace MJ
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -124,10 +141,58 @@ namespace MJ
         }
         #endregion
 
-        // Start is called before the first frame update
+        #region 규현
+        [Header("프로필 편집 인풋 박스들")]
+        public TMP_InputField nickNameInputField;
+        public TMP_InputField interestInputField;
+        public TMP_InputField myMessageInputField;
+
+        [Header("프로필 편집 텍스트")]
+        public TMP_Text nickNameText;
+        public TMP_Text interestText;
+        public TMP_Text myMessageText;
+
+        [Header("관심사 딕셔너리")]
+        private Dictionary<string, GameObject> buttonList = new Dictionary<string, GameObject>();
+
+        [Header("관심사 버튼 프리팹")]
+        public GameObject interestButtonPrefab;
+
+        [Header("관심사 버튼 생성위치")]
+        public RectTransform interestButtonTransform;
+
+        [Header("선택된 관심사 리스트")]
+        public List<string> selectedInterest;
+
+        private Color32 selectColor = new Color32(242, 136, 75, 255);
+        private Color32 noneSelectColor = new Color32(242, 242, 242, 255);
+
+        public TMP_Text profileLvNick;
+        public TMP_Text profileInterest;
+        public TMP_Text profileMyMessage;
+
+        public UserInfo currentuserInfo;
+
+        #endregion
+
         private void Start()
         {
             myProfileButton.onClick.AddListener(OnOffMyProfile);
+            myProfileEditButton.onClick.AddListener(OnMyProfileEdit);
+            myProfileSaveButton.onClick.AddListener(OffMyProfileEdit);
+
+            myProfileEditPanel.SetActive(false);
+            myProfilePanel.SetActive(false);
+
+            InterestButtonCreate();
+
+            SetProfile();
+        }
+        private void Update()
+        {
+            ProfileEditCount();
+
+
         }
 
         public void RestartSetting(
@@ -181,7 +246,7 @@ namespace MJ
             if (mapContestButton)
                 mapContestButton.onClick.AddListener(OnMapConfirmPanel);
 
-            if(MapConfirmYesButton)
+            if (MapConfirmYesButton)
                 MapConfirmYesButton.onClick.AddListener(OnMapRegisterPanel);
             if (MapConfirmYesButton)
                 MapConfirmYesButton.onClick.AddListener(OffMapConfirmPanel);
@@ -203,7 +268,7 @@ namespace MJ
             if (_mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel = _mapSuccessRegisterPanel;
         }
-        
+
         public void initDecorationPanel()
         {
             PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
@@ -275,7 +340,7 @@ namespace MJ
             InventoryCloseButton.gameObject.SetActive(false);
             InventoryButton.gameObject.SetActive(true);
             ChatPanel.gameObject.SetActive(true);
-            if(DataManager.instance.player != null)
+            if (DataManager.instance.player != null)
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = false;
             }
@@ -309,17 +374,18 @@ namespace MJ
         public void OnFriendsPanel()
         {
             friendsPanel.SetActive(true);
+            friendsPanel.GetComponent<FriendsUI>().RefreshFriends();
         }
 
         public void OffAllMapPanel()
         {
-            if(mapContestPanel)
+            if (mapContestPanel)
                 mapContestPanel.SetActive(false);
             if (mapRegisterPanel)
                 mapRegisterPanel.SetActive(false);
             if (mapConfirmPanel)
                 mapConfirmPanel.SetActive(false);
-            if(mapSuccessRegisterPanel)
+            if (mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel.SetActive(false);
         }
 
@@ -329,7 +395,7 @@ namespace MJ
             myProfilePanel.SetActive(!myProfilePanel.activeSelf);
 
             Image myProfileImage = myProfileButton.GetComponentInChildren<Image>();
-            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32 (242, 136, 75, 255) : new Color32(29, 27, 32, 255);
+            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(29, 27, 32, 255);
             myProfileImage.color = myprofileColor;
 
         }
@@ -343,5 +409,155 @@ namespace MJ
         {
             mapInventoryErrorPanel.SetActive(true);
         }
+
+        public void OnMyProfileEdit()
+        {
+            myProfileEditPanel.SetActive(true);
+            myProfilePanel.SetActive(false);
+        }
+
+        public void OffMyProfileEdit()
+        {
+            myProfileEditPanel.SetActive(false);
+            myProfilePanel.SetActive(true);
+            ProfileEditSave();
+        }
+
+        public void ProfileEditCount()
+        {
+            nickNameText.text = nickNameInputField.text.Length + "/10";
+            interestText.text = selectedInterest.Count + "/5";
+            myMessageText.text = myMessageInputField.text.Length + "/30";
+
+            if (interestInputField.isFocused)
+            {
+                interestButtonTransform.gameObject.SetActive(true);
+            }
+            if(Input.touchCount == 1 || Input.GetMouseButtonDown(0))
+            {
+            Vector2 localPointPos = interestButtonTransform.InverseTransformPoint(Input.mousePosition);
+            if (!interestButtonTransform.rect.Contains(localPointPos))
+                {
+                    interestButtonTransform.gameObject.SetActive(false);
+                }
+
+            }
+
+
+        }
+            public void InterestButtonOnOff()
+        {
+            bool onInterest = false;
+            onInterest = interestButtonTransform.gameObject.activeSelf ? false : true;
+            interestButtonTransform.gameObject.SetActive(onInterest);
+        }
+
+        private void InterestButtonCreate()
+        {
+            for (int i = 0; i < DataManager.instance.interests.Count; i++)
+            {
+                GameObject interestButton = Instantiate(interestButtonPrefab, interestButtonTransform);
+                interestButton.GetComponentInChildren<TMP_Text>().text = DataManager.instance.interests[i];
+                buttonList.Add(DataManager.instance.interests[i], interestButton);
+            }
+        }
+
+        public void InterestSlect(string key, Image image)
+        {
+            bool test = false;
+            interestInputField.text = "";
+
+            if (selectedInterest.Count > 0)
+            {
+
+                // 중복 체크
+                for (int i = 0; i < selectedInterest.Count; i++)
+                {
+                    if (selectedInterest[i] == key)
+                    {
+                        test = true;
+                        print("11");
+
+                        image.color = noneSelectColor;
+                        selectedInterest.RemoveAt(i);
+                        break;
+                    }
+                    else
+                    {
+                        test = false;
+                        print("22");
+
+                    }
+                    // interestText.text += "#" + selectedInterest[i] + " ";
+                }
+                if (!test)
+                {
+                    image.color = selectColor;
+
+                    if (selectedInterest.Count < 5)
+                    {
+                        selectedInterest.Add(key);
+                    }
+                    else
+                    {
+                        buttonList[selectedInterest[0]].GetComponent<Image>().color = noneSelectColor;
+                        selectedInterest.RemoveAt(0);
+                        selectedInterest.Add(key);
+                    }
+                }
+
+                for (int i = 0; i < selectedInterest.Count; i++)
+                {
+                    interestInputField.text += "#" + selectedInterest[i] + " ";
+
+                }
+            }
+            else
+            {
+                image.color = new Color32(242, 136, 75, 255);
+                selectedInterest.Add(key);
+                interestInputField.text += "#" + key + " ";
+            }
+
+        }
+
+        private void ProfileEditSave()
+        {
+            UserInfo joinInfo = new UserInfo();
+            joinInfo.name = nickNameInputField.text;
+            joinInfo.interest = selectedInterest;
+            joinInfo.statusMesasge = myMessageInputField.text;
+
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/profile";
+            info.body = JsonUtility.ToJson(joinInfo);
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+            StartCoroutine(HttpManager.GetInstance().Patch(info));
+
+            currentuserInfo = AuthManager.GetInstance().userAuthData.userInfo;
+            currentuserInfo.name = nickNameInputField.text;
+            currentuserInfo.interest = selectedInterest;
+            currentuserInfo.statusMesasge = myMessageInputField.text;
+
+            AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(currentuserInfo);
+            SetProfile();
+        }
+
+        private void SetProfile()
+        {
+            UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
+            profileLvNick.text = userInfo.level + " | " + userInfo.name;
+            for(int i = 0; i < userInfo.interest.Count; i++)
+            {
+                profileInterest.text += "#" + userInfo.interest[i] + " ";
+            }
+            //메시지
+            //profileMyMessage =
+
+        }
+
     }
 }

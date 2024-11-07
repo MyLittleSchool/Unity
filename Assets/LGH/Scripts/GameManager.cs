@@ -31,11 +31,11 @@ namespace GH
         public GameObject interracBut;
 
         public bool interMode = false;
-        public bool buttonDown =false;
+        public bool buttonDown = false;
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -59,8 +59,8 @@ namespace GH
         }
         void Update()
         {
-            if(PhotonNetwork.CurrentRoom != null)
-            currtRoomPlayerCnt.text = PhotonNetwork.CurrentRoom.PlayerCount.ToString();
+            if (PhotonNetwork.CurrentRoom != null)
+                currtRoomPlayerCnt.text = PhotonNetwork.CurrentRoom.PlayerCount.ToString();
             InteractionButton();
         }
 
@@ -74,15 +74,14 @@ namespace GH
             //룸에 입장이 완료될 때까지 기다린다.
             yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
 
-            Vector2 randomPos = Random.insideUnitCircle * 2.0f;
-            Vector3 initPosition = new Vector3(randomPos.x, randomPos.y, 0);
+            Vector3 initPosition = new Vector3(0, 0, 0);
 
-            GameObject p = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
-            Instantiate(interacterPrefab, p.transform);
+            GameObject spwanPlayer = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
+            Instantiate(interacterPrefab, spwanPlayer.transform);
 
-            if (p.GetComponent<PhotonView>().IsMine)
+            if (spwanPlayer.GetComponent<PhotonView>().IsMine)
             {
-                DataManager.instance.player = p;
+                DataManager.instance.player = spwanPlayer;
             }
 
         }
@@ -105,7 +104,7 @@ namespace GH
 
         public void InteractionButton()
         {
-            if(DataManager.instance != null)
+            if (DataManager.instance != null)
             {
 
                 interracBut.SetActive(interMode);
@@ -114,7 +113,7 @@ namespace GH
 
         public void ClickInterractionButton()
         {
-           StartCoroutine(nameof(ButtonUp));
+            StartCoroutine(nameof(ButtonUp));
             //버튼 눌렀을 때 상호작용
             DataManager.instance.player.GetComponentInChildren<PlayerInteracter>().InteractBut();
 
@@ -139,6 +138,6 @@ namespace GH
             }
         }
 
-       
+
     }
 }

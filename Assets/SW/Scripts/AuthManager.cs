@@ -1,3 +1,4 @@
+using GH;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,11 +36,15 @@ namespace SW
         [System.Serializable]
         public struct AuthData
         {
-            public int id;
-            public string state;
-            public string accessToken;
+            public UserInfo userInfo;
+            public AuthData(UserInfo info)
+            {
+                userInfo = info;
+                DataManager.instance.mapId = info.id;
+            }
         }
-        public AuthData UserAuthData { get; private set; }
+        public AuthData userAuthData { get; set; }
+        public int MapId { get; set; } = 1;
 
         private void Start()
         {
@@ -95,10 +100,8 @@ namespace SW
                 {
                     Debug.Log("Authorization Code successfully sent to server.");
                     Debug.Log(www.downloadHandler.text);
-                    UserAuthData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
-                    print(UserAuthData.id);
-                    print(UserAuthData.state);
-                    print(UserAuthData.accessToken);
+                    userAuthData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
+                   
                     break;
                 }
 

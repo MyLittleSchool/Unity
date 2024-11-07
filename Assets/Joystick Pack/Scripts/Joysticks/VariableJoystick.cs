@@ -11,7 +11,7 @@ public class VariableJoystick : Joystick
     [SerializeField] private JoystickType joystickType = JoystickType.Fixed;
 
     private Vector2 fixedPosition = Vector2.zero;
-    private Vector3 firstJoystickPos;
+    public Vector3 firstJoystickPos;
 
     public void SetMode(JoystickType joystickType)
     {
@@ -23,18 +23,23 @@ public class VariableJoystick : Joystick
         }
         else
             background.gameObject.SetActive(true);
+
+        firstJoystickPos = background.gameObject.transform.localPosition;
+        print("start  " + firstJoystickPos);
+
     }
 
     protected override void Start()
     {
         base.Start();
-        fixedPosition = background.anchoredPosition;
+        //fixedPosition = background.anchoredPosition;
         SetMode(joystickType);
     }
 
     public override void OnPointerDown(PointerEventData eventData)
     {
-        firstJoystickPos = background.gameObject.transform.position;
+
+        //firstJoystickPos = background.gameObject.transform.position;
         if (joystickType != JoystickType.Fixed)
         {
             background.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
@@ -45,12 +50,14 @@ public class VariableJoystick : Joystick
 
     public override void OnPointerUp(PointerEventData eventData)
     {
+        print("UP  "+firstJoystickPos);
+
         if (joystickType != JoystickType.Fixed)
-            background.gameObject.transform.position = firstJoystickPos;
+            background.gameObject.transform.localPosition = firstJoystickPos;
 
         base.OnPointerUp(eventData);
     }
-
+   
     protected override void HandleInput(float magnitude, Vector2 normalised, Vector2 radius, Camera cam)
     {
         if (joystickType == JoystickType.Dynamic && magnitude > moveThreshold)

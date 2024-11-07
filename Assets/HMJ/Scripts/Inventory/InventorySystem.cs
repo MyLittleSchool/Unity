@@ -69,18 +69,6 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    public void SetChoiceItem(ItemData _itemData)
-    {
-        choiceItem = _itemData;
-        if(!CheckItem())
-        {
-            // UI ¶ç¿ì±â
-            SceneUIManager.GetInstance().OnMapInventoryErrorPanel();
-            return;
-        }
-        DataManager.instance.setTileObj = choiceItem.prefab;
-    }
-
     public void UseItem()
     {
         int idx = items.IndexOf(choiceItem);
@@ -91,5 +79,23 @@ public class InventorySystem : MonoBehaviour
     public bool CheckItem()
     {
         return choiceItem.n > 0;
+    }
+
+    public void SetChoiceItem(ItemData _itemData)
+    {
+        choiceItem = _itemData;
+        if (!CheckItem())
+        {
+            // UI ¶ç¿ì±â
+            SceneUIManager.GetInstance().OnMapInventoryErrorPanel();
+            return;
+        }
+        DataManager.instance.setTileObj = _itemData.prefab;
+        DataManager.instance.setTileObjId = GetItemIndex(_itemData);
+    }
+
+    public int GetItemIndex(Item.ItemData _itemData)
+    {
+        return items.IndexOf(_itemData);
     }
 }
