@@ -51,16 +51,13 @@ namespace GH
         void Update()
         {
             tileLine.SetActive(setMode);
-            //알파 수정
-
+            //쓰레기 코드 베타에 수정
             if (DataManager.instance.setTileObj != null)
             {
                 setGameObject = DataManager.instance.setTileObj;
             }
-            if (DataManager.instance.setTileObjId != null)
-            {
-                setObjectId = DataManager.instance.setTileObjId;
-            }
+            setObjectId = DataManager.instance.setTileObjId;
+
 
             if (setMode)
             {

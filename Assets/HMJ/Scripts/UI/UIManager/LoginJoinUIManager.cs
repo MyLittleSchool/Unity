@@ -17,8 +17,6 @@ namespace GH
 
     public class LoginJoinUIManager : MonoBehaviour
     {
-        public string iP;
-        public string port;
         public enum Loginstep
         {
             START,
@@ -344,7 +342,7 @@ namespace GH
 
 
             HttpInfo info = new HttpInfo();
-            info.url = "http://" + iP + ":" + port + "/user";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user";
             info.body = JsonUtility.ToJson(joinInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -361,7 +359,7 @@ namespace GH
         {
             print("버튼 클릭");
             HttpInfo info = new HttpInfo();
-            info.url = "http://" + iP + ":" + port + "/user/email?email=" + loginList[0].text;
+            info.url =  HttpManager.GetInstance().SERVER_ADRESS + "/user/email?email=" + loginList[0].text;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
