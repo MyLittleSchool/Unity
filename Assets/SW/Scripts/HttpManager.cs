@@ -91,10 +91,21 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+ 
     public IEnumerator Patch(HttpInfo info)
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Put(info.url, info.body))
+        using (UnityWebRequest webRequest = new UnityWebRequest(info.url, "PATCH"))
         {
+            // 요청 본문 설정 (byte[] 형태로 설정)
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(info.body);
+            webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+            // Content-Type 설정
+            webRequest.SetRequestHeader("Content-Type", info.contentType);
+
+            // 응답 받기 위한 다운로드 핸들러 설정
+            webRequest.downloadHandler = new DownloadHandlerBuffer();
+
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
 
@@ -102,6 +113,7 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+  
     public IEnumerator Delete(HttpInfo info)
     {
         string url = info.url;
@@ -162,6 +174,7 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+
     public IEnumerator DownloadSprite(HttpInfo info)
     {
         using (UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(info.url))

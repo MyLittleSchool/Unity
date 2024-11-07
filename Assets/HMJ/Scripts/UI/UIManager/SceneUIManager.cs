@@ -433,10 +433,10 @@ namespace MJ
             {
                 interestButtonTransform.gameObject.SetActive(true);
             }
-            if(Input.touchCount == 1 || Input.GetMouseButtonDown(0))
+            if (Input.touchCount == 1 || Input.GetMouseButtonDown(0))
             {
-            Vector2 localPointPos = interestButtonTransform.InverseTransformPoint(Input.mousePosition);
-            if (!interestButtonTransform.rect.Contains(localPointPos))
+                Vector2 localPointPos = interestButtonTransform.InverseTransformPoint(Input.mousePosition);
+                if (!interestButtonTransform.rect.Contains(localPointPos))
                 {
                     interestButtonTransform.gameObject.SetActive(false);
                 }
@@ -445,7 +445,7 @@ namespace MJ
 
 
         }
-            public void InterestButtonOnOff()
+        public void InterestButtonOnOff()
         {
             bool onInterest = false;
             onInterest = interestButtonTransform.gameObject.activeSelf ? false : true;
@@ -523,14 +523,16 @@ namespace MJ
 
         private void ProfileEditSave()
         {
-            UserInfo joinInfo = new UserInfo();
+            UserInfo joinInfo = AuthManager.GetInstance().userAuthData.userInfo;
             joinInfo.name = nickNameInputField.text;
             joinInfo.interest = selectedInterest;
             joinInfo.statusMesasge = myMessageInputField.text;
+            joinInfo.schoolId = 1;
 
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/profile";
             info.body = JsonUtility.ToJson(joinInfo);
+            info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 print(downloadHandler.text);
@@ -548,15 +550,17 @@ namespace MJ
 
         private void SetProfile()
         {
+            profileInterest.text = "";
+            profileMyMessage.text = "";
             UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
             profileLvNick.text = userInfo.level + " | " + userInfo.name;
-            for(int i = 0; i < userInfo.interest.Count; i++)
+            for (int i = 0; i < userInfo.interest.Count; i++)
             {
                 profileInterest.text += "#" + userInfo.interest[i] + " ";
             }
-            //메시지
-            //profileMyMessage =
 
+            //메시지
+            profileMyMessage.text = userInfo.statusMesasge;
         }
 
     }

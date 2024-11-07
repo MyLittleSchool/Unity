@@ -42,7 +42,7 @@ namespace SW
     [Serializable]
     public class School
     {
-        public int schoolId;
+        public int id;
         public string schoolName;
         public string location;
         public int backgroundColorId;
