@@ -15,7 +15,7 @@ public class VoiceManager : MonoBehaviour
     
     private Photon.Voice.Unity.Recorder record;
     private List<AudioSource> playerAudioSources = new List<AudioSource>();
-    bool bSpeaker = true;
+    bool bMute = false;
     private void Awake()
     {
         if (instance == null)
@@ -55,16 +55,16 @@ public class VoiceManager : MonoBehaviour
     {
         SettingPlayerSpeaker();
 
-        bSpeaker = !bSpeaker;
+        bMute = !bMute;
         foreach (AudioSource audioSource in playerAudioSources)
-            audioSource.mute = bSpeaker;
-        if (!bSpeaker)
+            audioSource.mute = bMute;
+        if (bMute)
             record.TransmitEnabled = false;
     }
 
     public bool GetHeadSetOnOff()
     {
-        return bSpeaker;
+        return !bMute;
     }
 
     public void SettingPlayerSpeaker()
