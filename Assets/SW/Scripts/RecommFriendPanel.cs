@@ -8,6 +8,7 @@ namespace SW
 {
     public class RecommFriendPanel : MonoBehaviour
     {
+        public int id;
         public Image ProfileImage;
         public TMP_Text NickNameText;
         public TMP_Text SimilarityText;

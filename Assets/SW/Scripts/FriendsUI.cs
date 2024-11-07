@@ -2,6 +2,7 @@ using GH;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,6 +14,7 @@ namespace SW
         public Button closeButton;
         public RectTransform contents;
         public GameObject friendPrefab;
+        public GameObject requestedPrefab;
         public GameObject recommFriendPrefab;
         public GameObject tabPrefab;
         public Button[] tabButtons;
@@ -116,6 +118,51 @@ namespace SW
                 StartCoroutine(HttpManager.GetInstance().Get(info2));
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
+
+            // 요청 / 수락 대기
+            // 수신자 입장
+            HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
+            info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/list-receiver-unaccepted?receiverId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
+            info2.onComplete = (DownloadHandler res) =>
+            {
+                FriendshipList list = JsonUtility.FromJson<FriendshipList>(res.text);
+                if (list.response != null)
+                {
+                    for (int i = 0; i < list.response.Length; i++)
+                    {
+                        GameObject newPanel = Instantiate(requestedPrefab, contentsTabs[1]);
+                        RecommFriendPanel comp = newPanel.GetComponent<RecommFriendPanel>();
+                        UserInfo requester = list.response[i].requester;
+                        comp.id = list.response[i].id;
+                        comp.NickNameText.text = requester.name;
+                        comp.GradeText.text = requester.grade + "학년";
+                        comp.locationText.text = requester.school.schoolName;
+                        comp.InterestText.text = "#" + String.Join(" #", requester.interest);
+                        // 거절
+                        comp.PassButton.onClick.AddListener(() =>
+                        {
+                            HttpManager.HttpInfo info3 = new HttpManager.HttpInfo();
+                            info3.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/reject?friendshipId=" + comp.id;
+                            info3.onComplete = (DownloadHandler res) =>
+                            {
+                                Destroy(newPanel);
+                            };
+                        });
+                        // 수락
+                        comp.RequestButton.onClick.AddListener(() =>
+                        {
+                            HttpManager.HttpInfo info3 = new HttpManager.HttpInfo();
+                            info3.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/accept?friendshipId=" + comp.id;
+                            info3.onComplete = (DownloadHandler res) =>
+                            {
+                                RefreshFriends();
+                            };
+                        });
+                        // 친구 요청 사유 추가 필요
+                    }
+                }
+            };
+
         }
         public void RefreshTab3(List<RecommFriend> _recommFriends)
         {
