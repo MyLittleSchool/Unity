@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SW;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,8 +46,7 @@ namespace GH
         {
             setMode = false;
             tileLine.SetActive(false);
-            SuchGrid();
-
+            SuchGrid();            
         }
 
         void Update()

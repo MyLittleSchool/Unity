@@ -7,7 +7,7 @@ using UnityEngine;
 using static SW.PlaceManager;
 namespace SW
 {
-    public class ClassManager : MonoBehaviour
+    public class FurnitureLoader : MonoBehaviour
     {
         // Start is called before the first frame update
         void Start()
@@ -29,7 +29,6 @@ namespace SW
             }
             SetTile setTile = dataManager.player.GetComponent<SetTile>();
             PlaceManager placeManager = GetInstance();
-            print(123123123);
             // 배치 로딩
             placeManager.ReadPlace(DataManager.instance.mapId, DataManager.instance.mapType, (GetPlaceResInfo res) =>
             {
