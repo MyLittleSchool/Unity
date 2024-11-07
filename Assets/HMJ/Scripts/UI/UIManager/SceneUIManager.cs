@@ -2,8 +2,11 @@ using GH;
 using SW;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace MJ
 {
@@ -129,7 +132,36 @@ namespace MJ
         }
         #endregion
 
-        // Start is called before the first frame update
+        #region 규현
+        [Header("프로필 편집 인풋 박스들")]
+        public TMP_InputField nickNameInputField;
+        public TMP_InputField interestInputField;
+        public TMP_InputField myMessageInputField;
+
+        [Header("프로필 편집 텍스트")]
+        public TMP_Text nickNameText;
+        public TMP_Text interestText;
+        public TMP_Text myMessageText;
+
+        [Header("관심사 딕셔너리")]
+        private Dictionary<string, GameObject> buttonList = new Dictionary<string, GameObject>();
+
+        [Header("관심사 버튼 프리팹")]
+        public GameObject interestButtonPrefab;
+
+        [Header("관심사 버튼 생성위치")]
+        public RectTransform interestButtonTransform;
+
+        [Header("선택된 관심사 리스트")]
+        public List<string> selectedInterest;
+
+        private Color32 selectColor = new Color32(242, 136, 75, 255);
+        private Color32 noneSelectColor = new Color32(242, 242, 242, 255);
+
+        public string profileLvNick;
+        public string profileInterest;
+        #endregion
+
         private void Start()
         {
             myProfileButton.onClick.AddListener(OnOffMyProfile);
@@ -138,6 +170,15 @@ namespace MJ
 
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(false);
+
+            InterestButtonCreate();
+
+            profileLvNick = AuthManager.GetInstance().userAuthData.userInfo.level + " | " + AuthManager.GetInstance().userAuthData.userInfo.name;
+            
+        }
+        private void Update()
+        {
+            ProfileEditCount();
 
 
         }
@@ -349,6 +390,104 @@ namespace MJ
         {
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(true);
+
+        }
+
+        public void ProfileEditCount()
+        {
+            nickNameText.text = nickNameInputField.text.Length + "/10";
+            interestText.text = selectedInterest.Count + "/5";
+            myMessageText.text = myMessageInputField.text.Length + "/30";
+
+            if (interestInputField.isFocused)
+            {
+                interestButtonTransform.gameObject.SetActive(true);
+            }
+            if(Input.touchCount == 1 || Input.GetMouseButtonDown(0))
+            {
+            Vector2 localPointPos = interestButtonTransform.InverseTransformPoint(Input.mousePosition);
+            if (!interestButtonTransform.rect.Contains(localPointPos))
+                {
+                    interestButtonTransform.gameObject.SetActive(false);
+                }
+
+            }
+
+
+        }
+            public void InterestButtonOnOff()
+        {
+            bool onInterest = false;
+            onInterest = interestButtonTransform.gameObject.activeSelf ? false : true;
+            interestButtonTransform.gameObject.SetActive(onInterest);
+        }
+
+        private void InterestButtonCreate()
+        {
+            for (int i = 0; i < DataManager.instance.interests.Count; i++)
+            {
+                GameObject interestButton = Instantiate(interestButtonPrefab, interestButtonTransform);
+                interestButton.GetComponentInChildren<TMP_Text>().text = DataManager.instance.interests[i];
+                buttonList.Add(DataManager.instance.interests[i], interestButton);
+            }
+        }
+
+        public void InterestSlect(string key, Image image)
+        {
+            bool test = false;
+            interestInputField.text = "";
+
+            if (selectedInterest.Count > 0)
+            {
+
+                // 중복 체크
+                for (int i = 0; i < selectedInterest.Count; i++)
+                {
+                    if (selectedInterest[i] == key)
+                    {
+                        test = true;
+                        print("11");
+
+                        image.color = noneSelectColor;
+                        selectedInterest.RemoveAt(i);
+                        break;
+                    }
+                    else
+                    {
+                        test = false;
+                        print("22");
+
+                    }
+                    // interestText.text += "#" + selectedInterest[i] + " ";
+                }
+                if (!test)
+                {
+                    image.color = selectColor;
+
+                    if (selectedInterest.Count < 5)
+                    {
+                        selectedInterest.Add(key);
+                    }
+                    else
+                    {
+                        buttonList[selectedInterest[0]].GetComponent<Image>().color = noneSelectColor;
+                        selectedInterest.RemoveAt(0);
+                        selectedInterest.Add(key);
+                    }
+                }
+
+                for (int i = 0; i < selectedInterest.Count; i++)
+                {
+                    interestInputField.text += "#" + selectedInterest[i] + " ";
+
+                }
+            }
+            else
+            {
+                image.color = new Color32(242, 136, 75, 255);
+                selectedInterest.Add(key);
+                interestInputField.text += "#" + key + " ";
+            }
 
         }
     }

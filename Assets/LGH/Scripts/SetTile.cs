@@ -37,6 +37,8 @@ namespace GH
         public List<ObjectInfo> objectList = new List<ObjectInfo>();
 
         public bool tileObjCheck;
+        public int setObjectId;
+
 
         void Start()
         {
@@ -55,6 +57,11 @@ namespace GH
             {
                 setGameObject = DataManager.instance.setTileObj;
             }
+            if (DataManager.instance.setTileObjId != null)
+            {
+                setObjectId = DataManager.instance.setTileObjId;
+            }
+
             if (setMode)
             {
                 tilePosition = grid.WorldToCell(playerFrontTileTransform.position);

@@ -47,6 +47,6 @@ public class Item : MonoBehaviour
 
     public void SetItemPrefab()
     {
-        InventorySystem.GetInstance().SetChoiceItem(itemdata.prefab);
+        InventorySystem.GetInstance().SetChoiceItem(itemdata);
     }
 }
