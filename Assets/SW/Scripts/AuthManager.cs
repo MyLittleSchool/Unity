@@ -37,8 +37,13 @@ namespace SW
         public struct AuthData
         {
             public UserInfo userInfo;
+            public AuthData(UserInfo info)
+            {
+                userInfo = info;
+                DataManager.instance.mapId = info.id;
+            }
         }
-        public AuthData userAuthData;
+        public AuthData userAuthData { get; set; }
         public int MapId { get; set; } = 1;
 
         private void Start()

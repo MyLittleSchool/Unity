@@ -14,7 +14,7 @@ namespace SW
             int targetId = userRPC.userInfo.id;
             HttpManager httpManager = HttpManager.GetInstance();
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/friendship/request?arg0=" + myId + "&arg1=" + targetId;
+            info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
             info.onComplete = (DownloadHandler res) =>
             {
                 print(res.text);

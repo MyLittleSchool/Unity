@@ -10,10 +10,6 @@ namespace SW
         public GameObject playerUI;
         public PlayerPanel playerPanel;
         public UserInfo userInfo;
-        private void Awake()
-        {
-            DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
-        }
         private void Start()
         {
             pv = GetComponent<PhotonView>();

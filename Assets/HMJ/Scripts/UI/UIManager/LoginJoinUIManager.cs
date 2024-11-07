@@ -383,7 +383,7 @@ namespace GH
             yield return new WaitForSeconds(0.5f);
             if (getUserInfo.data.password == loginList[1].text)
             {
-                AuthManager.GetInstance().userAuthData.userInfo = getUserInfo.data;
+                AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
                 //¾À ³Ñ¾î°¡±â
                 DataManager.instance.playerName = getUserInfo.data.name;
                 if (schoolInputField.text.Length > 2)
