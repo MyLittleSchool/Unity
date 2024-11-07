@@ -82,9 +82,6 @@ namespace GH
         [Header("5. 비밀번호 확인 인풋필드")]
         public TMP_InputField pWCheckInputField;
 
-        [Header("6. 관심사 리스트")]
-        public List<string> interests;
-
         [Header("6. 관심사 버튼 프리팹")]
         public GameObject interestButtonPrefab;
 
@@ -266,11 +263,11 @@ namespace GH
 
         private void InterestButtonCreate()
         {
-            for (int i = 0; i < interests.Count; i++)
+            for (int i = 0; i < DataManager.instance.interests.Count; i++)
             {
                 GameObject interestButton = Instantiate(interestButtonPrefab, interestButtonTransform);
-                interestButton.GetComponentInChildren<TMP_Text>().text = interests[i];
-                buttonList.Add(interests[i], interestButton);
+                interestButton.GetComponentInChildren<TMP_Text>().text = DataManager.instance.interests[i];
+                buttonList.Add(DataManager.instance.interests[i], interestButton);
             }
         }
 
@@ -288,7 +285,6 @@ namespace GH
                     if (selectedInterest[i] == key)
                     {
                         test = true;
-                        print("11");
 
                         image.color = noneSelectColor;
                         selectedInterest.RemoveAt(i);
@@ -297,7 +293,6 @@ namespace GH
                     else
                     {
                         test = false;
-                        print("22");
 
                     }
                     // interestText.text += "#" + selectedInterest[i] + " ";

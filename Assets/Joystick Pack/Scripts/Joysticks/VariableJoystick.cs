@@ -38,7 +38,6 @@ public class VariableJoystick : Joystick
 
     public override void OnPointerDown(PointerEventData eventData)
     {
-        print("Down  " + firstJoystickPos);
 
         //firstJoystickPos = background.gameObject.transform.position;
         if (joystickType != JoystickType.Fixed)

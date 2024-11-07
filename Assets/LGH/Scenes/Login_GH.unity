@@ -3665,11 +3665,11 @@ Transform:
   m_GameObject: {fileID: 380931199}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1462.2548, y: -492.3557, z: 9.000734}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 862636658}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &398335846
 GameObject:
@@ -7993,7 +7993,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 380931201}
+  - {fileID: 1507722238}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &899907776
@@ -13832,7 +13832,7 @@ MonoBehaviour:
   port: 5544
   currentLoginstep: 0
   currentJoinInfo:
-    userId: 0
+    id: 0
     socialId: 
     name: 
     grade: 0
@@ -13848,7 +13848,7 @@ MonoBehaviour:
     maxExp: 0
   getUserInfo:
     data:
-      userId: 0
+      id: 0
       socialId: 
       name: 
       grade: 0
@@ -13895,25 +13895,6 @@ MonoBehaviour:
   checkNumText: {fileID: 515299108}
   pWInputField: {fileID: 825462736}
   pWCheckInputField: {fileID: 80391688}
-  interests:
-  - "\uAC8C\uC784"
-  - "\uC74C\uC545"
-  - "\uC601\uD654"
-  - "\uC6B4\uB3D9"
-  - "\uD328\uC158"
-  - "\uC6F9\uD230"
-  - "\uC5EC\uD589"
-  - "\uB3C5\uC11C"
-  - "\uB304\uC2A4"
-  - "\uC694\uB9AC"
-  - "\uC2A4\uD3EC\uCE20"
-  - "\uBBF8\uC220"
-  - "\uB3D9\uBB3C"
-  - "\uCF54\uB529"
-  - "\uBC84\uD29C\uBC84"
-  - "e-\uC2A4\uD3EC\uCE20"
-  - "\uC560\uB2C8"
-  - "\uC720\uD29C\uBE0C"
   interestButtonPrefab: {fileID: 2914267298495062984, guid: e35afc1d795fbd844a155acfe535b55a,
     type: 3}
   interestButtonTransform: {fileID: 837430590}
@@ -13940,11 +13921,11 @@ Transform:
   m_GameObject: {fileID: 1507722236}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1224.9242, y: 898.297, z: -0.07601261}
+  m_LocalPosition: {x: -237.33057, y: 405.94128, z: 8.924722}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 862636658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1537804881
 GameObject:
@@ -15048,6 +15029,25 @@ MonoBehaviour:
   playerCurrChannel: 
   mapId: 0
   setTileObj: {fileID: 0}
+  interests:
+  - "\uAC8C\uC784"
+  - "\uC74C\uC545"
+  - "\uC601\uD654"
+  - "\uC6B4\uB3D9"
+  - "\uD328\uC158"
+  - "\uC6F9\uD230"
+  - "\uC5EC\uD589"
+  - "\uB3C5\uC11C"
+  - "\uB304\uC2A4"
+  - "\uC694\uB9AC"
+  - "\uC2A4\uD3EC\uCE20"
+  - "\uBBF8\uC220"
+  - "\uB3D9\uBB3C"
+  - "\uCF54\uB529"
+  - "\uBC84\uD29C\uBC84"
+  - "e-\uC2A4\uD3EC\uCE20"
+  - "\uC560\uB2C8"
+  - "\uC720\uD29C\uBE0C"
 --- !u!4 &1687941235
 Transform:
   m_ObjectHideFlags: 0
@@ -20049,5 +20049,5 @@ SceneRoots:
   - {fileID: 49204010}
   - {fileID: 1771420930}
   - {fileID: 1687941235}
-  - {fileID: 1507722238}
+  - {fileID: 380931201}
   - {fileID: 862636658}

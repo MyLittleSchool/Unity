@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Item;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -64,9 +65,15 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    public void SetChoiceItem(GameObject itemPrefab)
+    public void SetChoiceItem(ItemData _itemPrefab)
     {
-        choiceItem = itemPrefab;
-        DataManager.instance.setTileObj = itemPrefab;
+        choiceItem = _itemPrefab.prefab;
+        DataManager.instance.setTileObj = _itemPrefab.prefab;
+        DataManager.instance.setTileObjId = GetItemIndex(_itemPrefab);
+    }
+
+    public int GetItemIndex(Item.ItemData _itemData)
+    {
+        return items.IndexOf(_itemData);
     }
 }

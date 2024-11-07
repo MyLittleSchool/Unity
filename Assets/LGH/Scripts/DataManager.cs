@@ -17,6 +17,10 @@ namespace GH
         public string playerCurrChannel;
         public int mapId;
         public GameObject setTileObj;
+        public int setTileObjId;
+
+        [Header("6. 관심사 리스트")]
+        public List<string> interests;
         private void Awake()
         {
             if (instance == null)
