@@ -67,7 +67,7 @@ public class MJCanvasUI : MonoBehaviour
         if (!HeadSetOnOffButton || !MicroPhoneOnOffButton)
             return;
 
-        SoundImageSetting();
+        //SoundImageSetting();
 
         HeadSetOnOffButton.onClick.AddListener(VoiceManager.instance.HeadSetOnOff);
         HeadSetOnOffButton.onClick.AddListener(SoundImageSetting);
@@ -83,6 +83,7 @@ public class MJCanvasUI : MonoBehaviour
 
     public void HeadSetImageSetting()
     {
+        VoiceManager.instance.SettingPlayerSpeaker();
         HeadSetXPanel.GetComponent<Image>().enabled = !VoiceManager.instance.GetHeadSetOnOff();
     }
 

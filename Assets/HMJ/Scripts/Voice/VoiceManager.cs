@@ -14,7 +14,8 @@ public class VoiceManager : MonoBehaviour
 
     
     private Photon.Voice.Unity.Recorder record;
-    private Speaker playerSpeaker;
+    private List<Speaker> playerSpeakers = new List<Speaker>();
+    bool bSpeaker = true;
     private void Awake()
     {
         if (instance == null)
@@ -52,19 +53,28 @@ public class VoiceManager : MonoBehaviour
 
     public void HeadSetOnOff()
     {
-        record.RecordingEnabled = !record.RecordingEnabled;
-        if (!record.RecordingEnabled)
+        SettingPlayerSpeaker();
+
+        bSpeaker = !bSpeaker;
+        foreach (Speaker speaker in playerSpeakers)
+            speaker.enabled = bSpeaker;
+        if (!bSpeaker)
             record.TransmitEnabled = false;
     }
 
     public bool GetHeadSetOnOff()
     {
-        return record.RecordingEnabled;
+        return bSpeaker;
     }
 
     public void SettingPlayerSpeaker()
     {
-        playerSpeaker = DataManager.instance.player.GetComponent<Speaker>();
+        playerSpeakers.Clear();
+        foreach (PhotonView photonview in PhotonNetwork.PhotonViews)
+        {
+            if(photonview.gameObject)
+                playerSpeakers.Add(photonview.gameObject.GetComponent<Speaker>());
+        }
     }
 
 }
