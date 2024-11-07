@@ -7,7 +7,7 @@ using UnityEngine;
 using static SW.PlaceManager;
 namespace SW
 {
-    public class ClassManager : MonoBehaviour
+    public class FurnitureLoader : MonoBehaviour
     {
         // Start is called before the first frame update
         void Start()

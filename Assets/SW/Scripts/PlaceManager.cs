@@ -1,4 +1,6 @@
 using GH;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,7 +66,7 @@ namespace SW
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
             info.url = httpManager.SERVER_ADRESS + "/furniture";
-            info.body = JsonUtility.ToJson(new SetPlaceInfo(objectInfo));
+            info.body = JsonConvert.SerializeObject(new SetPlaceInfo(objectInfo), new JsonSerializerSettings { Converters = { new StringEnumConverter() } });
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
@@ -98,9 +100,10 @@ namespace SW
         public void ReadPlace(int mapId, DataManager.MapType mapType, Action<GetPlaceResInfo> callBack)
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/furniture/list/map?mapId=" + (mapId == -1 ? AuthManager.GetInstance().MapId : mapId);
+            info.url = httpManager.SERVER_ADRESS + "/furniture/list/map/" + mapId + "/" + mapType.ToString();
             info.onComplete = (DownloadHandler res) =>
             {
+                print(res.text);
                 GetPlaceResInfo dataInfo = JsonUtility.FromJson<GetPlaceResInfo>(res.text);
                 foreach (PlaceInfo info in dataInfo.response)
                 {

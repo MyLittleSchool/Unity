@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SW;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,8 +46,7 @@ namespace GH
         {
             setMode = false;
             tileLine.SetActive(false);
-            SuchGrid();
-
+            SuchGrid();            
         }
 
         void Update()
@@ -89,7 +90,7 @@ namespace GH
                 // Ελ½Ε
                 ObjectInfo obj = objectList.Last();
                 PlaceManager.ObjectInfo objectInfo = new PlaceManager.ObjectInfo();
-                //objectInfo.objId = 
+                objectInfo.objId = setObjectId;
                 objectInfo.x = tilePosition.x;
                 objectInfo.y = tilePosition.y;
                 //objectInfo.rot =
