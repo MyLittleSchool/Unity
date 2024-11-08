@@ -190,7 +190,7 @@ namespace MJ
         }
         private void Update()
         {
-            ProfileEditCount();
+            //ProfileEditCount();
 
 
         }

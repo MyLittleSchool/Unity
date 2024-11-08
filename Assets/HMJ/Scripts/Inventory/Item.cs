@@ -8,6 +8,14 @@ using static Item;
 
 public class Item : MonoBehaviour
 {
+    public enum ItemType
+    { 
+        InventoryItem,
+        ShopItem,
+        ItemType_End
+    }
+
+    private ItemType itemType;
     /// <summary>
     /// 인스펙터 연결 데이터
     /// </summary>
@@ -40,7 +48,7 @@ public class Item : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        button.onClick.AddListener(SetItemPrefab);
+
     }
 
     // Update is called once per frame
@@ -48,11 +56,30 @@ public class Item : MonoBehaviour
     {
     }
 
-    public void SetItemData(ItemData _itemData)
+    public void SetItemData(ItemData _itemData, ItemType _itemType)
     {
         itemdata = _itemData;
         image.texture = itemdata.image;
         name.text = itemdata.itemName;
+
+        itemType = _itemType;
+        ItemTypeSetting();
+    }
+
+    public void ItemTypeSetting()
+    {
+        switch (itemType)
+        {
+            case ItemType.InventoryItem:
+                button.onClick.AddListener(() => InventorySystem.GetInstance().SetChoiceItem(itemdata));
+                break;
+            case ItemType.ShopItem:
+                button.onClick.AddListener(() => SellSystem.GetInstance().SetChoiceItem(itemdata));
+                // Sell 시스템 아이템 데이터 업데이트
+                button.onClick.AddListener(SellSystem.GetInstance().UpdateChoiceItemData);
+                break;
+        }
+
     }
 
     public void UpdateItemData()
@@ -64,5 +91,6 @@ public class Item : MonoBehaviour
     public void SetItemPrefab()
     {
         InventorySystem.GetInstance().SetChoiceItem(itemdata);
+        SellSystem.GetInstance().SetChoiceItem(itemdata);
     }
 }

@@ -8,17 +8,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Item;
 
-public class InventorySystem : MonoBehaviour
+public class SellSystem : MonoBehaviour
 {
     #region SingleTon
-    private static InventorySystem instance;
-    public static InventorySystem GetInstance()
+    private static SellSystem instance;
+    public static SellSystem GetInstance()
     {
         if (instance == null)
         {
             GameObject go = new GameObject();
             go.name = "InventorySystem";
-            go.AddComponent<InventorySystem>();
+            go.AddComponent<SellSystem>();
         }
         return instance;
     }
@@ -44,7 +44,11 @@ public class InventorySystem : MonoBehaviour
     public List<Item.ItemData> items = new List<Item.ItemData>();
     public List<Item> itemComponents = new List<Item>();
 
-    public ItemData choiceItem;
+    public List<ItemData> choiceItem;
+
+    public GameObject sellPrefab;
+    public GameObject sellParentPanel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,35 +67,36 @@ public class InventorySystem : MonoBehaviour
         {
             GameObject itemGame = Instantiate(itemPrefab, parentPanel.transform);
             itemComponents.Add(itemGame.GetComponent<Item>());
-            itemGame.GetComponent<Item>().SetItemData(item, ItemType.InventoryItem);
+            itemGame.GetComponent<Item>().SetItemData(item, ItemType.ShopItem);
             itemObjects.Add(itemGame);
         }
 
     }
 
-    public void UseItem()
-    {
-        int idx = items.IndexOf(choiceItem);
-        --items[idx].n;
-        itemComponents[idx].UpdateItemData();
-    }
-
-    public bool CheckItem()
-    {
-        return choiceItem.n > 0;
-    }
-
     public void SetChoiceItem(ItemData _itemData)
     {
-        choiceItem = _itemData;
-        if (!CheckItem())
+        int idx = choiceItem.IndexOf(_itemData);
+        if (idx < 0)
+            choiceItem.Add(_itemData);
+        else
+            choiceItem.RemoveAt(idx);
+
+    }
+    public void UpdateChoiceItemData()
+    {
+        ResetChoiceItemData();
+        foreach (ItemData itemData in choiceItem)
         {
-            // UI ¶ç¿ì±â
-            SceneUIManager.GetInstance().OnMapInventoryErrorPanel();
-            return;
+            GameObject itemGame = Instantiate(sellPrefab, sellParentPanel.transform);
+            itemGame.GetComponent<BuyItem>().SetData(itemData.itemName, 0);
         }
-        DataManager.instance.setTileObj = _itemData.prefab;
-        DataManager.instance.setTileObjId = GetItemIndex(_itemData);
+
+    }
+
+    public void ResetChoiceItemData()
+    {
+        foreach (Transform child in sellParentPanel.transform)
+            Destroy(child.gameObject);
     }
 
     public int GetItemIndex(Item.ItemData _itemData)
