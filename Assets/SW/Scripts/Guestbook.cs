@@ -1,3 +1,5 @@
+using GH;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +7,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 using Button = UnityEngine.UI.Button;
@@ -16,7 +19,13 @@ namespace SW
         public Button closeButton;
         public Button createPanel_onButton;
         public List<RectTransform> contentsRaws = new List<RectTransform>();
+        public RectTransform contents2;
         public GameObject contentPrefab;
+
+        [Header("탭")]
+        public Button[] tabButtons;
+        public GameObject[] tabPanels;
+
 
         [Header("방명록 글쓰기")]
         public RectTransform createPanel;
@@ -46,6 +55,11 @@ namespace SW
             }
             cancelDeleteButton.onClick.AddListener(() => { OnCancelButtonClick(); });
             confirmDeleteButton.onClick.AddListener(() => { OnConfirmButtonClick(); });
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                int idx = i;
+                tabButtons[i].onClick.AddListener(() => ChangeTab(idx));
+            }
         }
         private void OffPanel()
         {
@@ -75,6 +89,20 @@ namespace SW
         }
         public void OnSaveButtonClick()
         {
+            HttpManager httpManager = HttpManager.GetInstance();
+            PostInfo postInfo = new PostInfo();
+
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = httpManager.SERVER_ADRESS + "/엔드포인트";
+            info.body = JsonUtility.ToJson(postInfo);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler res) =>
+            {
+                print("게시 요청 완료");
+                LoadGuestbookData();
+            };
+            StartCoroutine(httpManager.Post(info));
+
             // 생성
             ContentData newContent = new ContentData();
             newContent.nickname = "이규현";
@@ -193,7 +221,63 @@ namespace SW
             deleteSelected = null;
             deletePanel.gameObject.SetActive(false);
         }
+        private int tab;
+        public void ChangeTab(int num)
+        {
+            tab = num;
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                if (i == num)
+                {
+                    tabPanels[i].gameObject.SetActive(true);
+                    tabButtons[i].transform.GetChild(1).gameObject.SetActive(true);
+                }
+                else
+                {
+                    tabPanels[i].gameObject.SetActive(false);
+                    tabButtons[i].transform.GetChild(1).gameObject.SetActive(false);
+                }
+            }
+        }
+        // 불러오기 통신
+        public void LoadGuestbookData()
+        {
+            int mapId = DataManager.instance.mapId;
+            DataManager.MapType mapType = DataManager.instance.mapType;
+            // 쪽지함은 내 교실일 때
+            if (mapId == AuthManager.GetInstance().userAuthData.userInfo.id && mapType == DataManager.MapType.MyClassroom)
+            {
+                tabButtons[1].gameObject.SetActive(true);
+            }
+            else
+            {
+                tabButtons[1].gameObject.SetActive(false);
+                ChangeTab(0);
+            }
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "" + mapId + "/" + mapType.ToString();
+            info.body = JsonUtility.ToJson(new LoadReqInfo());
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler res) =>
+            {
+                PostList list = JsonUtility.FromJson<PostList>(res.text);
+                foreach (PostInfo post in list.data)
+                {
+                    ContentData newContent = new ContentData();
+                    
+                    newContent.nickname = post.nickname;
+                    newContent.content = post.content;
+                    //newContent.rgb = 
+                    //newContent.registDate = 
+
+                    contentsList.Insert(0, newContent);
+                    StartCoroutine(RefreshList());
+                }
+
+            };
+        }
     }
+    [Serializable]
     public class ContentData
     {
         public int id;
@@ -202,5 +286,38 @@ namespace SW
         public string rgb;
         public string registDate;
         public int likeCount;
+    }
+    [Serializable]
+    public class PostInfo
+    {
+        public int userId;
+        public string nickname;
+        public int mapId;
+        DataManager.MapType mapType;
+        public string title;
+        public string content;
+        public PostInfo()
+        {
+            userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+            nickname = AuthManager.GetInstance().userAuthData.userInfo.name;
+            mapId = DataManager.instance.mapId;
+            mapType = DataManager.instance.mapType;
+        }
+    }
+    [Serializable]
+    public class LoadReqInfo
+    {
+        int mapId;
+        DataManager.MapType mapType;
+        public LoadReqInfo()
+        {
+            mapId = DataManager.instance.mapId;
+            mapType = DataManager.instance.mapType;
+        }
+    }
+    [Serializable]
+    public class PostList
+    {
+        public List<PostInfo> data;
     }
 }

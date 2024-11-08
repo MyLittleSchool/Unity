@@ -33,37 +33,7 @@ namespace SW
             httpManager = HttpManager.GetInstance();
         }
         private HttpManager httpManager;
-        [Serializable]
-        public class PostInfo
-        {
-            public int userId;
-            public int mapId;
-            public string nickname;
-            public string title;
-            public string content;
-            public PostInfo()
-            {
-                // 구현 필요
-                userId = 0;
-                mapId = 0;
-                nickname = "";
-            }
-        }
-        [Serializable]
-        public class LoadReqInfo
-        {
-            int mapId;
-            public LoadReqInfo()
-            {
-                // 구현 필요
-                mapId = 0;
-            }
-        }
-        [Serializable]
-        public class PostList
-        {
-            public List<PostInfo> data;
-        }
+        
         public void CreatePost(PostInfo postInfo)
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
