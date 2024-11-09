@@ -30,8 +30,17 @@ public class Item : MonoBehaviour
         public Texture image;
         public string itemName;
         public int n;
+        public int price;
         public GameObject prefab;
 
+        public ItemData(ItemData itemData)
+        {
+            image = itemData.image;
+            itemName = itemData.itemName;
+            n = itemData.n;
+            price = itemData.price;
+            prefab = itemData.prefab;
+        }
         public int N
         {
             get { return n; }
@@ -92,5 +101,15 @@ public class Item : MonoBehaviour
     {
         InventorySystem.GetInstance().SetChoiceItem(itemdata);
         SellSystem.GetInstance().SetChoiceItem(itemdata);
+    }
+
+    public ItemData GetItemData()
+    {
+        return itemdata;
+    }
+
+    public void AddItemN(int n)
+    {
+        itemdata.n += n;
     }
 }

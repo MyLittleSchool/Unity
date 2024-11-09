@@ -62,8 +62,10 @@ public class InventorySystem : MonoBehaviour
         foreach (Item.ItemData item in items)
         {
             GameObject itemGame = Instantiate(itemPrefab, parentPanel.transform);
-            itemComponents.Add(itemGame.GetComponent<Item>());
-            itemGame.GetComponent<Item>().SetItemData(item, ItemType.InventoryItem);
+            Item itemComponent = itemGame.GetComponent<Item>();
+            itemComponent.SetItemData(item, ItemType.InventoryItem);
+            itemComponent.UpdateItemData();
+            itemComponents.Add(itemComponent);
             itemObjects.Add(itemGame);
         }
 
@@ -74,6 +76,24 @@ public class InventorySystem : MonoBehaviour
         int idx = items.IndexOf(choiceItem);
         --items[idx].n;
         itemComponents[idx].UpdateItemData();
+    }
+
+    public void AddItem(int n, string ItemName)
+    {
+        int idx = ContainItem(ItemName);
+        if (idx >= 0)
+            itemComponents[idx].AddItemN(n);
+    }
+
+    public int ContainItem(string ItemName)
+    {
+        for (int i = 0; i < itemComponents.Count; i++)
+        {
+            if (itemComponents[i].GetItemData().itemName == ItemName)
+                return i;
+        }
+
+        return -1;
     }
 
     public bool CheckItem()
@@ -97,5 +117,16 @@ public class InventorySystem : MonoBehaviour
     public int GetItemIndex(Item.ItemData _itemData)
     {
         return items.IndexOf(_itemData);
+    }
+
+    public void UpdateItemData()
+    {
+        foreach (Item itemComponent in itemComponents)
+            itemComponent.UpdateItemData();
+    }
+
+    private void OnEnable()
+    {
+        UpdateItemData();
     }
 }
