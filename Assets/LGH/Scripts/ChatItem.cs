@@ -29,6 +29,7 @@ namespace GH
         }
         public void SetText(string msg, Color chatColor)
         {
+            //컬러 안나오는거 해결하기
             string[] text = msg.Split(" ", 2);
             if (text[0] == DataManager.instance.name)
             {

@@ -15,11 +15,18 @@ namespace GH
 
     public class PhotonChatMgr : MonoBehaviourPun, IChatClientListener
     {
+        public enum Loginstep
+        {
+            All,
+            School,
+            Private
+        }
+
         //Input Chat InputField
         public TMP_InputField inputChat;
         // ChatItem Prefab
         public GameObject chatItemPrefab;
-
+        public School aa;
         public Color color;
         public string playerName;
 
@@ -128,10 +135,9 @@ namespace GH
             string[] text = s.Split(" ", 2);
             string chat = playerName + "  " + s;
 
-            //전체 채팅 구성을 만들자.
+            //귓속말 
             if (s[0] == '@')
             {
-
                 chat = text[0] + "  " + text[1];
                 //귓속말 보내기
                 chatClient.SendPrivateMessage(text[1].Remove(0,1), chat);
@@ -140,7 +146,6 @@ namespace GH
             }
             else
             {
-
                 // 일반채팅을 보내자
                 chatClient.PublishMessage(currChannel, chat);
                 //말풍선에 텍스트를 넣는다.
