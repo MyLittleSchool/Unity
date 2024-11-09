@@ -125,27 +125,29 @@ namespace GH
 
             //귓속말인지 판단
             // /w 아이디 메시지면 귓속말
-            string[] text = s.Split(" ", 3);
-            string chat = playerName + " : " + s;
+            string[] text = s.Split(" ", 2);
+            string chat = playerName + "  " + s;
 
             //전체 채팅 구성을 만들자.
-            if (text[0] == "/w")
+            if (s[0] == '@')
             {
 
-                chat = playerName + " : " + text[2];
+                chat = text[0] + "  " + text[1];
                 //귓속말 보내기
-                chatClient.SendPrivateMessage(text[1], chat);
+                chatClient.SendPrivateMessage(text[1].Remove(0,1), chat);
+                print(text[1] + "에게 귓속말");
+                inputChat.text = "";
             }
             else
             {
 
                 // 일반채팅을 보내자
                 chatClient.PublishMessage(currChannel, chat);
+                //말풍선에 텍스트를 넣는다.
+                playerMalpung.RPC_MalPungText(inputChat.text);
+                inputChat.text = "";
             }
 
-            //말풍선에 텍스트를 넣는다.
-            playerMalpung.RPC_MalPungText(inputChat.text);
-            inputChat.text = "";
         }
 
         private void CreateChatItem(string chat, Color chatColor)
@@ -256,8 +258,8 @@ namespace GH
             chatLogInfo.chatType = "PRIVATE";
             chatLogInfo.senderId = AuthManager.GetInstance().userAuthData.userInfo.id;
 
-             HttpInfo info = new HttpInfo();
-            info.url = "http://125.132.216.190:5544/chat-log";
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/chat-log";
             info.body = JsonUtility.ToJson(chatLogInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
