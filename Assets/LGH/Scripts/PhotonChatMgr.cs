@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using SW;
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -22,6 +23,8 @@ namespace GH
             Private
         }
 
+        public Loginstep currentLogin;
+
         //Input Chat InputField
         public TMP_InputField inputChat;
         // ChatItem Prefab
@@ -33,11 +36,12 @@ namespace GH
         // ChatItem의 부모 Transfrom
         public RectTransform contentRectTransform;
 
-        //전체적인 PhotonChat 기능을 가지고 있는 변ㅅ
+        //전체적인 PhotonChat 기능을 가지고 있는 변수
         ChatClient chatClient;
 
         // 일반채팅채널
-        public string currChannel = "판교중학교";
+        public string currChannel = "All";
+
 
         //챗 로그 뷰
         public GameObject chatLogView;
@@ -51,12 +55,16 @@ namespace GH
         public RectTransform chatMainPanelRecttransform;
         public RectTransform chatPanelRecttransform;
 
+        public List<GameObject> chatList = new List<GameObject>();
+
+        //채팅 채널 전환 버튼
+        public
         void Start()
         {
             DontDestroyOnLoad(gameObject);
             playerName = DataManager.instance.playerName;
             //
-            currChannel = DataManager.instance.playerSchool;
+            //currChannel = DataManager.instance.playerSchool;
             // 엔터 쳤을 때 호출되는 함수 등록
             inputChat.onSubmit.AddListener(OnSubmit);
 
@@ -83,6 +91,24 @@ namespace GH
                     playerMalpung = DataManager.instance.player.GetComponent<PlayerMalpung>();
                     malpungPanel = playerMalpung.malpungPanel;
                     malpungText = playerMalpung.malpungText;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha9))
+            {
+                currentLogin = currentLogin == Loginstep.All ? Loginstep.School : Loginstep.All;
+                switch (currentLogin)
+                {
+                    case Loginstep.All:
+                        print("올 확인");
+                        JoinChatRoom("All");
+                        break;
+                    case Loginstep.School:
+                        print("학교 확인");
+                        JoinChatRoom("판교중학교");
+                        break;
+                    case Loginstep.Private:
+                        break;
                 }
             }
         }
@@ -112,6 +138,27 @@ namespace GH
             chatClient.ConnectUsingSettings(chatAppSettings);
 
         }
+
+        public void JoinChatRoom(string newRoom)
+        {
+            //채팅 로그 초기화
+            for (int i = 0; i < chatList.Count; i++)
+            {
+                Destroy(chatList[i]);
+            }
+
+            chatList.Clear();
+            if (!string.IsNullOrEmpty(currChannel))
+            {
+                chatClient.Unsubscribe(new string[] { currChannel });
+            }
+            chatClient.Disconnect();
+
+            currChannel = newRoom;
+            PhotonChatConnect();
+            //chatClient.Subscribe(new string[] { currChannel });
+        }
+
         private void OnSubmit(string s)
         {
             ChatLogSeverPost(s);
@@ -140,7 +187,7 @@ namespace GH
             {
                 chat = text[0] + "  " + text[1];
                 //귓속말 보내기
-                chatClient.SendPrivateMessage(text[1].Remove(0,1), chat);
+                chatClient.SendPrivateMessage(text[1].Remove(0, 1), chat);
                 print(text[1] + "에게 귓속말");
                 inputChat.text = "";
             }
@@ -161,7 +208,7 @@ namespace GH
             //s의 내용을 ChatItem을 만들자
             GameObject go = Instantiate(chatItemPrefab, contentRectTransform);
             ChatItem chatItem = go.GetComponent<ChatItem>();
-
+            chatList.Add(go);
 
 
             // 가져온 컴포넌트의 SetText함수를 실행
@@ -183,7 +230,10 @@ namespace GH
         {
             print("채팅 서버 접속 성공!");
             // 특정 채널에 들어가자(구독)
+
             chatClient.Subscribe(currChannel, 0, -1, new ChannelCreationOptions() { PublishSubscribers = true });
+
+
         }
 
         public void OnChatStateChange(ChatState state)
@@ -242,7 +292,7 @@ namespace GH
             chatLogOn = chatLogOn ? false : true;
 
             //챗 로그의 높이로 챗 로그를 활성화 * 엑티브를 끄면 스크립트를 못가져와서 에러가 난다.
-            chatHeight = chatLogOn ? 820 : 0;
+            chatHeight = chatLogOn ? 1000 : 0;
             //chatLogView.GetComponentAtIndex<Image>(0).raycastTarget = chatLogOn ? true : false;
             chatRectTransform.GetChild(0).GetComponent<Image>().raycastTarget = chatLogOn ? true : false;
             chatRectTransform.sizeDelta = new Vector2(chatRectTransform.sizeDelta.x, chatHeight);
@@ -272,6 +322,14 @@ namespace GH
                 print(downloadHandler.text);
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
+        }
+
+
+        //인풋창에 플레이어 이름 추가하기
+        public void OneToOneChat(string playerName)
+        {
+
+            inputChat.text = "@" + playerName + " ";
         }
     }
 
