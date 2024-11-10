@@ -177,16 +177,18 @@ namespace MJ
 
         private void Start()
         {
-            myProfileButton.onClick.AddListener(OnOffMyProfile);
-            myProfileEditButton.onClick.AddListener(OnMyProfileEdit);
-            myProfileSaveButton.onClick.AddListener(OffMyProfileEdit);
+            //myProfileButton.onClick.AddListener(OnOffMyProfile);
+            // myProfileEditButton.onClick.AddListener(OnMyProfileEdit);
+            //myProfileSaveButton.onClick.AddListener(OffMyProfileEdit);
 
-            myProfileEditPanel.SetActive(false);
-            myProfilePanel.SetActive(false);
+            //myProfileEditPanel.SetActive(false);
+            //myProfilePanel.SetActive(false);
 
-            InterestButtonCreate();
+            //InterestButtonCreate();
 
-            SetProfile();
+            //SetProfile();
+
+            initDecorationPanel();
         }
         private void Update()
         {

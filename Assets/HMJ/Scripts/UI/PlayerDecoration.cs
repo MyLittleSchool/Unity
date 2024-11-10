@@ -19,7 +19,7 @@ namespace MJ
         /// <summary>
         /// 파일에서 직접 로드할 이미지 데이터
         /// </summary>
-        private Texture2D[,] loadDecorationImage = new Texture2D[4, 3];
+        private Texture2D[,] loadDecorationImage = new Texture2D[4, 6];
 
         /// <summary>
         /// 꾸미기 데이터와 연결할 이미지
@@ -85,7 +85,7 @@ namespace MJ
                 for (int j = 0; j < fileInfos.Length; j++) // 특정 아이템 이미지 데이터 가져오기
                 {
                     string data = "Image/PlayerDecoration/" + DecorationData[i] + "/" + Path.GetFileNameWithoutExtension(fileInfos[j].Name);
-                    loadDecorationImage[i, j] = Resources.Load<Texture2D>(data);
+                    loadDecorationImage[i, j] = Resources.LoadAll<Sprite>(data)[0].texture;
                 }
             }
         }

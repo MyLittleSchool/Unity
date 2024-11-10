@@ -1,16 +1,7 @@
 fileFormatVersion: 2
-guid: f37d3a70622bd32449c476c824b26c1a
+guid: 0e3eaf318cbcef04295f05dc9bf5c14d
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -8675011627427599730
-    second: Right
-  - first:
-      213: -3618802667364733500
-    second: Body
-  - first:
-      213: -8202439237598021607
-    second: Left
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -57,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -74,14 +65,14 @@ TextureImporter:
   ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -94,33 +85,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 64
-    resizeAlgorithm: 0
-    textureFormat: 4
     textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 1
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -133,7 +98,20 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -145,64 +123,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Right
+      name: front_clothes_set_c_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 16
-        width: 5
-        height: 5
+        x: 0
+        y: 0
+        width: 240
+        height: 240
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e8a6bc413ea2c9780800000000000000
-      internalID: -8675011627427599730
+      spriteID: 30706fb94b394b347ae8d01ed5fd511d
+      internalID: -406842675
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Body
+      name: front_clothes_set_c_1
       rect:
         serializedVersion: 2
-        x: 10
-        y: 11
-        width: 12
-        height: 10
+        x: 240
+        y: 0
+        width: 240
+        height: 240
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4cd2d73b52e67cdc0800000000000000
-      internalID: -3618802667364733500
+      spriteID: 8a4c856fc1b478248b0751d0bf02e9e6
+      internalID: -409937417
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Left
+      name: front_clothes_set_c_2
       rect:
         serializedVersion: 2
-        x: 23
-        y: 16
-        width: 5
-        height: 5
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 480
+        y: 0
+        width: 240
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9187e37c8f41b2e80800000000000000
-      internalID: -8202439237598021607
+      spriteID: b23d3e23b45c66940bc3b65a8cc8b446
+      internalID: -15411172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: front_clothes_set_c_3
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 240
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e9398af348d8a24a9b9100a0e79d934
+      internalID: 1134753649
       vertices: []
       indices: 
       edges: []
@@ -210,7 +209,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: de78578ace26dd646845492a75c6a644
     internalID: 0
     vertices: []
     indices: 
@@ -218,9 +217,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Body: -3618802667364733500
-      Left: -8202439237598021607
-      Right: -8675011627427599730
+      front_clothes_set_c_0: -406842675
+      front_clothes_set_c_1: -409937417
+      front_clothes_set_c_2: -15411172
+      front_clothes_set_c_3: 1134753649
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

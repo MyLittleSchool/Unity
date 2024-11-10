@@ -1,19 +1,7 @@
 fileFormatVersion: 2
-guid: ce26cbfc9cdfb5c4aa9bc0c634b8740a
+guid: 489c5f9c16ae2c24898ef3072e68a404
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 5498782995666421484
-    second: Right
-  - first:
-      213: 6828881972621389015
-    second: Body
-  - first:
-      213: -2432274809877799677
-    second: Left
-  - first:
-      213: -7626887478670665703
-    second: Cloth_2_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -33,7 +21,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -46,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -60,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -77,14 +65,14 @@ TextureImporter:
   ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,33 +85,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 64
-    resizeAlgorithm: 0
-    textureFormat: 4
     textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 1
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -136,7 +98,20 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -148,64 +123,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Right
+      name: front_clothes_set_b_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 13
-        width: 9
-        height: 9
-      alignment: 9
-      pivot: {x: 0.6111111, y: 0.7222222}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ce6c7a1300a9f4c40800000000000000
-      internalID: 5498782995666421484
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Body
-      rect:
-        serializedVersion: 2
-        x: 10
-        y: 10
-        width: 12
-        height: 13
+        x: 0
+        y: 0
+        width: 240
+        height: 240
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7dcaa2f19ff05ce50800000000000000
-      internalID: 6828881972621389015
+      spriteID: 20cc3a23b2486b5438281e750a6b8374
+      internalID: -520372794
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Left
+      name: front_clothes_set_b_1
       rect:
         serializedVersion: 2
-        x: 22
-        y: 13
-        width: 9
-        height: 9
-      alignment: 9
-      pivot: {x: 0.3888889, y: 0.7222222}
+        x: 240
+        y: 0
+        width: 240
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 30d5a1972f2de3ed0800000000000000
-      internalID: -2432274809877799677
+      spriteID: addf0431dfb5d9f41ba78c00bf2c5bf4
+      internalID: -1002843887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: front_clothes_set_b_2
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 240
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9c861441bf16d84dac4fbb9f7f08811
+      internalID: 1162764381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: front_clothes_set_b_3
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 240
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1d53b313ee1e34448bd2574bfbfa7d8
+      internalID: 689752544
       vertices: []
       indices: 
       edges: []
@@ -213,7 +209,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 2f3bef026e2ac9145a98deab7f1e517d
     internalID: 0
     vertices: []
     indices: 
@@ -221,9 +217,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Body: 6828881972621389015
-      Left: -2432274809877799677
-      Right: 5498782995666421484
+      front_clothes_set_b_0: -520372794
+      front_clothes_set_b_1: -1002843887
+      front_clothes_set_b_2: 1162764381
+      front_clothes_set_b_3: 689752544
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
