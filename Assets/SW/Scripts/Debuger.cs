@@ -60,7 +60,7 @@ namespace SW
             });
             load.onClick.AddListener(() =>
             {
-                postManager.LoadPost();
+                //postManager.LoadPost();
             });
         }
 
