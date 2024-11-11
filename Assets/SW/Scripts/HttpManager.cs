@@ -130,7 +130,7 @@ public class HttpManager : MonoBehaviour
     }
 
     // 파일 업로드(form-data)
-    public IEnumerator UploadFileByFormData(HttpInfo info)
+    public IEnumerator UploadFileByFormData(HttpInfo info, string fileName)
     {
         // info.data에는 파일의 위치
         // info.data 에 있는 파일을 byte 배열로 읽어오자.
@@ -138,7 +138,7 @@ public class HttpManager : MonoBehaviour
 
         // data를 MultipartForm 으로 셋팅
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        formData.Add(new MultipartFormFileSection("file", data, "audio.wav", info.contentType));
+        formData.Add(new MultipartFormFileSection("file", data, fileName, info.contentType));
 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, formData))
         {
@@ -147,8 +147,9 @@ public class HttpManager : MonoBehaviour
             yield return webRequest.SendWebRequest();
 
             // 서버에게 응답이 왔다.
-            DoneRequest(webRequest, info);
+            DoneRequest(webRequest, info);            
         }
+
     }
 
     // 파일 업로드
@@ -183,6 +184,7 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+
     public IEnumerator DownloadAudio(HttpInfo info)
     {
         using (UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(info.url, AudioType.WAV))
@@ -209,7 +211,7 @@ public class HttpManager : MonoBehaviour
         {
             // 그렇지 않다면 (Error 라면)
             // Error 의 이유를 출력
-            Debug.LogError("Net Error : " + webRequest.error);
+            Debug.LogError("Net Error : " + webRequest.error); 
         }
     }
 }
