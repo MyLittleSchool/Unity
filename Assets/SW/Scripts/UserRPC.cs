@@ -25,6 +25,7 @@ namespace SW
         }
         private void OnDestroy()
         {
+            PlayerList.instance.Leave();
             Destroy(playerUI);
         }
         public void JoinReq()

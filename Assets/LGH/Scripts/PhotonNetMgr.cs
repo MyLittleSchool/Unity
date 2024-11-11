@@ -152,6 +152,8 @@ namespace GH
         {
             //방에 들어간다.
             PhotonNetwork.JoinRoom(roomName);
+            DataManager.instance.playerCurrChannel = roomName;
+
         }
 
 

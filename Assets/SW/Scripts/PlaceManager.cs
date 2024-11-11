@@ -103,12 +103,7 @@ namespace SW
             info.url = httpManager.SERVER_ADRESS + "/furniture/list/map/" + mapId + "/" + mapType.ToString();
             info.onComplete = (DownloadHandler res) =>
             {
-                print(res.text);
                 GetPlaceResInfo dataInfo = JsonUtility.FromJson<GetPlaceResInfo>(res.text);
-                foreach (PlaceInfo info in dataInfo.response)
-                {
-                    print(info.id + "/" + info.objId + "/" + info.x + "/" + info.y + "/" + info.rot);
-                }
                 callBack(dataInfo);
             };
             StartCoroutine(httpManager.Get(info));

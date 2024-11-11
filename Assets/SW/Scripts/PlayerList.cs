@@ -12,7 +12,18 @@ namespace SW
 
         public RectTransform contentPanel;
         public GameObject playerPanelPrefab;
+        public TMP_Text numText;
 
+        private int playerNum;
+        private int PlayerNum
+        {
+            get { return playerNum; }
+            set
+            {
+                playerNum = value;
+                numText.text = playerNum.ToString("D2") + "Έν";
+            }
+        }
         public void SetPlayerListPanel()
         {
             gameObject.SetActive(!gameObject.activeSelf);
@@ -23,6 +34,7 @@ namespace SW
             {
                 Destroy(contentPanel.transform.GetChild(i).gameObject);
             }
+            PlayerNum = 1;
         }
         public void JoinReq()
         {
@@ -35,13 +47,19 @@ namespace SW
         }
         public void GetJoin(int actorNumber, ref GameObject ui)
         {
+            PlayerNum++;
             ui = Instantiate(playerPanelPrefab, contentPanel);
             ui.transform.Find("NicknameText").GetComponent<TMP_Text>().text = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).NickName;
         }
         public void JoinRes(int actorNumber, ref GameObject ui)
         {
+            PlayerNum++;
             ui = Instantiate(playerPanelPrefab, contentPanel);
             ui.transform.Find("NicknameText").GetComponent<TMP_Text>().text = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).NickName;
+        }
+        public void Leave()
+        {
+            PlayerNum--;
         }
     }
 }

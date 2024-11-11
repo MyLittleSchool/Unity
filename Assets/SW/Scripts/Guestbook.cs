@@ -1,4 +1,6 @@
 using GH;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -9,6 +11,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static SW.PlaceManager;
 using static UnityEngine.Rendering.DebugUI;
 using Button = UnityEngine.UI.Button;
 namespace SW
@@ -103,7 +106,7 @@ namespace SW
             postInfo.backgroundColor = selectedColorIdx;
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
             info.url = httpManager.SERVER_ADRESS + "/guest-book";
-            info.body = JsonUtility.ToJson(postInfo);
+            info.body = JsonConvert.SerializeObject(postInfo, new JsonSerializerSettings { Converters = { new StringEnumConverter() } });
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
@@ -142,15 +145,16 @@ namespace SW
                 ChangeTab(0);
             }
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/guest-book/list" + mapId + "/" + mapType.ToString();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/guest-book/list/" + mapType.ToString() + "/" + mapId;
             info.onComplete = (DownloadHandler res) =>
             {
-                PostList list = JsonUtility.FromJson<PostList>(res.text);
+                PostList list = JsonUtility.FromJson<PostList>("{\"data\" : " + res.text + "}");
                 contentsList = new List<ContentData>();
                 foreach (PostInfo post in list.data)
                 {
                     ContentData newContent = new ContentData();
                     newContent.id = post.id;
+                    newContent.userId = post.user.id;
                     newContent.nickname = post.user.name;
                     newContent.content = post.content;
                     switch (post.backgroundColor)
@@ -180,12 +184,13 @@ namespace SW
                     info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/guest-book/list/" + DataManager.MapType.Note.ToString() + "/" + mapId;
                     info2.onComplete = (DownloadHandler res2) =>
                     {
-                        PostList list = JsonUtility.FromJson<PostList>(res2.text);
+                        PostList list = JsonUtility.FromJson<PostList>("{\"data\" : " + res2.text + "}");
                         notesList = new List<ContentData>();
                         foreach (PostInfo post in list.data)
                         {
                             ContentData newContent = new ContentData();
                             newContent.id = post.id;
+                            newContent.userId = post.user.id;
                             newContent.nickname = post.user.name;
                             newContent.content = post.content;
                             switch (post.backgroundColor)
@@ -233,7 +238,6 @@ namespace SW
             // 삭제
             foreach (RectTransform raw in contentsRaws)
             {
-                print(raw.childCount);
                 for (int i = raw.childCount - 1; i >= 0; i--)
                 {
                     Destroy(raw.GetChild(i).gameObject);
@@ -252,8 +256,38 @@ namespace SW
         {
             RectTransform raw = contentsRaws.OrderBy(rt => rt.rect.height).FirstOrDefault();
             GameObject newContent = Instantiate(contentPrefab, raw);
-            Button delBtn = newContent.transform.GetChild(1).GetChild(0).GetComponent<Button>();
             // 삭제 버튼
+            Button delBtn = newContent.transform.GetChild(1).GetChild(0).GetComponent<Button>();
+            // 작성자 이거나
+            if (contentData.userId == AuthManager.GetInstance().userAuthData.userInfo.id || 
+            // 교실의 주인일 때
+                (DataManager.instance.mapType == DataManager.MapType.MyClassroom && DataManager.instance.mapId == AuthManager.GetInstance().userAuthData.userInfo.id))
+            // 삭제버튼 On
+            {
+                delBtn.onClick.AddListener(() =>
+                {
+                    deleteSelected = contentData;
+                    deletePanel.gameObject.SetActive(true);
+                });
+            }
+            else
+            {
+                delBtn.gameObject.SetActive(false);
+            }
+            newContent.GetComponent<Image>().color = HexToColor(contentData.rgb);
+            TMP_Text contentText = newContent.transform.GetChild(0).GetComponent<TMP_Text>();
+            contentText.text = contentData.content;
+            TMP_Text infoText = newContent.transform.GetChild(1).GetComponent<TMP_Text>();
+            infoText.text = "<b>" + contentData.nickname + "</b> <color=#A4A4A4>";// + GetElapsedTime(contentData.registDate) + "</color>";
+            LayoutRebuilder.ForceRebuildLayoutImmediate(contentText.rectTransform);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(raw);
+        }
+        // 쪽지함
+        private void CreateNote(ContentData contentData)
+        {
+            GameObject newContent = Instantiate(contentPrefab, contents2.transform);
+            // 삭제 버튼
+            Button delBtn = newContent.transform.GetChild(1).GetChild(0).GetComponent<Button>();
             delBtn.onClick.AddListener(() =>
             {
                 deleteSelected = contentData;
@@ -263,24 +297,7 @@ namespace SW
             TMP_Text contentText = newContent.transform.GetChild(0).GetComponent<TMP_Text>();
             contentText.text = contentData.content;
             TMP_Text infoText = newContent.transform.GetChild(1).GetComponent<TMP_Text>();
-            infoText.text = "<b>" + contentData.nickname + "</b> <color=#A4A4A4>" + GetElapsedTime(contentData.registDate) + "</color>";
-            LayoutRebuilder.ForceRebuildLayoutImmediate(contentText.rectTransform);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(raw);
-        }
-        // 쪽지함
-        private void CreateNote(ContentData contentData)
-        {
-            GameObject newContent = Instantiate(contentPrefab, contents2.transform);
-            Button delBtn = newContent.transform.GetChild(1).GetChild(0).GetComponent<Button>();
-            delBtn.onClick.AddListener(() =>
-            {
-
-            });
-            newContent.GetComponent<Image>().color = HexToColor(contentData.rgb);
-            TMP_Text contentText = newContent.transform.GetChild(0).GetComponent<TMP_Text>();
-            contentText.text = contentData.content;
-            TMP_Text infoText = newContent.transform.GetChild(1).GetComponent<TMP_Text>();
-            infoText.text = "<b>" + contentData.nickname + "</b> <color=#A4A4A4>" + GetElapsedTime(contentData.registDate) + "</color>";
+            infoText.text = "<b>" + contentData.nickname + "</b> <color=#A4A4A4>";// + GetElapsedTime(contentData.registDate) + "</color>";
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentText.rectTransform);
             LayoutRebuilder.ForceRebuildLayoutImmediate(contents2);
         }
@@ -349,6 +366,14 @@ namespace SW
         {
             contentsList.Remove(deleteSelected);
             StartCoroutine(RefreshList());
+
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/guest-book?guestBookId=" + deleteSelected.id;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                LoadGuestbookData();
+            };
+            StartCoroutine(HttpManager.GetInstance().Delete(info));
             deleteSelected = null;
             deletePanel.gameObject.SetActive(false);
         }
@@ -361,12 +386,12 @@ namespace SW
                 if (i == num)
                 {
                     tabPanels[i].gameObject.SetActive(true);
-                    tabButtons[i].transform.GetChild(1).gameObject.SetActive(true);
+                    tabButtons[i].transform.GetChild(0).gameObject.SetActive(true);
                 }
                 else
                 {
                     tabPanels[i].gameObject.SetActive(false);
-                    tabButtons[i].transform.GetChild(1).gameObject.SetActive(false);
+                    tabButtons[i].transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
         }
@@ -375,6 +400,7 @@ namespace SW
     public class ContentData
     {
         public int id;
+        public int userId;
         public string nickname;
         public string content;
         public string rgb;
@@ -388,7 +414,7 @@ namespace SW
         public string content;
         public UserInfo user;
         public int mapId;
-        DataManager.MapType mapType;
+        public DataManager.MapType mapType;
         public int backgroundColor;
         public PostInfo()
         {

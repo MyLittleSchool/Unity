@@ -1,5 +1,7 @@
 using GH;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,8 @@ namespace SW
         public GameObject tabPrefab;
         public Button[] tabButtons;
         public Transform[] contentsTabs;
+        public RectTransform noteCreatePanel;
+        public TMP_Text numText;
 
         public List<Friend> friends;
         public List<RecommFriend> recommFriends;
@@ -53,6 +57,10 @@ namespace SW
                 int idx = i;
                 tabButtons[i].onClick.AddListener(() => ChangeTab(idx));
             }
+            foreach (Button button in colorButtons)
+            {
+                button.onClick.AddListener(() => { SetColor(button); });
+            }
 
             //RefreshTab0(friends);
             RefreshTab3(recommFriends);
@@ -61,6 +69,10 @@ namespace SW
         private void ClosePanel()
         {
             gameObject.SetActive(false);
+        }
+        public void CloseNoteCreatePanel()
+        {
+            noteCreatePanel.gameObject.SetActive(false);
         }
         enum ModifyBtnState
         {
@@ -75,7 +87,7 @@ namespace SW
                 modifyBtnText.text = "취소";
                 for (int i = 0; i < contentsTabs[0].childCount; i++)
                 {
-                    contentsTabs[0].GetChild(i).Find("InviteButton").gameObject.SetActive(false);
+                    contentsTabs[0].GetChild(i).Find("EnterButton").gameObject.SetActive(false);
                     contentsTabs[0].GetChild(i).Find("ChatButton").gameObject.SetActive(false);
                 }
             }
@@ -97,6 +109,7 @@ namespace SW
                     }
                 }
                 ModifyOff();
+                ChangeTab(tab);
             }
         }
         private int checkedNum;
@@ -115,23 +128,42 @@ namespace SW
         private void ChangeTab(int num)
         {
             tab = num;
-            if (num == 0) modifyButton.gameObject.SetActive(true);
-            else modifyButton.gameObject.SetActive(false);
+            if (num == 0)
+            {
+                modifyButton.gameObject.SetActive(true);
+                numText.text = "친구 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
+            }
+            else
+            {
+                modifyButton.gameObject.SetActive(false);
+                if (num == 1)
+                {
+                    numText.text = "내가 받은 요청 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
+                }
+                else if (num == 2)
+                {
+                    numText.text = "내가 보낸 요청 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
+                }
+                else if (num == 3)
+                {
+                    numText.text = "추천 인원 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
+                }
+            }
             for (int i = 0; i < contentsTabs.Length; i++)
             {
                 if (i == num)
                 {
                     contentsTabs[i].gameObject.SetActive(true);
-                    tabButtons[i].transform.GetChild(1).gameObject.SetActive(true);
+                    tabButtons[i].transform.GetChild(0).gameObject.SetActive(true);
                 }
                 else
                 {
                     contentsTabs[i].gameObject.SetActive(false);
-                    tabButtons[i].transform.GetChild(1).gameObject.SetActive(false);
+                    tabButtons[i].transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
         }
-
+        private int selectedUserId;
         public void RefreshFriends()
         {
             modifyBtnState = ModifyBtnState.Modify;
@@ -162,6 +194,22 @@ namespace SW
                         comp.friendshipId = list.response[i].id;
                         comp.id = friend.id;
                         comp.NickNameText.text = friend.name;
+                        // 교실 놀러가기 버튼
+                        comp.PassButton.onClick.AddListener(() =>
+                        {
+                            DataManager.instance.mapType = DataManager.MapType.MyClassroom;
+                            DataManager.instance.mapId = comp.id;
+                            PhotonNetMgr.instance.roomName = friend.name;
+                            PhotonNetwork.LeaveRoom();
+                            PhotonNetMgr.instance.sceneNum = 2;
+                        });
+                        // 쪽지 버튼
+                        comp.RequestButton.onClick.AddListener(() =>
+                        {
+                            selectedUserId = comp.id;
+                            noteCreatePanel.gameObject.SetActive(true);
+                            inputField.text = "";
+                        });
                         // 체크 버튼
                         Transform btn = newPanel.transform.Find("CheckButton");
                         btn.GetComponent<Button>().onClick.AddListener(() =>
@@ -217,6 +265,7 @@ namespace SW
                             };
                             StartCoroutine(HttpManager.GetInstance().Post(info3));
                             Destroy(newPanel);
+                            ChangeTab(tab);
                         });
                         // 수락
                         comp.RequestButton.onClick.AddListener(() =>
@@ -261,6 +310,7 @@ namespace SW
                             };
                             StartCoroutine(HttpManager.GetInstance().Post(info3));
                             Destroy(newPanel);
+                            ChangeTab(tab);
                         });
                     }
                 }
@@ -287,7 +337,52 @@ namespace SW
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }
-
+        [Header("쪽지 보내기")]
+        public Button[] colorButtons;
+        public Button saveButton;
+        public TMP_InputField inputField;
+        private Color selectedColor = Color.white;
+        private int selectedColorIdx = 0;
+        public Image createPanelImage;
+        private void SetColor(Button _button)
+        {
+            for (int i = 0; i < colorButtons.Length; i++)
+            {
+                if (colorButtons[i] == _button)
+                {
+                    colorButtons[i].transform.GetChild(0).gameObject.SetActive(true);
+                    selectedColorIdx = i;
+                }
+                else colorButtons[i].transform.GetChild(0).gameObject.SetActive(false);
+            }
+            Color buttonColor = _button.GetComponent<Image>().color;
+            if (buttonColor == Color.white) createPanelImage.color = new Color(0.9529412f, 0.9607844f, 0.9764706f);
+            else createPanelImage.color = buttonColor;
+            selectedColor = buttonColor;
+        }
+        public void OnValueChanged(string value)
+        {
+            if (value.Length == 0) saveButton.interactable = false;
+            else saveButton.interactable = true;
+        }
+        public void OnSendNoteButtonClick()
+        {
+            PostInfo postInfo = new PostInfo();
+            postInfo.mapId = selectedUserId;
+            postInfo.mapType = DataManager.MapType.Note;
+            postInfo.content = inputField.text;
+            postInfo.backgroundColor = selectedColorIdx;
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/guest-book";
+            info.body = JsonConvert.SerializeObject(postInfo, new JsonSerializerSettings { Converters = { new StringEnumConverter() } });
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler res) =>
+            {
+                
+            };
+            StartCoroutine(HttpManager.GetInstance().Post(info));
+            CloseNoteCreatePanel();
+        }
         [Serializable]
         public class FriendshipList
         {
