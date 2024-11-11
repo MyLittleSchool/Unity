@@ -18,15 +18,25 @@ namespace MJ
             public TMP_Text title;
             public TMP_Text Description;
             public RawImage mapImage;
+            public List<ObjectContestInfo> furnitureList;
         }
 
         public MapRegisterScrollUI myMapRegisterScrollUIcp;
         private Image PanelImage;
         public MapContestData mapContestData;
+
+        public Button button;
         // Start is called before the first frame update
         void Start()
         {
             PanelImage = GetComponent<Image>();
+        }
+
+        public void SettingButton()
+        {
+            button = GetComponent<Button>();
+
+            //button.onClick.AddListener();
         }
 
         // Update is called once per frame
@@ -46,15 +56,16 @@ namespace MJ
         {
             mapContestData.title.text = _mapRegisterData.title;
             mapContestData.Description.text = _mapRegisterData.Description;
-            if(_mapRegisterData.mapImage)
+            if (_mapRegisterData.mapImage)
                 mapContestData.mapImage.texture = _mapRegisterData.mapImage.texture;
         }
 
-        public void SetRegisterData(MapRegisterDataUI.MapRegisterData _mapRegisterData, Texture2D _texture2D)
+        public void SetRegisterData(MapRegisterDataUI.MapRegisterData _mapRegisterData, Texture2D _texture2D, List<ObjectContestInfo> _furnitureList)
         {
             mapContestData.title.text = _mapRegisterData.title;
             mapContestData.Description.text = _mapRegisterData.Description;
             mapContestData.mapImage.texture = _texture2D;
+            mapContestData.furnitureList = _furnitureList;
         }
 
     }

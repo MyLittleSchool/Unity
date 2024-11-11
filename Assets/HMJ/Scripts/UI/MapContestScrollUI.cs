@@ -21,18 +21,7 @@ public class MapContestScrollUI : ScrollUI
     // Update is called once per frame
     void Update()
     {
-        //if(!settingImage && MapContestLoader.GetInstance().LoadSpriteComplete())
-        //{
-        //    LoadMapData();
-        //    settingImage = true;
-        //    for (int i = 0; i < content.childCount; i++)
-        //    {
-        //        // 자식 객체를 가져오기
-        //        Transform child = content.GetChild(i);
-        //        child.gameObject.GetComponent<Image>().sprite = MapContestLoader.instance.sprites[i];
-        //        Debug.Log("Child " + i + ": " + child.name);
-        //    }
-        //}
+        LoadMapData();
     }
 
     public override void AddItem()
@@ -67,7 +56,7 @@ public class MapContestScrollUI : ScrollUI
             mapRegisterData.Description = mapContestData.description;
             mapRegisterData.likes = mapContestData.likeCount;
             mapRegisterData.views = mapContestData.viewCount;
-            mapContestDataUI.SetRegisterData(mapRegisterData, MapContestLoader.GetInstance().sprites[i]);
+            mapContestDataUI.SetRegisterData(mapRegisterData, MapContestLoader.GetInstance().sprites[i], mapContestData.furnitureList) ;
 
             itemlist.Add(item);
             imageList.Add(item.GetComponent<Image>());

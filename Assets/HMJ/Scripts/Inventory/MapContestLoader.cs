@@ -59,6 +59,8 @@ namespace MJ
         public static MapContestLoader instance;
         // Start is called before the first frame update
 
+        private DataManager dataManager;
+
         public MapContestDataList mapDatas;
         public MapContestScrollUI mapContestScrollUIComponent;
 
@@ -93,6 +95,7 @@ namespace MJ
 
         void Start()
         {
+            dataManager = DataManager.instance;
         }
 
         public void SendMapContestData(string mapRoute, MapRegisterData mapRegisterData)
@@ -151,8 +154,6 @@ namespace MJ
 
         public void LoadMapData()
         {
-            // http://125.132.216.190:5544/map-contest/list
-            print("버튼 클릭");
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/list";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -161,13 +162,7 @@ namespace MJ
                 sprites.Clear();
                 Debug.Log("--------------------------------------------------------------------------------");
                 for (int i = 0; i < mapDatas.response.Count; i++)
-                {
-                    Debug.Log("title: " + mapDatas.response[i].title +
-                        "description: " + mapDatas.response[i].description +
-                        "imageUrl: " + mapDatas.response[i].previewImageUrl + "\n");
-
                     ReceiveMapImage(mapDatas.response[i].previewImageUrl, i);
-                }
                 mapContestScrollUIComponent.LoadMapData();
                 Debug.Log("--------------------------------------------------------------------------------");
             };
@@ -184,6 +179,15 @@ namespace MJ
 
 
             return false;
+        }
+
+        public void PlaceFurniture(List<ObjectContestInfo> furnitureList)
+        {
+            SetTile setTile = dataManager.player.GetComponent<SetTile>();
+            foreach (ObjectContestInfo info in furnitureList)
+            {
+                setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().items[info.objId].prefab, info.id);
+            }
         }
     }
 }
