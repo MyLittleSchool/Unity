@@ -61,6 +61,15 @@ namespace MJ
         [Header("나의 프로필 편집 저장 버튼")]
         public Button myProfileSaveButton;
 
+        [Header("첫 로그인 학생 선택 버튼")]
+        public Button studentCheckButton;
+
+        [Header("첫 로그인 학생 아님 선택 버튼")]
+        public Button noStudentCheckButton;
+
+        [Header("학교 선택 완료 버튼")]
+        public Button schoolSaveButton;
+
         #endregion
 
         #region Panel
@@ -106,6 +115,11 @@ namespace MJ
         [Header("플레이어 목록 패널")]
         public GameObject playerList;
 
+        [Header("첫 로그인 학생 선택 패널")]
+        public GameObject firstLoginPanel;
+
+        [Header("첫 로그인 학교 선택 패널")]
+        public GameObject firstSchoolPanel;
         #endregion
 
         #region SingleTone
@@ -174,10 +188,16 @@ namespace MJ
             myProfileButton.onClick.AddListener(OnOffMyProfile);
             myProfileEditButton.onClick.AddListener(OnMyProfileEdit);
             myProfileSaveButton.onClick.AddListener(OffMyProfileEdit);
+            studentCheckButton.onClick.AddListener(ClickStudent);
+            noStudentCheckButton.onClick.AddListener(ClickNoStudent);
+            schoolSaveButton.onClick.AddListener(SchoolSave);
 
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(false);
-
+            if (AuthManager.GetInstance().userAuthData.userInfo.schoolId == 0)
+            {
+                firstLoginPanel.SetActive(false);
+            }
             InterestButtonCreate();
 
             SetProfile();
@@ -416,10 +436,7 @@ namespace MJ
                 {
                     interestButtonTransform.gameObject.SetActive(false);
                 }
-
             }
-
-
         }
         public void InterestButtonOnOff()
         {
@@ -537,6 +554,23 @@ namespace MJ
 
             //메시지
             profileMyMessage.text = userInfo.statusMesasge;
+        }
+
+        //첫 로그인 핵생 선택 버튼
+        private void ClickStudent()
+        {
+            firstLoginPanel.SetActive(false);
+            firstSchoolPanel.SetActive(true);
+        }
+        private void ClickNoStudent()
+        {
+            firstLoginPanel.SetActive(false);
+
+        }
+        private void SchoolSave()
+        {
+            firstSchoolPanel.SetActive(false);
+
         }
 
     }
