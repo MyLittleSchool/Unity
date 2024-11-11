@@ -29,9 +29,10 @@ namespace GH
         {
             joystick = GameManager.instance.Joystick;
             DataManager.instance.players.Add(gameObject.GetComponent<PhotonView>());
+            stingDir = -transform.up;
 
 
-     
+
         }
 
         private void Update()
@@ -100,27 +101,6 @@ namespace GH
             }
             transform.position += playerDir * playerSpeed * Time.fixedDeltaTime;
 
-
-            //애니메이션 손보기
-            if ( horizontal == 0 && vertical == 0)
-            {
-                moveAniTrriger = false;
-            }
-            else
-            {
-                moveAniTrriger = true;
-
-            }
-
-            if (moveAniTrriger)
-            {
-                playerAnimator.SetBool("Run", true);
-            }
-            else
-            {
-                playerAnimator.SetBool("Run", false);
-
-            }
 
 
         }

@@ -29,6 +29,10 @@ namespace GH
 
         public int sceneNum;
 
+        //로딩 패널
+        public GameObject loadingPanel;
+        public Loading loading;
+
         private void Awake()
         {
             if (instance == null)
@@ -47,6 +51,10 @@ namespace GH
             playerName = DataManager.instance.playerName;
             roomName = DataManager.instance.playerName;
             StartLogin();
+
+            //로딩채널 활성화
+            loadingPanel.SetActive(true);
+            loading = loadingPanel.GetComponent<Loading>();
         }
         void Update()
         {
@@ -186,6 +194,7 @@ namespace GH
             }
 
 
+            
 
         }
 
@@ -204,8 +213,10 @@ namespace GH
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
             //CreateRoom();
             //// 방에 입장한 친구들은 모두 1번 씬으로 이동하자
-          
+            //로딩창 활성화
             PhotonNetwork.LoadLevel(sceneNum);
+            loadingPanel.SetActive(true);
+            StartCoroutine(loading.SceneMove());
             GameManager.instance.CoSpwamPlayer();
 
 
