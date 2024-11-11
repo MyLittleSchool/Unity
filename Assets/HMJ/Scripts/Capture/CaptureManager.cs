@@ -1,12 +1,44 @@
 using GH;
+using MJ;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Capture : MonoBehaviour
+public class CaptureManager : MonoBehaviour
 {
+    public static CaptureManager instance;
+    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
+    public static CaptureManager GetInstance()
+    {
+        if (instance == null)
+        {
+            GameObject go = new GameObject();
+            go.name = "CaptureManager";
+            go.AddComponent<CaptureManager>();
+        }
+        return instance;
+    }
+
     public RenderTexture m_CaptureRenderTexture;
+
+    private string m_CurrentCaptureTexturePath;
 
     public Sprite CaptureRenderTexture()
     {
@@ -21,8 +53,8 @@ public class Capture : MonoBehaviour
 
         
         byte[] bytes = texture.EncodeToPNG();
-        string path = "MapImage/" + DateTime.Now.ToString(("yyyy_MM_dd_HH_mm_ss_")) + DataManager.instance.playerName + ".png";
-        System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/" + path, bytes);
+        m_CurrentCaptureTexturePath = "MapImage/" + DateTime.Now.ToString(("yyyy_MM_dd_HH_mm_ss_")) + DataManager.instance.playerName + ".png";
+        System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/" + m_CurrentCaptureTexturePath, bytes);
 
         Texture2D textureData = new Texture2D(2, 2);
         textureData.LoadImage(bytes); // PNG -> Texture·Î ·Îµå
@@ -41,6 +73,11 @@ public class Capture : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public string GetCapturePath()
+    {
+        return m_CurrentCaptureTexturePath;
     }
 
 

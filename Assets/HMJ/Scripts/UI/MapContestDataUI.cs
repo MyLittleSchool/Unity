@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static MJ.MapContestDataUI;
 
 namespace MJ
 {
@@ -45,7 +46,15 @@ namespace MJ
         {
             mapContestData.title.text = _mapRegisterData.title;
             mapContestData.Description.text = _mapRegisterData.Description;
-            mapContestData.mapImage.texture = _mapRegisterData.mapImage.texture;
+            if(_mapRegisterData.mapImage)
+                mapContestData.mapImage.texture = _mapRegisterData.mapImage.texture;
+        }
+
+        public void SetRegisterData(MapRegisterDataUI.MapRegisterData _mapRegisterData, Texture2D _texture2D)
+        {
+            mapContestData.title.text = _mapRegisterData.title;
+            mapContestData.Description.text = _mapRegisterData.Description;
+            mapContestData.mapImage.texture = _texture2D;
         }
 
     }

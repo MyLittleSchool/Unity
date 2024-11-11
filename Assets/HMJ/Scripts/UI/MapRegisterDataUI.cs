@@ -15,6 +15,8 @@ public class MapRegisterDataUI : MonoBehaviour, IPointerClickHandler
         public string title;
         public string Description;
         public RawImage mapImage;
+        public int likes;
+        public int views;
     }
 
     public MapRegisterScrollUI myMapRegisterScrollUIcp;

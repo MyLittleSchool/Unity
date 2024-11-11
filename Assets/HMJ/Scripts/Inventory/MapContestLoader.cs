@@ -1,0 +1,195 @@
+using GH;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+using Photon.Pun;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static SW.PlaceManager;
+using UnityEngine.Networking;
+using UnityEditor.U2D.Aseprite;
+using System.IO;
+using static HttpManager;
+using UnityEngine.Analytics;
+using static MapRegisterDataUI;
+using System.Net;
+using static SW.FriendsUI;
+using SW;
+using System.Security.Cryptography;
+using ExitGames.Client.Photon;
+using System.Text;
+using UnityEngine.Rendering;
+namespace MJ
+{
+    [Serializable]
+    public class ObjectContestInfo
+    {
+        public int id;
+        public int objId; // 오브젝트 아이디
+        public int x, y; // 좌표
+        public int rot; // 회전
+        public bool flip; // 반전
+        public int mapId; // 맵아이디
+        public DataManager.MapType mapType;
+    }
+
+    [Serializable]
+    public struct MapContestData
+    {
+        public int id;
+        public int mapId;
+        public string title;
+        public string description;
+        public List<ObjectContestInfo> furnitureList;
+        public string previewImageUrl;
+        public int likeCount;
+        public int viewCount;
+        public int userId;
+    }
+
+    [Serializable]
+    public class MapContestDataList
+    {
+        public List<MapContestData> response;
+    }
+
+    public class MapContestLoader : MonoBehaviour
+    {
+        public static MapContestLoader instance;
+        // Start is called before the first frame update
+
+        public MapContestDataList mapDatas;
+        public MapContestScrollUI mapContestScrollUIComponent;
+
+        public List<Texture2D> sprites = new List<Texture2D>();
+        bool allLoadsprite = false;
+
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+
+        }
+
+        public static MapContestLoader GetInstance()
+        {
+            if (instance == null)
+            {
+                GameObject go = new GameObject();
+                go.name = "MapContestLoader";
+                go.AddComponent<MapContestLoader>();
+            }
+            return instance;
+        }
+
+        void Start()
+        {
+        }
+
+        public void SendMapContestData(string mapRoute, MapRegisterData mapRegisterData)
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/upload-image";
+            info.contentType = "multipart/form-data";
+            info.body = Application.dataPath + "/Resources/" + mapRoute; // 파일 경로
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string fileName = downloadHandler.text.ToString().Substring(39);
+                SendMapData(mapRegisterData, fileName);
+
+            };
+            StartCoroutine(HttpManager.GetInstance().UploadFileByFormData(info, mapRoute));
+
+        }
+
+        public void SendMapData(MapRegisterData mapRegisterData, string url)
+        {
+            MapContestData mapContestInfo = new MapContestData();
+
+            mapContestInfo.title = mapRegisterData.title;
+            mapContestInfo.description = mapRegisterData.Description;
+            mapContestInfo.userId = 1;
+            mapContestInfo.previewImageUrl = url;
+
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
+            info.body = JsonUtility.ToJson(mapContestInfo);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+
+            StartCoroutine(HttpManager.GetInstance().Post(info));
+        }
+
+        public void ReceiveMapImage(string ImageUrl, int idx)
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = ImageUrl;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                DownloadHandlerTexture handler = downloadHandler as DownloadHandlerTexture;
+                sprites.Add(handler.texture);
+                //sprites[idx] = sprite;
+            };
+            StartCoroutine(HttpManager.GetInstance().DownloadSprite(info));
+        }
+        //public string title;
+        //public string description;
+        //public int mapId;
+        //public string imageUrl;
+
+        public void LoadMapData()
+        {
+            // http://125.132.216.190:5544/map-contest/list
+            print("버튼 클릭");
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/list";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                mapDatas = JsonUtility.FromJson<MapContestDataList>(downloadHandler.text);
+                sprites.Clear();
+                Debug.Log("--------------------------------------------------------------------------------");
+                for (int i = 0; i < mapDatas.response.Count; i++)
+                {
+                    Debug.Log("title: " + mapDatas.response[i].title +
+                        "description: " + mapDatas.response[i].description +
+                        "imageUrl: " + mapDatas.response[i].previewImageUrl + "\n");
+
+                    ReceiveMapImage(mapDatas.response[i].previewImageUrl, i);
+                }
+                mapContestScrollUIComponent.LoadMapData();
+                Debug.Log("--------------------------------------------------------------------------------");
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+        }
+
+        public bool LoadSpriteComplete()
+        {
+            if (mapDatas.response.Count <= 0)
+                return false;
+
+            if (sprites.Count == mapDatas.response.Count)
+                return true;
+
+
+            return false;
+        }
+    }
+}
+
+/*
+ * ArgumentException: JSON must represent an object type.
+UnityEngine.JsonUtility.FromJson (System.String json, System.Type type) (at <5ee00f1c11864dcd8992e826540f733b>:0)
+UnityEngine.JsonUtility.FromJson[T] (System.String json) (at <5ee00f1c11864dcd8992e826540f733b>:0)
+ */

@@ -9,13 +9,10 @@ public class MapRegisterScrollUI : ScrollUI
 {
     public MapContestScrollUI myMapContestScrollUIcp;
     private GameObject registerObject;
-    private Capture CaptureComponent;
     // Start is called before the first frame update
     protected virtual void Start()
     {
         base.Start();
-
-        CaptureComponent = GetComponent<Capture>();
     }
 
     // Update is called once per frame
@@ -56,8 +53,9 @@ public class MapRegisterScrollUI : ScrollUI
         imageList.Add(item.GetComponent<Image>());
     }
 
+
     public Sprite SetPrefabImage()
     {
-        return CaptureComponent.CaptureRenderTexture();
+        return CaptureManager.GetInstance().CaptureRenderTexture();
     }
 }
