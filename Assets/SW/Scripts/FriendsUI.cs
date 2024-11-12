@@ -108,8 +108,8 @@ namespace SW
                         Destroy(comp.gameObject);
                     }
                 }
-                ModifyOff();
                 ChangeTab(tab);
+                ModifyOff();
             }
         }
         private int checkedNum;
@@ -176,7 +176,6 @@ namespace SW
             contentsTabs[0] = Instantiate(tabPrefab, contents).transform;
             contentsTabs[1] = Instantiate(tabPrefab, contents).transform;
             contentsTabs[2] = Instantiate(tabPrefab, contents).transform;
-            ChangeTab(tab);
             // 서버 요청
             // 내 친구 목록
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
@@ -194,6 +193,24 @@ namespace SW
                         comp.friendshipId = list.response[i].id;
                         comp.id = friend.id;
                         comp.NickNameText.text = friend.name;
+                        if (friend.isOnline)
+                        {
+                            comp.StateText.text = "<color=#F2884B>접속중";
+                            // 귓속말 보내기
+                            comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "귓속말 보내기";
+                        }
+                        else
+                        {
+                            comp.StateText.text = "1일 전";
+                            // 쪽지 버튼
+                            comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "쪽지 남기기";
+                            comp.RequestButton.onClick.AddListener(() =>
+                            {
+                                selectedUserId = comp.id;
+                                noteCreatePanel.gameObject.SetActive(true);
+                                inputField.text = "";
+                            });
+                        }
                         // 교실 놀러가기 버튼
                         comp.PassButton.onClick.AddListener(() =>
                         {
@@ -202,13 +219,6 @@ namespace SW
                             PhotonNetMgr.instance.roomName = friend.name;
                             PhotonNetwork.LeaveRoom();
                             PhotonNetMgr.instance.sceneNum = 2;
-                        });
-                        // 쪽지 버튼
-                        comp.RequestButton.onClick.AddListener(() =>
-                        {
-                            selectedUserId = comp.id;
-                            noteCreatePanel.gameObject.SetActive(true);
-                            inputField.text = "";
                         });
                         // 체크 버튼
                         Transform btn = newPanel.transform.Find("CheckButton");
@@ -233,6 +243,7 @@ namespace SW
                         });
                     }
                 }
+                if (tab == 0) ChangeTab(tab);
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
 
@@ -281,6 +292,7 @@ namespace SW
                         // 친구 요청 사유 추가 필요
                     }
                 }
+                if (tab == 1) ChangeTab(tab);
             };
             StartCoroutine(HttpManager.GetInstance().Get(getinfo));
 
@@ -314,6 +326,7 @@ namespace SW
                         });
                     }
                 }
+                if (tab == 2) ChangeTab(tab);
             };
             StartCoroutine(HttpManager.GetInstance().Get(waitInfo));
         }
@@ -334,6 +347,7 @@ namespace SW
                     GameObject newPanel = Instantiate(recommFriendPrefab, contentsTabs[3]);
                     newPanel.GetComponent<FriendPanel>().NickNameText.text = name;
                 }
+                if (tab == 3) ChangeTab(tab);
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }

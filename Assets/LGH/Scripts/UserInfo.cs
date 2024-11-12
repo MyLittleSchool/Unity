@@ -21,6 +21,7 @@ namespace GH
         public int level;
         public int exp;
         public int maxExp;
+        public bool isOnline;
         public School school;
     }
 

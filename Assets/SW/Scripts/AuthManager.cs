@@ -1,4 +1,5 @@
 using GH;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace SW
             {
                 userInfo = info;
                 DataManager.instance.mapId = info.id;
+                GetInstance().OnlineStatue();
             }
         }
         public AuthData userAuthData { get; set; }
@@ -114,6 +116,21 @@ namespace SW
         public string GenerateRandomClientId()
         {
             return Guid.NewGuid().ToString();  // UUID 형식으로 고유값 생성
+        }
+        public void OnlineStatue()
+        {
+            StopCoroutine(COnlineStatus());
+            StartCoroutine(COnlineStatus());
+        }
+        private IEnumerator COnlineStatus()
+        {
+            while (true)
+            {
+                HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/request-online-status?userId=" + userAuthData.userInfo.id;
+                StartCoroutine(HttpManager.GetInstance().Post(info));
+                yield return new WaitForSeconds(50);
+            }
         }
     }
 }
