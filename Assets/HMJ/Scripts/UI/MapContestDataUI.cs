@@ -1,3 +1,5 @@
+using GH;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,36 +15,51 @@ namespace MJ
     public class MapContestDataUI : MonoBehaviour, IPointerClickHandler
     {
         [Serializable]
-        public struct MapContestData
+        public struct MapContestDrawData
         {
             public TMP_Text title;
             public TMP_Text Description;
             public RawImage mapImage;
+            public TMP_Text likes;
+            public TMP_Text views;
             public List<ObjectContestInfo> furnitureList;
         }
 
         public MapRegisterScrollUI myMapRegisterScrollUIcp;
         private Image PanelImage;
-        public MapContestData mapContestData;
+        public MapContestDrawData mapContestDrawData;
 
-        public Button button;
+        public Button viewsButton;
+        public Button likesButton;
+
+
+        MapContestData mapContestData;
         // Start is called before the first frame update
         void Start()
         {
             PanelImage = GetComponent<Image>();
+            SettingButton();
         }
 
         public void SettingButton()
         {
-            button = GetComponent<Button>();
+            viewsButton.onClick.AddListener(ClickViewButton);
+            likesButton.onClick.AddListener(ClickLikeButton);
 
-            //button.onClick.AddListener();
+            viewsButton.onClick.AddListener(SettingUIData);
+            likesButton.onClick.AddListener(SettingUIData);
         }
 
         // Update is called once per frame
         void Update()
         {
 
+        }
+
+        public void IntoMapcontestRoom()
+        {
+            MapContestLoader.GetInstance().loadfurnitureList = mapContestData.furnitureList;
+            SceneMgr.instance.MapContestMapIn(DataManager.instance.playerName + "의 " + mapContestData.title);
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -52,21 +69,43 @@ namespace MJ
             }
         }
 
-        public void SetRegisterData(MapRegisterDataUI.MapRegisterData _mapRegisterData)
+        public void SetRegisterData(MapContestData _mapContestData, Texture2D _texture2D)
         {
-            mapContestData.title.text = _mapRegisterData.title;
-            mapContestData.Description.text = _mapRegisterData.Description;
-            if (_mapRegisterData.mapImage)
-                mapContestData.mapImage.texture = _mapRegisterData.mapImage.texture;
+            mapContestData = _mapContestData;
+
+            mapContestDrawData.title.text = _mapContestData.title;
+            mapContestDrawData.Description.text = _mapContestData.description;
+            mapContestDrawData.mapImage.texture = _texture2D;
+            mapContestDrawData.furnitureList = _mapContestData.furnitureList;
+
+            SettingUIData();
         }
 
-        public void SetRegisterData(MapRegisterDataUI.MapRegisterData _mapRegisterData, Texture2D _texture2D, List<ObjectContestInfo> _furnitureList)
+        public void ClickLikeButton()
         {
-            mapContestData.title.text = _mapRegisterData.title;
-            mapContestData.Description.text = _mapRegisterData.Description;
-            mapContestData.mapImage.texture = _texture2D;
-            mapContestData.furnitureList = _furnitureList;
+            mapContestData.likeCount++;
+            //post 통신
+            MapContestLoader.GetInstance().MapContestEditSave(mapContestData);
         }
 
+        public void ClickViewButton()
+        {
+            mapContestData.viewCount++;
+
+            //post 통신
+            MapContestLoader.GetInstance().MapContestEditSave(mapContestData);
+            IntoMapcontestRoom();
+        }
+
+        private void OnEnable()
+        {
+            SettingUIData();
+        }
+
+        public void SettingUIData()
+        {
+            mapContestDrawData.likes.text = mapContestData.likeCount.ToString();
+            mapContestDrawData.views.text = mapContestData.viewCount.ToString();
+        }
     }
 }

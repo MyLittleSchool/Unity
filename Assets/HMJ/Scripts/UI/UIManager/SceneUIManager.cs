@@ -360,7 +360,7 @@ namespace MJ
 
         public void OnMapSuccessRegisterPanel()
         {
-            mapSuccessRegisterPanel.SetActive(true);
+            // mapSuccessRegisterPanel.SetActive(true);
         }
 
         public void OffMapSuccessRegisterPanel()

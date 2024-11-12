@@ -13,14 +13,14 @@ using static Item;
 
 public class SellSystem : MonoBehaviour
 {
-    #region SingleTon
+    #region SingleTone
     private static SellSystem instance;
     public static SellSystem GetInstance()
     {
         if (instance == null)
         {
             GameObject go = new GameObject();
-            go.name = "InventorySystem";
+            go.name = "SellSystem";
             go.AddComponent<SellSystem>();
         }
         return instance;

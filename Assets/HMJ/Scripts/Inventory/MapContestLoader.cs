@@ -38,7 +38,6 @@ namespace MJ
     public struct MapContestData
     {
         public int id;
-        public int mapId;
         public string title;
         public string description;
         public List<ObjectContestInfo> furnitureList;
@@ -65,7 +64,8 @@ namespace MJ
         public MapContestScrollUI mapContestScrollUIComponent;
 
         public List<Texture2D> sprites = new List<Texture2D>();
-        bool allLoadsprite = false;
+
+        public List<ObjectContestInfo> loadfurnitureList;
 
         private void Awake()
         {
@@ -122,7 +122,6 @@ namespace MJ
             mapContestInfo.description = mapRegisterData.Description;
             mapContestInfo.userId = 1;
             mapContestInfo.previewImageUrl = url;
-
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
             info.body = JsonUtility.ToJson(mapContestInfo);
@@ -181,14 +180,46 @@ namespace MJ
             return false;
         }
 
-        public void PlaceFurniture(List<ObjectContestInfo> furnitureList)
+        public void LoadFurniture()
         {
             SetTile setTile = dataManager.player.GetComponent<SetTile>();
-            foreach (ObjectContestInfo info in furnitureList)
+            foreach (ObjectContestInfo info in loadfurnitureList)
             {
                 setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().items[info.objId].prefab, info.id);
             }
         }
+
+        public void MapContestEditSave(MapContestData mapContestInfo)
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
+            info.body = JsonUtility.ToJson(mapContestInfo);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+            StartCoroutine(HttpManager.GetInstance().Patch(info));
+        }
+
+        /*
+         *  MapContestData mapContestInfo = new MapContestData();
+
+            mapContestInfo.title = mapRegisterData.title;
+            mapContestInfo.description = mapRegisterData.Description;
+            mapContestInfo.userId = 1;
+            mapContestInfo.previewImageUrl = url;
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
+            info.body = JsonUtility.ToJson(mapContestInfo);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+
+            StartCoroutine(HttpManager.GetInstance().Post(info));
+         */
     }
 }
 

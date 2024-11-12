@@ -90,4 +90,12 @@ public class SceneMgr : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 5;
     }
+
+    public void MapContestMapIn(string roomName)
+    {
+        PhotonNetMgr.instance.roomName = "맵 콘테스트: " + roomName;
+
+        PhotonNetwork.LeaveRoom();
+        PhotonNetMgr.instance.sceneNum = 6;
+    }
 }

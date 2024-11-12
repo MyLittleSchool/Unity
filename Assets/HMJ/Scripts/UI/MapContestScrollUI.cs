@@ -21,7 +21,7 @@ public class MapContestScrollUI : ScrollUI
     // Update is called once per frame
     void Update()
     {
-        LoadMapData();
+
     }
 
     public override void AddItem()
@@ -44,29 +44,26 @@ public class MapContestScrollUI : ScrollUI
 
     public void LoadMapChild()
     {
-        int i = 0;
-        foreach (MapContestData mapContestData in MapContestLoader.GetInstance().mapDatas.response)
+        List<MapContestData> respon = MapContestLoader.GetInstance().mapDatas.response;
+        for(int i = 0; i < respon.Count; i++)
         {
             GameObject item = Instantiate(prefab, content);
             //item.set
             MJ.MapContestDataUI mapContestDataUI = item.GetComponent<MJ.MapContestDataUI>();
 
-            MapRegisterData mapRegisterData = new MapRegisterData();
-            mapRegisterData.title = mapContestData.title;
-            mapRegisterData.Description = mapContestData.description;
-            mapRegisterData.likes = mapContestData.likeCount;
-            mapRegisterData.views = mapContestData.viewCount;
-            mapContestDataUI.SetRegisterData(mapRegisterData, MapContestLoader.GetInstance().sprites[i], mapContestData.furnitureList) ;
+            //MapRegisterData mapRegisterData = new MapRegisterData();
+            //mapRegisterData.title = mapContestData.title;
+            //mapRegisterData.Description = mapContestData.description;
+            //mapRegisterData.likes = mapContestData.likeCount;
+            //mapRegisterData.views = mapContestData.viewCount;
+
+            mapContestDataUI.SetRegisterData(respon[i], MapContestLoader.GetInstance().sprites[i]);
 
             itemlist.Add(item);
             imageList.Add(item.GetComponent<Image>());
-            i++;
         }
-
         SceneUIManager.GetInstance().OnMapSuccessRegisterPanel();
     }
-
-
     public void ResetColor()
     {
         foreach (var image in imageList)
@@ -75,12 +72,10 @@ public class MapContestScrollUI : ScrollUI
 
     private void OnEnable()
     {
-        ResetData();
         // 맵 데이터 로드
         MapContestLoader.GetInstance().LoadMapData();
 
-        // 스프라이트도 로드 
-
+        LoadMapData();
     }
 
     public void ResetData()
@@ -93,7 +88,7 @@ public class MapContestScrollUI : ScrollUI
     IEnumerator WaitForConditionToBeTrue()
     {
         Debug.Log("Waiting for condition...");
-
+        ResetData();
         // 조건이 true가 될 때까지 대기
         yield return new WaitUntil(() => MapContestLoader.GetInstance().LoadSpriteComplete());
 
