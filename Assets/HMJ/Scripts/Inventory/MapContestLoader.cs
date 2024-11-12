@@ -1,25 +1,10 @@
 using GH;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
-using Photon.Pun;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static SW.PlaceManager;
 using UnityEngine.Networking;
-using UnityEditor.U2D.Aseprite;
-using System.IO;
 using static HttpManager;
-using UnityEngine.Analytics;
 using static MapRegisterDataUI;
-using System.Net;
-using static SW.FriendsUI;
-using SW;
-using System.Security.Cryptography;
-using ExitGames.Client.Photon;
-using System.Text;
-using UnityEngine.Rendering;
 namespace MJ
 {
     [Serializable]

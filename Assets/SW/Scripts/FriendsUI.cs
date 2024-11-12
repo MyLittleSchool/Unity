@@ -4,13 +4,10 @@ using Newtonsoft.Json.Converters;
 using Photon.Pun;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using static SW.FriendsUI;
 namespace SW
 {
     public class FriendsUI : MonoBehaviour
@@ -218,6 +215,7 @@ namespace SW
                             DataManager.instance.mapType = DataManager.MapType.MyClassroom;
                             DataManager.instance.mapId = comp.id;
                             PhotonNetMgr.instance.roomName = friend.name;
+                            gameObject.SetActive(false);
                             PhotonNetwork.LeaveRoom();
                             PhotonNetMgr.instance.sceneNum = 2;
                         });

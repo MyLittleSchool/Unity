@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Photon.Pun;
 using SW;
 using System.Collections;
 using System.Collections.Generic;
@@ -83,8 +84,8 @@ namespace GH
             if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
             {
                 tilemap.SetTile(tilePosition, emptyTilebase);
-                GameObject setObject = Instantiate(setGameObject, tilemap.transform);
-                setObject.transform.position = tilePosition;
+                GameObject setObject = PhotonNetwork.Instantiate(setGameObject.name, tilePosition, Quaternion.identity);
+                //setObject.transform.position = tilePosition;
                 AddObject(setObject);
 
                 InventorySystem.GetInstance().UseItem();
@@ -113,7 +114,7 @@ namespace GH
                 {
                     if (obj.position == tilePosition)
                     {
-                        Destroy(obj.obj.gameObject);
+                        PhotonNetwork.Destroy(obj.obj.gameObject);
                         PlaceManager.GetInstance().DeletePlace(obj.id); // Ελ½Ε
                     }
                 }
@@ -138,8 +139,8 @@ namespace GH
             if (!tilemap.HasTile(tilePosition))
             {
                 tilemap.SetTile(tilePosition, emptyTilebase);
-                GameObject setObject = Instantiate(setGameObject, tilemap.transform);
-                setObject.transform.position = tilePosition;
+                GameObject setObject = PhotonNetwork.Instantiate(setGameObject.name, tilePosition, Quaternion.identity);
+                //setObject.transform.position = tilePosition;
                 AddObject(setObject);
                 objectList.Last().id = id;
                 print(tilemap.HasTile(tilePosition));
