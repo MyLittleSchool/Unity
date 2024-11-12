@@ -53,13 +53,26 @@ namespace MJ
         public List<MapContestData> response;
     }
 
+    [Serializable]
+    public struct DeleteItemData
+    {
+        public int objId; // 오브젝트 아이디
+        public int removedCount; // 제거한 오브젝트 개수
+    }
+
+    [Serializable]
+    public class DeleteItemDataList
+    {
+        public List<DeleteItemData> response;
+    }
+
     public class MapContestLoader : MonoBehaviour
     {
         public static MapContestLoader instance;
         // Start is called before the first frame update
 
         private DataManager dataManager;
-
+        private HttpManager httpManager;
         public MapContestDataList mapDatas;
         public MapContestScrollUI mapContestScrollUIComponent;
 
@@ -67,6 +80,8 @@ namespace MJ
 
         public List<ObjectContestInfo> loadfurnitureList;
 
+
+        public DeleteItemDataList deleteItemDataLists;
         private void Awake()
         {
             if (instance == null)
@@ -96,12 +111,13 @@ namespace MJ
         void Start()
         {
             dataManager = DataManager.instance;
+            httpManager = HttpManager.GetInstance();
         }
 
         public void SendMapContestData(string mapRoute, MapRegisterData mapRegisterData)
         {
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/upload-image";
+            info.url = httpManager.SERVER_ADRESS + "/map-contest/upload-image";
             info.contentType = "multipart/form-data";
             info.body = Application.dataPath + "/Resources/" + mapRoute; // 파일 경로
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -110,7 +126,7 @@ namespace MJ
                 SendMapData(mapRegisterData, fileName);
 
             };
-            StartCoroutine(HttpManager.GetInstance().UploadFileByFormData(info, mapRoute));
+            StartCoroutine(httpManager.UploadFileByFormData(info, mapRoute));
 
         }
 
@@ -123,7 +139,7 @@ namespace MJ
             mapContestInfo.userId = 1;
             mapContestInfo.previewImageUrl = url;
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
+            info.url = httpManager.SERVER_ADRESS + "/map-contest";
             info.body = JsonUtility.ToJson(mapContestInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -131,7 +147,7 @@ namespace MJ
                 print(downloadHandler.text);
             };
 
-            StartCoroutine(HttpManager.GetInstance().Post(info));
+            StartCoroutine(httpManager.Post(info));
         }
 
         public void ReceiveMapImage(string ImageUrl, int idx)
@@ -144,7 +160,7 @@ namespace MJ
                 sprites.Add(handler.texture);
                 //sprites[idx] = sprite;
             };
-            StartCoroutine(HttpManager.GetInstance().DownloadSprite(info));
+            StartCoroutine(httpManager.DownloadSprite(info));
         }
         //public string title;
         //public string description;
@@ -154,7 +170,7 @@ namespace MJ
         public void LoadMapData()
         {
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/list";
+            info.url = httpManager.SERVER_ADRESS + "/map-contest/list";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 mapDatas = JsonUtility.FromJson<MapContestDataList>(downloadHandler.text);
@@ -165,7 +181,7 @@ namespace MJ
                 mapContestScrollUIComponent.LoadMapData();
                 Debug.Log("--------------------------------------------------------------------------------");
             };
-            StartCoroutine(HttpManager.GetInstance().Get(info));
+            StartCoroutine(httpManager.Get(info));
         }
 
         public bool LoadSpriteComplete()
@@ -192,15 +208,32 @@ namespace MJ
         public void MapContestEditSave(MapContestData mapContestInfo)
         {
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
+            info.url = httpManager.SERVER_ADRESS + "/map-contest";
             info.body = JsonUtility.ToJson(mapContestInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 print(downloadHandler.text);
             };
-            StartCoroutine(HttpManager.GetInstance().Patch(info));
+            StartCoroutine(httpManager.Patch(info));
         }
+
+        public void MapContestDeleteAllFurniture()
+        {
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = httpManager.SERVER_ADRESS + "/furniture/list/" + DataManager.instance.mapId;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                deleteItemDataLists = JsonUtility.FromJson<DeleteItemDataList>(res.text);
+                print("제거완료");
+            };
+            StartCoroutine(httpManager.Delete(info));
+            // no -> 다시 깔고
+
+            // yes -> (인벤토리 개수 + 이전에 깔았던 아이템 개수)
+
+        } 
+
 
         /*
          *  MapContestData mapContestInfo = new MapContestData();
@@ -210,7 +243,7 @@ namespace MJ
             mapContestInfo.userId = 1;
             mapContestInfo.previewImageUrl = url;
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
+            info.url = httpManager.SERVER_ADRESS + "/map-contest";
             info.body = JsonUtility.ToJson(mapContestInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -218,7 +251,7 @@ namespace MJ
                 print(downloadHandler.text);
             };
 
-            StartCoroutine(HttpManager.GetInstance().Post(info));
+            StartCoroutine(httpManager.Post(info));
          */
     }
 }

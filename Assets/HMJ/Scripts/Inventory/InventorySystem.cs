@@ -45,6 +45,20 @@ public class InventorySystem : MonoBehaviour
     public List<Item> itemComponents = new List<Item>();
 
     public ItemData choiceItem;
+
+    [Serializable]
+    public struct ItemInfoData
+    {
+        public string itemName;
+        public int n;
+        public int price;
+    }
+    [Serializable]
+    public class ItemInfoDataList
+    {
+        public List<ItemInfoData> response;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
