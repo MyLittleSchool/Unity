@@ -51,16 +51,16 @@ namespace SW
             });
             create.onClick.AddListener(() =>
             {
-                PostManager.PostInfo postInfo = new PostManager.PostInfo();
-                postInfo.userId = int.Parse(userId.text);
-                postInfo.nickname = nickName.text;
-                postInfo.title = title.text;
-                postInfo.content = content.text;
-                postManager.CreatePost(postInfo);
+                //PostManager.PostInfo postInfo = new PostManager.PostInfo();
+                //postInfo.userId = int.Parse(userId.text);
+                //postInfo.nickname = nickName.text;
+                //postInfo.title = title.text;
+                //postInfo.content = content.text;
+                //postManager.CreatePost(postInfo);
             });
             load.onClick.AddListener(() =>
             {
-                postManager.LoadPost();
+                //postManager.LoadPost();
             });
         }
 

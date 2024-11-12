@@ -1,5 +1,6 @@
 using GH;
 using Photon.Pun;
+using SW;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -66,9 +67,11 @@ public class SceneMgr : MonoBehaviour
 
     public void SchoolIn()
     {
-        DataManager.instance.playerCurrChannel = DataManager.instance.playerSchool;
-        PhotonNetMgr.instance.roomName = DataManager.instance.playerSchool;
-
+        //DataManager.instance.playerCurrChannel = DataManager.instance.playerSchool;
+        //PhotonNetMgr.instance.roomName = DataManager.instance.playerSchool;
+        PhotonNetMgr.instance.roomName = AuthManager.GetInstance().userAuthData.userInfo.school.schoolName;
+        DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.school.id;
+        DataManager.instance.mapType = DataManager.MapType.School;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 1;
     }

@@ -22,6 +22,7 @@ namespace GH
 
         //포톤 변수값
         Vector3 myPos;
+        public bool onIdle = true;
 
         public bool interactionMode = false;
 
@@ -29,9 +30,8 @@ namespace GH
         {
             joystick = GameManager.instance.Joystick;
             DataManager.instance.players.Add(gameObject.GetComponent<PhotonView>());
-
-
-     
+            stingDir = -transform.up;
+            onIdle = true;
         }
 
         private void Update()
@@ -42,6 +42,11 @@ namespace GH
                 if (joystick.Vertical != 0 && joystick.Horizontal != 0)
                 {
                     joystickDeg = Mathf.Rad2Deg * Mathf.Atan2(joystick.Vertical, joystick.Horizontal);
+                    onIdle = false;
+                }
+                else if (joystick.Vertical == 0 && joystick.Horizontal == 0)
+                {
+                    onIdle = true;
                 }
 
                 // 찌르기 이모지 방향값 설정
@@ -101,27 +106,6 @@ namespace GH
             transform.position += playerDir * playerSpeed * Time.fixedDeltaTime;
 
 
-            //애니메이션 손보기
-            if ( horizontal == 0 && vertical == 0)
-            {
-                moveAniTrriger = false;
-            }
-            else
-            {
-                moveAniTrriger = true;
-
-            }
-
-            if (moveAniTrriger)
-            {
-                playerAnimator.SetBool("Run", true);
-            }
-            else
-            {
-                playerAnimator.SetBool("Run", false);
-
-            }
-
 
         }
 
@@ -132,6 +116,7 @@ namespace GH
             {
                 stream.SendNext(transform.position);
                 stream.SendNext(stingDir);
+                stream.SendNext(onIdle);
 
             }
             //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
@@ -139,7 +124,8 @@ namespace GH
             {
                 //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
                 myPos = (Vector3)stream.ReceiveNext();
-                stingDirPun = (Vector3)stream.ReceiveNext();
+                stingDir = (Vector3)stream.ReceiveNext();
+                onIdle = (bool)stream.ReceiveNext();
             }
         }
     }

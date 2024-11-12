@@ -23,7 +23,7 @@ namespace GH
             transform.position += transform.right * stringSpeed * Time.deltaTime;
             stingSpriteRenderer.color -= new Color(0, 0, 0, 1) * stringAlpha * Time.deltaTime;
 
-            Destroy(transform.gameObject, 1f);
+            Destroy(transform.gameObject, 0.5f);
         }
     }
 }
