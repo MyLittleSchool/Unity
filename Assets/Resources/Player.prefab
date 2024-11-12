@@ -199,6 +199,7 @@ MonoBehaviour:
   joystick: {fileID: 0}
   stingDir: {x: 0, y: 0, z: 0}
   stingDirPun: {x: 0, y: 0, z: 0}
+  onIdle: 1
   interactionMode: 0
 --- !u!114 &-4655146129839858024
 MonoBehaviour:
@@ -924,8 +925,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC774\uADDC\uD604"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6524d2b5a89fb1d45a4a17dff2b54e1f, type: 2}
-  m_sharedMaterial: {fileID: 2056741148348037280, guid: 6524d2b5a89fb1d45a4a17dff2b54e1f,
+  m_fontAsset: {fileID: 11400000, guid: e3c9a00bda717bd41857453afc87e9e5, type: 2}
+  m_sharedMaterial: {fileID: 2056741148348037280, guid: e3c9a00bda717bd41857453afc87e9e5,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -956,7 +957,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1053,7 +1054,7 @@ Transform:
   m_GameObject: {fileID: 2305518834202577979}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

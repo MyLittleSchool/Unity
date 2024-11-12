@@ -76,7 +76,7 @@ namespace GH
             //룸에 입장이 완료될 때까지 기다린다.
             yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
 
-            Vector3 initPosition = new Vector3(0, 0, 0);
+            Vector3 initPosition = GameObject.Find("SpwanPosition").transform.position;
 
             GameObject spwanPlayer = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
             Instantiate(interacterPrefab, spwanPlayer.transform);
