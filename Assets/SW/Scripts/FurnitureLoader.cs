@@ -24,7 +24,6 @@ namespace SW
             DataManager dataManager = DataManager.instance;
             while (dataManager.player == null)  // 플레이어 생성 대기
             {
-                print(dataManager.player == null);
                 yield return null;
             }
             SetTile setTile = dataManager.player.GetComponent<SetTile>();
@@ -52,6 +51,7 @@ namespace SW
         public int id;
         public string schoolName;
         public string location;
+        public int onlineUserCount;
         public int backgroundColorId;
         public List<PlaceManager.ObjectInfo> furnitureList;
     }
