@@ -48,6 +48,8 @@ public class SceneMgr : MonoBehaviour
     {
         DataManager.instance.playerCurrChannel = DataManager.instance.playerName;
         PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
+        DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
+        DataManager.instance.mapType = DataManager.MapType.MyClassroom;
 
         //DataManager.instance.player = null;
         PhotonNetwork.LeaveRoom();
@@ -60,7 +62,8 @@ public class SceneMgr : MonoBehaviour
     {
         DataManager.instance.playerCurrChannel = "¸¸³²ÀÇ ±¤Àå";
         PhotonNetMgr.instance.roomName = "¸¸³²ÀÇ ±¤Àå";
-
+        DataManager.instance.mapId = 0;
+        DataManager.instance.mapType = DataManager.MapType.Others;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 3;
     }
@@ -80,7 +83,8 @@ public class SceneMgr : MonoBehaviour
     {
         DataManager.instance.playerCurrChannel = "ÄûÁî";
         PhotonNetMgr.instance.roomName = "ÄûÁî";
-
+        DataManager.instance.mapId = 0;
+        DataManager.instance.mapType = DataManager.MapType.Others;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 4;
     }
@@ -89,7 +93,8 @@ public class SceneMgr : MonoBehaviour
     {
         DataManager.instance.playerCurrChannel = "ÄûÁî ±¤Àå";
         PhotonNetMgr.instance.roomName = "ÄûÁî ±¤Àå";
-
+        DataManager.instance.mapId = 0;
+        DataManager.instance.mapType = DataManager.MapType.Others;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 5;
     }

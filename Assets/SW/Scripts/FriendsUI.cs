@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -201,7 +202,7 @@ namespace SW
                         }
                         else
                         {
-                            comp.StateText.text = "1일 전";
+                            comp.StateText.text = "";
                             // 쪽지 버튼
                             comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "쪽지 남기기";
                             comp.RequestButton.onClick.AddListener(() =>
@@ -266,6 +267,14 @@ namespace SW
                         comp.GradeText.text = requester.grade + "학년";
                         comp.locationText.text = requester.school.schoolName;
                         comp.InterestText.text = "#" + String.Join(" #", requester.interest);
+                        //if (requester.isOnline)
+                        //{
+                        //    comp.StateText.text = "<color=#F2884B>접속중";
+                        //}
+                        //else
+                        //{
+                            comp.StateText.text = "";
+                        //}
                         // 거절
                         comp.PassButton.onClick.AddListener(() =>
                         {
@@ -312,6 +321,14 @@ namespace SW
                         comp.friendshipId = list.response[i].id;
                         comp.id = receiver.id;
                         comp.NickNameText.text = receiver.name;
+                        if (receiver.isOnline)
+                        {
+                            comp.StateText.text = "<color=#F2884B>접속중";
+                        }
+                        else
+                        {
+                            comp.StateText.text = "";
+                        }
                         // 요청취소
                         comp.RequestButton.onClick.AddListener(() =>
                         {

@@ -11,5 +11,6 @@ namespace SW
         public TMP_Text schoolName;
         public TMP_Text playerNum;
         public Outline outLine;
+        public Button button;
     }
 }
