@@ -13,7 +13,9 @@ namespace GH
     {
         public static GameManager instance;
 
-        public GameObject activateButtonPannel;
+        public Image conversionImage;
+        public Sprite activateOn;
+        public Sprite activateOff;
         public GameObject emojiButtonPannel;
         public Button stingButton;
         // 패널 온 오프
@@ -33,6 +35,7 @@ namespace GH
         public bool interMode = false;
         public bool buttonDown = false;
 
+        public GameObject firstLoginPanel;
         private void Awake()
         {
             if (instance == null)
@@ -48,7 +51,6 @@ namespace GH
 
         void Start()
         {
-            activateButtonPannel.SetActive(false);
             emojiButtonPannel.SetActive(true);
             interracBut.SetActive(false);
             CoSpwamPlayer();
@@ -67,7 +69,7 @@ namespace GH
         public void CoSpwamPlayer()
         {
             StartCoroutine(SpawnPlayer());
-
+            
         }
         IEnumerator SpawnPlayer()
         {
@@ -89,13 +91,13 @@ namespace GH
         {
             if (onActivate)
             {
-                activateButtonPannel.SetActive(true);
+                conversionImage.sprite = activateOff;
                 emojiButtonPannel.gameObject.SetActive(false);
                 onActivate = false;
             }
             else
             {
-                activateButtonPannel.SetActive(false);
+                conversionImage.sprite = activateOn;
                 emojiButtonPannel.gameObject.SetActive(true);
                 onActivate = true;
 

@@ -8,9 +8,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using static HttpManager;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine.Analytics;
 using UnityEngine.Networking;
+using System.IO;
 
 namespace MJ
 {
@@ -64,6 +64,15 @@ namespace MJ
         [Header("나의 프로필 편집 저장 버튼")]
         public Button myProfileSaveButton;
 
+        [Header("첫 로그인 학생 선택 버튼")]
+        public Button studentCheckButton;
+
+        [Header("첫 로그인 학생 아님 선택 버튼")]
+        public Button noStudentCheckButton;
+
+        [Header("학교 선택 완료 버튼")]
+        public Button schoolSaveButton;
+
         #endregion
 
         #region Panel
@@ -112,6 +121,11 @@ namespace MJ
         [Header("플레이어 목록 패널")]
         public GameObject playerList;
 
+        [Header("첫 로그인 학생 선택 패널")]
+        public GameObject firstLoginPanel;
+
+        [Header("첫 로그인 학교 선택 패널")]
+        public GameObject firstSchoolPanel;
         #endregion
 
         #region SingleTone
@@ -173,6 +187,19 @@ namespace MJ
 
         public UserInfo currentuserInfo;
 
+        [Header("학교 검색 인풋필드")]
+        public TMP_InputField schoolSuch;
+
+        [Header("학교 통신 겟 리스트")]
+        public SchoolData schooldata;
+
+        [Header("학교 통신 드롭다운")]
+        public TMP_Dropdown schoolDropDown;
+
+        [Header("학년 드롭다운")]
+        public TMP_Dropdown schoolGradeDropDown;
+
+        public List<string> schoolName ;
         #endregion
 
         private void Start()
@@ -180,18 +207,35 @@ namespace MJ
             myProfileButton.onClick.AddListener(OnOffMyProfile);
             myProfileEditButton.onClick.AddListener(OnMyProfileEdit);
             myProfileSaveButton.onClick.AddListener(OffMyProfileEdit);
+            studentCheckButton.onClick.AddListener(ClickStudent);
+            noStudentCheckButton.onClick.AddListener(ClickNoStudent);
+            schoolSaveButton.onClick.AddListener(SchoolSave);
 
+            firstLoginPanel.SetActive(false);
+            firstSchoolPanel.SetActive(false);
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(false);
-
+            if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
+            {
+                firstLoginPanel.SetActive(true);
+            }
             InterestButtonCreate();
 
             SetProfile();
+
+
         }
         private void Update()
         {
             ProfileEditCount();
 
+
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                print("엔터");
+                SchoolGet();
+            }
+            schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
 
         }
 
@@ -440,10 +484,7 @@ namespace MJ
                 {
                     interestButtonTransform.gameObject.SetActive(false);
                 }
-
             }
-
-
         }
         public void InterestButtonOnOff()
         {
@@ -561,6 +602,101 @@ namespace MJ
 
             //메시지
             profileMyMessage.text = userInfo.statusMesasge;
+        }
+
+        //첫 로그인 핵생 선택 버튼
+        private void ClickStudent()
+        {
+            firstLoginPanel.SetActive(false);
+            firstSchoolPanel.SetActive(true);
+        }
+        private void ClickNoStudent()
+        {
+            firstLoginPanel.SetActive(false);
+
+        }
+        private void SchoolSave()
+        {
+           //학년 추가======================-=====
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/school/add-user?schoolId="
+                + schooldata.data[schoolDropDown.value].id+ "&userId=" + AuthManager.GetInstance().userAuthData.userInfo.id
+                + "&user_grade=" + schoolGradeDropDown.value;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+            StartCoroutine(HttpManager.GetInstance().Post(info));
+
+
+            firstSchoolPanel.SetActive(false);
+
+            StartCoroutine(CoUserGet());
+
+        }
+
+        private void SchoolGet()
+        {
+            schooldata.data.Clear();
+
+            schoolName.Clear();
+
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/school/" + schoolSuch.text;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                print(jsonData);
+                //jsonData를 PostInfoArray 형으로 바꾸자.
+                schooldata = JsonUtility.FromJson<SchoolData>(jsonData);
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+
+            StartCoroutine(CoSchoolGet());
+
+
+            print("학교 정보 불러오기");
+
+          
+
+        }
+        private void SetSchoolName(int option)
+        {
+            schoolSuch.text = schoolDropDown.options[option].text;
+        }
+        IEnumerator CoSchoolGet()
+        {
+            yield return new WaitUntil(() => schooldata.data.Count > 0);
+
+            for (int i = 0; i < schooldata.data.Count; i++)
+            {
+                schoolName.Add(schooldata.data[i].schoolName);
+            }
+
+            schoolDropDown.ClearOptions();
+            schoolDropDown.AddOptions(schoolName);
+
+            schoolDropDown.Show();
+
+           
+        }
+
+        IEnumerator CoUserGet()
+        {
+            yield return new WaitForSeconds(0.5f);
+
+
+
+            HttpInfo info2 = new HttpInfo();
+            info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email?email=" + AuthManager.GetInstance().userAuthData.userInfo.email;
+            info2.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                print(jsonData);
+                //jsonData를 데이터에 다시 저장 바꾸자.
+                AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(JsonUtility.FromJson<UserInfoData>(jsonData).data);
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info2));
         }
 
     }
