@@ -48,4 +48,10 @@ namespace SW
         public int backgroundColorId;
         public List<PlaceManager.ObjectInfo> furnitureList;
     }
+
+    [Serializable]
+    public class SchoolData
+    {
+        public List<School> data;
+    }
 }

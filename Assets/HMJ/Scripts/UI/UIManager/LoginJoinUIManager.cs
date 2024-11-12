@@ -357,7 +357,6 @@ namespace GH
 
         private void UserLogin()
         {
-            print("버튼 클릭");
             HttpInfo info = new HttpInfo();
             info.url =  HttpManager.GetInstance().SERVER_ADRESS + "/user/email?email=" + loginList[0].text;
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -395,7 +394,6 @@ namespace GH
                 print("비밀번호가 다릅니다");
                 yield return new WaitForSeconds(3f);
                 PWCheckText.SetActive(false);
-
             }
         }
 

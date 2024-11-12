@@ -35,6 +35,7 @@ namespace GH
         public bool interMode = false;
         public bool buttonDown = false;
 
+        public GameObject firstLoginPanel;
         private void Awake()
         {
             if (instance == null)
@@ -68,7 +69,7 @@ namespace GH
         public void CoSpwamPlayer()
         {
             StartCoroutine(SpawnPlayer());
-
+            
         }
         IEnumerator SpawnPlayer()
         {

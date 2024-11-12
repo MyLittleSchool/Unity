@@ -35,7 +35,6 @@ public class Loading : MonoBehaviour
     float textTime = 0;
     int textnum = 0;
 
-    public int randDir;
     void Start()
     {
         loadingSlider = GetComponentInChildren<Slider>();
@@ -48,48 +47,22 @@ public class Loading : MonoBehaviour
         LoadingSilde();
         UdateTime();
 
-        if (randDir == 0)
-        {
-            SpriteAnimation(clothes[clothesid].frontAnimations, clothesSpriteRenderer);
-            SpriteAnimation(skin[skinid].frontAnimations, skinSpriteRenderer);
-            SpriteAnimation(face[faceid].frontAnimations, faceSpriteRenderer);
-            SpriteAnimation(hair[hairid].frontAnimations, hairSpriteRenderer);
-        }
-        else if (randDir == 1)
-        {
-            SpriteAnimation(clothes[clothesid].backAnimations, clothesSpriteRenderer);
-            SpriteAnimation(skin[skinid].backAnimations, skinSpriteRenderer);
-            SpriteAnimation(face[faceid].backAnimations, faceSpriteRenderer);
-            SpriteAnimation(hair[hairid].backAnimations, hairSpriteRenderer);
-        }
-        else if (randDir == 2)
-        {
-            SpriteAnimation(clothes[clothesid].sideAnimations, clothesSpriteRenderer);
-            SpriteAnimation(skin[skinid].sideAnimations, skinSpriteRenderer);
-            SpriteAnimation(face[faceid].sideAnimations, faceSpriteRenderer);
-            SpriteAnimation(hair[hairid].sideAnimations, hairSpriteRenderer);
 
-            clothesSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
-            skinSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
-            faceSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
-            hairSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
-        }
-        else if (randDir == 3)
-        {
-            SpriteAnimation(clothes[clothesid].sideAnimations, clothesSpriteRenderer);
-            SpriteAnimation(skin[skinid].sideAnimations, skinSpriteRenderer);
-            SpriteAnimation(face[faceid].sideAnimations, faceSpriteRenderer);
-            SpriteAnimation(hair[hairid].sideAnimations, hairSpriteRenderer);
-            clothesSpriteRenderer.rectTransform.localScale = new Vector3(-1, 1, 1);
-            skinSpriteRenderer.rectTransform.localScale = new Vector3(-1, 1, 1);
-            faceSpriteRenderer.rectTransform.localScale = new Vector3(-1, 1, 1);
-            hairSpriteRenderer.rectTransform.localScale = new Vector3(-1, 1, 1);
-        }
+        SpriteAnimation(clothes[clothesid].sideAnimations, clothesSpriteRenderer);
+        SpriteAnimation(skin[skinid].sideAnimations, skinSpriteRenderer);
+        SpriteAnimation(face[faceid].sideAnimations, faceSpriteRenderer);
+        SpriteAnimation(hair[hairid].sideAnimations, hairSpriteRenderer);
+
+        clothesSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
+        skinSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
+        faceSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
+        hairSpriteRenderer.rectTransform.localScale = new Vector3(1, 1, 1);
+
+
 
     }
     private void RandomSet()
     {
-        randDir = Random.Range(0, 4);
         skinid = Random.Range(0, skin.Count);
         clothesid = Random.Range(0, clothes.Count);
         faceid = Random.Range(0, face.Count);
@@ -120,10 +93,10 @@ public class Loading : MonoBehaviour
     {
         loadingText.text = loadingString[textnum];
         textTime += Time.deltaTime;
-        if(textTime > 0.5f)
+        if (textTime > 0.5f)
         {
             textnum++;
-            if(textnum >= loadingString.Count)
+            if (textnum >= loadingString.Count)
             {
                 textnum = 0;
             }
