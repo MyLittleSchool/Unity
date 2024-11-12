@@ -339,6 +339,7 @@ namespace MJ
         public void OnGuestbookPanel()
         {
             guestbookPanel.SetActive(true);
+            guestbookPanel.GetComponent<Guestbook>().LoadGuestbookData();
         }
 
         public void OnMapRegisterPanel()

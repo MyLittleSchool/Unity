@@ -34,7 +34,14 @@ namespace SW
             {
                 foreach (PlaceInfo info in res.response)
                 {
-                    setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().items[info.objId].prefab, info.id);
+                    try
+                    {
+                        setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().items[info.objId].prefab, info.id);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             });
         }
