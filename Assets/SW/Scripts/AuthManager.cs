@@ -127,9 +127,23 @@ namespace SW
             while (true)
             {
                 HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/request-online-status?userId=" + userAuthData.userInfo.id;
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/schedule/request-online-status";
+                info.body = JsonUtility.ToJson(new Schedule());
+                info.contentType = "application/json";
                 StartCoroutine(HttpManager.GetInstance().Post(info));
-                yield return new WaitForSeconds(50);
+                yield return new WaitForSeconds(80);
+            }
+        }
+        private class Schedule
+        {
+            public int userId;
+            public int mapId;
+            public string mapType;
+            public Schedule()
+            {
+                userId = GetInstance().userAuthData.userInfo.id;
+                mapId = DataManager.instance.mapId;
+                mapType = DataManager.instance.mapType.ToString();
             }
         }
     }

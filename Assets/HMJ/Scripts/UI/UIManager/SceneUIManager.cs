@@ -126,6 +126,9 @@ namespace MJ
 
         [Header("첫 로그인 학교 선택 패널")]
         public GameObject firstSchoolPanel;
+
+        [Header("학교 방문 패널")]
+        public GameObject visitOtherSchoolPanel;
         #endregion
 
         #region SingleTone
@@ -465,6 +468,10 @@ namespace MJ
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(true);
             ProfileEditSave();
+        }
+        public void OnVisitOtherSchoolPanel()
+        {
+            visitOtherSchoolPanel.SetActive(true);
         }
 
         public void ProfileEditCount()
