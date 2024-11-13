@@ -126,6 +126,9 @@ namespace MJ
 
         [Header("첫 로그인 학교 선택 패널")]
         public GameObject firstSchoolPanel;
+
+        [Header("프라이빗 룸 패널")]
+        public GameObject privateRoomPanel;
         #endregion
 
         #region SingleTone
