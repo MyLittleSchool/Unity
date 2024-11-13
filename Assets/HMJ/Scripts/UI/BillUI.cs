@@ -87,6 +87,8 @@ public class BillUI : MonoBehaviour
 
     public void calculateDeleteItem()
     {
+        if (MapContestLoader.GetInstance().deleteItemDataLists == null)
+            return;
         // 현재 내 맵에서 삭제된 정보 인벤토리에 다시 넣기
         foreach (DeleteItemData deleteItemData in MapContestLoader.GetInstance().deleteItemDataLists.response)
             ++inventorySystem.items[deleteItemData.objectId].n;
@@ -103,6 +105,7 @@ public class BillUI : MonoBehaviour
 
     public void BuyFunitureItem()
     {
+
         // 가구 모두 지우기
         MapContestLoader.GetInstance().MapContestDeleteAllFurniture();
 
@@ -118,7 +121,7 @@ public class BillUI : MonoBehaviour
 
     public bool LoadDeleteItemComplete()
     {
-        if (mapContestLoader.deleteItemDataLists.response.Count == 0)
+        if (mapContestLoader.deleteItemDataLists == null || mapContestLoader.deleteItemDataLists.response.Count == 0)
             return false;
 
         return true;

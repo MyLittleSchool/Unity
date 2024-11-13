@@ -63,7 +63,7 @@ public class InventorySystem : MonoBehaviour
     void Start()
     {
         InitItem();
-        // gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame

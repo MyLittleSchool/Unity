@@ -8,7 +8,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static GH.DataManager;
-using static UnityEngine.InputManagerEntry;
 
 namespace GH
 {
