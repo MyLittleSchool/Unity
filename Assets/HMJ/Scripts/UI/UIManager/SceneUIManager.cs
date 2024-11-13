@@ -129,6 +129,8 @@ namespace MJ
 
         [Header("학교 방문 패널")]
         public GameObject visitOtherSchoolPanel;
+        [Header("프라이빗 룸 패널")]
+        public GameObject privateRoomPanel;
         #endregion
 
         #region SingleTone

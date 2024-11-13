@@ -50,7 +50,6 @@ public class VariableJoystick : Joystick
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-        print("UP  "+firstJoystickPos);
 
         if (joystickType != JoystickType.Fixed)
             background.gameObject.transform.localPosition = firstJoystickPos;
