@@ -1,129 +1,207 @@
+using MJ;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class PrivateRoom : MonoBehaviour
+namespace GH
 {
-    public List<GameObject> playersList = new List<GameObject>();
-    public GameObject passWordPanel;
 
-    //룸 패스워드
-    public string roomPassword = "99999";
-    //룸 패스워드 인풋 필드
-    public TMP_InputField passWordInputField;
-
-    //룸 패스워드 안내 텍스트
-    public TMP_Text passWordText;
-
-    // 패스워드 틀렸을 때 텍스트
-    public TMP_Text passWordWrongText;
-
-    //패스워드 제출 버튼
-    public Button passWordSubmitButton;
-    public Button passWordExitButton;
-
-    private BoxCollider2D boxCollider;
-
-    private bool activeRoom = false;
-
-    void Start()
+    public class PrivateRoom : MonoBehaviourPun, IPunObservable
     {
-        passWordPanel.SetActive(false);
-        passWordSubmitButton.onClick.AddListener(PassWordCheck);
-        passWordExitButton.onClick.AddListener(PassWordExit);
-        boxCollider = GetComponent<BoxCollider2D>();
-        passWordWrongText.enabled = false;
+        public List<GameObject> playersList = new List<GameObject>();
+        private GameObject passWordPanel;
 
-    }
+        private PrivateRoomPanel privateRoomPanel;
 
-    void Update()
-    {
+        //룸 패스워드
+        public string roomPassword = "99999";
+        //룸 패스워드 인풋 필드
+        private TMP_InputField passWordInputField;
 
-    }
+        //룸 패스워드 안내 텍스트
+        private TMP_Text passWordText;
 
-    private void OnUI(GameObject player)
-    {
-        passWordInputField.text = "";
-        passWordPanel.SetActive(true);
+        // 패스워드 틀렸을 때 텍스트
+        private TMP_Text passWordWrongText;
 
-        if (activeRoom == false)
+        //패스워드 제출 버튼
+        private Button passWordSubmitButton;
+        private Button passWordExitButton;
+
+        private BoxCollider2D boxCollider;
+
+        private bool activeRoom = false;
+
+        public GameObject playerMine;
+
+        private GameObject darkSprite;
+
+        void Start()
         {
-            passWordText.text = "비밀번호 설정해주세요";
+            passWordPanel = GameObject.Find("UIManager").GetComponent<SceneUIManager>().privateRoomPanel;
+            privateRoomPanel = passWordPanel.GetComponent<PrivateRoomPanel>();
+
+            passWordInputField = privateRoomPanel.passWordInputField;
+            passWordText = privateRoomPanel.passWordText;
+            passWordWrongText = privateRoomPanel.passWordWrongText;
+            passWordSubmitButton = privateRoomPanel.passWordSubmitButton;
+            passWordExitButton = privateRoomPanel.passWordExitButton;
+
+            passWordSubmitButton.onClick.AddListener(PassWordCheck);
+            passWordExitButton.onClick.AddListener(PassWordExit);
+            boxCollider = GetComponent<BoxCollider2D>();
+            darkSprite = transform.GetChild(0).gameObject;
+
+            StartCoroutine(PlayerSuch());
+
         }
-        else
-        {
-            passWordText.text = "비밀번호를 입력해주세요";
-        }
-    }
 
-    public void PassWordCheck()
-    {
-        if (!activeRoom)
+        void Update()
         {
-            roomPassword = passWordInputField.text;
-            boxCollider.isTrigger = true;
-            passWordPanel.SetActive(false);
-            activeRoom = true;
+
         }
-        else
+
+        private void OnUI()
         {
-            if (passWordInputField.text == roomPassword)
+            passWordInputField.text = "";
+            print(passWordPanel.name);
+            passWordPanel.SetActive(true);
+
+            if (activeRoom == false)
             {
-                boxCollider.isTrigger = true;
-                passWordPanel.SetActive(false);
+                passWordText.text = "비밀번호 설정해주세요";
             }
             else
             {
-                passWordWrongText.gameObject.SetActive(true);
+                passWordText.text = "비밀번호를 입력해주세요";
             }
-
         }
 
-    }
-
-    public void PassWordExit()
-    {
-        passWordPanel.SetActive(false);
-
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        public void PassWordCheck()
         {
-            OnUI(collision.gameObject);
-            playersList.Add(collision.gameObject);
-
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-          //  playersList.Add(collision.gameObject);
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            for(int i = 0; i < playersList.Count; i++)
+            if (!activeRoom)
             {
-                if (playersList[i] == collision.gameObject)
+                if (playersList.Count == 1)
                 {
-                    playersList.RemoveAt(i);
-                    boxCollider.isTrigger = false;
-                    break;
+
+                    roomPassword = passWordInputField.text;
+                    if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
+                    {
+                        passWordPanel.SetActive(false);
+                        boxCollider.isTrigger = true;
+
+                        playerMine.transform.position = gameObject.transform.position - new Vector3(0, 1.5f, 0);
+                        activeRoom = true;
+                    }
                 }
+
+
             }
-            if(playersList.Count == 0)
+            else
             {
-                activeRoom = false;
+                if (passWordInputField.text == roomPassword)
+                {
+                    boxCollider.isTrigger = true;
+                    passWordPanel.SetActive(false);
+                }
+                else
+                {
+                    passWordWrongText.gameObject.SetActive(true);
+                }
+
             }
 
         }
+
+        public void PassWordExit()
+        {
+            passWordPanel.SetActive(false);
+
+        }
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+                {
+                    OnUI();
+                    darkSprite.SetActive(true);
+                    playerMine = collision.gameObject;
+
+                }
+                playersList.Add(collision.gameObject);
+
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                //  playersList.Add(collision.gameObject);
+            }
+        }
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                for (int i = 0; i < playersList.Count; i++)
+                {
+                    if (playersList[i] == collision.gameObject)
+                    {
+                        playersList.RemoveAt(i);
+                        if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+                        {
+                            boxCollider.isTrigger = false;
+                            darkSprite.SetActive(false);
+                            playerMine = null;
+                        }
+                        break;
+                    }
+                }
+                if (playersList.Count == 0)
+                {
+                    activeRoom = false;
+                }
+
+            }
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
+            if (stream.IsWriting)
+            {
+
+            }
+            //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
+            else if (stream.IsReading)
+            {
+                //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
+
+            }
+        }
+
+        IEnumerator PlayerSuch()
+        {
+            yield return new WaitForSeconds(2.0f);
+            Collider2D[] players = Physics2D.OverlapBoxAll(transform.position, new Vector2(6, 6), 0, 1 << LayerMask.NameToLayer("Player"));
+            foreach (Collider2D player in players)
+            {
+                playersList.Add(player.gameObject);
+            }
+
+            if (playersList.Count > 0)
+            {
+                activeRoom = true;
+            }
+        }
+
     }
+
 }

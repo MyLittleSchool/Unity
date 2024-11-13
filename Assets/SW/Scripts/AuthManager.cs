@@ -131,7 +131,7 @@ namespace SW
                 info.body = JsonUtility.ToJson(new Schedule());
                 info.contentType = "application/json";
                 StartCoroutine(HttpManager.GetInstance().Post(info));
-                yield return new WaitForSeconds(80);
+                yield return new WaitForSeconds(3);
             }
         }
         private class Schedule

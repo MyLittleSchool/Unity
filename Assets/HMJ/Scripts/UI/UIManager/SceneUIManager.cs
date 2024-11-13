@@ -1,16 +1,15 @@
 using GH;
+using Photon.Pun;
 using SW;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using static HttpManager;
-using UnityEngine.Analytics;
 using UnityEngine.Networking;
-using System.IO;
+using UnityEngine.UI;
+using static HttpManager;
 
 namespace MJ
 {
@@ -118,6 +117,9 @@ namespace MJ
         [Header("나의 프로필 편집 패널")]
         public GameObject myProfileEditPanel;
 
+        [Header("다른 플레이어 프로필 패널")]
+        public GameObject othersProfilePanel;
+
         [Header("플레이어 목록 패널")]
         public GameObject playerList;
 
@@ -129,6 +131,8 @@ namespace MJ
 
         [Header("학교 방문 패널")]
         public GameObject visitOtherSchoolPanel;
+        [Header("프라이빗 룸 패널")]
+        public GameObject privateRoomPanel;
         #endregion
 
         #region SingleTone
@@ -226,6 +230,8 @@ namespace MJ
 
             SetProfile();
             // initDecorationPanel();
+            InitOtherPlayerPanel();
+            initDecorationPanel();
         }
         private void Update()
         {
@@ -238,7 +244,7 @@ namespace MJ
                 SchoolGet();
             }
             schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
-
+            TouchPlayer();
         }
 
         public void RestartSetting(
@@ -705,6 +711,89 @@ namespace MJ
             };
             StartCoroutine(HttpManager.GetInstance().Get(info2));
         }
+        private void TouchPlayer()
+        {
+            // 터치 입력이 발생했을 때만 처리
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
 
+                // 터치가 시작되었을 때 처리
+                if (touch.phase == UnityEngine.TouchPhase.Began)
+                {
+                    // UI가 터치를 가로챘는지 확인
+                    if (IsPointerOverUIObject(touch.position))
+                    {
+                        //Debug.Log("UI를 터치했습니다.");
+                        return; // UI가 터치를 가로챘으므로 월드 오브젝트와의 상호작용을 중지
+                    }
+
+                    // UI가 아닌 2D 콜라이더 오브젝트 터치 처리
+                    Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+                    RaycastHit2D hit = Physics2D.Raycast(touchPosition, Vector2.zero, Mathf.Infinity, 1 << LayerMask.NameToLayer("Player"));
+
+                    if (hit.collider != null)
+                    {
+                        //Debug.Log("2D 오브젝트를 터치했습니다: " + hit.collider.gameObject.name);
+                        // 터치한 오브젝트에 대한 처리 수행
+                        if (hit.collider.gameObject.GetComponent<PhotonView>().IsMine == false)
+                        {
+                            othersProfilePanel.SetActive(true);
+                            UserInfo userInfo = hit.collider.gameObject.GetComponent<UserRPC>().userInfo;
+                            FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
+                            comp.id = userInfo.id;
+                            comp.NickNameText.text = userInfo.name;
+                            comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
+                            comp.MessageText.text = userInfo.statusMesasge;
+                        }
+                    }
+                    else othersProfilePanel.SetActive(false);
+                }
+            }
+        }
+        private void InitOtherPlayerPanel()
+        {
+            FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
+            comp.PassButton.onClick.AddListener(() =>
+            {
+                othersProfilePanel.SetActive(false);
+            });
+            comp.RequestButton.onClick.AddListener(() =>
+            {
+                int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                int targetId = comp.id;
+                HttpManager httpManager = HttpManager.GetInstance();
+                HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
+                info.onComplete = (DownloadHandler res) =>
+                {
+                    print(res.text);
+                };
+                StartCoroutine(HttpManager.GetInstance().Post(info));
+            });
+        }
+        private bool IsPointerOverUIObject(Vector2 touchPosition)
+        {
+            // PointerEventData 생성 및 터치 위치 설정
+            PointerEventData eventData = new PointerEventData(EventSystem.current) { position = touchPosition };
+
+            // Raycast 결과를 저장할 리스트 생성
+            var results = new List<RaycastResult>();
+
+            // EventSystem을 통해 Raycast 수행
+            EventSystem.current.RaycastAll(eventData, results);
+
+            // Raycast 결과 검사하여 Default 레이어가 아닌 UI 요소만 확인
+            foreach (var result in results)
+            {
+                if (result.gameObject.layer != LayerMask.NameToLayer("Default"))
+                {
+                    return true; // Default 레이어가 아닌 UI 요소가 있으면 true 반환
+                }
+            }
+
+            // Default 레이어만 감지되었거나, UI가 없으면 false 반환
+            return false;
+        }
     }
 }
