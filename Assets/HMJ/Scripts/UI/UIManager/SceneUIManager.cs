@@ -716,7 +716,7 @@ namespace MJ
                 Touch touch = Input.GetTouch(0);
 
                 // 터치가 시작되었을 때 처리
-                if (touch.phase == UnityEngine.TouchPhase.Began)
+                if (touch.phase == TouchPhase.Began)
                 {
                     // UI가 터치를 가로챘는지 확인
                     if (IsPointerOverUIObject(touch.position))
@@ -727,26 +727,35 @@ namespace MJ
 
                     // UI가 아닌 2D 콜라이더 오브젝트 터치 처리
                     Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                    RaycastHit2D hit = Physics2D.Raycast(touchPosition, Vector2.zero, Mathf.Infinity, 1 << LayerMask.NameToLayer("Player"));
-
-                    if (hit.collider != null)
-                    {
-                        //Debug.Log("2D 오브젝트를 터치했습니다: " + hit.collider.gameObject.name);
-                        // 터치한 오브젝트에 대한 처리 수행
-                        if (hit.collider.gameObject.GetComponent<PhotonView>().IsMine == false)
-                        {
-                            othersProfilePanel.SetActive(true);
-                            UserInfo userInfo = hit.collider.gameObject.GetComponent<UserRPC>().userInfo;
-                            FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
-                            comp.id = userInfo.id;
-                            comp.NickNameText.text = userInfo.name;
-                            comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
-                            comp.MessageText.text = userInfo.statusMesasge;
-                        }
-                    }
-                    else othersProfilePanel.SetActive(false);
+                    HandleInteraction(touchPosition);
                 }
             }
+            else if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                HandleInteraction(clickPosition);
+            }
+        }
+        private void HandleInteraction(Vector2 touchPosition)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(touchPosition, Vector2.zero, Mathf.Infinity, 1 << LayerMask.NameToLayer("Player"));
+
+            if (hit.collider != null)
+            {
+                //Debug.Log("2D 오브젝트를 터치했습니다: " + hit.collider.gameObject.name);
+                // 터치한 오브젝트에 대한 처리 수행
+                if (hit.collider.gameObject.GetComponent<PhotonView>().IsMine == false)
+                {
+                    othersProfilePanel.SetActive(true);
+                    UserInfo userInfo = hit.collider.gameObject.GetComponent<UserRPC>().userInfo;
+                    FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
+                    comp.id = userInfo.id;
+                    comp.NickNameText.text = userInfo.name;
+                    comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
+                    comp.MessageText.text = userInfo.statusMesasge;
+                }
+            }
+            else othersProfilePanel.SetActive(false);
         }
         private void InitOtherPlayerPanel()
         {
