@@ -1389,10 +1389,16 @@ MonoBehaviour:
   MapRegisterSuccessCloseButton: {fileID: 0}
   InventoryButton: {fileID: 1726883999}
   InventoryCloseButton: {fileID: 1726883998}
+  InventoryErrorCloseButton: {fileID: 0}
+  HeadSetOnOffButton: {fileID: 0}
+  MicroPhoneOnOffButton: {fileID: 0}
   mapSuccessRegisterPanel: {fileID: 0}
   mapRegisterPanel: {fileID: 1703133526}
   mapContestPanel: {fileID: 1703133528}
   mapConfirmPanel: {fileID: 0}
+  HeadSetXPanel: {fileID: 0}
+  MirocoPhoneXPanel: {fileID: 0}
+  mapInventoryErrorPanel: {fileID: 0}
 --- !u!1 &1338558253
 GameObject:
   m_ObjectHideFlags: 0
@@ -87078,7 +87084,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -55
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1955780407065832202, guid: 1d19a572730ad6140933086f52a6f4b7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

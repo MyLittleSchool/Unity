@@ -2,18 +2,15 @@ using MJ;
 using Ookii.Dialogs;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class BillUI : MonoBehaviour
 {
-    
-    public UnityEngine.UI.Button billButton;
-    public UnityEngine.UI.Button buyButton;
-    public UnityEngine.UI.Button noBuyButton;
+    public Button billButton;
+    public Button buyButton;
+    public Button noBuyButton;
 
     public TMP_Text BillText;
     public GameObject BillPanel;
@@ -23,13 +20,15 @@ public class BillUI : MonoBehaviour
     private InventorySystem inventorySystem;
     private MapContestLoader mapContestLoader;
 
-    Dictionary<string, int> ItemMap;
+    Dictionary<string, int> ItemMap = new Dictionary<string, int>();
     // Start is called before the first frame update
     void Start()
     {
         inventorySystem = InventorySystem.GetInstance();
 
         mapContestLoader = MapContestLoader.GetInstance();
+
+        SettingButton();
     }
 
     // Update is called once per frame
@@ -48,24 +47,27 @@ public class BillUI : MonoBehaviour
     public void OnBillPanel()
     {
         BillPanel.SetActive(true);
+        SettingBillData();
+        BuyFunitureItem();
     }
 
     public void OffBillPanel()
     {
-        BillPanel.SetActive(true);
+        BillPanel.SetActive(false);
     }
 
     public void ClickBuyButton()
     {
         OffBillPanel();
-
         // 이때 프리셋 적용
+        mapContestLoader.MapCopyFurniture();
+
     }
 
     public void ClickNoBuyButton()
     {
         OffBillPanel();
-        SettingBillData();
+
         // 이때 프리셋 적용x
     }
 
@@ -87,7 +89,7 @@ public class BillUI : MonoBehaviour
     {
         // 현재 내 맵에서 삭제된 정보 인벤토리에 다시 넣기
         foreach (DeleteItemData deleteItemData in MapContestLoader.GetInstance().deleteItemDataLists.response)
-            ++inventorySystem.items[deleteItemData.objId].n;
+            ++inventorySystem.items[deleteItemData.objectId].n;
     }
 
     public void SettingBillData()
@@ -108,6 +110,8 @@ public class BillUI : MonoBehaviour
 
         // 지운 가구 데이터 계산
         calculateDeleteItem();
+
+        BuyItem();
         //
 
     }

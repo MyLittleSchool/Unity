@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static GH.DataManager;
 
 namespace GH
 {
@@ -105,6 +106,30 @@ namespace GH
                 });
             }
         }
+
+        public void CopyTile(Vector3Int _tilePosition, int objId)
+        {
+            tilemap.SetTile(_tilePosition, emptyTilebase);
+            GameObject setObject = PhotonNetwork.Instantiate(setGameObject.name, _tilePosition, Quaternion.identity);
+            //setObject.transform.position = tilePosition;
+            AddObject(setObject);
+
+            print(tilemap.HasTile(_tilePosition));
+            // Ελ½Ε
+            ObjectInfo obj = objectList.Last();
+            PlaceManager.ObjectInfo objectInfo = new PlaceManager.ObjectInfo();
+            objectInfo.objId = objId;
+            objectInfo.x = _tilePosition.x;
+            objectInfo.y = _tilePosition.y;
+            //objectInfo.rot =
+            objectInfo.mapId = DataManager.instance.mapId;
+            objectInfo.mapType = MapType.MyClassroom;
+            PlaceManager.GetInstance().CreatePlace(objectInfo, (PlaceManager.PlaceInfo callBack) =>
+            {
+                obj.id = callBack.id;
+            });
+        }
+
         public void DeleteTile()
         {
             if (tilemap.HasTile(tilePosition))

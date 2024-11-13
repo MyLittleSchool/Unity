@@ -1,6 +1,8 @@
 using GH;
+using SW;
 using System;
 using System.Collections.Generic;
+using System.Resources;
 using UnityEngine;
 using UnityEngine.Networking;
 using static HttpManager;
@@ -41,7 +43,7 @@ namespace MJ
     [Serializable]
     public struct DeleteItemData
     {
-        public int objId; // 오브젝트 아이디
+        public int objectId; // 오브젝트 아이디
         public int removedCount; // 제거한 오브젝트 개수
     }
 
@@ -102,7 +104,7 @@ namespace MJ
         public void SendMapContestData(string mapRoute, MapRegisterData mapRegisterData)
         {
             HttpInfo info = new HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/map-contest/upload-image";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/upload-image";
             info.contentType = "multipart/form-data";
             info.body = Application.dataPath + "/Resources/" + mapRoute; // 파일 경로
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -111,7 +113,7 @@ namespace MJ
                 SendMapData(mapRegisterData, fileName);
 
             };
-            StartCoroutine(httpManager.UploadFileByFormData(info, mapRoute));
+            StartCoroutine(HttpManager.GetInstance().UploadFileByFormData(info, mapRoute));
 
         }
 
@@ -121,10 +123,10 @@ namespace MJ
 
             mapContestInfo.title = mapRegisterData.title;
             mapContestInfo.description = mapRegisterData.Description;
-            mapContestInfo.userId = 1;
+            mapContestInfo.userId = DataManager.instance.mapId;
             mapContestInfo.previewImageUrl = url;
             HttpInfo info = new HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/map-contest";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
             info.body = JsonUtility.ToJson(mapContestInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -132,7 +134,7 @@ namespace MJ
                 print(downloadHandler.text);
             };
 
-            StartCoroutine(httpManager.Post(info));
+            StartCoroutine(HttpManager.GetInstance().Post(info));
         }
 
         public void ReceiveMapImage(string ImageUrl, int idx)
@@ -145,7 +147,7 @@ namespace MJ
                 sprites.Add(handler.texture);
                 //sprites[idx] = sprite;
             };
-            StartCoroutine(httpManager.DownloadSprite(info));
+            StartCoroutine(HttpManager.GetInstance().DownloadSprite(info));
         }
         //public string title;
         //public string description;
@@ -155,7 +157,7 @@ namespace MJ
         public void LoadMapData()
         {
             HttpInfo info = new HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/map-contest/list";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/list";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 mapDatas = JsonUtility.FromJson<MapContestDataList>(downloadHandler.text);
@@ -166,7 +168,7 @@ namespace MJ
                 mapContestScrollUIComponent.LoadMapData();
                 Debug.Log("--------------------------------------------------------------------------------");
             };
-            StartCoroutine(httpManager.Get(info));
+            StartCoroutine(HttpManager.GetInstance().Get(info));
         }
 
         public bool LoadSpriteComplete()
@@ -192,29 +194,42 @@ namespace MJ
         public void MapContestEditSave(MapContestData mapContestInfo)
         {
             HttpInfo info = new HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/map-contest";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
             info.body = JsonUtility.ToJson(mapContestInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 print(downloadHandler.text);
             };
-            StartCoroutine(httpManager.Patch(info));
+            StartCoroutine(HttpManager.GetInstance().Patch(info));
         }
 
         public void MapContestDeleteAllFurniture()
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/furniture/list/" + DataManager.instance.mapId;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/furniture/list/" + DataManager.instance.mapId;
+            Debug.Log("MapContestDeleteAllFurniture: " + info.url);
+            info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
                 deleteItemDataLists = JsonUtility.FromJson<DeleteItemDataList>(res.text);
+                print("res값: " + res);
                 print("제거완료");
             };
-            StartCoroutine(httpManager.Delete(info));
+            StartCoroutine(HttpManager.GetInstance().Post(info));
 
-        } 
+        }
 
+        // 맵 콘테스트 가구 현재 나만의 방에 배치
+        public void MapCopyFurniture()
+        {
+            SetTile setTileComponent = DataManager.instance.player.GetComponent<SetTile>();
+            if(setTileComponent)
+            {
+                foreach (ObjectContestInfo info in loadfurnitureList)
+                    setTileComponent.CopyTile(new Vector3Int(info.x, info.y, 0), info.objId);
+            }
+        }
     }
 }
 

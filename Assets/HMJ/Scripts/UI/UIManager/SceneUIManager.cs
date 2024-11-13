@@ -225,7 +225,7 @@ namespace MJ
             InterestButtonCreate();
 
             SetProfile();
-            initDecorationPanel();
+            // initDecorationPanel();
         }
         private void Update()
         {

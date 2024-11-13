@@ -85,6 +85,7 @@ public class MJCanvasUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        int a = 0;
     }
 
     public void HeadSetImageSetting()
