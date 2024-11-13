@@ -232,7 +232,7 @@ namespace MJ
             //ProfileEditCount();
 
 
-            if (Input.GetKeyDown(KeyCode.Alpha7))
+            if (Input.GetKeyDown(KeyCode.Return))
             {
                 print("ฟฃลอ");
                 SchoolGet();

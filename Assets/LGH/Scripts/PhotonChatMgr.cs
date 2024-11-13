@@ -58,7 +58,8 @@ namespace GH
         public List<GameObject> chatList = new List<GameObject>();
 
         //채팅 채널 전환 버튼
-        public
+        public Button chatChannel;
+        private TMP_Text chatChannelText;
         void Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -71,7 +72,8 @@ namespace GH
             // photon chat 서버에 접속
             PhotonChatConnect();
 
-
+            chatChannel.onClick.AddListener(ChatChannelChange);
+            chatChannelText = chatChannel.gameObject.GetComponentInChildren<TMP_Text>();
         }
 
         void Update()
@@ -94,22 +96,24 @@ namespace GH
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha9))
+           
+        }
+        private void ChatChannelChange()
+        {
+            currentLogin = currentLogin == Loginstep.All ? Loginstep.School : Loginstep.All;
+            switch (currentLogin)
             {
-                currentLogin = currentLogin == Loginstep.All ? Loginstep.School : Loginstep.All;
-                switch (currentLogin)
-                {
-                    case Loginstep.All:
-                        print("올 확인");
-                        JoinChatRoom("All");
-                        break;
-                    case Loginstep.School:
-                        print("학교 확인");
-                        JoinChatRoom("판교중학교");
-                        break;
-                    case Loginstep.Private:
-                        break;
-                }
+                case Loginstep.All:
+                    JoinChatRoom(DataManager.instance.playerCurrChannel);
+                    chatChannelText.text = "전체";
+                    break;
+                case Loginstep.School:
+                    chatChannelText.text = "학교";
+
+                    JoinChatRoom(AuthManager.GetInstance().userAuthData.userInfo.school.schoolName);
+                    break;
+                case Loginstep.Private:
+                    break;
             }
         }
 

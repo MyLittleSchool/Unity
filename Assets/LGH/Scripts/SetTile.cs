@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEngine.InputManagerEntry;
 
 namespace GH
 {
@@ -42,12 +43,15 @@ namespace GH
         public bool tileObjCheck;
         public int setObjectId;
 
+        public PlayerMove playerMove;
+
 
         void Start()
         {
             setMode = false;
             tileLine.SetActive(false);
-            SuchGrid();            
+            SuchGrid();
+            playerMove =GetComponent<PlayerMove>();
         }
 
         void Update()
@@ -63,6 +67,28 @@ namespace GH
 
             if (setMode)
             {
+
+                if (playerMove.stingDir == -transform.up)
+                {
+                    playerFrontTileTransform.localPosition = new Vector3(0, -1, 0);
+                }
+                else if (playerMove.stingDir == transform.up)
+                {
+                    playerFrontTileTransform.localPosition = new Vector3(0, 2, 0);
+
+                }
+                else if (playerMove.stingDir == transform.right)
+                {
+                    playerFrontTileTransform.localPosition = new Vector3(1, 1, 0);
+
+                }
+                else if (playerMove.stingDir == -transform.right)
+                {
+
+                    playerFrontTileTransform.localPosition = new Vector3(-1, 1, 0);
+
+                }
+
                 tilePosition = grid.WorldToCell(playerFrontTileTransform.position);
                 tileLine.transform.position = tilePosition;
                 if (Input.GetKeyDown(KeyCode.Q))

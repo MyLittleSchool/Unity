@@ -5800,7 +5800,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8038c276dc6bc714b9947f6a61f39dda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activateButtonPannel: {fileID: 2067966024}
+  conversionImage: {fileID: 0}
+  activateOn: {fileID: 0}
+  activateOff: {fileID: 0}
   emojiButtonPannel: {fileID: 1286197118}
   stingButton: {fileID: 628389291097845611}
   Joystick: {fileID: 880146282}
@@ -5812,6 +5814,7 @@ MonoBehaviour:
   interracBut: {fileID: 563543186}
   interMode: 0
   buttonDown: 0
+  firstLoginPanel: {fileID: 0}
 --- !u!224 &334668351 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 658965234966244804, guid: ff518cc4804f1bd45a849a8dceb280fe,
@@ -6242,9 +6245,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 701a46b7130af414cba77cc0ea483d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentLogin: 0
   inputChat: {fileID: 1638223122}
   chatItemPrefab: {fileID: 3610997981301941466, guid: 2dcc62abe3f46db45a6c3000c13254d1,
     type: 3}
+  aa:
+    id: 0
+    schoolName: 
+    location: 
+    backgroundColorId: 0
+    furnitureList: []
   color: {r: 0.9490197, g: 0.4156863, b: 0.10588236, a: 1}
   playerName: 
   contentRectTransform: {fileID: 1126405372}
@@ -6254,6 +6264,7 @@ MonoBehaviour:
   malpungText: {fileID: 0}
   chatMainPanelRecttransform: {fileID: 274811290}
   chatPanelRecttransform: {fileID: 1285061394}
+  chatList: []
 --- !u!4 &412267817
 Transform:
   m_ObjectHideFlags: 0
@@ -13309,6 +13320,8 @@ MonoBehaviour:
   topMenuText: {fileID: 408033423}
   roomName: 
   sceneNum: 0
+  loadingPanel: {fileID: 0}
+  loading: {fileID: 0}
 --- !u!1 &1138614462
 GameObject:
   m_ObjectHideFlags: 0
@@ -16284,11 +16297,15 @@ MonoBehaviour:
   MapRegisterSuccessCloseButton: {fileID: 0}
   InventoryButton: {fileID: 0}
   InventoryCloseButton: {fileID: 0}
+  InventoryErrorCloseButton: {fileID: 0}
   topMenuButton: {fileID: 891129490}
   friendsButton: {fileID: 652797198}
   myProfileButton: {fileID: 0}
   myProfileEditButton: {fileID: 0}
   myProfileSaveButton: {fileID: 0}
+  studentCheckButton: {fileID: 0}
+  noStudentCheckButton: {fileID: 0}
+  schoolSaveButton: {fileID: 0}
   DecorationPanel: {fileID: 0}
   PlayerObject: {fileID: 0}
   guestbookPanel: {fileID: 1033744291}
@@ -16297,12 +16314,15 @@ MonoBehaviour:
   mapContestPanel: {fileID: 0}
   mapSuccessRegisterPanel: {fileID: 0}
   mapInventoryPanel: {fileID: 570476069}
+  mapInventoryErrorPanel: {fileID: 0}
   menuPanel: {fileID: 1845295994}
   friendsPanel: {fileID: 1091491093}
   ChatPanel: {fileID: 1285061393}
   myProfilePanel: {fileID: 0}
   myProfileEditPanel: {fileID: 0}
   playerList: {fileID: 7317297467709347390}
+  firstLoginPanel: {fileID: 0}
+  firstSchoolPanel: {fileID: 0}
   nickNameInputField: {fileID: 0}
   interestInputField: {fileID: 0}
   myMessageInputField: {fileID: 0}
@@ -16312,8 +16332,38 @@ MonoBehaviour:
   interestButtonPrefab: {fileID: 0}
   interestButtonTransform: {fileID: 0}
   selectedInterest: []
-  profileLvNick: 
-  profileInterest: 
+  profileLvNick: {fileID: 0}
+  profileInterest: {fileID: 0}
+  profileMyMessage: {fileID: 0}
+  currentuserInfo:
+    id: 0
+    socialId: 
+    name: 
+    grade: 0
+    birthday: 
+    gender: 0
+    email: 
+    password: 
+    phone: 
+    interest: []
+    statusMesasge: 
+    schoolId: 0
+    level: 0
+    exp: 0
+    maxExp: 0
+    isOnline: 0
+    school:
+      id: 0
+      schoolName: 
+      location: 
+      backgroundColorId: 0
+      furnitureList: []
+  schoolSuch: {fileID: 0}
+  schooldata:
+    data: []
+  schoolDropDown: {fileID: 0}
+  schoolGradeDropDown: {fileID: 0}
+  schoolName: []
 --- !u!4 &1955180374
 Transform:
   m_ObjectHideFlags: 0
@@ -16504,10 +16554,16 @@ MonoBehaviour:
   MapRegisterSuccessCloseButton: {fileID: 0}
   InventoryButton: {fileID: 1831768884}
   InventoryCloseButton: {fileID: 1831768882}
+  InventoryErrorCloseButton: {fileID: 0}
+  HeadSetOnOffButton: {fileID: 0}
+  MicroPhoneOnOffButton: {fileID: 0}
   mapSuccessRegisterPanel: {fileID: 0}
   mapRegisterPanel: {fileID: 613435602}
   mapContestPanel: {fileID: 613435600}
   mapConfirmPanel: {fileID: 0}
+  HeadSetXPanel: {fileID: 0}
+  MirocoPhoneXPanel: {fileID: 0}
+  mapInventoryErrorPanel: {fileID: 0}
 --- !u!114 &2024837825
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -72,7 +72,7 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    public void UseItem()
+    public void UseItem()                                                                                                                                                                                                                                   
     {
         int idx = items.IndexOf(choiceItem);
         --items[idx].n;
