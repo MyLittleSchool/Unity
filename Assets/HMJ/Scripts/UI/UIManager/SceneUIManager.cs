@@ -207,7 +207,7 @@ namespace MJ
         [Header("학년 드롭다운")]
         public TMP_Dropdown schoolGradeDropDown;
 
-        public List<string> schoolName ;
+        public List<string> schoolName;
         #endregion
 
         private void Start()
@@ -238,14 +238,17 @@ namespace MJ
         {
             //ProfileEditCount();
 
-
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (firstSchoolPanel.activeSelf)
             {
-                print("엔터");
-                SchoolGet();
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    print("엔터");
+                    SchoolGet();
+                }
+                schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
+                TouchPlayer();
+
             }
-            schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
-            TouchPlayer();
         }
 
         public void RestartSetting(
@@ -631,10 +634,10 @@ namespace MJ
         }
         private void SchoolSave()
         {
-           //학년 추가======================-=====
+            //학년 추가======================-=====
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/school/add-user?schoolId="
-                + schooldata.data[schoolDropDown.value].id+ "&userId=" + AuthManager.GetInstance().userAuthData.userInfo.id
+                + schooldata.data[schoolDropDown.value].id + "&userId=" + AuthManager.GetInstance().userAuthData.userInfo.id
                 + "&user_grade=" + schoolGradeDropDown.value;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
@@ -671,7 +674,7 @@ namespace MJ
 
             print("학교 정보 불러오기");
 
-          
+
 
         }
         private void SetSchoolName(int option)
@@ -692,7 +695,7 @@ namespace MJ
 
             schoolDropDown.Show();
 
-           
+
         }
 
         IEnumerator CoUserGet()
