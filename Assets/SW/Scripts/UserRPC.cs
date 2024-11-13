@@ -37,7 +37,7 @@ namespace SW
         public void GetJoin(int actorNumber, string _userInfo)
         {
             PlayerList.instance.GetJoin(actorNumber, ref playerUI);
-            photonView.RPC(nameof(JoinRes), PhotonNetwork.CurrentRoom.GetPlayer(actorNumber), PhotonNetwork.LocalPlayer.ActorNumber, JsonUtility.ToJson(AuthManager.GetInstance().userAuthData.userInfo));
+            DataManager.instance.player.GetComponent<PhotonView>().RPC(nameof(JoinRes), PhotonNetwork.CurrentRoom.GetPlayer(actorNumber), PhotonNetwork.LocalPlayer.ActorNumber, JsonUtility.ToJson(AuthManager.GetInstance().userAuthData.userInfo));
             playerPanel = playerUI.GetComponent<PlayerPanel>();
             playerPanel.userRPC = this;
             userInfo = JsonUtility.FromJson<UserInfo>(_userInfo);
