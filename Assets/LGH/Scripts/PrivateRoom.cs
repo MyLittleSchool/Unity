@@ -121,7 +121,20 @@ namespace GH
         public void PassWordExit()
         {
             passWordPanel.SetActive(false);
+            if (!activeRoom)
+            {
+                if (playersList.Count == 1)
+                {
+                    if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
+                    {
+                        darkSprite.SetActive(false);
+                        playerMine = null;
+                        playersList.Clear();
+                    }
+                }
 
+
+            }
         }
         private void OnCollisionEnter2D(Collision2D collision)
         {
