@@ -10002,6 +10002,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 544152516}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &544152518 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4625167635868834112, guid: 5f7cc0e30cba89648ae018a17482237c,
+    type: 3}
+  m_PrefabInstance: {fileID: 544152516}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &546327494
 GameObject:
   m_ObjectHideFlags: 0
@@ -18381,6 +18387,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: MJCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8063423977866545608, guid: 5456f0a3c6bd31e41ad76881be0baea0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8400787537825184951, guid: 5456f0a3c6bd31e41ad76881be0baea0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6024764230176668808, guid: 5456f0a3c6bd31e41ad76881be0baea0, type: 3}
     m_RemovedGameObjects: []
@@ -26646,7 +26662,7 @@ MonoBehaviour:
   playerList: {fileID: 1129481932}
   firstLoginPanel: {fileID: 1871245159}
   firstSchoolPanel: {fileID: 404184216}
-  visitOtherSchoolPanel: {fileID: 0}
+  visitOtherSchoolPanel: {fileID: 544152518}
   privateRoomPanel: {fileID: 774857656}
   nickNameInputField: {fileID: 130431467}
   interestInputField: {fileID: 1904312805}
