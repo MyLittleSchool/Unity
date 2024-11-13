@@ -136,7 +136,9 @@ namespace GH
 
             }
         }
-        private void OnCollisionEnter2D(Collision2D collision)
+    
+
+        private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
@@ -148,15 +150,6 @@ namespace GH
 
                 }
                 playersList.Add(collision.gameObject);
-
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                //  playersList.Add(collision.gameObject);
             }
         }
         private void OnTriggerExit2D(Collider2D collision)
