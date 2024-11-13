@@ -113,14 +113,18 @@ namespace SW
         private int checkedNum;
         private void ModifyOff()
         {
-            for (int i = 0; i < contentsTabs[0].childCount; i++)
+            try
             {
-                contentsTabs[0].GetChild(i).Find("InviteButton").gameObject.SetActive(true);
-                contentsTabs[0].GetChild(i).Find("ChatButton").gameObject.SetActive(true);
-                contentsTabs[0].GetChild(i).Find("CheckButton").GetChild(1).gameObject.SetActive(false);
-                modifyBtnState = ModifyBtnState.Modify;
-                modifyBtnText.text = "包府窍扁";
+                for (int i = 0; i < contentsTabs[0].childCount; i++)
+                {
+                    contentsTabs[0].GetChild(i).Find("InviteButton").gameObject.SetActive(true);
+                    contentsTabs[0].GetChild(i).Find("ChatButton").gameObject.SetActive(true);
+                    contentsTabs[0].GetChild(i).Find("CheckButton").GetChild(1).gameObject.SetActive(false);
+                    modifyBtnState = ModifyBtnState.Modify;
+                    modifyBtnText.text = "包府窍扁";
+                }
             }
+            catch { }
         }
         private int tab;
         private void ChangeTab(int num)
