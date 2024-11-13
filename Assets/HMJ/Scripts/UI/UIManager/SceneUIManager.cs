@@ -701,7 +701,7 @@ namespace MJ
 
 
             HttpInfo info2 = new HttpInfo();
-            info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email?email=" + AuthManager.GetInstance().userAuthData.userInfo.email;
+            info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + AuthManager.GetInstance().userAuthData.userInfo.email;
             info2.onComplete = (DownloadHandler downloadHandler) =>
             {
                 string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
