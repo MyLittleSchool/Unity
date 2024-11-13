@@ -5,6 +5,7 @@ using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -357,19 +358,65 @@ namespace SW
             contentsTabs[3] = Instantiate(tabPrefab, contents).transform;
             // 서버 요청
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/ai-recommend/name-list?userId=1";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/ai-recommend/list/recommendation-info?userId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler res) =>
             {
-                List<string> nameList = JsonConvert.DeserializeObject<List<string>>(res.text);
-                foreach (var name in nameList)
+                AIRecommendList list = JsonUtility.FromJson<AIRecommendList>("{\"data\" : " + res.text + "}");
+                foreach (var each in list.data)
                 {
                     GameObject newPanel = Instantiate(recommFriendPrefab, contentsTabs[3]);
-                    newPanel.GetComponent<FriendPanel>().NickNameText.text = name;
+                    FriendPanel friendPanel = newPanel.GetComponent<FriendPanel>();
+                    friendPanel.id = each.recommendedUserId;
+                    friendPanel.NickNameText.text = each.username;
+                    friendPanel.SimilarityText.text = "유사도 " + each.similarityValue.ToString("F2");
+                    friendPanel.StateText.text = each.onlineStatus ? "접속중" : "";
+                    friendPanel.RecommandText.text = each.recommendationLevel;
+                    friendPanel.GradeText.text = each.grade + " 학년";
+                    friendPanel.locationText.text = each.schoolLocation;
+                    friendPanel.InterestText.text = "#" + String.Join(" #", each.interests);
+                    friendPanel.MessageText.text = each.similarityMessage;
+                    friendPanel.PassButton.onClick.AddListener(() =>
+                    {
+                        Destroy(newPanel);
+                    });
+                    friendPanel.RequestButton.onClick.AddListener(() =>
+                    {
+                        int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                        int targetId = friendPanel.id;
+                        HttpManager httpManager = HttpManager.GetInstance();
+                        HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                        info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
+                        info.onComplete = (DownloadHandler res) =>
+                        {
+                            print(res.text);
+                        };
+                        StartCoroutine(HttpManager.GetInstance().Post(info));
+                    });
                 }
                 if (tab == 3) ChangeTab(tab);
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }
+        [Serializable]
+        public class AIRecommendList
+        {
+            public List<AIRecommend> data;
+        }
+        [Serializable]
+        public class AIRecommend
+        {
+            public int recommendedUserId;
+            public string username;
+            public float similarityValue;
+            public bool onlineStatus;
+            public string recommendationLevel;
+            public int grade;
+            public string schoolLocation;
+            public List<string> interests;
+            public string similarityMessage;
+            public string avatarImageUrl;
+        }
+
         [Header("쪽지 보내기")]
         public Button[] colorButtons;
         public Button saveButton;
