@@ -192,7 +192,6 @@ namespace MJ
             if (sprites.Count == mapDatas.response.Count)
                 return true;
 
-
             return false;
         }
 
@@ -228,36 +227,9 @@ namespace MJ
                 print("제거완료");
             };
             StartCoroutine(httpManager.Delete(info));
-            // no -> 다시 깔고
-
-            // yes -> (인벤토리 개수 + 이전에 깔았던 아이템 개수)
 
         } 
 
-
-        /*
-         *  MapContestData mapContestInfo = new MapContestData();
-
-            mapContestInfo.title = mapRegisterData.title;
-            mapContestInfo.description = mapRegisterData.Description;
-            mapContestInfo.userId = 1;
-            mapContestInfo.previewImageUrl = url;
-            HttpInfo info = new HttpInfo();
-            info.url = httpManager.SERVER_ADRESS + "/map-contest";
-            info.body = JsonUtility.ToJson(mapContestInfo);
-            info.contentType = "application/json";
-            info.onComplete = (DownloadHandler downloadHandler) =>
-            {
-                print(downloadHandler.text);
-            };
-
-            StartCoroutine(httpManager.Post(info));
-         */
     }
 }
 
-/*
- * ArgumentException: JSON must represent an object type.
-UnityEngine.JsonUtility.FromJson (System.String json, System.Type type) (at <5ee00f1c11864dcd8992e826540f733b>:0)
-UnityEngine.JsonUtility.FromJson[T] (System.String json) (at <5ee00f1c11864dcd8992e826540f733b>:0)
- */

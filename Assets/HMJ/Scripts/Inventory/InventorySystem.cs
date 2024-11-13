@@ -85,11 +85,38 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    public void UseItem()
+    public bool UseItem()
     {
         int idx = items.IndexOf(choiceItem);
-        --items[idx].n;
+        if (items[idx].n <= 0)
+            return false;
+        else
+            --items[idx].n;
         itemComponents[idx].UpdateItemData();
+
+        return true;
+    }
+
+    // 모자란 개수 반환
+    public int UseItem(int n, string ItemName)
+    {
+        int remainData = 0;
+        int idx = ContainItem(ItemName);
+        if (idx >= 0)
+        {
+            remainData = items[idx].n - n;
+            if (items[idx].n - n < 0)
+                items[idx].n = 0;
+            else
+               items[idx].n -= n;
+            itemComponents[idx].UpdateItemData();
+
+            if (remainData < 0)
+                return remainData;
+            else
+                return 0;
+        }
+        return 0;
     }
 
     public void AddItem(int n, string ItemName)
@@ -108,6 +135,12 @@ public class InventorySystem : MonoBehaviour
         }
 
         return -1;
+    }
+
+    public int GetPrice(int n, string ItemName)
+    {
+        int idx = ContainItem(ItemName);
+        return itemComponents[idx].GetItemData().price * n;
     }
 
     public bool CheckItem()
