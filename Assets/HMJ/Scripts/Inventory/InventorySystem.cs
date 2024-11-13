@@ -86,7 +86,7 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    public void UseItem()                                                                                                                                                                                                                                   
+    public bool UseItem()                                                                                                                                                                                                                                   
     {
         int idx = items.IndexOf(choiceItem);
         if (items[idx].n <= 0)
