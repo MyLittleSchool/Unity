@@ -1,3 +1,4 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,7 +11,7 @@ public class PrivateRoom : MonoBehaviour
     public GameObject passWordPanel;
 
     //룸 패스워드
-    public string roomPassword;
+    public string roomPassword = "99999";
     //룸 패스워드 인풋 필드
     public TMP_InputField passWordInputField;
 
@@ -22,13 +23,17 @@ public class PrivateRoom : MonoBehaviour
 
     //패스워드 제출 버튼
     public Button passWordSubmitButton;
+    public Button passWordExitButton;
 
     private BoxCollider2D boxCollider;
+
+    private bool activeRoom = false;
 
     void Start()
     {
         passWordPanel.SetActive(false);
         passWordSubmitButton.onClick.AddListener(PassWordCheck);
+        passWordExitButton.onClick.AddListener(PassWordExit);
         boxCollider = GetComponent<BoxCollider2D>();
         passWordWrongText.enabled = false;
 
@@ -41,26 +46,27 @@ public class PrivateRoom : MonoBehaviour
 
     private void OnUI(GameObject player)
     {
+        passWordInputField.text = "";
         passWordPanel.SetActive(true);
 
-        if (playersList.Count < 1)
+        if (activeRoom == false)
         {
-            passWordText.text = "비밀번호 설정";
-            playersList.Add(player);
+            passWordText.text = "비밀번호 설정해주세요";
         }
         else
         {
-            passWordText.text = "비밀번호";
+            passWordText.text = "비밀번호를 입력해주세요";
         }
     }
 
     public void PassWordCheck()
     {
-        if (playersList.Count < 1)
+        if (!activeRoom)
         {
             roomPassword = passWordInputField.text;
             boxCollider.isTrigger = true;
             passWordPanel.SetActive(false);
+            activeRoom = true;
         }
         else
         {
@@ -71,10 +77,16 @@ public class PrivateRoom : MonoBehaviour
             }
             else
             {
-                passWordWrongText.enabled = true;
+                passWordWrongText.gameObject.SetActive(true);
             }
 
         }
+
+    }
+
+    public void PassWordExit()
+    {
+        passWordPanel.SetActive(false);
 
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -82,6 +94,35 @@ public class PrivateRoom : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             OnUI(collision.gameObject);
+            playersList.Add(collision.gameObject);
+
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+          //  playersList.Add(collision.gameObject);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            for(int i = 0; i < playersList.Count; i++)
+            {
+                if (playersList[i] == collision.gameObject)
+                {
+                    playersList.RemoveAt(i);
+                    boxCollider.isTrigger = false;
+                    break;
+                }
+            }
+            if(playersList.Count == 0)
+            {
+                activeRoom = false;
+            }
 
         }
     }
