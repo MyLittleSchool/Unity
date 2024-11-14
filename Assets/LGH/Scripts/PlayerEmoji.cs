@@ -127,7 +127,7 @@ namespace GH
             }
             else
             {
-                stingDir = GetComponent<PlayerMove>().stingDirPun;
+                stingDir = GetComponent<PlayerMove>().stingDir;
                 playerStingName = "test";
 
             }

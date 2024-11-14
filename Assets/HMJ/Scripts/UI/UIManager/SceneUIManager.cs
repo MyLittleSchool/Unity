@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using static HttpManager;
@@ -212,7 +213,7 @@ namespace MJ
         [Header("학년 드롭다운")]
         public TMP_Dropdown schoolGradeDropDown;
 
-        public List<string> schoolName ;
+        public List<string> schoolName;
         #endregion
 
         private void Start()
@@ -243,14 +244,17 @@ namespace MJ
         {
             //ProfileEditCount();
 
-
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (firstSchoolPanel.activeSelf)
             {
-                print("엔터");
-                SchoolGet();
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    print("엔터");
+                    SchoolGet();
+                }
+                schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
+                TouchPlayer();
+
             }
-            schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
-            TouchPlayer();
         }
 
         public void RestartSetting(
@@ -661,10 +665,9 @@ namespace MJ
         }
         private void SchoolSave()
         {
-           //학년 추가======================-=====
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/school/add-user?schoolId="
-                + schooldata.data[schoolDropDown.value].id+ "&userId=" + AuthManager.GetInstance().userAuthData.userInfo.id
+                + schooldata.data[schoolDropDown.value].id + "&userId=" + AuthManager.GetInstance().userAuthData.userInfo.id
                 + "&user_grade=" + schoolGradeDropDown.value;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
@@ -672,7 +675,8 @@ namespace MJ
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
 
-
+            AuthManager.GetInstance().userAuthData.userInfo.school.schoolName = schooldata.data[schoolDropDown.value].schoolName;
+            DataManager.instance.playerSchool = schooldata.data[schoolDropDown.value].schoolName;
             firstSchoolPanel.SetActive(false);
 
             StartCoroutine(CoUserGet());
@@ -701,7 +705,7 @@ namespace MJ
 
             print("학교 정보 불러오기");
 
-          
+
 
         }
         private void SetSchoolName(int option)
@@ -722,7 +726,7 @@ namespace MJ
 
             schoolDropDown.Show();
 
-           
+
         }
 
         IEnumerator CoUserGet()
@@ -748,7 +752,7 @@ namespace MJ
             // 터치 입력이 발생했을 때만 처리
             if (Input.touchCount > 0)
             {
-                Touch touch = Input.GetTouch(0);
+                UnityEngine.Touch touch = Input.GetTouch(0);
 
                 // 터치가 시작되었을 때 처리
                 if (touch.phase == TouchPhase.Began)
@@ -756,10 +760,8 @@ namespace MJ
                     // UI가 터치를 가로챘는지 확인
                     if (IsPointerOverUIObject(touch.position))
                     {
-                        //Debug.Log("UI를 터치했습니다.");
                         return; // UI가 터치를 가로챘으므로 월드 오브젝트와의 상호작용을 중지
                     }
-
                     // UI가 아닌 2D 콜라이더 오브젝트 터치 처리
                     Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
                     HandleInteraction(touchPosition);
@@ -767,6 +769,11 @@ namespace MJ
             }
             else if (Input.GetMouseButtonDown(0))
             {
+                // UI가 터치를 가로챘는지 확인
+                if (IsPointerOverUIObject(Input.mousePosition))
+                {
+                    return; // UI가 터치를 가로챘으므로 월드 오브젝트와의 상호작용을 중지
+                }
                 Vector2 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 HandleInteraction(clickPosition);
             }
@@ -792,27 +799,6 @@ namespace MJ
             }
             else othersProfilePanel.SetActive(false);
         }
-        private void InitOtherPlayerPanel()
-        {
-            FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
-            comp.PassButton.onClick.AddListener(() =>
-            {
-                othersProfilePanel.SetActive(false);
-            });
-            comp.RequestButton.onClick.AddListener(() =>
-            {
-                int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                int targetId = comp.id;
-                HttpManager httpManager = HttpManager.GetInstance();
-                HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-                info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
-                info.onComplete = (DownloadHandler res) =>
-                {
-                    print(res.text);
-                };
-                StartCoroutine(HttpManager.GetInstance().Post(info));
-            });
-        }
         private bool IsPointerOverUIObject(Vector2 touchPosition)
         {
             // PointerEventData 생성 및 터치 위치 설정
@@ -835,6 +821,27 @@ namespace MJ
 
             // Default 레이어만 감지되었거나, UI가 없으면 false 반환
             return false;
+        }
+        private void InitOtherPlayerPanel()
+        {
+            FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
+            comp.PassButton.onClick.AddListener(() =>
+            {
+                othersProfilePanel.SetActive(false);
+            });
+            comp.RequestButton.onClick.AddListener(() =>
+            {
+                int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                int targetId = comp.id;
+                HttpManager httpManager = HttpManager.GetInstance();
+                HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
+                info.onComplete = (DownloadHandler res) =>
+                {
+                    print(res.text);
+                };
+                StartCoroutine(HttpManager.GetInstance().Post(info));
+            });
         }
     }
 }
