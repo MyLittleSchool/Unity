@@ -25,9 +25,10 @@ namespace GH
         // ¸ðµ¨ À§Ä¡°ª
         public Transform modelTransform;
 
-
+        private AudioSource audioSource;
         void Start()
         {
+            audioSource = GetComponent<AudioSource>();
             playerMove = GetComponent<PlayerMove>();
 
             emojiTransform = GameManager.instance.emojiTransform;
@@ -168,6 +169,15 @@ namespace GH
             if (collision.gameObject.layer == LayerMask.NameToLayer("Sting") && stingMove.stingPlayer != photonView.Owner.NickName)
             {
                 modelTransform.localPosition = new Vector3(Random.Range(0, 0.15f), Random.Range(0, 0.15f), 0);
+            }
+        }
+        public AudioClip stingAudioClip;
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            StingMove stingMove = collision.GetComponent<StingMove>();
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Sting") && stingMove.stingPlayer != photonView.Owner.NickName)
+            {
+                audioSource.PlayOneShot(stingAudioClip);
             }
         }
     }
