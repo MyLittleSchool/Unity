@@ -29,7 +29,6 @@ namespace GH
         public TMP_InputField inputChat;
         // ChatItem Prefab
         public GameObject chatItemPrefab;
-        public School aa;
         public Color color;
         public string playerName;
 
@@ -60,9 +59,23 @@ namespace GH
         //채팅 채널 전환 버튼
         public Button chatChannel;
         private TMP_Text chatChannelText;
+
+        public static PhotonChatMgr instance;
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
         void Start()
         {
-            DontDestroyOnLoad(gameObject);
             playerName = DataManager.instance.playerName;
             //
             //currChannel = DataManager.instance.playerSchool;
@@ -98,7 +111,7 @@ namespace GH
 
            
         }
-        private void ChatChannelChange()
+        public void ChatChannelChange()
         {
             currentLogin = currentLogin == Loginstep.All ? Loginstep.School : Loginstep.All;
             switch (currentLogin)
@@ -106,10 +119,12 @@ namespace GH
                 case Loginstep.All:
                     JoinChatRoom(DataManager.instance.playerCurrChannel);
                     chatChannelText.text = "전체";
+                    print("전체");
+
                     break;
                 case Loginstep.School:
                     chatChannelText.text = "학교";
-
+                    print("학교");
                     JoinChatRoom(AuthManager.GetInstance().userAuthData.userInfo.school.schoolName);
                     break;
                 case Loginstep.Private:
@@ -119,6 +134,7 @@ namespace GH
 
         void PhotonChatConnect()
         {
+            print("커넥트 진입");
             //포톤 설정 가져오기
             AppSettings photonSettings = PhotonNetwork.PhotonServerSettings.AppSettings;
 
@@ -140,6 +156,7 @@ namespace GH
             chatClient.AuthValues = new Photon.Chat.AuthenticationValues(playerName);
             //연결시도
             chatClient.ConnectUsingSettings(chatAppSettings);
+            print("연결 시도");
 
         }
 
@@ -160,12 +177,12 @@ namespace GH
 
             currChannel = newRoom;
             PhotonChatConnect();
+            print(newRoom + "룸 만들었다!");
             //chatClient.Subscribe(new string[] { currChannel });
         }
 
         private void OnSubmit(string s)
         {
-            ChatLogSeverPost(s);
             // 채팅창에 아무것도 없으면 함수를 끝낸다.
             if (inputChat.text.Length < 1)
                 return;
@@ -180,6 +197,7 @@ namespace GH
             //    nickName = playerName;
             //}
 
+            ChatLogSeverPost(s);
 
             //귓속말인지 판단
             // /w 아이디 메시지면 귓속말
@@ -191,8 +209,8 @@ namespace GH
             {
                 chat = text[0] + "  " + text[1];
                 //귓속말 보내기
-                chatClient.SendPrivateMessage(text[1].Remove(0, 1), chat);
-                print(text[1] + "에게 귓속말");
+                chatClient.SendPrivateMessage(text[0].Remove(0, 1), chat);
+                print(text[0].Remove(0, 1) + "에게 귓속말");
                 inputChat.text = "";
             }
             else
@@ -224,9 +242,19 @@ namespace GH
         public void DebugReturn(DebugLevel level, string message)
         {
         }
+        public void OnChatStateChange(ChatState state)
+        {
+            Debug.Log($"Chat State Changed: {state}");
+        }
 
+        public void OnErrorInfo(ErrorInfo errorInfo)
+        {
+            Debug.LogError($"Error: {errorInfo.Info}");
+        }
         public void OnDisconnected()
         {
+            PhotonChatConnect();
+            print("실패!!!!!!");
         }
 
         //채팅 서버에 접속 성공하면 호출되는 함수
@@ -240,9 +268,7 @@ namespace GH
 
         }
 
-        public void OnChatStateChange(ChatState state)
-        {
-        }
+      
 
         // 특정 채널에 메시지가 들어올 때 호출되는 함수
         public void OnGetMessages(string channelName, string[] senders, object[] messages)

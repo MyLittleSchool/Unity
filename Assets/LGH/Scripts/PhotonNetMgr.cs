@@ -160,7 +160,6 @@ namespace GH
         {
             //방에 들어간다.
             PhotonNetwork.JoinRoom(roomName);
-            DataManager.instance.playerCurrChannel = roomName;
 
         }
 
@@ -184,7 +183,9 @@ namespace GH
         {
             base.OnJoinedRoom();
             topMenuText.text = roomName;
-
+            DataManager.instance.playerCurrChannel = roomName;
+            PhotonChatMgr.instance.currChannel = roomName;
+            PhotonChatMgr.instance.ChatChannelChange();
 
             // 성공적으로 방이 만들어졌다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");

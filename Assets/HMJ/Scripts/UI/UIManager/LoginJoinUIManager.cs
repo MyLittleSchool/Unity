@@ -213,6 +213,7 @@ namespace GH
 
             }
             logins[(int)currentLoginstep + 1].SetActive(true);
+            
             currentLoginstep++;
         }
         public void BackStep()
@@ -353,12 +354,14 @@ namespace GH
 
             logins[7].SetActive(false);
             logins[2].SetActive(true);
+
+            currentLoginstep = Loginstep.LOGIN;
         }
 
         private void UserLogin()
         {
             HttpInfo info = new HttpInfo();
-            info.url =  HttpManager.GetInstance().SERVER_ADRESS + "/user/email?email=" + loginList[0].text;
+            info.url =  HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 string jsonData = "{ \"data\" : " + downloadHandler.text + "}";

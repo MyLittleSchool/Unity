@@ -18,7 +18,6 @@ namespace GH
         public VariableJoystick joystick;
 
         public Vector3 stingDir;
-        public Vector3 stingDirPun;
 
         //Æ÷Åæ º¯¼ö°ª
         Vector3 myPos;

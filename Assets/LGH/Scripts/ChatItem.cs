@@ -31,7 +31,7 @@ namespace GH
         {
             //컬러 안나오는거 해결하기
             string[] text = msg.Split(" ", 2);
-            if (text[0] == DataManager.instance.name)
+            if (text[0] == DataManager.instance.playerName)
             {
                 print("색상변경11");
                 text[0] = "<color=#" + ColorUtility.ToHtmlStringRGB(chatColor) + ">" + text[0] + "</color>";
