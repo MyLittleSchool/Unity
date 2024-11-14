@@ -20,6 +20,12 @@ namespace MJ
         public UnityEngine.UI.Button MapRegisterCloseButton;
         public UnityEngine.UI.Button MapContestCloseButton;
 
+        [Header("아바타 꾸미기 On 버튼")]
+        public Button avatarDecoOpenButton;
+
+        [Header("아바타 꾸미기 Off 버튼")]
+        public Button avatarDecoOffButton;
+
         [Header("꾸미기 패널 - Skin, Face, Hair, Cloth")]
         public UnityEngine.UI.Button[] decorationEnumButton;
 
@@ -311,6 +317,12 @@ namespace MJ
             if (InventoryErrorCloseButton)
                 InventoryErrorCloseButton.onClick.AddListener(OffMapInventoryErrorPanel);
 
+            if (avatarDecoOpenButton)
+                avatarDecoOpenButton.onClick.AddListener(OnDecorationPanel);
+
+            if (avatarDecoOffButton)
+                avatarDecoOffButton.onClick.AddListener(OffDecorationPanel);
+
             if (_mapContestPanel)
                 mapContestPanel = _mapContestPanel;
             if (_mapRegisterPanel)
@@ -323,8 +335,14 @@ namespace MJ
 
         public void initDecorationPanel()
         {
+            avatarDecoOpenButton.onClick.AddListener(OnDecorationPanel);
+            avatarDecoOffButton.onClick.AddListener(OffDecorationPanel);
+
             PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
+            DecorationDT.LoadDecorationData();
+
             PlayerAnimation AnimationDT = PlayerObject.GetComponent<PlayerAnimation>();
+            AnimationDT.InitPlayerAnimation();
 
             for (int i = 0; i < decorationEnumButton.Length; i++)
             {
@@ -337,12 +355,14 @@ namespace MJ
                 int data = i;
                 decorationChoiceButton[i].onClick.AddListener(() =>
                 {
-                    DecorationDT.SetPlayerSelectDecorationData(DecorationDT.CurDecorationPanel, data);
-
+                    if (!DecorationDT.SetPlayerSelectDecorationData(DecorationDT.CurDecorationPanel, data))
+                        return;
                     AnimationDT.ResetDecorationAnimData(DecorationDT.CurDecorationPanel);
                     AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
                 });
             }
+
+            OffDecorationPanel();
         }
         public void OnGuestbookPanel()
         {
@@ -452,6 +472,17 @@ namespace MJ
             myProfileImage.color = myprofileColor;
 
         }
+
+        public void OnDecorationPanel()
+        {
+            DecorationPanel.SetActive(true);
+        }
+
+        public void OffDecorationPanel()
+        {
+            DecorationPanel.SetActive(false);
+        }
+        
 
         public void OffMapInventoryErrorPanel()
         {
@@ -702,6 +733,7 @@ namespace MJ
 
             HttpInfo info2 = new HttpInfo();
             info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + AuthManager.GetInstance().userAuthData.userInfo.email;
+            Debug.Log("로그인 url: " + info2.url);
             info2.onComplete = (DownloadHandler downloadHandler) =>
             {
                 string jsonData = "{ \"data\" : " + downloadHandler.text + "}";

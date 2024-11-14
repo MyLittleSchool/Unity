@@ -8265,6 +8265,7 @@ MonoBehaviour:
   chatMainPanelRecttransform: {fileID: 274811290}
   chatPanelRecttransform: {fileID: 1285061394}
   chatList: []
+  chatChannel: {fileID: 0}
 --- !u!4 &412267817
 Transform:
   m_ObjectHideFlags: 0
@@ -12874,6 +12875,46 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4758458244009043989, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4758458244009043989, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4758458244009043989, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4758458244009043989, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5614851395618054796, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5614851395618054796, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5614851395618054796, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5614851395618054796, guid: b70e57a47e11ee34ba7d2cf32a9b4052,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13436,8 +13477,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 657.1875, y: -0}
-  m_SizeDelta: {x: 1314.375, y: 0}
+  m_AnchoredPosition: {x: 720, y: -0}
+  m_SizeDelta: {x: 1440, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &668502096
 MonoBehaviour:
@@ -15722,6 +15763,11 @@ PrefabInstance:
     - target: {fileID: 7694443197756836038, guid: 5456f0a3c6bd31e41ad76881be0baea0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7924442456430908891, guid: 5456f0a3c6bd31e41ad76881be0baea0,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8063423977866545608, guid: 5456f0a3c6bd31e41ad76881be0baea0,
@@ -20141,8 +20187,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 657.1875, y: -210}
-  m_SizeDelta: {x: 1314.375, y: 0}
+  m_AnchoredPosition: {x: 720, y: -210}
+  m_SizeDelta: {x: 1440, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1285061395
 MonoBehaviour:
@@ -25389,6 +25435,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapRegisterCloseButton: {fileID: 0}
   MapContestCloseButton: {fileID: 0}
+  avatarDecoOpenButton: {fileID: 0}
+  avatarDecoOffButton: {fileID: 0}
   decorationEnumButton: []
   decorationChoiceButton: []
   mapRegisterButton: {fileID: 0}
@@ -25421,10 +25469,12 @@ MonoBehaviour:
   ChatPanel: {fileID: 1285061393}
   myProfilePanel: {fileID: 1586500760}
   myProfileEditPanel: {fileID: 459013697}
+  othersProfilePanel: {fileID: 0}
   playerList: {fileID: 1129481932}
   firstLoginPanel: {fileID: 1871245159}
   firstSchoolPanel: {fileID: 404184216}
   visitOtherSchoolPanel: {fileID: 0}
+  privateRoomPanel: {fileID: 0}
   nickNameInputField: {fileID: 130431467}
   interestInputField: {fileID: 1904312805}
   myMessageInputField: {fileID: 667437857}
