@@ -830,7 +830,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &46442232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1182,7 +1182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &86954402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4471,9 +4471,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpeed: 5
   playerAnimator: {fileID: 1852051166}
+  joystickDeg: 0
   joystick: {fileID: 0}
   stingDir: {x: 0, y: 0, z: 0}
-  stingDirPun: {x: 0, y: 0, z: 0}
+  onIdle: 1
+  interactionMode: 0
 --- !u!4 &472067771
 Transform:
   m_ObjectHideFlags: 0
@@ -7088,7 +7090,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 17.807692
+  orthographic size: 20.512821
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -11705,16 +11707,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62d6de110ce48b243b3c157c8e998051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginButton: {fileID: 1459550040}
-  KakaoLoginButton: {fileID: 857380341}
+  currentLoginstep: 0
+  currentJoinInfo:
+    id: 0
+    socialId: 
+    name: 
+    grade: 0
+    birthday: 
+    gender: 0
+    email: 
+    password: 
+    phone: 
+    interest: []
+    statusMesasge: 
+    schoolId: 0
+    level: 0
+    exp: 0
+    maxExp: 0
+    isOnline: 0
+    school:
+      id: 0
+      schoolName: 
+      location: 
+      onlineUserCount: 0
+      backgroundColorId: 0
+      furnitureList: []
+  getUserInfo:
+    data:
+      id: 0
+      socialId: 
+      name: 
+      grade: 0
+      birthday: 
+      gender: 0
+      email: 
+      password: 
+      phone: 
+      interest: []
+      statusMesasge: 
+      schoolId: 0
+      level: 0
+      exp: 0
+      maxExp: 0
+      isOnline: 0
+      school:
+        id: 0
+        schoolName: 
+        location: 
+        onlineUserCount: 0
+        backgroundColorId: 0
+        furnitureList: []
+  nextButtons: []
+  backButtons: []
+  checkIDButton: {fileID: 0}
+  checkNumButton: {fileID: 0}
   joinButton: {fileID: 1196342658}
-  kakaoJoinButton: {fileID: 855981298}
-  kakaoLoginCloseButton: {fileID: 680691711}
-  kakaoJoinCloseButton: {fileID: 1739354421}
-  loginPanel: {fileID: 931558320}
-  KakaoLoginPanel: {fileID: 515855681}
-  JoinPanel: {fileID: 1731543019}
-  KakaoJoinPanel: {fileID: 14348822}
+  menButton: {fileID: 0}
+  womenButton: {fileID: 0}
+  logins: []
+  indexSlider: {fileID: 0}
+  checkIDText: {fileID: 0}
+  checkNumText: {fileID: 0}
+  pWInputField: {fileID: 0}
+  pWCheckInputField: {fileID: 0}
+  interestButtonPrefab: {fileID: 0}
+  interestButtonTransform: {fileID: 0}
+  interestText: {fileID: 0}
+  selectedInterest: []
+  gender: 0
+  joinInfoInfoList: []
+  loginList: []
+  loginButton: {fileID: 1459550040}
+  PWCheckText: {fileID: 0}
+  schoolInputField: {fileID: 0}
 --- !u!1 &1196342656
 GameObject:
   m_ObjectHideFlags: 0
@@ -21856,6 +21921,74 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4607189159790269106}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1672291154992154458
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8651488702874747149, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_Name
+      value: Teacher
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183754962957252568, guid: b1d2bfe80100d8b419dca3fab8254d43,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b1d2bfe80100d8b419dca3fab8254d43, type: 3}
 --- !u!1001 &3450773194293287192
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22764,6 +22897,7 @@ SceneRoots:
   - {fileID: 472067771}
   - {fileID: 1713166527}
   - {fileID: 1669478118}
+  - {fileID: 1672291154992154458}
   - {fileID: 7715604034282033226}
   - {fileID: 2028911274}
   - {fileID: 46442235}

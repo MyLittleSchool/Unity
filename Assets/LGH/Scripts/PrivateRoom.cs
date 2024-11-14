@@ -67,6 +67,7 @@ namespace GH
         }
         public override void OnJoinedRoom()
         {
+            base.OnJoinedRoom();
             if (!PhotonNetwork.IsMasterClient) photonView.RPC(nameof(ReqSync), PhotonNetwork.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
         }
         [PunRPC]
