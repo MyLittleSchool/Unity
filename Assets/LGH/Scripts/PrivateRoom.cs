@@ -10,7 +10,7 @@ using Photon.Pun;
 namespace GH
 {
 
-    public class PrivateRoom : MonoBehaviourPun, IPunObservable
+    public class PrivateRoom : MonoBehaviourPunCallbacks, IPunObservable
     {
         public List<GameObject> playersList = new List<GameObject>();
         private GameObject passWordPanel;
@@ -64,9 +64,11 @@ namespace GH
             darkSprite = transform.GetChild(0).gameObject;
 
             StartCoroutine(PlayerSuch());
+        }
+        public override void OnJoinedRoom()
+        {
             if (!PhotonNetwork.IsMasterClient) photonView.RPC(nameof(ReqSync), PhotonNetwork.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
         }
-
         [PunRPC]
         public void ReqSync(int actorNumber)
         {
