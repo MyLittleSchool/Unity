@@ -14,7 +14,7 @@ namespace MJ
         /// <summary>
         /// Player 아바타 꾸밈 정보
         /// </summary>
-        private int[] decorationData = new int[4];
+        private int[] decorationData = new int[5];
 
         /// <summary>
         /// 파일에서 직접 로드할 이미지 데이터
@@ -41,7 +41,7 @@ namespace MJ
 
         private void Start()
         {
-            LoadDecorationData();
+
         }
 
         /// <summary>
@@ -55,9 +55,12 @@ namespace MJ
                 return;
 
             curDecorationPanel = _DATA;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
-                decorationImage[i].texture = loadDecorationImage[(int)_DATA, i];
+                if (loadDecorationImage[(int)_DATA, i])
+                    decorationImage[i].texture = loadDecorationImage[(int)_DATA, i];
+                else
+                    decorationImage[i].texture = null;
             }
         }
 
@@ -66,9 +69,13 @@ namespace MJ
         /// </summary>
         /// <param name="_DATA"></param>
         /// <param name="idx"></param>
-        public void SetPlayerSelectDecorationData(DECORATION_DATA _DATA, int idx)
+        public bool SetPlayerSelectDecorationData(DECORATION_DATA _DATA, int idx)
         {
+            if (!loadDecorationImage[(int)_DATA, idx])
+                return false;
+
             decorationData[(int)_DATA] = idx;
+            return true;
         }
 
         /// <summary>
@@ -88,6 +95,12 @@ namespace MJ
                     loadDecorationImage[i, j] = Resources.LoadAll<Sprite>(data)[0].texture;
                 }
             }
+        }
+
+        private void OnEnable()
+        {
+            curDecorationPanel = DECORATION_DATA.SKIN;
+            SetPlayerDecorationData(curDecorationPanel);
         }
     }
 
