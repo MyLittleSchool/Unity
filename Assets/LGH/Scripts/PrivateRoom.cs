@@ -6,12 +6,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace GH
 {
 
-    public class PrivateRoom : MonoBehaviourPun, IPunObservable
+    public class PrivateRoom : MonoBehaviourPun
     {
         public List<GameObject> playersList = new List<GameObject>();
         private GameObject passWordPanel;
@@ -35,11 +34,18 @@ namespace GH
 
         private BoxCollider2D boxCollider;
 
-        private bool activeRoom = false;
+        public bool activeRoom = false;
 
         public GameObject playerMine;
 
         private GameObject darkSprite;
+
+        public int roomNum;
+
+        // 프라이빗 룸 선별(임시)
+        public bool playerCheck = false;
+
+        Vector3 enterPosition;
 
         void Start()
         {
@@ -84,34 +90,40 @@ namespace GH
 
         public void PassWordCheck()
         {
-            if (!activeRoom)
+            if (playersList.Count == 1)
             {
-                if (playersList.Count == 1)
+                PrivateRoomManager.instance.privateRooms[roomNum].roomPassword = passWordInputField.text;
+                if (playerCheck)
                 {
 
-                    roomPassword = passWordInputField.text;
                     if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
                     {
                         passWordPanel.SetActive(false);
-                        boxCollider.isTrigger = true;
 
                         playerMine.transform.position = gameObject.transform.position - new Vector3(0, 1.5f, 0);
-                        activeRoom = true;
+                        playerCheck = false;
                     }
                 }
 
 
             }
-            else
+            if (activeRoom)
             {
-                if (passWordInputField.text == roomPassword)
+                if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
                 {
-                    boxCollider.isTrigger = true;
-                    passWordPanel.SetActive(false);
-                }
-                else
-                {
-                    passWordWrongText.gameObject.SetActive(true);
+                    if (passWordInputField.text == roomPassword)
+                    {
+                        passWordPanel.SetActive(false);
+                        playerCheck = false;
+                        playerMine.transform.position = gameObject.transform.position - new Vector3(0, 1.5f, 0);
+
+                    }
+                    else
+                    {
+
+                        passWordWrongText.gameObject.SetActive(true);
+
+                    }
                 }
 
             }
@@ -121,22 +133,29 @@ namespace GH
         public void PassWordExit()
         {
             passWordPanel.SetActive(false);
-            if (!activeRoom)
+            if (playerCheck)
             {
-                if (playersList.Count == 1)
+                if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
                 {
-                    if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
+                    darkSprite.SetActive(false);
+                    playerMine.transform.position = gameObject.transform.position - new Vector3(0, 4f, 0);
+                    playerMine = null;
+                    playerCheck = false;
+                    darkSprite.SetActive(false);
+
+                    if (playersList.Count == 1)
                     {
-                        darkSprite.SetActive(false);
-                        playerMine = null;
-                        playersList.Clear();
+                    }
+                    else
+                    {
+
                     }
                 }
 
 
             }
         }
-    
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -147,9 +166,12 @@ namespace GH
                     OnUI();
                     darkSprite.SetActive(true);
                     playerMine = collision.gameObject;
-
+                    playerCheck = true;
+                    enterPosition = collision.transform.position;
                 }
                 playersList.Add(collision.gameObject);
+                activeRoom = true;
+
             }
         }
         private void OnTriggerExit2D(Collider2D collision)
@@ -163,7 +185,6 @@ namespace GH
                         playersList.RemoveAt(i);
                         if (collision.gameObject.GetComponent<PhotonView>().IsMine)
                         {
-                            boxCollider.isTrigger = false;
                             darkSprite.SetActive(false);
                             playerMine = null;
                         }
@@ -177,21 +198,38 @@ namespace GH
 
             }
         }
-
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
-            if (stream.IsWriting)
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-
+                if (collision.gameObject.GetPhotonView().IsMine)
+                {
+                    if (playerCheck)
+                    {
+                        collision.transform.position = enterPosition;
+                    }
+                }
             }
-            //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
-            else if (stream.IsReading)
-            {
-                //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
 
-            }
         }
+
+        //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        //{
+        //    // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
+        //    if (stream.IsWriting)
+        //    {
+        //        stream.SendNext(roomPassword);
+        //        stream.SendNext(activeRoom);
+
+        //    }
+        //    //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
+        //    else if (stream.IsReading)
+        //    {
+        //        //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
+        //        roomPassword = (string)stream.ReceiveNext();
+        //        activeRoom = (bool)stream.ReceiveNext();
+        //    }
+        //}
 
         IEnumerator PlayerSuch()
         {

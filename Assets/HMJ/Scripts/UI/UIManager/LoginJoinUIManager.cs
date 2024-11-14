@@ -213,6 +213,7 @@ namespace GH
 
             }
             logins[(int)currentLoginstep + 1].SetActive(true);
+            
             currentLoginstep++;
         }
         public void BackStep()
@@ -353,6 +354,8 @@ namespace GH
 
             logins[7].SetActive(false);
             logins[2].SetActive(true);
+
+            currentLoginstep = Loginstep.LOGIN;
         }
 
         private void UserLogin()

@@ -634,7 +634,6 @@ namespace MJ
         }
         private void SchoolSave()
         {
-            //학년 추가======================-=====
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/school/add-user?schoolId="
                 + schooldata.data[schoolDropDown.value].id + "&userId=" + AuthManager.GetInstance().userAuthData.userInfo.id
@@ -645,7 +644,8 @@ namespace MJ
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
 
-
+            AuthManager.GetInstance().userAuthData.userInfo.school.schoolName = schooldata.data[schoolDropDown.value].schoolName;
+            DataManager.instance.playerSchool = schooldata.data[schoolDropDown.value].schoolName;
             firstSchoolPanel.SetActive(false);
 
             StartCoroutine(CoUserGet());
