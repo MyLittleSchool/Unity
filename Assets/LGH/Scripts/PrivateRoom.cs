@@ -10,7 +10,7 @@ using Photon.Pun;
 namespace GH
 {
 
-    public class PrivateRoom : MonoBehaviourPun
+    public class PrivateRoom : MonoBehaviourPun, IPunObservable
     {
         public List<GameObject> playersList = new List<GameObject>();
         private GameObject passWordPanel;
@@ -64,12 +64,18 @@ namespace GH
             darkSprite = transform.GetChild(0).gameObject;
 
             StartCoroutine(PlayerSuch());
-
+            if (!PhotonNetwork.IsMasterClient) photonView.RPC(nameof(ReqSync), PhotonNetwork.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
         }
 
-        void Update()
+        [PunRPC]
+        public void ReqSync(int actorNumber)
         {
-
+            photonView.RPC(nameof(ResSync), PhotonNetwork.CurrentRoom.GetPlayer(actorNumber), roomPassword);
+        }
+        [PunRPC]
+        public void ResSync(string password)
+        {
+            roomPassword = password;
         }
 
         private void OnUI()
@@ -88,14 +94,20 @@ namespace GH
             }
         }
 
+        [PunRPC]
+        public void PassWordUpload(string s)
+        {
+            PrivateRoomManager.instance.privateRooms[roomNum].roomPassword = s;
+        }
+
         public void PassWordCheck()
         {
             if (playersList.Count == 1)
             {
-                PrivateRoomManager.instance.privateRooms[roomNum].roomPassword = passWordInputField.text;
+               
                 if (playerCheck)
                 {
-
+                    photonView.RPC(nameof(PassWordUpload), RpcTarget.All, passWordInputField.text);
                     if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
                     {
                         passWordPanel.SetActive(false);
@@ -213,23 +225,19 @@ namespace GH
 
         }
 
-        //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        //{
-        //    // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
-        //    if (stream.IsWriting)
-        //    {
-        //        stream.SendNext(roomPassword);
-        //        stream.SendNext(activeRoom);
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            // 만일 데이터를 서버에 전송(PhotonView.IsMine == true)하는 상태라면
+            if (stream.IsWriting)
+            {
 
-        //    }
-        //    //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
-        //    else if (stream.IsReading)
-        //    {
-        //        //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
-        //        roomPassword = (string)stream.ReceiveNext();
-        //        activeRoom = (bool)stream.ReceiveNext();
-        //    }
-        //}
+            }
+            //그렇지 않고 만일 데이터를 서버로부터 읽어오는 상태라면
+            else if (stream.IsReading)
+            {
+                //위에 받는 순서대로 변수를 캐스팅 해줘야 한다.
+            }
+        }
 
         IEnumerator PlayerSuch()
         {
