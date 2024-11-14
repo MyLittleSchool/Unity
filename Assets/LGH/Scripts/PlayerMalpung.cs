@@ -22,6 +22,11 @@ namespace GH
         bool onMalpung = true;
         //bool onMalpung_Pun;
 
+        [Header("ÀÔ·Â¸»Ç³")]
+        public GameObject inputMalpung;
+        public TMP_InputField malpungInputField;
+
+
         void Start()
         {
             //¸»Ç³¼± ²ô±â

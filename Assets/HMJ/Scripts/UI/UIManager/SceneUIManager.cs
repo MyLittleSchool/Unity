@@ -238,7 +238,7 @@ namespace MJ
             SetProfile();
             // initDecorationPanel();
             InitOtherPlayerPanel();
-            initDecorationPanel();
+            //initDecorationPanel();
         }
         private void Update()
         {
@@ -252,9 +252,9 @@ namespace MJ
                     SchoolGet();
                 }
                 schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
-                TouchPlayer();
 
             }
+            TouchPlayer();
         }
 
         public void RestartSetting(

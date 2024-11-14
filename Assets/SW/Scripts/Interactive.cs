@@ -20,7 +20,7 @@ namespace SW
         {
             return interacterName;
         }
-        public void HighlightOff()
+        public virtual void HighlightOff()
         {
             material.SetInt("_On", 0);
             print("²¨Áü");
