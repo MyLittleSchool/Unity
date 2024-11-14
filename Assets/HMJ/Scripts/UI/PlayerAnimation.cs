@@ -20,17 +20,11 @@ namespace MJ
         public List<int> infoList;
     }
 
-    [Serializable]
-    public class AvatarIndexDataList
-    {
-        public List<AvatarIndexData> response;
-    }
-
     public class PlayerAnimation : MonoBehaviour
     {
         //public static PlayerAnimation instance;
 
-        AvatarIndexDataList avatarIndexData;
+        AvatarIndexData avatarIndexData;
 
         //private void Awake()
         //{
@@ -60,7 +54,6 @@ namespace MJ
             playerAnimator[(int)decorationData].SetBool("Anim" + (idx + 1).ToString(), true);
             animatorIndex[(int)decorationData] = idx;
 
-            //SendAvatarData();
             ResetDecorationAnim();
         }
 
@@ -99,16 +92,9 @@ namespace MJ
         // 아바타 데이터 전송
         public void SendAvatarData()
         {
-            if (!gameObject.activeSelf)
-                return;
-            AvatarIndexDataList avatarInfoList = new AvatarIndexDataList();
-            AvatarIndexData avatarInfo = new AvatarIndexData();
-
-            avatarInfo.userId = DataManager.instance.mapId;
-            avatarInfo.infoList = animatorIndex.ToList();
-
-            avatarInfoList.response = new List<AvatarIndexData>();
-            avatarInfoList.response.Add(avatarInfo);
+            AvatarIndexData avatarInfoList = new AvatarIndexData();
+            avatarInfoList.userId = DataManager.instance.mapId;
+            avatarInfoList.infoList = animatorIndex.ToList();
 
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/avatar";
@@ -124,6 +110,22 @@ namespace MJ
             StartCoroutine(HttpManager.GetInstance().Post(info));
         }
 
+        public void FetchAvatarData()
+        {
+            AvatarIndexData avatarInfoList = new AvatarIndexData();
+            avatarInfoList.userId = DataManager.instance.mapId;
+            avatarInfoList.infoList = animatorIndex.ToList();
+
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/avatar";
+            info.body = JsonUtility.ToJson(avatarInfoList);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+            };
+            StartCoroutine(HttpManager.GetInstance().Patch(info));
+        }
 
         // 아바타 데이터 받기
         public void GetAvatarData()
@@ -132,9 +134,9 @@ namespace MJ
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/avatar?userId=" + DataManager.instance.mapId;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
-                avatarIndexData = JsonUtility.FromJson<AvatarIndexDataList>(downloadHandler.text);
+                avatarIndexData = JsonUtility.FromJson<AvatarIndexData>(downloadHandler.text);
                 Debug.Log("--------------------------------------------------------------------------------");
-                Debug.Log("아바타 정보 리스트: " + avatarIndexData.response);
+                Debug.Log("아바타 정보 리스트: " + avatarIndexData);
                 Debug.Log("--------------------------------------------------------------------------------");
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));

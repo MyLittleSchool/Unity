@@ -12,7 +12,7 @@ namespace GH
         public float playerSpeed = 5f;
         public Animator playerAnimator;
         private bool moveAniTrriger = false;
-        private float joystickDeg;
+        public float joystickDeg;
 
         //¡∂¿ÃΩ∫∆Ω
         public VariableJoystick joystick;
@@ -38,7 +38,7 @@ namespace GH
         {
             if (GetComponent<PhotonView>().IsMine)
             {
-
+                Debug.Log("Horizontal: " + GameManager.instance.Joystick.Horizontal + ", Vertical: " + GameManager.instance.Joystick.Vertical);
                 if (joystick.Vertical != 0 && joystick.Horizontal != 0)
                 {
                     joystickDeg = Mathf.Rad2Deg * Mathf.Atan2(joystick.Vertical, joystick.Horizontal);
