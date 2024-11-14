@@ -44,6 +44,7 @@ public class MapContestScrollUI : ScrollUI
 
     public void LoadMapChild()
     {
+        ResetData();
         List<MapContestData> respon = MapContestLoader.GetInstance().mapDatas.response;
         for(int i = 0; i < respon.Count; i++)
         {
@@ -57,10 +58,13 @@ public class MapContestScrollUI : ScrollUI
             //mapRegisterData.likes = mapContestData.likeCount;
             //mapRegisterData.views = mapContestData.viewCount;
 
-            mapContestDataUI.SetRegisterData(respon[i], MapContestLoader.GetInstance().sprites[i]);
+            if (MapContestLoader.GetInstance().sprites.Count != 0)
+            {
+                mapContestDataUI.SetRegisterData(respon[i], MapContestLoader.GetInstance().sprites[i]);
 
-            itemlist.Add(item);
-            imageList.Add(item.GetComponent<Image>());
+                itemlist.Add(item);
+                imageList.Add(item.GetComponent<Image>());
+            }
         }
         SceneUIManager.GetInstance().OnMapSuccessRegisterPanel();
     }
