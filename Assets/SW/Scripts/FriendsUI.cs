@@ -247,6 +247,7 @@ namespace SW
                     }
                 }
                 if (tab == 0) ChangeTab(tab);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[0].GetComponent<RectTransform>());
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
 
@@ -304,6 +305,7 @@ namespace SW
                     }
                 }
                 if (tab == 1) ChangeTab(tab);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[1].GetComponent<RectTransform>());
             };
             StartCoroutine(HttpManager.GetInstance().Get(getinfo));
 
@@ -346,6 +348,7 @@ namespace SW
                     }
                 }
                 if (tab == 2) ChangeTab(tab);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[2].GetComponent<RectTransform>());
             };
             StartCoroutine(HttpManager.GetInstance().Get(waitInfo));
         }
@@ -393,6 +396,7 @@ namespace SW
                     });
                 }
                 if (tab == 3) ChangeTab(tab);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[3].GetComponent<RectTransform>());
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }
