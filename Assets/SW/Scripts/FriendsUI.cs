@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Photon.Pun;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -81,6 +82,7 @@ namespace SW
         {
             if (modifyBtnState == ModifyBtnState.Modify)
             {
+                checkedNum = 0;
                 modifyBtnState = ModifyBtnState.Cancel;
                 modifyBtnText.text = "취소";
                 for (int i = 0; i < contentsTabs[0].childCount; i++)
@@ -117,7 +119,7 @@ namespace SW
             {
                 for (int i = 0; i < contentsTabs[0].childCount; i++)
                 {
-                    contentsTabs[0].GetChild(i).Find("InviteButton").gameObject.SetActive(true);
+                    contentsTabs[0].GetChild(i).Find("EnterButton").gameObject.SetActive(true);
                     contentsTabs[0].GetChild(i).Find("ChatButton").gameObject.SetActive(true);
                     contentsTabs[0].GetChild(i).Find("CheckButton").GetChild(1).gameObject.SetActive(false);
                     modifyBtnState = ModifyBtnState.Modify;
@@ -293,7 +295,7 @@ namespace SW
                             };
                             StartCoroutine(HttpManager.GetInstance().Post(info3));
                             Destroy(newPanel);
-                            ChangeTab(tab);
+                            StartCoroutine(ChangeTab1FrameAfter());
                         });
                         // 수락
                         comp.RequestButton.onClick.AddListener(() =>
@@ -348,7 +350,7 @@ namespace SW
                             };
                             StartCoroutine(HttpManager.GetInstance().Post(info3));
                             Destroy(newPanel);
-                            ChangeTab(tab);
+                            StartCoroutine(ChangeTab1FrameAfter());
                         });
                     }
                 }
@@ -385,6 +387,7 @@ namespace SW
                     friendPanel.PassButton.onClick.AddListener(() =>
                     {
                         Destroy(newPanel);
+                        StartCoroutine(ChangeTab1FrameAfter());
                     });
                     friendPanel.RequestButton.onClick.AddListener(() =>
                     {
@@ -404,6 +407,11 @@ namespace SW
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[3].GetComponent<RectTransform>());
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
+        }
+        IEnumerator ChangeTab1FrameAfter()
+        {
+            yield return null;
+            ChangeTab(tab);
         }
         [Serializable]
         public class AIRecommendList

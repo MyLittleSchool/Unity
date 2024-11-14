@@ -238,7 +238,7 @@ namespace MJ
             SetProfile();
             initDecorationPanel();
             InitOtherPlayerPanel();
-            //initDecorationPanel();
+            initDecorationPanel();
         }
         private void Update()
         {
