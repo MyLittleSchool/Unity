@@ -246,9 +246,9 @@ namespace MJ
                     SchoolGet();
                 }
                 schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
-                TouchPlayer();
 
             }
+            TouchPlayer();
         }
 
         public void RestartSetting(
