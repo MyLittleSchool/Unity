@@ -62,8 +62,7 @@ namespace GH
             passWordExitButton.onClick.AddListener(PassWordExit);
             boxCollider = GetComponent<BoxCollider2D>();
             darkSprite = transform.GetChild(0).gameObject;
-
-            StartCoroutine(PlayerSuch());
+           // StartCoroutine(PlayerSuch());
             if (!PhotonNetwork.IsMasterClient) photonView.RPC(nameof(ReqSync), PhotonNetwork.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
         }
 

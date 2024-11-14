@@ -102,11 +102,6 @@ public class PlayerAnimator : MonoBehaviourPun, IPunObservable
 
         }
 
-        //명진이가 보낼 거.
-        //if (DataManager.instance.player.GetPhotonView().IsMine)
-        //{
-        //    DataManager.instance.player.GetPhotonView().RPC(nameof(SetAvatarPart), RpcTarget.AllBuffered, 1,2,3,4);
-        //}
     }
     [PunRPC]
     public void SetAvatarPart(int skinId, int clothesId, int faceId, int hairId)
