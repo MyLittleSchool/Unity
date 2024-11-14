@@ -10,7 +10,7 @@ using Photon.Pun;
 namespace GH
 {
 
-    public class PrivateRoom : MonoBehaviourPunCallbacks, IPunObservable
+    public class PrivateRoom : MonoBehaviourPun, IPunObservable
     {
         public List<GameObject> playersList = new List<GameObject>();
         private GameObject passWordPanel;
@@ -62,14 +62,10 @@ namespace GH
             passWordExitButton.onClick.AddListener(PassWordExit);
             boxCollider = GetComponent<BoxCollider2D>();
             darkSprite = transform.GetChild(0).gameObject;
-
-            StartCoroutine(PlayerSuch());
-        }
-        public override void OnJoinedRoom()
-        {
-            base.OnJoinedRoom();
+           // StartCoroutine(PlayerSuch());
             if (!PhotonNetwork.IsMasterClient) photonView.RPC(nameof(ReqSync), PhotonNetwork.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
         }
+
         [PunRPC]
         public void ReqSync(int actorNumber)
         {

@@ -236,7 +236,7 @@ namespace MJ
             InterestButtonCreate();
 
             SetProfile();
-            // initDecorationPanel();
+            initDecorationPanel();
             InitOtherPlayerPanel();
             initDecorationPanel();
         }

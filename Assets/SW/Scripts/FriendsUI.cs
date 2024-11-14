@@ -202,6 +202,11 @@ namespace SW
                             comp.StateText.text = "<color=#F2884B>접속중";
                             // 귓속말 보내기
                             comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "귓속말 보내기";
+                            comp.RequestButton.onClick.AddListener(() =>
+                            {
+                                PhotonChatMgr.instance.OneToOneChat(friend.name);
+                                gameObject.SetActive(false);
+                            });
                         }
                         else
                         {
