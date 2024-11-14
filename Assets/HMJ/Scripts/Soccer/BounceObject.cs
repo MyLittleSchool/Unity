@@ -124,13 +124,5 @@ public class BounceObject : MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        //if (stream.IsWriting)
-        //{
-        //    stream.SendNext(bBallBounce);
-        //}
-        //else if (stream.IsReading)
-        //{
-        //    bBallBounce = !(bool)stream.ReceiveNext();
-        //}
     }
 }
