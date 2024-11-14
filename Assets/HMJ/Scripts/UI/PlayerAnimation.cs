@@ -47,12 +47,13 @@ namespace MJ
             animatorIndex[(int)decorationData] = idx;
             //skin, cloth, face, hair
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (animMaxIndexData[i] <= animatorIndex[i])
                     return;
             }
-            AvatarEdit(animatorIndex[0] - 1, animatorIndex[3] - 1, animatorIndex[1] - 1, animatorIndex[2] - 1);
+            Debug.Log(animatorIndex[0] + ", " + animatorIndex[3] + ", " + animatorIndex[1] + ", " + animatorIndex[2]);
+            AvatarEdit(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
             ResetDecorationAnim();
         }
 

@@ -57,7 +57,7 @@ public class PlayerAnimator : MonoBehaviourPun, IPunObservable
             SpriteAnimation(face[faceid].idleAnimations, faceSpriteRenderer);
             SpriteAnimation(hair[hairid].idleAnimations, hairSpriteRenderer);
 
-            Debug.Log("clothes: " + clothesid + "skin: " + skinid + "face: " + faceid + "hair:" + hairid);
+           // Debug.Log("clothes: " + clothesid + "skin: " + skinid + "face: " + faceid + "hair:" + hairid);
         }
         else
         {
