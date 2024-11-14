@@ -361,8 +361,10 @@ namespace MJ
                 {
                     if (!DecorationDT.SetPlayerSelectDecorationData(DecorationDT.CurDecorationPanel, data))
                         return;
+                    //특정 패널 애니메이션 리셋
                     AnimationDT.ResetDecorationAnimData(DecorationDT.CurDecorationPanel);
                     AnimationDT.SetDecorationAnimData(DecorationDT.CurDecorationPanel, data);
+                    AnimationDT.UpdateDecorationAnimData();
                 });
             }
 

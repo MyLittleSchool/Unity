@@ -10,6 +10,7 @@ using static HttpManager;
 using static MapRegisterDataUI;
 using static MJ.DecorationEnum;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+using Photon.Pun;
 
 namespace MJ
 {
@@ -20,25 +21,10 @@ namespace MJ
         public List<int> infoList;
     }
 
-    public class PlayerAnimation : MonoBehaviour
+    public class PlayerAnimation : MonoBehaviourPun
     {
-        //public static PlayerAnimation instance;
-
         AvatarIndexData avatarIndexData;
 
-        //private void Awake()
-        //{
-        //    if (instance == null)
-        //    {
-        //        instance = this;
-        //        DontDestroyOnLoad(gameObject);
-        //    }
-        //    else
-        //    {
-        //        Destroy(gameObject);
-        //    }
-
-        //}
         private void Start()
         {
         }
@@ -47,13 +33,26 @@ namespace MJ
         private int[] animMaxIndexData = {3, 5, 4, 4 };
         public Animator[] playerAnimator = new Animator[(int)DecorationEnum.DECORATION_DATA.DECORATION_DATA_END];
 
+        /*
+         *            SKIN,
+            FACE,
+            HAIR,
+            CLOTH,
+         */
         public void SetDecorationAnimData(DecorationEnum.DECORATION_DATA decorationData, int idx)
         {
             if (animMaxIndexData[(int)decorationData] <= idx)
                 return;
             playerAnimator[(int)decorationData].SetBool("Anim" + (idx + 1).ToString(), true);
             animatorIndex[(int)decorationData] = idx;
+            //skin, cloth, face, hair
 
+            for(int i = 0; i < 4; i++)
+            {
+                if (animMaxIndexData[i] <= animatorIndex[i])
+                    return;
+            }
+            AvatarEdit(animatorIndex[0] - 1, animatorIndex[3] - 1, animatorIndex[1] - 1, animatorIndex[2] - 1);
             ResetDecorationAnim();
         }
 
@@ -83,8 +82,14 @@ namespace MJ
                 ResetDecorationAnimData((DecorationEnum.DECORATION_DATA)i);
                 SetDecorationAnimData((DecorationEnum.DECORATION_DATA)i, animatorIndex[i]);
             }
+
         }
 
+        public void UpdateDecorationAnimData()
+        {
+            for (int i = 0; i < (int)DecorationEnum.DECORATION_DATA.DECORATION_DATA_END; i++)
+                playerAnimator[i].SetBool("Anim" + (animatorIndex[i] + 1).ToString(), true);
+        }
 
         private void OnEnable()
         {
@@ -140,6 +145,15 @@ namespace MJ
                 Debug.Log("--------------------------------------------------------------------------------");
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
+        }
+
+        private void AvatarEdit(int skinId, int clothesId, int faceId, int hairId)
+        {
+            GameObject player = DataManager.instance.player;
+            if (player && player.GetPhotonView().IsMine)
+            {
+                DataManager.instance.player.GetPhotonView().RPC("SetAvatarPart", RpcTarget.AllBuffered, skinId, clothesId, faceId, hairId);
+            }
         }
     }
 

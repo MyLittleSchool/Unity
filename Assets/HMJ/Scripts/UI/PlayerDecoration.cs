@@ -34,10 +34,21 @@ namespace MJ
             set { curDecorationPanel = value; }
         }
 
-        private void Awake()
-        {
+        //public static PlayerDecoration instance;
 
-        }
+        //private void Awake()
+        //{
+        //    if (instance == null)
+        //    {
+        //        instance = this;
+        //        DontDestroyOnLoad(gameObject);
+
+        //    }
+        //    else
+        //    {
+        //        Destroy(gameObject);
+        //    }
+        //}
 
         private void Start()
         {
@@ -83,16 +94,32 @@ namespace MJ
         /// </summary>
         public void LoadDecorationData()
         {
-            string ImagePath = "Assets/Resources/Image/PlayerDecoration/";
+            //string ImagePath = "Assets/Resources/Image/PlayerDecoration/";
+            //string[] DecorationData = { "Skin", "Face", "Hair", "Cloth" };
+            //// 폴더명
+            //for(int i = 0; i < DecorationData.Length; i++)
+            //{
+            //    FileInfo[] fileInfos = FileManager.Instance.GetFileInfo(ImagePath + DecorationData[i], "png");
+            //    for (int j = 0; j < fileInfos.Length; j++) // 특정 아이템 이미지 데이터 가져오기
+            //    {
+            //        string data = "Image/PlayerDecoration/" + DecorationData[i] + "/" + Path.GetFileNameWithoutExtension(fileInfos[j].Name);
+            //        loadDecorationImage[i, j] = Resources.LoadAll<Sprite>(data)[0].texture;
+            //    }
+            //}
+
+            string ImagePath = "Image/PlayerDecoration/"; // Resources 폴더 내 경로
             string[] DecorationData = { "Skin", "Face", "Hair", "Cloth" };
-            // 폴더명
-            for(int i = 0; i < DecorationData.Length; i++)
+            loadDecorationImage = new Texture2D[DecorationData.Length, 10]; // 가정: 각 항목마다 최대 10개의 이미지
+
+            for (int i = 0; i < DecorationData.Length; i++)
             {
-                FileInfo[] fileInfos = FileManager.Instance.GetFileInfo(ImagePath + DecorationData[i], "png");
-                for (int j = 0; j < fileInfos.Length; j++) // 특정 아이템 이미지 데이터 가져오기
+                // 특정 경로에서 스프라이트 파일들을 모두 로드
+                Sprite[] sprites = FileManager.Instance.LoadSpritesFromResources(ImagePath + DecorationData[i]);
+
+                for (int j = 0; j < sprites.Length; j++) // 특정 아이템 이미지 데이터 가져오기
                 {
-                    string data = "Image/PlayerDecoration/" + DecorationData[i] + "/" + Path.GetFileNameWithoutExtension(fileInfos[j].Name);
-                    loadDecorationImage[i, j] = Resources.LoadAll<Sprite>(data)[0].texture;
+                    loadDecorationImage[i, j] = sprites[j].texture;
+                    Debug.Log("Loaded Sprite: " + ImagePath + DecorationData[i] + "/" + sprites[j].name);
                 }
             }
         }

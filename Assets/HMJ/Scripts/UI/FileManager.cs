@@ -45,14 +45,19 @@ namespace MJ
         }
 
         // 특정 경로, 형식의 파일 이름을 구하는 함수
-        public FileInfo[] GetFileInfo(string filePath, string form = "")
+        //public FileInfo[] GetFileInfo(string filePath, string form = "")
+        //{
+        //    DirectoryInfo directoryInfo = new DirectoryInfo(filePath);
+
+        //    return directoryInfo.GetFiles("*." + form);
+        //}
+
+        // Resources 폴더 내의 특정 경로에서 모든 스프라이트 파일을 불러오는 함수
+        public Sprite[] LoadSpritesFromResources(string folderPath)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(filePath);
-
-            return directoryInfo.GetFiles("*." + form);
+            // Resources 폴더 내에서 해당 경로의 모든 스프라이트 로드
+            return Resources.LoadAll<Sprite>(folderPath);
         }
-
-
     }
 }
     
