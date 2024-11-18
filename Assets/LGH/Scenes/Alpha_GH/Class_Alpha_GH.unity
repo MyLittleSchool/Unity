@@ -393,7 +393,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -28
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -14794,8 +14794,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 740.157, y: -0}
-  m_SizeDelta: {x: 1480.314, y: 0}
+  m_AnchoredPosition: {x: 720, y: -0}
+  m_SizeDelta: {x: 1440, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &668502096
 MonoBehaviour:
@@ -21851,8 +21851,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 740.157, y: -210}
-  m_SizeDelta: {x: 1480.314, y: 0}
+  m_AnchoredPosition: {x: 720, y: -210}
+  m_SizeDelta: {x: 1440, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1285061395
 MonoBehaviour:
@@ -29917,6 +29917,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Offset.y
       value: 0.49319553
+      objectReference: {fileID: 0}
+    - target: {fileID: 1829988647404904124, guid: 73f41c43ea2f6954c9c81d7d68608e8e,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3835197878305558472, guid: 73f41c43ea2f6954c9c81d7d68608e8e,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8511555918172411431, guid: 73f41c43ea2f6954c9c81d7d68608e8e,
         type: 3}
