@@ -4,15 +4,8 @@ using UnityEngine;
 
 namespace MJ
 {
-    public class DecorationEnum : MonoBehaviour
-    {
-        public enum DECORATION_DATA
-        {
-            SKIN,
-            FACE,
-            HAIR,
-            CLOTH,
-            DECORATION_DATA_END
-        }
-    }
+
 }
+
+// SKIN, FACE, HAIR, CLOTH
+// int skinId, int clothesId, int faceId, int hairId

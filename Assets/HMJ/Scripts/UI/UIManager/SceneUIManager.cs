@@ -231,8 +231,12 @@ namespace MJ
             myProfilePanel.SetActive(false);
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {
+                RegisterAvatar();
                 firstLoginPanel.SetActive(true);
             }
+            else
+                GetAvatar();
+
             InterestButtonCreate();
 
             SetProfile();
@@ -337,16 +341,26 @@ namespace MJ
                 mapSuccessRegisterPanel = _mapSuccessRegisterPanel;
         }
 
+        public void RegisterAvatar()
+        {
+            PlayerAnimation.GetInstance().PostAvatarData();
+        }
+
+        public void GetAvatar()
+        {
+            PlayerAnimation.GetInstance().GetAvatarData();
+        }
+
         public void initDecorationPanel()
         {
             avatarDecoOpenButton.onClick.AddListener(OnDecorationPanel);
             avatarDecoOffButton.onClick.AddListener(OffDecorationPanel);
 
-            PlayerDecoration DecorationDT = DecorationPanel.GetComponent<PlayerDecoration>();
+            PlayerDecoration DecorationDT = PlayerDecoration.GetInstance();
             DecorationDT.LoadDecorationData();
 
-            PlayerAnimation AnimationDT = PlayerObject.GetComponent<PlayerAnimation>();
-            AnimationDT.InitPlayerAnimation();
+            PlayerAnimation AnimationDT = PlayerAnimation.GetInstance();
+
 
             for (int i = 0; i < decorationEnumButton.Length; i++)
             {
@@ -368,7 +382,7 @@ namespace MJ
                 });
             }
 
-            OffDecorationPanel();
+            // OffDecorationPanel();
         }
         public void OnGuestbookPanel()
         {
@@ -486,6 +500,7 @@ namespace MJ
 
         public void OffDecorationPanel()
         {
+            PlayerAnimation.GetInstance().PatchAvatarData();
             DecorationPanel.SetActive(false);
         }
         

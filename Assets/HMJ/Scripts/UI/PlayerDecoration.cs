@@ -34,21 +34,32 @@ namespace MJ
             set { curDecorationPanel = value; }
         }
 
-        //public static PlayerDecoration instance;
+        public static PlayerDecoration instance;
 
-        //private void Awake()
-        //{
-        //    if (instance == null)
-        //    {
-        //        instance = this;
-        //        DontDestroyOnLoad(gameObject);
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
 
-        //    }
-        //    else
-        //    {
-        //        Destroy(gameObject);
-        //    }
-        //}
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        public static PlayerDecoration GetInstance()
+        {
+            if (instance == null)
+            {
+                GameObject go = new GameObject();
+                go.name = "PlayerDecoration";
+                go.AddComponent<PlayerDecoration>();
+            }
+            return instance;
+        }
 
         private void Start()
         {
