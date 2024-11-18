@@ -39,6 +39,8 @@ namespace MJ
     {
         public static PlayerAnimation instance;
 
+        public DecoPlayerUI decoPlayUI;
+
         private void Awake()
         {
             if (instance == null)
@@ -68,44 +70,23 @@ namespace MJ
 
         private void Update()
         {
-            Debug.Log("animatorIndex: " + animatorIndex[0] + ", " + animatorIndex[1] + ", " + animatorIndex[2] + ", " + animatorIndex[3]);
+
         }
         private int[] animatorIndex = new int[(int)DecorationEnum.DECORATION_DATA.DECORATION_DATA_END];
         private int[] animMaxIndexData = { 3, 5, 4, 4 };
-        public Animator[] playerAnimator = new Animator[(int)DecorationEnum.DECORATION_DATA.DECORATION_DATA_END];
 
         public void SetDecorationAnimData(DecorationEnum.DECORATION_DATA decorationData, int idx)
         {
             if (animMaxIndexData[(int)decorationData] <= idx)
                 return;
-            playerAnimator[(int)decorationData].SetBool("Anim" + (idx + 1).ToString(), true);
             animatorIndex[(int)decorationData] = idx;
             //skin, cloth, face, hair
 
+            decoPlayUI.SetAnimationSpriteIndex(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
             for (int i = 0; i < 4; i++)
             {
                 if (animMaxIndexData[i] <= animatorIndex[i])
                     return;
-            }
-            Debug.Log(animatorIndex[0] + ", " + animatorIndex[3] + ", " + animatorIndex[1] + ", " + animatorIndex[2]);
-            ResetDecorationAnim();
-        }
-
-        public void ResetDecorationAnimData(DecorationEnum.DECORATION_DATA decorationData)
-        {
-            int maxAnimData = animMaxIndexData[(int)decorationData];
-            for (int i = 0; i < maxAnimData; i++)
-            {
-                playerAnimator[(int)decorationData].SetBool("Anim" + (i + 1).ToString(), false);
-            }
-        }
-
-        public void ResetDecorationAnim()
-        {
-            for (int i = 0; i < (int)DecorationEnum.DECORATION_DATA.DECORATION_DATA_END; i++)
-            {
-                if (animatorIndex[i] >= 0)
-                    playerAnimator[i].Play("Anim" + (animatorIndex[i] + 1).ToString(), 0, 0.0f);
             }
         }
 
@@ -114,16 +95,8 @@ namespace MJ
             for (int i = 0; i < (int)DecorationEnum.DECORATION_DATA.DECORATION_DATA_END; i++)
             {
                 animatorIndex[i] = UnityEngine.Random.Range(0, animMaxIndexData[i]);
-                //ResetDecorationAnimData((DecorationEnum.DECORATION_DATA)i);
-                //SetDecorationAnimData((DecorationEnum.DECORATION_DATA)i, animatorIndex[i]);
             }
 
-        }
-
-        public void UpdateDecorationAnimData()
-        {
-            for (int i = 0; i < (int)DecorationEnum.DECORATION_DATA.DECORATION_DATA_END; i++)
-                playerAnimator[i].SetBool("Anim" + (animatorIndex[i] + 1).ToString(), true);
         }
 
         private void OnEnable()
@@ -144,6 +117,7 @@ namespace MJ
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
+                decoPlayUI.SetAnimationSpriteIndex(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
                 AvatarEdit(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
                 Debug.Log("아바타 데이터-------------------");
                 Debug.Log(downloadHandler.text);
@@ -165,6 +139,7 @@ namespace MJ
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
+                decoPlayUI.SetAnimationSpriteIndex(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
                 AvatarEdit(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
                 Debug.Log("Fetch 성공: " + downloadHandler.text);
             };
@@ -180,6 +155,7 @@ namespace MJ
             {
                 avatarIndexData = JsonUtility.FromJson<AvatarIndexData>(downloadHandler.text);
                 animatorIndex = avatarIndexData.infoList.ToArray();
+                decoPlayUI.SetAnimationSpriteIndex(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
                 AvatarEdit(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
                 Debug.Log("--------------------------------------------------------------------------------");
                 Debug.Log("아바타 정보 리스트: " + avatarIndexData);
