@@ -9,7 +9,6 @@ using UnityEngine.Rendering;
 using static HttpManager;
 using static MapRegisterDataUI;
 using static MJ.DecorationEnum;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using Photon.Pun;
 
 namespace MJ
