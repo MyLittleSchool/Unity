@@ -132,7 +132,7 @@ namespace GH
             SetTile setTile = DataManager.instance.player.GetComponent<SetTile>();
             if (setTile.tileObjCheck)
             {
-                setTile.DeleteTile();
+                setTile.RPC_DeleteTile();
             }
             else
             {
