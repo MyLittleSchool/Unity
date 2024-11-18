@@ -33,9 +33,9 @@ public class QuizLogic : MonoBehaviour
     public TMP_Text text;
 
     int idx = 0;
-    int quizN = 5;
+    int quizN = 3;
 
-    float quizTime = 5.0f;
+    float quizTime = 4.0f;
     bool quizClear = false;
 
     int minimumPlayer = 2;
