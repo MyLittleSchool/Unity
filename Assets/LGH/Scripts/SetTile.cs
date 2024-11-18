@@ -110,7 +110,7 @@ namespace GH
             if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
             {
                 tilemap.SetTile(tilePosition, emptyTilebase);
-                GameObject setObject = PhotonNetwork.InstantiateRoomObject(setGameObject.name, tilePosition, Quaternion.identity);
+                GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
                 //setObject.transform.position = tilePosition;
                 AddObject(setObject);
 
@@ -135,7 +135,7 @@ namespace GH
         public void CopyTile(Vector3Int _tilePosition, int objId)
         {
             tilemap.SetTile(_tilePosition, emptyTilebase);
-            GameObject setObject = PhotonNetwork.InstantiateRoomObject(setGameObject.name, _tilePosition, Quaternion.identity);
+            GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, _tilePosition, Quaternion.identity);
             //setObject.transform.position = tilePosition;
             AddObject(setObject);
 
@@ -189,7 +189,7 @@ namespace GH
             if (!tilemap.HasTile(tilePosition))
             {
                 tilemap.SetTile(tilePosition, emptyTilebase);
-                GameObject setObject = PhotonNetwork.InstantiateRoomObject(setGameObject.name, tilePosition, Quaternion.identity);
+                GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
                 //setObject.transform.position = tilePosition;
                 AddObject(setObject);
                 objectList.Last().id = id;
