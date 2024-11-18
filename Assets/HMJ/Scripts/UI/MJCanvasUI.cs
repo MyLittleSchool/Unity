@@ -62,8 +62,6 @@ public class MJCanvasUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SceneUIManager.GetInstance().RestartSetting(MapContestCloseButton, MapRegisterCloseButton, mapRegisterButton, InventoryButton, InventoryCloseButton, mapContestButton, MapConfirmYesButton, MapConfirmNoButton, MapRegisterSuccessCloseButton, InventoryErrorCloseButton, mapContestPanel, mapRegisterPanel, mapConfirmPanel, mapSuccessRegisterPanel, mapInventoryErrorPanel);
-        SceneUIManager.GetInstance().OffAllMapPanel();
 
         SettingSoundPanel();
     }

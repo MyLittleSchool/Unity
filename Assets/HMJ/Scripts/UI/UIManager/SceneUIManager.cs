@@ -229,68 +229,6 @@ namespace MJ
             firstSchoolPanel.SetActive(false);
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(false);
-            if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
-            {
-                RegisterAvatar();
-                firstLoginPanel.SetActive(true);
-            }
-            else
-                GetAvatar();
-
-            InterestButtonCreate();
-
-            SetProfile();
-            initDecorationPanel();
-            InitOtherPlayerPanel();
-            initDecorationPanel();
-        }
-        private void Update()
-        {
-            //ProfileEditCount();
-
-            if (firstSchoolPanel.activeSelf)
-            {
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    print("엔터");
-                    SchoolGet();
-                }
-                schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
-
-            }
-            TouchPlayer();
-        }
-
-        public void RestartSetting(
-            Button _mapContestCloseButton,
-            Button _mapRegisterCloseButton,
-            Button _mapRegisterButton,
-            Button _InventoryButton,
-            Button _InventoryCloseButton,
-            Button _mapContestButton,
-            Button _mapConfirmYesButton,
-            Button _mapConfirmNoButton,
-            Button _mapRegisterSuccessCloseButton,
-            Button _InventoryErrorCloseButton,
-
-            GameObject _mapContestPanel,
-            GameObject _mapRegisterPanel,
-            GameObject _mapConfirmPanel,
-            GameObject _mapSuccessRegisterPanel,
-            GameObject _mapInventoryErrorPanel
-            )
-        {
-            MapContestCloseButton = _mapContestCloseButton;
-            MapRegisterCloseButton = _mapRegisterCloseButton;
-            mapRegisterButton = _mapRegisterButton;
-            InventoryButton = _InventoryButton;
-            InventoryCloseButton = _InventoryCloseButton;
-            mapContestButton = _mapContestButton;
-            MapConfirmYesButton = _mapConfirmYesButton;
-            MapConfirmNoButton = _mapConfirmNoButton;
-            MapRegisterSuccessCloseButton = _mapRegisterSuccessCloseButton;
-            mapInventoryErrorPanel = _mapInventoryErrorPanel;
-            InventoryErrorCloseButton = _InventoryErrorCloseButton;
 
             if (mapRegisterButton)
             {
@@ -331,16 +269,38 @@ namespace MJ
             if (avatarDecoOffButton)
                 avatarDecoOffButton.onClick.AddListener(OffDecorationPanel);
 
-            if (_mapContestPanel)
-                mapContestPanel = _mapContestPanel;
-            if (_mapRegisterPanel)
-                mapRegisterPanel = _mapRegisterPanel;
-            if (_mapConfirmPanel)
-                mapConfirmPanel = _mapConfirmPanel;
-            if (_mapSuccessRegisterPanel)
-                mapSuccessRegisterPanel = _mapSuccessRegisterPanel;
-        }
 
+            if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
+            {
+                RegisterAvatar();
+                firstLoginPanel.SetActive(true);
+            }
+            else
+                GetAvatar();
+
+            InterestButtonCreate();
+
+            SetProfile();
+            initDecorationPanel();
+            InitOtherPlayerPanel();
+            initDecorationPanel();
+        }
+        private void Update()
+        {
+            //ProfileEditCount();
+
+            if (firstSchoolPanel.activeSelf)
+            {
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    print("엔터");
+                    SchoolGet();
+                }
+                schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
+
+            }
+            TouchPlayer();
+        }
         public void RegisterAvatar()
         {
             PlayerAnimation.GetInstance().PostAvatarData();
