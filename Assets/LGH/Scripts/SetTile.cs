@@ -71,7 +71,7 @@ namespace GH
 
                 if (playerMove.stingDir == -transform.up)
                 {
-                    playerFrontTileTransform.localPosition = new Vector3(0, -1, 0);
+                    playerFrontTileTransform.localPosition = new Vector3(0, 0, 0);
                 }
                 else if (playerMove.stingDir == transform.up)
                 {
