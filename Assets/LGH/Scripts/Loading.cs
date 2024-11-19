@@ -1,4 +1,5 @@
 using GH;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -105,7 +106,7 @@ public class Loading : MonoBehaviour
 
     }
     float currentTime = 0;
-    float maxTime = 3;
+    float maxTime = 1.2f;
     private void LoadingSilde()
     {
         currentTime += Time.deltaTime;
@@ -120,7 +121,7 @@ public class Loading : MonoBehaviour
     {
         currentTime = 0;
         RandomSet();
-        yield return new WaitUntil(() => { return DataManager.instance.player != null; });
+        yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
         gameObject.SetActive(false);
     }
 }
