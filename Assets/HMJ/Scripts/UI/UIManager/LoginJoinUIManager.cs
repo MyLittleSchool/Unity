@@ -368,35 +368,29 @@ namespace GH
                 print(jsonData);
                 //jsonData를 PostInfoArray 형으로 바꾸자.
                 getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+                print("get : "+getUserInfo);
+                LoginCallback();
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
-            StartCoroutine(nameof(login));
+
 
         }
-        IEnumerator login()
+        private void LoginCallback()
         {
-            yield return new WaitForSeconds(0.5f);
             if (getUserInfo.data.password == loginList[1].text)
             {
+                print("맞음");
                 AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
                 //씬 넘어가기
                 DataManager.instance.playerName = getUserInfo.data.name;
-                if (schoolInputField.text.Length > 2)
-                {
-                    DataManager.instance.playerSchool = schoolInputField.text;
-                }
-                else
-                {
-                    DataManager.instance.playerSchool = "판교중학교";
-                }
                 SceneManager.LoadScene(2);
             }
             else
             {
+                print("틀림");
+
                 PWCheckText.SetActive(true);
                 print("비밀번호가 다릅니다");
-                yield return new WaitForSeconds(3f);
-                PWCheckText.SetActive(false);
             }
         }
 

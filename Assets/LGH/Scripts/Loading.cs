@@ -120,7 +120,7 @@ public class Loading : MonoBehaviour
     {
         currentTime = 0;
         RandomSet();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitUntil(() => { return DataManager.instance.player != null; });
         gameObject.SetActive(false);
     }
 }
