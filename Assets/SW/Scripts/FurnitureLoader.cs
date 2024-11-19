@@ -9,6 +9,12 @@ namespace SW
 {
     public class FurnitureLoader : MonoBehaviour
     {
+        public static FurnitureLoader instance;
+        public bool isLoading;
+        private void Awake()
+        {
+            instance = this;
+        }
         // Start is called before the first frame update
         void Start()
         {
@@ -29,6 +35,7 @@ namespace SW
             SetTile setTile = dataManager.player.GetComponent<SetTile>();
             PlaceManager placeManager = GetInstance();
             // 배치 로딩
+            isLoading = true;
             placeManager.ReadPlace(DataManager.instance.mapId, DataManager.instance.mapType, (GetPlaceResInfo res) =>
             {
                 foreach (PlaceInfo info in res.response)
@@ -42,6 +49,7 @@ namespace SW
 
                     }
                 }
+                isLoading = false;
             });
         }
     }

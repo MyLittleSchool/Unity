@@ -1,18 +1,21 @@
 using GH;
 using MJ;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 namespace SW
 {
-    public class UserRPC : MonoBehaviourPun
+    public class UserRPC : MonoBehaviourPunCallbacks
     {
         private PhotonView pv;
+        private int actorNumber;
         public GameObject playerUI;
         public PlayerPanel playerPanel;
         public UserInfo userInfo;
         private void Start()
         {
             pv = GetComponent<PhotonView>();
+            actorNumber = pv.OwnerActorNr;
             if (pv.IsMine)
             {
                 if (PlayerList.instance == null)
@@ -49,6 +52,15 @@ namespace SW
             playerPanel = playerUI.GetComponent<PlayerPanel>();
             playerPanel.userRPC = this;
             userInfo = JsonUtility.FromJson<UserInfo>(_userInfo);
+        }
+
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            base.OnPlayerLeftRoom(otherPlayer);
+            if (PhotonNetwork.IsMasterClient && actorNumber == otherPlayer.ActorNumber)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
     }
 }

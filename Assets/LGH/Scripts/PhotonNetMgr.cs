@@ -152,7 +152,7 @@ namespace GH
             roomOpt.MaxPlayers = 20;
             roomOpt.IsOpen = true;
             roomOpt.IsVisible = true;
-
+            roomOpt.CleanupCacheOnLeave = false;
             PhotonNetwork.CreateRoom(roomName, roomOpt, TypedLobby.Default);
         }
 

@@ -21,13 +21,14 @@ namespace GH
         // 생성자
         public ObjectInfo(GameObject obj, Vector3 position)
         {
+            this.id = -1;
             this.obj = obj;
             this.position = position;
         }
     }
-
-    public class SetTile : MonoBehaviour
+    public class SetTile : MonoBehaviourPun
     {
+        public static SetTile instance;
         public Tilemap tilemap;
         public Transform playerFrontTileTransform;
         private Vector3Int tilePosition;
@@ -45,9 +46,9 @@ namespace GH
 
         public PlayerMove playerMove;
 
-
         void Start()
         {
+            if (photonView.IsMine) instance = this;
             setMode = false;
             tileLine.SetActive(false);
             SuchGrid();
@@ -97,20 +98,24 @@ namespace GH
                 }
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    DeleteTile();
+                    RPC_DeleteTile();
                 }
                 tileObjCheck = tilemap.HasTile(tilePosition);
-
+                print(tileObjCheck);
 
             }
         }
-
+        public void TileMapSetTile(Vector3Int pos, bool remove = false)
+        {
+            if (remove) tilemap.SetTile(pos, null);
+            else tilemap.SetTile(pos, emptyTilebase);
+        }
         public void OnTile()
         {
             if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
             {
                 tilemap.SetTile(tilePosition, emptyTilebase);
-                GameObject setObject = PhotonNetwork.InstantiateRoomObject(setGameObject.name, tilePosition, Quaternion.identity);
+                GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
                 //setObject.transform.position = tilePosition;
                 AddObject(setObject);
 
@@ -135,7 +140,7 @@ namespace GH
         public void CopyTile(Vector3Int _tilePosition, int objId)
         {
             tilemap.SetTile(_tilePosition, emptyTilebase);
-            GameObject setObject = PhotonNetwork.InstantiateRoomObject(setGameObject.name, _tilePosition, Quaternion.identity);
+            GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, _tilePosition, Quaternion.identity);
             //setObject.transform.position = tilePosition;
             AddObject(setObject);
 
@@ -155,16 +160,35 @@ namespace GH
             });
         }
 
-        public void DeleteTile()
+        public void RPC_DeleteTile()
         {
             if (tilemap.HasTile(tilePosition))
             {
-                tilemap.SetTile(tilePosition, null);
                 foreach (ObjectInfo obj in objectList)
                 {
                     if (obj.position == tilePosition)
                     {
-                        PhotonNetwork.Destroy(obj.obj.gameObject);
+                        photonView.RPC(nameof(ReqDeleteTile), obj.obj.GetPhotonView().Owner, tilePosition.x, tilePosition.y, tilePosition.z);
+                    }
+                }
+            }
+        }
+        [PunRPC]
+        public void ReqDeleteTile(int x, int y, int z)
+        {
+            Vector3Int pos = new Vector3Int(x, y, z);
+            DataManager.instance.player.GetComponent<SetTile>().DeleteTile(pos);
+        }
+        public void DeleteTile(Vector3Int pos)
+        {
+            if (tilemap.HasTile(pos))
+            {
+                tilemap.SetTile(pos, null);
+                foreach (ObjectInfo obj in objectList)
+                {
+                    if (obj.position == pos)
+                    {
+                        PhotonNetwork.Destroy(obj.obj);
                         PlaceManager.GetInstance().DeletePlace(obj.id); // 통신
                     }
                 }
@@ -179,7 +203,7 @@ namespace GH
         public void AddObject(GameObject obj)
         {
             Vector3 position = obj.transform.position; // 오브젝트의 현재 위치를 가져옴
-            ObjectInfo newObjectInfo = new ObjectInfo(obj, position); // 새 ObjectInfo 객체 생성
+            ObjectInfo newObjectInfo = obj.GetComponent<Furnitures>().objectInfo; // 새 ObjectInfo 객체 생성
             objectList.Add(newObjectInfo); // 리스트에 추가
         }
         public void LoadData(Vector3Int pos, GameObject obj, int id)
@@ -189,7 +213,7 @@ namespace GH
             if (!tilemap.HasTile(tilePosition))
             {
                 tilemap.SetTile(tilePosition, emptyTilebase);
-                GameObject setObject = PhotonNetwork.InstantiateRoomObject(setGameObject.name, tilePosition, Quaternion.identity);
+                GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
                 //setObject.transform.position = tilePosition;
                 AddObject(setObject);
                 objectList.Last().id = id;
