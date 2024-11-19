@@ -1,11 +1,9 @@
 using MJ;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapRegisterDataUI;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 public class MapContestScrollUI : ScrollUI
 {
