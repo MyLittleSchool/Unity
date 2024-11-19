@@ -91,6 +91,9 @@ namespace MJ
         [Header("방명록 패널")]
         public GameObject guestbookPanel;
 
+        [Header("게시판 패널")]
+        public GameObject boardPanel;
+
         [Header("맵 등록 패널")]
         public GameObject mapRegisterPanel;
 
@@ -346,7 +349,11 @@ namespace MJ
             guestbookPanel.SetActive(true);
             guestbookPanel.GetComponent<Guestbook>().LoadGuestbookData();
         }
-
+        public void OnBoardPanel()
+        {
+            boardPanel.SetActive(true);
+            boardPanel.GetComponent<Board>().LoadBoardData();
+        }
         public void OnMapRegisterPanel()
         {
             mapRegisterPanel.SetActive(true);

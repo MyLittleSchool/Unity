@@ -1,10 +1,10 @@
+using MJ;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 namespace SW
 {
-    public class Teacher : Interactive
+    public class MapContestNPC : Interactive
     {
         public GameObject chatBalloon;
         public TMP_Text chatBallonText;
@@ -31,12 +31,17 @@ namespace SW
         }
         public override void Interact()
         {
-            ChatEnable = true;
+            SceneUIManager.GetInstance().OnMapConfirmPanel();
         }
         protected override void Start()
         {
             base.Start();
             chatBallonText.text = text;
+        }
+        public override void HighlightOn()
+        {
+            base.HighlightOn();
+            ChatEnable = true;
         }
         public override void HighlightOff()
         {
@@ -44,7 +49,6 @@ namespace SW
             if (ChatEnable)
             {
                 ChatEnable = false;
-
             }
         }
         private void OnDestroy()
