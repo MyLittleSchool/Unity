@@ -10,16 +10,9 @@ using static Item;
 
 public class InventorySystem : MonoBehaviour
 {
-    #region SingleTon
     private static InventorySystem instance;
     public static InventorySystem GetInstance()
     {
-        if (instance == null)
-        {
-            GameObject go = new GameObject();
-            go.name = "InventorySystem";
-            go.AddComponent<InventorySystem>();
-        }
         return instance;
     }
 
@@ -28,14 +21,9 @@ public class InventorySystem : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        InitItem();
     }
-    #endregion
 
     public GameObject itemPrefab;
     public GameObject parentPanel;
@@ -49,21 +37,24 @@ public class InventorySystem : MonoBehaviour
     [Serializable]
     public struct ItemInfoData
     {
+        public int id;
         public string itemName;
-        public int n;
+        public int count;
         public int price;
+        public int userId;
+        public string itemType;
     }
+
     [Serializable]
     public class ItemInfoDataList
     {
         public List<ItemInfoData> response;
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
-        InitItem();
-        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -171,6 +162,11 @@ public class InventorySystem : MonoBehaviour
     {
         foreach (Item itemComponent in itemComponents)
             itemComponent.UpdateItemData();
+    }
+
+    public void RegisterItem()
+    {
+
     }
 
     private void OnEnable()

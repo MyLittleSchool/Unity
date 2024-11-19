@@ -116,6 +116,9 @@ namespace GH
 
                         playerMine.transform.position = gameObject.transform.position - new Vector3(0, 1.5f, 0);
                         playerCheck = false;
+
+                        // 입장
+                        SceneUIManager.GetInstance().OnVoicePanel();
                     }
                 }
 
@@ -131,6 +134,8 @@ namespace GH
                         playerCheck = false;
                         playerMine.transform.position = gameObject.transform.position - new Vector3(0, 1.5f, 0);
 
+                        // 입장
+                        SceneUIManager.GetInstance().OnVoicePanel();
                     }
                     else
                     {
@@ -201,6 +206,10 @@ namespace GH
                         {
                             darkSprite.SetActive(false);
                             playerMine = null;
+                            // 퇴장
+                            SceneUIManager.GetInstance().OffVoicePanel();
+                            VoiceManager.GetInstance().HeadSetOnOff(false);
+                            VoiceManager.GetInstance().MicrophoneOnOff(false);
                         }
                         break;
                     }

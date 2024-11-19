@@ -221,7 +221,7 @@ namespace GH
             loadingPanel.SetActive(true);
             StartCoroutine(loading.SceneMove());
             GameManager.instance.CoSpwamPlayer();
-
+            VoiceManager.GetInstance().MoveScene();
 
         }
 
