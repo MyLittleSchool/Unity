@@ -48,7 +48,6 @@ public class PlayerAnimator : MonoBehaviourPun, IPunObservable
 
     void Update()
     {
-        Debug.Log("clothes: " + clothesid + "skin: " + skinid + "face: " + faceid + "hair:" + hairid);
         UdateTime();
         if (playerMove.onIdle)
         {

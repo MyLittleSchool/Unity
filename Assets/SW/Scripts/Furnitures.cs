@@ -37,7 +37,14 @@ public class Furnitures : MonoBehaviourPunCallbacks
     }
     private void OnDestroy()
     {
-        SetTile.instance.TileMapSetTile(new Vector3Int((int)objectInfo.position.x, (int)objectInfo.position.y, (int)objectInfo.position.z), true);
-        SetTile.instance.objectList.Remove(objectInfo);
+        try
+        {
+            SetTile.instance.TileMapSetTile(new Vector3Int((int)objectInfo.position.x, (int)objectInfo.position.y, (int)objectInfo.position.z), true);
+            SetTile.instance.objectList.Remove(objectInfo);
+        }
+        catch
+        {
+
+        }
     }
 }
