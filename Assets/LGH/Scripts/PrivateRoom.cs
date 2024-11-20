@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using SW;
 
 namespace GH
 {
@@ -136,6 +137,7 @@ namespace GH
 
                         // ¿‘¿Â
                         SceneUIManager.GetInstance().OnVoicePanel();
+
                     }
                     else
                     {
@@ -189,6 +191,7 @@ namespace GH
                     enterPosition = collision.transform.position;
                 }
                 playersList.Add(collision.gameObject);
+                VoiceManager.GetInstance().SettingPlayerList(playersList);
                 activeRoom = true;
 
             }
@@ -202,6 +205,7 @@ namespace GH
                     if (playersList[i] == collision.gameObject)
                     {
                         playersList.RemoveAt(i);
+                        VoiceManager.GetInstance().SettingPlayerList(playersList);
                         if (collision.gameObject.GetComponent<PhotonView>().IsMine)
                         {
                             darkSprite.SetActive(false);

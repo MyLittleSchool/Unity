@@ -14,7 +14,7 @@ public class VoiceManager : MonoBehaviour
 
     private Photon.Voice.Unity.Recorder record;
     private List<AudioSource> playerAudioSources = new List<AudioSource>();
-    bool bMute = false;
+    bool bPlay = false;
     private void Awake()
     {
         if (instance == null)
@@ -55,13 +55,13 @@ public class VoiceManager : MonoBehaviour
         return record.TransmitEnabled;
     }
 
-    public void HeadSetOnOff(bool _bMute)
+    public void HeadSetOnOff(bool _bOn)
     {
         SettingPlayerSpeaker();
 
-        bMute = _bMute;
+        bPlay = _bOn;
         foreach (AudioSource audioSource in playerAudioSources)
-            audioSource.mute = bMute;
+            audioSource.mute = !bPlay;
     }
 
     public void SettingPlayerSpeaker()
@@ -85,5 +85,22 @@ public class VoiceManager : MonoBehaviour
         yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
         VoiceManager.GetInstance().HeadSetOnOff(false);
         VoiceManager.GetInstance().MicrophoneOnOff(false);
+    }
+
+    public void SettingPlayerList(List<GameObject> playerList)
+    {
+        // ResetTargetPlayerData();
+        int playerActorNumber = DataManager.instance.player.GetPhotonView().OwnerActorNr;
+
+        List<int> ActorList = new List<int>();
+        ActorList.Add(0);
+        foreach (GameObject ObjectData in playerList)
+        {
+            int objectActorNumber = ObjectData.GetPhotonView().OwnerActorNr;
+            if (objectActorNumber != playerActorNumber)
+                ActorList.Add(objectActorNumber);
+        }
+        int[] targetPlayers = ActorList.ToArray();
+        record.TargetPlayers = targetPlayers;
     }
 }

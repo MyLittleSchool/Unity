@@ -68,5 +68,6 @@ public class VoiceOnOff : MonoBehaviour
     {
         m_eCurVoiceState = VoiceState.VoiceOff;
         SetVoiceState(m_eCurVoiceState);
+        Debug.Log("m_eCurVoiceState: " + m_eCurVoiceState.ToString());
     }
 }
