@@ -381,6 +381,13 @@ namespace GH
             inputChat.Select();
             TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false);
         }
+
+        public void PrivateRoomIn(string s)
+        {
+            JoinChatRoom(s);
+            chatChannelText.text = s;
+            print(s);
+        }
     }
 
     [Serializable]

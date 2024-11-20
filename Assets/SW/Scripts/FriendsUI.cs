@@ -223,7 +223,7 @@ namespace SW
                         // 교실 놀러가기 버튼
                         comp.PassButton.onClick.AddListener(() =>
                         {
-                            DataManager.instance.mapType = DataManager.MapType.MyClassroom;
+                            DataManager.instance.MapTypeState = DataManager.MapType.MyClassroom;
                             DataManager.instance.mapId = comp.id;
                             PhotonNetMgr.instance.roomName = friend.name;
                             gameObject.SetActive(false);

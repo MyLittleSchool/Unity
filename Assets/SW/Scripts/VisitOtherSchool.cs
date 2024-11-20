@@ -18,7 +18,7 @@ namespace SW
         public void OnVisitButtonClick()
         {
             gameObject.SetActive(false);
-            DataManager.instance.mapType = DataManager.MapType.School;
+            DataManager.instance.MapTypeState = DataManager.MapType.School;
             DataManager.instance.mapId = selected.id;
             PhotonNetMgr.instance.roomName = selected.schoolName.text;
             PhotonNetwork.LeaveRoom();
