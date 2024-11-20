@@ -36,7 +36,7 @@ namespace SW
             PlaceManager placeManager = GetInstance();
             // 배치 로딩
             isLoading = true;
-            placeManager.ReadPlace(DataManager.instance.mapId, DataManager.instance.mapType, (GetPlaceResInfo res) =>
+            placeManager.ReadPlace(DataManager.instance.mapId, DataManager.instance.MapTypeState, (GetPlaceResInfo res) =>
             {
                 foreach (PlaceInfo info in res.response)
                 {

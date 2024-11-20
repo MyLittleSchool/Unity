@@ -6249,12 +6249,6 @@ MonoBehaviour:
   inputChat: {fileID: 1638223122}
   chatItemPrefab: {fileID: 3610997981301941466, guid: 2dcc62abe3f46db45a6c3000c13254d1,
     type: 3}
-  aa:
-    id: 0
-    schoolName: 
-    location: 
-    backgroundColorId: 0
-    furnitureList: []
   color: {r: 0.9490197, g: 0.4156863, b: 0.10588236, a: 1}
   playerName: 
   contentRectTransform: {fileID: 1126405372}
@@ -6265,6 +6259,7 @@ MonoBehaviour:
   chatMainPanelRecttransform: {fileID: 274811290}
   chatPanelRecttransform: {fileID: 1285061394}
   chatList: []
+  chatChannel: {fileID: 0}
 --- !u!4 &412267817
 Transform:
   m_ObjectHideFlags: 0
@@ -6475,6 +6470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23990e5ee2d9f54e9554e887baf3a0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLoading: 0
 --- !u!4 &523861077
 Transform:
   m_ObjectHideFlags: 0
@@ -11943,7 +11939,7 @@ TilemapRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 1, y: 1.65625, z: 0}
+  m_ChunkCullingBounds: {x: 1, y: 1.5625, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -12383,7 +12379,7 @@ TilemapRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 3.5, y: 0.5, z: 0}
+  m_ChunkCullingBounds: {x: 3.5, y: 1.5, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -16288,6 +16284,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapRegisterCloseButton: {fileID: 0}
   MapContestCloseButton: {fileID: 0}
+  avatarDecoOpenButton: {fileID: 0}
+  avatarDecoOffButton: {fileID: 0}
   decorationEnumButton: []
   decorationChoiceButton: []
   mapRegisterButton: {fileID: 0}
@@ -16309,6 +16307,7 @@ MonoBehaviour:
   DecorationPanel: {fileID: 0}
   PlayerObject: {fileID: 0}
   guestbookPanel: {fileID: 1033744291}
+  boardPanel: {fileID: 0}
   mapRegisterPanel: {fileID: 0}
   mapConfirmPanel: {fileID: 0}
   mapContestPanel: {fileID: 0}
@@ -16320,9 +16319,12 @@ MonoBehaviour:
   ChatPanel: {fileID: 1285061393}
   myProfilePanel: {fileID: 0}
   myProfileEditPanel: {fileID: 0}
+  othersProfilePanel: {fileID: 0}
   playerList: {fileID: 7317297467709347390}
   firstLoginPanel: {fileID: 0}
   firstSchoolPanel: {fileID: 0}
+  visitOtherSchoolPanel: {fileID: 0}
+  privateRoomPanel: {fileID: 0}
   nickNameInputField: {fileID: 0}
   interestInputField: {fileID: 0}
   myMessageInputField: {fileID: 0}
@@ -16356,6 +16358,7 @@ MonoBehaviour:
       id: 0
       schoolName: 
       location: 
+      onlineUserCount: 0
       backgroundColorId: 0
       furnitureList: []
   schoolSuch: {fileID: 0}

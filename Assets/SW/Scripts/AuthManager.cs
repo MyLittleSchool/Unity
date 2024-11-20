@@ -143,7 +143,7 @@ namespace SW
             {
                 userId = GetInstance().userAuthData.userInfo.id;
                 mapId = DataManager.instance.mapId;
-                mapType = DataManager.instance.mapType.ToString();
+                mapType = DataManager.instance.MapTypeState.ToString();
             }
         }
     }
