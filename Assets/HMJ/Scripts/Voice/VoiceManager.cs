@@ -12,7 +12,6 @@ public class VoiceManager : MonoBehaviour
 {
     public static VoiceManager instance;
 
-    
     private Photon.Voice.Unity.Recorder record;
     private List<AudioSource> playerAudioSources = new List<AudioSource>();
     bool bMute = false;
@@ -29,6 +28,11 @@ public class VoiceManager : MonoBehaviour
         }
     }
 
+    public static VoiceManager GetInstance()
+    {
+        return instance;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,9 +45,9 @@ public class VoiceManager : MonoBehaviour
         
     }
 
-    public void MicrophoneOnOff()
+    public void MicrophoneOnOff(bool _onMicro)
     {
-        record.TransmitEnabled = !record.TransmitEnabled;
+        record.TransmitEnabled = _onMicro;
     }
 
     public bool GetMicrophoneOnOff()
@@ -51,20 +55,13 @@ public class VoiceManager : MonoBehaviour
         return record.TransmitEnabled;
     }
 
-    public void HeadSetOnOff()
+    public void HeadSetOnOff(bool _bMute)
     {
         SettingPlayerSpeaker();
 
-        bMute = !bMute;
+        bMute = _bMute;
         foreach (AudioSource audioSource in playerAudioSources)
             audioSource.mute = bMute;
-        if (bMute)
-            record.TransmitEnabled = false;
-    }
-
-    public bool GetHeadSetOnOff()
-    {
-        return !bMute;
     }
 
     public void SettingPlayerSpeaker()
@@ -72,9 +69,21 @@ public class VoiceManager : MonoBehaviour
         playerAudioSources.Clear();
         foreach (PhotonView photonview in PhotonNetwork.PhotonViews)
         {
-            if(photonview.gameObject)
-                playerAudioSources.Add(photonview.gameObject.GetComponent<AudioSource>());
+            GameObject photonviewObject = photonview.gameObject;
+            if (photonviewObject && photonviewObject.GetComponent<AudioSource>())
+                playerAudioSources.Add(photonviewObject.GetComponent<AudioSource>());
         }
     }
 
+    public void MoveScene()
+    {
+        StartCoroutine(MicHeadSetOff());
+    }
+
+    public IEnumerator MicHeadSetOff()
+    {
+        yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
+        VoiceManager.GetInstance().HeadSetOnOff(false);
+        VoiceManager.GetInstance().MicrophoneOnOff(false);
+    }
 }

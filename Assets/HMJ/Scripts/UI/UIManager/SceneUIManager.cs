@@ -143,6 +143,9 @@ namespace MJ
         public GameObject visitOtherSchoolPanel;
         [Header("프라이빗 룸 패널")]
         public GameObject privateRoomPanel;
+
+        [Header("보이스 패널")]
+        public GameObject voicePanel;
         #endregion
 
         #region SingleTone
@@ -246,8 +249,8 @@ namespace MJ
             if (MapContestCloseButton)
                 MapContestCloseButton.onClick.AddListener(CloseMapContestPanel);
 
+            // StartCoroutine(coMapInventoryGameObject());
             InventoryButton.onClick.AddListener(OnMapInventoryPanel);
-
             InventoryCloseButton.onClick.AddListener(CloseMapInventoryPanel);
 
             if (mapContestButton)
@@ -276,6 +279,7 @@ namespace MJ
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {
                 RegisterAvatar();
+
                 firstLoginPanel.SetActive(true);
             }
             else
@@ -365,6 +369,11 @@ namespace MJ
             mapRegisterPanel.SetActive(false);
             mapContestPanel.SetActive(true);
             mapContestButton.gameObject.SetActive(false);
+        }
+
+        IEnumerator coMapInventoryGameObject()
+        {
+            yield return new WaitUntil(() => mapInventoryPanel != null);
         }
 
         public void OnMapInventoryPanel()
@@ -494,6 +503,16 @@ namespace MJ
         public void OnVisitOtherSchoolPanel()
         {
             visitOtherSchoolPanel.SetActive(true);
+        }
+
+        public void OnVoicePanel()
+        {
+            voicePanel.SetActive(true);
+        }
+
+        public void OffVoicePanel()
+        {
+            voicePanel.SetActive(false);
         }
 
         public void ProfileEditCount()
