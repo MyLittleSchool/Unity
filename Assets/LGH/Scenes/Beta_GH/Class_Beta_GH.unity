@@ -6110,6 +6110,7 @@ MonoBehaviour:
   firstSchoolPanel: {fileID: 1645021369}
   visitOtherSchoolPanel: {fileID: 1645021364}
   privateRoomPanel: {fileID: 1645021363}
+  voicePanel: {fileID: 784556229}
   nickNameInputField: {fileID: 1645021381}
   interestInputField: {fileID: 1645021379}
   myMessageInputField: {fileID: 1645021377}
@@ -9968,6 +9969,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fc031d87aa8fff44a47ba6871813fbc, type: 3}
+--- !u!1 &784556229 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3301893122437365681, guid: e3e00f03040e0a1408e13cf72fc9b374,
+    type: 3}
+  m_PrefabInstance: {fileID: 1645021338}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &880044909
 GameObject:
   m_ObjectHideFlags: 0
@@ -12530,6 +12537,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 385511233}
+    - target: {fileID: 3301893122437365681, guid: e3e00f03040e0a1408e13cf72fc9b374,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3490700074737476797, guid: e3e00f03040e0a1408e13cf72fc9b374,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -12756,6 +12768,31 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4653956529609841728, guid: e3e00f03040e0a1408e13cf72fc9b374,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719774621054616030, guid: e3e00f03040e0a1408e13cf72fc9b374,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719774621054616030, guid: e3e00f03040e0a1408e13cf72fc9b374,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719774621054616030, guid: e3e00f03040e0a1408e13cf72fc9b374,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719774621054616030, guid: e3e00f03040e0a1408e13cf72fc9b374,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4719774621054616030, guid: e3e00f03040e0a1408e13cf72fc9b374,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0

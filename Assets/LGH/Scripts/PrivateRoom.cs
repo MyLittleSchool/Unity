@@ -129,7 +129,8 @@ namespace GH
             }
             if (activeRoom)
             {
-                if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
+                //확인 필요 --- 다른 방에 사람이 있으면 방이 안만들어진다.
+                if (playerMine.gameObject.GetPhotonView().IsMine)
                 {
                     if (passWordInputField.text == roomPassword)
                     {
@@ -185,7 +186,7 @@ namespace GH
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+                if (collision.gameObject.GetPhotonView().IsMine)
                 {
                     playerMine = collision.gameObject;
                     OnUI();
