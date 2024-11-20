@@ -7,6 +7,7 @@ using Photon.Voice.Unity;
 using Unity.VisualScripting;
 using GH;
 using Photon.Pun;
+using SW;
 
 public class VoiceManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class VoiceManager : MonoBehaviour
     private Photon.Voice.Unity.Recorder record;
     private List<AudioSource> playerAudioSources = new List<AudioSource>();
     bool bPlay = false;
+    public List<int> actorList = new List<int>();
     private void Awake()
     {
         if (instance == null)
@@ -37,6 +39,9 @@ public class VoiceManager : MonoBehaviour
     void Start()
     {
         record = GetComponent<Photon.Voice.Unity.Recorder>();
+        actorList.Add(0);
+        int[] targetPlayers = actorList.ToArray();
+        record.TargetPlayers = targetPlayers;
     }
 
     // Update is called once per frame
@@ -87,20 +92,23 @@ public class VoiceManager : MonoBehaviour
         VoiceManager.GetInstance().MicrophoneOnOff(false);
     }
 
-    public void SettingPlayerList(List<GameObject> playerList)
+    public void AddPlayerList(int ActorNumber)
     {
-        // ResetTargetPlayerData();
-        int playerActorNumber = DataManager.instance.player.GetPhotonView().OwnerActorNr;
+        if (DataManager.instance.player.GetPhotonView().OwnerActorNr == ActorNumber)
+            return;
+        actorList.Add(ActorNumber);
 
-        List<int> ActorList = new List<int>();
-        ActorList.Add(0);
-        foreach (GameObject ObjectData in playerList)
-        {
-            int objectActorNumber = ObjectData.GetPhotonView().OwnerActorNr;
-            if (objectActorNumber != playerActorNumber)
-                ActorList.Add(objectActorNumber);
-        }
-        int[] targetPlayers = ActorList.ToArray();
+        int[] targetPlayers = actorList.ToArray();
+        record.TargetPlayers = targetPlayers;
+    }
+
+    public void DeletePlayerList(int ActorNumber)
+    {
+        if (DataManager.instance.player.GetPhotonView().OwnerActorNr == ActorNumber)
+            return;
+        actorList.Remove(ActorNumber);
+
+        int[] targetPlayers = actorList.ToArray();
         record.TargetPlayers = targetPlayers;
     }
 }

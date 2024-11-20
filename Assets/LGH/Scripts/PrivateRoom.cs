@@ -122,6 +122,7 @@ namespace GH
 
                         // 입장
                         SceneUIManager.GetInstance().OnVoicePanel();
+                        DataManager.instance.privateRoomName = gameObject.name.ToString();
                     }
                 }
 
@@ -139,6 +140,7 @@ namespace GH
 
 
                         // 입장
+                        DataManager.instance.privateRoomName = gameObject.name.ToString();
                         SceneUIManager.GetInstance().OnVoicePanel();
                         PhotonChatMgr.instance.PrivateRoomIn("PR" + roomNum);
                     }
@@ -195,7 +197,8 @@ namespace GH
                     
                 }
                 playersList.Add(collision.gameObject);
-                VoiceManager.GetInstance().SettingPlayerList(playersList);
+                if (DataManager.instance.privateRoomName == gameObject.name.ToString()) // 같은 방일때만
+                    VoiceManager.GetInstance().AddPlayerList(collision.gameObject.GetPhotonView().OwnerActorNr);
                 activeRoom = true;
 
             }
@@ -209,9 +212,13 @@ namespace GH
                     if (playersList[i] == collision.gameObject)
                     {
                         playersList.RemoveAt(i);
-                        VoiceManager.GetInstance().SettingPlayerList(playersList);
+
+                        if (DataManager.instance.privateRoomName == gameObject.name.ToString()) // 같은 방일때만
+                            VoiceManager.GetInstance().DeletePlayerList(collision.gameObject.GetPhotonView().OwnerActorNr);
+
                         if (collision.gameObject.GetComponent<PhotonView>().IsMine)
                         {
+                            DataManager.instance.privateRoomName = "";
                             darkSprite.SetActive(false);
                             playerMine = null;
                             // 퇴장
