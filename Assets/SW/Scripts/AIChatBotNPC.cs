@@ -22,6 +22,7 @@ namespace SW
                 {
                     PhotonChatMgr.instance.ChatModeState = PhotonChatMgr.ChatMode.AIChatBot;
                     PhotonChatMgr.instance.NPC = this;
+                    PhotonChatMgr.instance.OnChatInput();
                 }
                 else
                 {
