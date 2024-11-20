@@ -232,6 +232,8 @@ namespace GH
             else if (ChatModeState == ChatMode.AIChatBot)
             {
                 NPC.ReqChat(s);
+                playerMalpung.MalPungText(s);
+                inputChat.text = "";
             }
         }
 
