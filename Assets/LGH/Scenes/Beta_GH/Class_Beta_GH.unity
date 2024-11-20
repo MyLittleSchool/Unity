@@ -11016,8 +11016,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97463de4fd16a234b923830d0fda2e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newFont: {fileID: 0}
-  targetFont: {fileID: 0}
+  newFont: {fileID: 11400000, guid: 0e67901dfa69bdd479832e61b6e3dd3d, type: 2}
+  targetFont: {fileID: 11400000, guid: 6524d2b5a89fb1d45a4a17dff2b54e1f, type: 2}
 --- !u!4 &1476406132
 Transform:
   m_ObjectHideFlags: 0
@@ -11464,6 +11464,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3006222366931089827, guid: e3e00f03040e0a1408e13cf72fc9b374,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9556848b49f0e15478eee4005c85383a,
+        type: 3}
     - target: {fileID: 3262519371195196721, guid: e3e00f03040e0a1408e13cf72fc9b374,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
