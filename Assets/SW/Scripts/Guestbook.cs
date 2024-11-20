@@ -131,7 +131,7 @@ namespace SW
         public void LoadGuestbookData()
         {
             int mapId = DataManager.instance.mapId;
-            DataManager.MapType mapType = DataManager.instance.mapType;
+            DataManager.MapType mapType = DataManager.instance.MapTypeState;
             bool isMyClassroom = false;
             // 쪽지함은 내 교실일 때
             if (mapId == AuthManager.GetInstance().userAuthData.userInfo.id && mapType == DataManager.MapType.MyClassroom)
@@ -261,7 +261,7 @@ namespace SW
             // 작성자 이거나
             if (contentData.userId == AuthManager.GetInstance().userAuthData.userInfo.id || 
             // 교실의 주인일 때
-                (DataManager.instance.mapType == DataManager.MapType.MyClassroom && DataManager.instance.mapId == AuthManager.GetInstance().userAuthData.userInfo.id))
+                (DataManager.instance.MapTypeState == DataManager.MapType.MyClassroom && DataManager.instance.mapId == AuthManager.GetInstance().userAuthData.userInfo.id))
             // 삭제버튼 On
             {
                 delBtn.onClick.AddListener(() =>
@@ -420,7 +420,7 @@ namespace SW
         {
             user = AuthManager.GetInstance().userAuthData.userInfo;
             mapId = DataManager.instance.mapId;
-            mapType = DataManager.instance.mapType;
+            mapType = DataManager.instance.MapTypeState;
         }
     }
     [Serializable]

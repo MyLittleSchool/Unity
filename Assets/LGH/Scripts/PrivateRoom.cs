@@ -83,10 +83,11 @@ namespace GH
 
         private void OnUI()
         {
+
             passWordInputField.text = "";
             print(passWordPanel.name);
             passWordPanel.SetActive(true);
-
+            passWordWrongText.gameObject.SetActive(false);
             if (activeRoom == false)
             {
                 passWordText.text = "비밀번호 설정해주세요";
@@ -116,6 +117,7 @@ namespace GH
                         passWordPanel.SetActive(false);
 
                         playerMine.transform.position = gameObject.transform.position - new Vector3(0, 1.5f, 0);
+                        PhotonChatMgr.instance.PrivateRoomIn("PR" + roomNum);
                         playerCheck = false;
 
                         // 입장
@@ -135,9 +137,10 @@ namespace GH
                         playerCheck = false;
                         playerMine.transform.position = gameObject.transform.position - new Vector3(0, 1.5f, 0);
 
+
                         // 입장
                         SceneUIManager.GetInstance().OnVoicePanel();
-
+                        PhotonChatMgr.instance.PrivateRoomIn("PR" + roomNum);
                     }
                     else
                     {
@@ -184,11 +187,12 @@ namespace GH
             {
                 if (collision.gameObject.GetComponent<PhotonView>().IsMine)
                 {
+                    playerMine = collision.gameObject;
                     OnUI();
                     darkSprite.SetActive(true);
-                    playerMine = collision.gameObject;
                     playerCheck = true;
                     enterPosition = collision.transform.position;
+                    
                 }
                 playersList.Add(collision.gameObject);
                 VoiceManager.GetInstance().SettingPlayerList(playersList);
@@ -214,6 +218,10 @@ namespace GH
                             SceneUIManager.GetInstance().OffVoicePanel();
                             VoiceManager.GetInstance().HeadSetOnOff(false);
                             VoiceManager.GetInstance().MicrophoneOnOff(false);
+
+                            PhotonChatMgr.instance.ChatChannelChange();
+
+
                         }
                         break;
                     }

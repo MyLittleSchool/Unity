@@ -16,8 +16,18 @@ namespace GH
         public string playerSchool;
         public string playerCurrChannel;
         public int mapId;
-        public enum MapType { MyClassroom, School, Note, Others }
-        public MapType mapType;
+        public enum MapType { Login, School, MyClassroom, Square, Quiz, QuizSquare, ContestClassroom,Note, Others }
+        public MapType mapType = MapType.MyClassroom;
+        public MapType MapTypeState
+        {
+            get { return mapType; }
+            set
+            {
+                mapType = value;
+                // Ελ½Ε
+
+            }
+        }
         public GameObject setTileObj;
         public int setTileObjId;
 

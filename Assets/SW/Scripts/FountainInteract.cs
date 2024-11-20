@@ -21,7 +21,7 @@ namespace SW
                 DataManager.instance.playerCurrChannel = DataManager.instance.playerName;
                 PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
                 DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                DataManager.instance.mapType = DataManager.MapType.MyClassroom;
+                DataManager.instance.MapTypeState = DataManager.MapType.MyClassroom;
 
                 //DataManager.instance.player = null;
                 PhotonNetwork.LeaveRoom();

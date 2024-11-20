@@ -180,7 +180,12 @@ namespace GH
             print(newRoom + "룸 만들었다!");
             //chatClient.Subscribe(new string[] { currChannel });
         }
-
+        public enum ChatMode
+        {
+            Default, AIChatBot
+        }
+        public ChatMode ChatModeState { get; set; }
+        public AIChatBotNPC NPC { get; set; }
         private void OnSubmit(string s)
         {
             // 채팅창에 아무것도 없으면 함수를 끝낸다.
@@ -197,31 +202,39 @@ namespace GH
             //    nickName = playerName;
             //}
 
-            ChatLogSeverPost(s);
-
-            //귓속말인지 판단
-            // /w 아이디 메시지면 귓속말
-            string[] text = s.Split(" ", 2);
-            string chat = playerName + "  " + s;
-
-            //귓속말 
-            if (s[0] == '@')
+            if (ChatModeState == ChatMode.Default)
             {
-                chat = text[0] + "  " + text[1];
-                //귓속말 보내기
-                chatClient.SendPrivateMessage(text[0].Remove(0, 1), chat);
-                print(text[0].Remove(0, 1) + "에게 귓속말");
+                ChatLogSeverPost(s);
+
+                //귓속말인지 판단
+                // /w 아이디 메시지면 귓속말
+                string[] text = s.Split(" ", 2);
+                string chat = playerName + "  " + s;
+
+                //귓속말 
+                if (s[0] == '@')
+                {
+                    chat = text[0] + "  " + text[1];
+                    //귓속말 보내기
+                    chatClient.SendPrivateMessage(text[0].Remove(0, 1), chat);
+                    print(text[0].Remove(0, 1) + "에게 귓속말");
+                    inputChat.text = "";
+                }
+                else
+                {
+                    // 일반채팅을 보내자
+                    chatClient.PublishMessage(currChannel, chat);
+                    //말풍선에 텍스트를 넣는다.
+                    playerMalpung.RPC_MalPungText(inputChat.text);
+                    inputChat.text = "";
+                }
+            }
+            else if (ChatModeState == ChatMode.AIChatBot)
+            {
+                NPC.ReqChat(s);
+                playerMalpung.MalPungText(s);
                 inputChat.text = "";
             }
-            else
-            {
-                // 일반채팅을 보내자
-                chatClient.PublishMessage(currChannel, chat);
-                //말풍선에 텍스트를 넣는다.
-                playerMalpung.RPC_MalPungText(inputChat.text);
-                inputChat.text = "";
-            }
-
         }
 
         private void CreateChatItem(string chat, Color chatColor)
@@ -360,6 +373,20 @@ namespace GH
         {
 
             inputChat.text = "@" + playerName + " ";
+        }
+
+        // 채팅 입력 On
+        public void OnChatInput()
+        {
+            inputChat.Select();
+            TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false);
+        }
+
+        public void PrivateRoomIn(string s)
+        {
+            JoinChatRoom(s);
+            chatChannelText.text = s;
+            print(s);
         }
     }
 

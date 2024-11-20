@@ -25,7 +25,7 @@ namespace SW
             material.SetInt("_On", 0);
             print("²¨Áü");
         }
-        public void HighlightOn()
+        public virtual void HighlightOn()
         {
             material.SetInt("_On", 1);
             print("ÄÑÁü");
