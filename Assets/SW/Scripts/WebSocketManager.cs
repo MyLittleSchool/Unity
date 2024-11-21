@@ -74,13 +74,30 @@ namespace SW
                 string data = receiveQueue.Dequeue();
                 print(data);
                 GetReceiveType type = JsonUtility.FromJson<GetReceiveType>(data);
+                // 친구 목록
                 if (type.type == "FRIEND_LIST")
                 {
                     friendsUI.LoadFriendList(data);
                 }
+                // 받은 요청
                 else if (type.type == "PENDING_REQUESTS")
                 {
-
+                    friendsUI.LoadFriendRequest(data);
+                }
+                // 친구 수락 콜백
+                else if (type.type == "ACCEPT_FRIENDSHIP_REQUEST_CALLBACK")
+                {
+                    friendsUI.RefreshFriends();
+                }
+                // 보낸 요청
+                else if (type.type == "PENDING_REQUESTS_BY_REQUESTER")
+                {
+                    friendsUI.LoadFriendRequesting(data);
+                }
+                // 상대방이 수락
+                else if (type.type == "ACCEPT_FRIENDSHIP_REQUEST")
+                {
+                    friendsUI.RefreshFriends();
                 }
             }
         }
@@ -128,6 +145,10 @@ namespace SW
             {
                 Debug.Log(e.ToString());
             }
+        }
+        public void RequestFriend(int userId)
+        {
+            Send(friendWebSocket, "{\"type\": \"FRIEND_REQUEST\", \"requesterId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + ", \"receiverId\": " + userId + "}");
         }
     }
 }
