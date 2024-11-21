@@ -6110,6 +6110,7 @@ MonoBehaviour:
   firstSchoolPanel: {fileID: 1645021369}
   visitOtherSchoolPanel: {fileID: 1645021364}
   privateRoomPanel: {fileID: 1645021363}
+  voicePanel: {fileID: 0}
   nickNameInputField: {fileID: 1645021381}
   interestInputField: {fileID: 1645021379}
   myMessageInputField: {fileID: 1645021377}
@@ -14188,6 +14189,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5802267189082769139}
   m_CullTransparentMesh: 1
+--- !u!1001 &1103612627680805829
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.455909
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 32.92057
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 26.381239
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192536772173232257, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5213293038701920034, guid: 2e8d8b8b35b70f34091bb2fe0e037df6,
+        type: 3}
+      propertyPath: m_Name
+      value: QuestManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2e8d8b8b35b70f34091bb2fe0e037df6, type: 3}
 --- !u!114 &1153576312838112984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15402,3 +15471,4 @@ SceneRoots:
   - {fileID: 756077808}
   - {fileID: 1645021338}
   - {fileID: 282858742}
+  - {fileID: 1103612627680805829}
