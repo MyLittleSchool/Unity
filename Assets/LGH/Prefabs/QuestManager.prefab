@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5213293038701920034
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5192536772173232257}
+  - component: {fileID: 6800847805163266762}
+  m_Layer: 0
+  m_Name: QuestManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5192536772173232257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5213293038701920034}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.455909, y: 32.92057, z: 26.381239}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6800847805163266762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5213293038701920034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b47616030a0b84da81e2f841a7fe71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialQuestList:
+  - title: "\uB9C8\uC774\uB9AC\uD2C0 \uC2A4\uCFE8\uC5D0 \uC624\uC2E0 \uAC83\uC744
+      \uD658\uC601\uD569\uB2C8\uB2E4!"
+    content: "\uB85C\uADF8\uC778\uD558\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB098\uB9CC\uC758 \uD504\uB85C\uD544\uC744 \uC644\uC131\uD558\uC138\uC694!"
+    content: "\uD504\uB85C\uD544 \uC124\uC815\uD558\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB098\uC758 \uCCAB\uCE5C\uAD6C\uB294...?"
+    content: "\uCCAB \uCE5C\uAD6C \uCD94\uAC00\uD558\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uCE5C\uAD6C\uC640 \uBE44\uBC00 \uC774\uC57C\uAE30\uB97C \uD574\uBD05\uC2DC\uB2E4!"
+    content: "\uCE5C\uAD6C\uC5D0\uAC8C \uCABD\uC9C0 \uBCF4\uB0B4\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB098\uB9CC\uC758 \uAD50\uC2E4\uC744 \uB9CC\uB4E4\uC790!"
+    content: "\uAD50\uC2E4 \uCC98\uC74C \uAFB8\uBBF8\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB098\uC758 \uC9C0\uC2DD \uBF50\uB0B4\uAE30! 1"
+    content: "\uCCAB OX \uD034\uC988 \uCC38\uC5EC"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB098\uC758 \uC9C0\uC2DD \uBF50\uB0B4\uAE30! 2"
+    content: "\uCCAB \uACE8\uB4E0\uBCA8 \uCC38\uC5EC"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB9CC\uB0A8\uC758 \uAD11\uC7A5\uC5D0\uB294 \uBB34\uC5C7\uC774 \uC788\uC744\uAE4C?"
+    content: "\uB9CC\uB0A8\uC758 \uAD11\uC7A5 \uC624\uBE0C\uC81C \uC0C1\uD638\uC791\uC6A9
+      \uCCAB \uC2DC\uB3C4"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB9CC\uB0A8\uC758 \uAD11\uC7A5\uC5D0\uB294 \uBB34\uC5C7\uC774 \uC788\uC744\uAE4C?2"
+    content: "\uCC98\uC74C \uACE0\uBBFC\uC0C1\uB2F4 \uAC8C\uC2DC\uAE00 \uB0A8\uAE30\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uB098\uC758 \uBCA0\uC2A4\uD2B8 \uCE5C\uAD6C\uB294..?"
+    content: "AI \uCD94\uCC9C \uCE5C\uAD6C \uBC1B\uC544\uBCF4\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uACE0\uBBFC \uD574\uACB0!"
+    content: "\uCC98\uC74C\uC73C\uB85C \uACE0\uBBFC\uC0C1\uB2F4 \uB313\uAE00 \uB0A8\uAE30\uAE30"
+    count: 0
+    exp: 20
+    money: 50
+  - title: "\uC6B0\uB9AC \uD559\uAD50 \uAE30\uB85D"
+    content: "\uC544\uCE74\uC774\uBE59 \uAC24\uB7EC\uB9AC\uC5D0 \uC0AC\uC9C4 \uC5C5\uB85C\uB4DC\uD558\uAE30"
+    count: 0
+    exp: 20
+    money: 50
