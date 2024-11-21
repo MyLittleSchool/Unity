@@ -114,6 +114,7 @@ namespace MJ
 
         [Header("메뉴 패널")]
         public GameObject menuPanel;
+        public RectTransform menuPanelRT;
 
         [Header("친구창 패널")]
         public GameObject friendsPanel;
@@ -437,11 +438,14 @@ namespace MJ
             if (menuPanel.activeSelf)
             {
                 iTween.Stop(menuPanel);
-                menuPanel.transform.position = new Vector3(267, menuPanel.transform.position.y, 0);
-                iTween.MoveTo(menuPanel, iTween.Hash(
-                    "x", 0,
+                MoveMenuPanel(267);
+                iTween.ValueTo(menuPanel, iTween.Hash(
+                    "from", 267,
+                    "to", 0,
                     "time", 0.6f,
                     "easetype", iTween.EaseType.easeOutBounce,
+                    "onupdate", nameof(MoveMenuPanel),
+                    "onupdatetarget", gameObject,
                     "oncomplete", nameof(SetMenuPanel),
                     "oncompletetarget", gameObject,
                     "oncompleteparams", false
@@ -450,18 +454,25 @@ namespace MJ
             else
             {
                 iTween.Stop(menuPanel);
-                menuPanel.transform.position = new Vector3(0, menuPanel.transform.position.y, 0);
+                MoveMenuPanel(0);
                 SetMenuPanel(true);
-                iTween.MoveTo(menuPanel, iTween.Hash(
-                    "x", 267,
+                iTween.ValueTo(menuPanel, iTween.Hash(
+                    "from", 0,
+                    "to", 267,
                     "time", 0.6f,
-                    "easetype", iTween.EaseType.easeOutBounce
+                    "easetype", iTween.EaseType.easeOutBounce,
+                    "onupdate", nameof(MoveMenuPanel),
+                    "onupdatetarget", gameObject
                 ));
             }
         }
         public void SetMenuPanel(bool value)
         {
             menuPanel.SetActive(value);
+        }
+        public void MoveMenuPanel(float newValue)
+        {
+            menuPanelRT.anchoredPosition = new Vector3(newValue, menuPanelRT.anchoredPosition.y, 0);
         }
 
         public void OnFriendsPanel()
