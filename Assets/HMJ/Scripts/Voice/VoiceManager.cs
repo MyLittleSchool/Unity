@@ -92,23 +92,23 @@ public class VoiceManager : MonoBehaviour
         VoiceManager.GetInstance().MicrophoneOnOff(false);
     }
 
-    public void AddPlayerList(int ActorNumber)
+    public void settingPlayerList(List<GameObject> players)
     {
-        if (DataManager.instance.player.GetPhotonView().OwnerActorNr == ActorNumber)
-            return;
-        actorList.Add(ActorNumber);
-
+        clearPlayerList();
+        int minePlayerActorN = DataManager.instance.player.GetPhotonView().OwnerActorNr;
+        for (int i = 0; i < players.Count; i++)
+        {
+            int playerActorN = players[i].GetPhotonView().OwnerActorNr;
+            if (minePlayerActorN == playerActorN)
+                continue;
+            actorList.Add(playerActorN);
+        }
         int[] targetPlayers = actorList.ToArray();
         record.TargetPlayers = targetPlayers;
     }
 
-    public void DeletePlayerList(int ActorNumber)
+    public void clearPlayerList()
     {
-        if (DataManager.instance.player.GetPhotonView().OwnerActorNr == ActorNumber)
-            return;
-        actorList.Remove(ActorNumber);
-
-        int[] targetPlayers = actorList.ToArray();
-        record.TargetPlayers = targetPlayers;
+        actorList.Clear();
     }
 }

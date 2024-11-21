@@ -122,7 +122,9 @@ namespace GH
 
                         // 입장
                         SceneUIManager.GetInstance().OnVoicePanel();
+
                         DataManager.instance.privateRoomName = gameObject.name.ToString();
+                        VoiceManager.GetInstance().settingPlayerList(playersList);
                     }
                 }
 
@@ -141,6 +143,7 @@ namespace GH
 
                         // 입장
                         DataManager.instance.privateRoomName = gameObject.name.ToString();
+                        VoiceManager.GetInstance().settingPlayerList(playersList);
                         SceneUIManager.GetInstance().OnVoicePanel();
                         PhotonChatMgr.instance.PrivateRoomIn("PR" + roomNum);
                     }
@@ -197,8 +200,8 @@ namespace GH
                     
                 }
                 playersList.Add(collision.gameObject);
-                if (DataManager.instance.privateRoomName == gameObject.name.ToString()) // 같은 방일때만
-                    VoiceManager.GetInstance().AddPlayerList(collision.gameObject.GetPhotonView().OwnerActorNr);
+                if(DataManager.instance.privateRoomName == gameObject.name.ToString())
+                    VoiceManager.GetInstance().settingPlayerList(playersList);
                 activeRoom = true;
 
             }
@@ -213,8 +216,8 @@ namespace GH
                     {
                         playersList.RemoveAt(i);
 
-                        if (DataManager.instance.privateRoomName == gameObject.name.ToString()) // 같은 방일때만
-                            VoiceManager.GetInstance().DeletePlayerList(collision.gameObject.GetPhotonView().OwnerActorNr);
+                        if (DataManager.instance.privateRoomName == gameObject.name.ToString())
+                            VoiceManager.GetInstance().settingPlayerList(playersList);
 
                         if (collision.gameObject.GetComponent<PhotonView>().IsMine)
                         {
@@ -222,6 +225,7 @@ namespace GH
                             darkSprite.SetActive(false);
                             playerMine = null;
                             // 퇴장
+                            VoiceManager.GetInstance().clearPlayerList();
                             SceneUIManager.GetInstance().OffVoicePanel();
                             VoiceManager.GetInstance().HeadSetOnOff(false);
                             VoiceManager.GetInstance().MicrophoneOnOff(false);
