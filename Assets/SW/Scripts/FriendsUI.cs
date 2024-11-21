@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static Unity.Burst.Intrinsics.X86.Avx;
 namespace SW
 {
     public class FriendsUI : MonoBehaviour
@@ -100,6 +101,7 @@ namespace SW
             }
             else if (modifyBtnState == ModifyBtnState.Confirm)
             {
+                WebSocketManager webSocketManager = WebSocketManager.GetInstance();
                 for (int i = 0; i < contentsTabs[0].childCount; i++)
                 {
                     if (contentsTabs[0].GetChild(i).Find("CheckButton").GetChild(1).gameObject.activeSelf == true)
@@ -107,7 +109,8 @@ namespace SW
                         FriendPanel comp = contentsTabs[0].GetChild(i).GetComponent<FriendPanel>();
                         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
                         info.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/remove?friendshipId=" + comp.friendshipId;
-                        StartCoroutine(HttpManager.GetInstance().Delete(info));
+                        //StartCoroutine(HttpManager.GetInstance().Delete(info));
+                        webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"DELETE_FRIEND_REQUEST\", \"friendshipId\": " + comp.friendshipId + "}");
                         Destroy(comp.gameObject);
                     }
                 }
@@ -366,8 +369,10 @@ namespace SW
             WebSocketManager webSocketManager = WebSocketManager.GetInstance();
             // 친구 목록 조회
             webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_FRIEND_LIST\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
-            // 보류 중 요청 목록 조회
+            // 받은 요청 목록 조회
             webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_PENDING_REQUESTS\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
+            // 보낸 요청 목록 조회
+            webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_PENDING_REQUESTS_BY_REQUESTER\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
         }
         [Serializable]
         public class FriendList
@@ -447,17 +452,25 @@ namespace SW
             if (tab == 0) ChangeTab(tab);
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[0].GetComponent<RectTransform>());
         }
+        [Serializable]
+        public class FriendRequestList
+        {
+            public string type;
+            public Friendship[] requests;
+        }
         public void LoadFriendRequest(string res)
         {
-            FriendList list = JsonUtility.FromJson<FriendList>(res);
-            if (list.friends != null)
+            WebSocketManager webSocketManager = WebSocketManager.GetInstance();
+            FriendRequestList list = JsonUtility.FromJson<FriendRequestList>(res);
+            if (list.requests != null)
             {
-                for (int i = 0; i < list.friends.Length; i++)
+                for (int i = 0; i < list.requests.Length; i++)
                 {
+                    UserInfo requester = list.requests[i].requester;
+                    // 내가 받은 요청
                     GameObject newPanel = Instantiate(requestedPrefab, contentsTabs[1]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
-                    UserInfo requester = list.friends[i].requester;
-                    comp.friendshipId = list.friends[i].id;
+                    comp.friendshipId = list.requests[i].id;
                     comp.id = requester.id;
                     comp.NickNameText.text = requester.name;
                     comp.GradeText.text = requester.grade + "학년";
@@ -474,12 +487,10 @@ namespace SW
                     // 거절
                     comp.PassButton.onClick.AddListener(() =>
                     {
-                        HttpManager.HttpInfo info3 = new HttpManager.HttpInfo();
-                        info3.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/reject?friendshipId=" + comp.friendshipId;
-                        info3.onComplete = (DownloadHandler res) =>
-                        {
-                        };
-                        StartCoroutine(HttpManager.GetInstance().Post(info3));
+                        //HttpManager.HttpInfo info3 = new HttpManager.HttpInfo();
+                        //info3.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/reject?friendshipId=" + comp.friendshipId;
+                        //StartCoroutine(HttpManager.GetInstance().Post(info3));
+                        webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FRIEND_REJECT\", \"friendshipId\": " + comp.friendshipId + "}");
                         Destroy(newPanel);
                         StartCoroutine(ChangeTab1FrameAfter());
                     });
@@ -492,12 +503,54 @@ namespace SW
                         {
                             RefreshFriends();
                         };
-                        StartCoroutine(HttpManager.GetInstance().Post(info3));
+                        //StartCoroutine(HttpManager.GetInstance().Post(info3));
+                        webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FRIEND_ACCEPT\", \"friendshipId\": " + comp.friendshipId + "}");
                     });
                     // 친구 요청 사유 추가 필요
                 }
             }
             if (tab == 1) ChangeTab(tab);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[1].GetComponent<RectTransform>());
+        }
+        public void LoadFriendRequesting(string res)
+        {
+            WebSocketManager webSocketManager = WebSocketManager.GetInstance();
+            FriendRequestList list = JsonUtility.FromJson<FriendRequestList>(res);
+            if (list.requests != null)
+            {
+                for (int i = 0; i < list.requests.Length; i++)
+                {
+                    UserInfo requester = list.requests[i].requester;
+                    // 내가 보낸 요청
+                    GameObject newPanel = Instantiate(requestingPrefab, contentsTabs[2]);
+                    FriendPanel comp = newPanel.GetComponent<FriendPanel>();
+                    UserInfo receiver = list.requests[i].receiver;
+                    comp.friendshipId = list.requests[i].id;
+                    comp.id = receiver.id;
+                    comp.NickNameText.text = receiver.name;
+                    if (receiver.isOnline)
+                    {
+                        comp.StateText.text = "<color=#F2884B>접속중";
+                    }
+                    else
+                    {
+                        comp.StateText.text = "";
+                    }
+                    // 요청취소
+                    comp.RequestButton.onClick.AddListener(() =>
+                    {
+                        HttpManager.HttpInfo info3 = new HttpManager.HttpInfo();
+                        info3.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/cancel?friendshipId=" + comp.friendshipId;
+                        //StartCoroutine(HttpManager.GetInstance().Post(info3));
+                        webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"DELETE_FRIEND_REQUEST\", \"friendshipId\": " + comp.friendshipId + "}");
+                        Destroy(newPanel);
+                        StartCoroutine(ChangeTab1FrameAfter());
+                    });
+                    if (tab == 2) ChangeTab(tab);
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[2].GetComponent<RectTransform>());
+                }
+            }
+            if (tab == 2) ChangeTab(tab);
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[1].GetComponent<RectTransform>());
         }
 
@@ -533,16 +586,7 @@ namespace SW
                     });
                     friendPanel.RequestButton.onClick.AddListener(() =>
                     {
-                        int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                        int targetId = friendPanel.id;
-                        HttpManager httpManager = HttpManager.GetInstance();
-                        HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-                        info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
-                        info.onComplete = (DownloadHandler res) =>
-                        {
-                            print(res.text);
-                        };
-                        StartCoroutine(HttpManager.GetInstance().Post(info));
+                        WebSocketManager.GetInstance().RequestFriend(friendPanel.id);
                     });
                 }
                 if (tab == 3) ChangeTab(tab);

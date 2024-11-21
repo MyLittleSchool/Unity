@@ -858,16 +858,7 @@ namespace MJ
             });
             comp.RequestButton.onClick.AddListener(() =>
             {
-                int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                int targetId = comp.id;
-                HttpManager httpManager = HttpManager.GetInstance();
-                HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-                info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
-                info.onComplete = (DownloadHandler res) =>
-                {
-                    print(res.text);
-                };
-                StartCoroutine(HttpManager.GetInstance().Post(info));
+                WebSocketManager.GetInstance().RequestFriend(comp.id);
             });
         }
     }
