@@ -122,6 +122,9 @@ namespace GH
 
                         // 입장
                         SceneUIManager.GetInstance().OnVoicePanel();
+
+                        DataManager.instance.privateRoomName = gameObject.name.ToString();
+                        VoiceManager.GetInstance().settingPlayerList(playersList);
                     }
                 }
 
@@ -129,7 +132,8 @@ namespace GH
             }
             if (activeRoom)
             {
-                if (playerMine.gameObject.GetComponent<PhotonView>().IsMine)
+                //확인 필요 --- 다른 방에 사람이 있으면 방이 안만들어진다.
+                if (playerMine.gameObject.GetPhotonView().IsMine)
                 {
                     if (passWordInputField.text == roomPassword)
                     {
@@ -139,6 +143,8 @@ namespace GH
 
 
                         // 입장
+                        DataManager.instance.privateRoomName = gameObject.name.ToString();
+                        VoiceManager.GetInstance().settingPlayerList(playersList);
                         SceneUIManager.GetInstance().OnVoicePanel();
                         PhotonChatMgr.instance.PrivateRoomIn("PR" + roomNum);
                     }
@@ -185,7 +191,7 @@ namespace GH
         {
             if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+                if (collision.gameObject.GetPhotonView().IsMine)
                 {
                     playerMine = collision.gameObject;
                     OnUI();
@@ -195,7 +201,8 @@ namespace GH
                     
                 }
                 playersList.Add(collision.gameObject);
-                VoiceManager.GetInstance().SettingPlayerList(playersList);
+                if(DataManager.instance.privateRoomName == gameObject.name.ToString())
+                    VoiceManager.GetInstance().settingPlayerList(playersList);
                 activeRoom = true;
 
             }
@@ -209,12 +216,17 @@ namespace GH
                     if (playersList[i] == collision.gameObject)
                     {
                         playersList.RemoveAt(i);
-                        VoiceManager.GetInstance().SettingPlayerList(playersList);
+
+                        if (DataManager.instance.privateRoomName == gameObject.name.ToString())
+                            VoiceManager.GetInstance().settingPlayerList(playersList);
+
                         if (collision.gameObject.GetComponent<PhotonView>().IsMine)
                         {
+                            DataManager.instance.privateRoomName = "";
                             darkSprite.SetActive(false);
                             playerMine = null;
                             // 퇴장
+                            VoiceManager.GetInstance().clearPlayerList();
                             SceneUIManager.GetInstance().OffVoicePanel();
                             VoiceManager.GetInstance().HeadSetOnOff(false);
                             VoiceManager.GetInstance().MicrophoneOnOff(false);

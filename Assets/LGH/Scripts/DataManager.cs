@@ -16,6 +16,7 @@ namespace GH
         public string playerSchool;
         public string playerCurrChannel;
         public int mapId;
+        public string privateRoomName;
         public enum MapType { Login, School, MyClassroom, Square, Quiz, QuizSquare, ContestClassroom,Note, Others }
         public MapType mapType = MapType.MyClassroom;
         public MapType MapTypeState
@@ -49,7 +50,7 @@ namespace GH
             }
             Screen.SetResolution(360, 800, false);
             Screen.fullScreen = false;
-
+            privateRoomName = "";
         }
         public void PlayerFind()
         {
