@@ -34,70 +34,51 @@ namespace SW
         #endregion
 
         public string SERVER_ADDRESS { get; } = "ws://125.132.216.190:5544";
-        public WebSocket friendWebSocket;
-        public FriendsUI friendsUI;
-        public void LogIn(int id)
+        public WebSocket webSocket;
+        private void Start()
         {
             try
             {
-                friendWebSocket = new WebSocket(SERVER_ADDRESS + "/ws?userId=" + id);
-                friendWebSocket.OnOpen += (sender, e) =>
+                webSocket = new WebSocket(SERVER_ADDRESS + "/ws?userId=test1");
+                webSocket.OnOpen += (sender, e) =>
                 {
                     Debug.Log("서버와 연결되었습니다.");
                 };
-                friendWebSocket.OnMessage += Receive;
-                friendWebSocket.OnClose += (sender, e) =>
+                webSocket.OnMessage += Receive;
+                webSocket.OnClose += (sender, e) =>
                 {
                     Debug.Log("서버와의 연결이 종료되었습니다.");
                 };
-                friendWebSocket.OnError += (sender, e) =>
+                webSocket.OnError += (sender, e) =>
                 {
                     Debug.LogError("WebSocket 오류: " + e.Message);
                 };
-                if (friendWebSocket == null || !friendWebSocket.IsAlive)
-                    friendWebSocket.Connect();
+                if (webSocket == null || !webSocket.IsAlive)
+                    webSocket.Connect();
             }
             catch (Exception ex)
             {
                 Debug.LogError("WebSocket 연결 중 오류 발생: " + ex.Message);
             }
         }
-        private Queue<string> receiveQueue = new Queue<string>();
         private void Receive(object sender, MessageEventArgs e)
         {
-            receiveQueue.Enqueue(e.Data);
+            print(e.Data);
         }
-        private void Update()
-        {
-            while (receiveQueue.Count != 0)
-            {
-                string data = receiveQueue.Dequeue();
-                print(data);
-                GetReceiveType type = JsonUtility.FromJson<GetReceiveType>(data);
-                if (type.type == "FRIEND_LIST")
-                {
-                    friendsUI.LoadFriendList(data);
-                }
-                else if (type.type == "PENDING_REQUESTS")
-                {
-
-                }
-            }
-        }
-        [Serializable]
-        private struct GetReceiveType
-        {
-            public string type;
-        }
-
-        public void Send(WebSocket socket, string jsonMessage)
+        public void Send()
         {
             try
             {
-                if (socket != null && socket.IsAlive)
+                if (webSocket != null && webSocket.IsAlive)
                 {
+
+                    // 객체를 JSON 문자열로 변환
+                    string jsonMessage = "test";
+
                     // WebSocket을 통해 서버로 전송
-                    socket.Send(jsonMessage);
+                    webSocket.Send(jsonMessage);
+
+                    Debug.Log("보낸 메시지: " + jsonMessage);
                 }
                 else
                 {
@@ -117,16 +98,23 @@ namespace SW
         {
             try
             {
-                if (friendWebSocket == null)
+                if (webSocket == null)
                     return;
 
-                if (friendWebSocket.IsAlive)
-                    friendWebSocket.Close();
+                if (webSocket.IsAlive)
+                    webSocket.Close();
 
             }
             catch (Exception e)
             {
                 Debug.Log(e.ToString());
+            }
+        }
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                Send();
             }
         }
     }

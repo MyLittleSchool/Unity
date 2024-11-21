@@ -42,8 +42,7 @@ namespace SW
             {
                 userInfo = info;
                 DataManager.instance.mapId = info.id;
-                //GetInstance().OnlineStatue();
-                WebSocketManager.GetInstance().LogIn(info.id);
+                GetInstance().OnlineStatue();
             }
         }
         public AuthData userAuthData { get; set; }

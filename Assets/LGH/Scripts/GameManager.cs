@@ -36,7 +36,6 @@ namespace GH
         public bool buttonDown = false;
 
         public GameObject firstLoginPanel;
-        private VerticalLayoutGroup emojiButPanelVerticalLayoutGroup;
         private void Awake()
         {
             if (instance == null)
@@ -53,7 +52,6 @@ namespace GH
         void Start()
         {
             emojiButtonPannel.SetActive(true);
-            emojiButPanelVerticalLayoutGroup = emojiButtonPannel.GetComponent<VerticalLayoutGroup>();
             interracBut.SetActive(false);
             CoSpwamPlayer();
             // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기(per seconds)
@@ -94,51 +92,16 @@ namespace GH
             if (onActivate)
             {
                 conversionImage.sprite = activateOff;
-                //emojiButtonPannel.gameObject.SetActive(false);
+                emojiButtonPannel.gameObject.SetActive(false);
                 onActivate = false;
-                iTween.Stop(emojiButtonPannel);
-                emojiButtonPannel.transform.position = new Vector3(stingButton.transform.position.x, stingButton.transform.position.y + 150, 0);
-                emojiButPanelVerticalLayoutGroup.spacing = 15;
-                iTween.MoveTo(emojiButtonPannel, iTween.Hash(
-                    "y", stingButton.transform.position.y,
-                    "time", 1,
-                    "easetype", iTween.EaseType.easeOutQuint
-                ));
-                iTween.ValueTo(emojiButtonPannel, iTween.Hash(
-                    "from", 15,
-                    "to", -130,
-                    "time", 1,
-                    "easetype", iTween.EaseType.easeOutQuint,
-                    "onupdate", nameof(ChangeSpacing),
-                    "onupdatetarget", gameObject
-                ));
             }
             else
             {
                 conversionImage.sprite = activateOn;
-                //emojiButtonPannel.gameObject.SetActive(true);
+                emojiButtonPannel.gameObject.SetActive(true);
                 onActivate = true;
-                iTween.Stop(emojiButtonPannel);
-                emojiButtonPannel.transform.position = new Vector3(stingButton.transform.position.x, stingButton.transform.position.y, 0);
-                emojiButPanelVerticalLayoutGroup.spacing = -130;
-                iTween.MoveTo(emojiButtonPannel, iTween.Hash(
-                    "y", stingButton.transform.position.y + 150,
-                    "time", 1,
-                    "easetype", iTween.EaseType.easeOutQuint
-                ));
-                iTween.ValueTo(emojiButtonPannel, iTween.Hash(
-                    "from", -130,
-                    "to", 15,
-                    "time", 1,
-                    "easetype", iTween.EaseType.easeOutQuint,
-                    "onupdate", nameof(ChangeSpacing),
-                    "onupdatetarget", gameObject
-                ));
+
             }
-        }
-        public void ChangeSpacing(float newValue)
-        {
-            emojiButPanelVerticalLayoutGroup.spacing = newValue;
         }
 
         public void InteractionButton()

@@ -46,10 +46,7 @@ namespace SW
             public string message;
         }
 
-        private void Awake()
-        {
-            WebSocketManager.GetInstance().friendsUI = this;
-        }
+        // Start is called before the first frame update
         void Start()
         {
             closeButton.onClick.AddListener(() => ClosePanel());
@@ -259,7 +256,7 @@ namespace SW
                 if (tab == 0) ChangeTab(tab);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[0].GetComponent<RectTransform>());
             };
-            //StartCoroutine(HttpManager.GetInstance().Get(info));
+            StartCoroutine(HttpManager.GetInstance().Get(info));
 
             // 친구 요청 목록
             HttpManager.HttpInfo getinfo = new HttpManager.HttpInfo();
@@ -317,7 +314,7 @@ namespace SW
                 if (tab == 1) ChangeTab(tab);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[1].GetComponent<RectTransform>());
             };
-            //StartCoroutine(HttpManager.GetInstance().Get(getinfo));
+            StartCoroutine(HttpManager.GetInstance().Get(getinfo));
 
             // 요청 대기 목록
             HttpManager.HttpInfo waitInfo = new HttpManager.HttpInfo();
@@ -360,147 +357,8 @@ namespace SW
                 if (tab == 2) ChangeTab(tab);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[2].GetComponent<RectTransform>());
             };
-            //StartCoroutine(HttpManager.GetInstance().Get(waitInfo));
-
-            // 소켓
-            WebSocketManager webSocketManager = WebSocketManager.GetInstance();
-            // 친구 목록 조회
-            webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_FRIEND_LIST\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
-            // 보류 중 요청 목록 조회
-            webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_PENDING_REQUESTS\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
+            StartCoroutine(HttpManager.GetInstance().Get(waitInfo));
         }
-        [Serializable]
-        public class FriendList
-        {
-            public string type;
-            public Friendship[] friends;
-        }
-        public void LoadFriendList(string res)
-        {
-            FriendList list = JsonUtility.FromJson<FriendList>(res);
-            if (list.friends != null)
-            {
-                for (int i = 0; i < list.friends.Length; i++)
-                {
-                    GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
-                    FriendPanel comp = newPanel.GetComponent<FriendPanel>();
-                    UserInfo friend = list.friends[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.friends[i].receiver : list.friends[i].requester;
-                    comp.friendshipId = list.friends[i].id;
-                    comp.id = friend.id;
-                    comp.NickNameText.text = friend.name;
-                    if (friend.isOnline)
-                    {
-                        comp.StateText.text = "<color=#F2884B>접속중";
-                        // 귓속말 보내기
-                        comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "귓속말 보내기";
-                        comp.RequestButton.onClick.AddListener(() =>
-                        {
-                            PhotonChatMgr.instance.OneToOneChat(friend.name);
-                            gameObject.SetActive(false);
-                        });
-                    }
-                    else
-                    {
-                        comp.StateText.text = "";
-                        // 쪽지 버튼
-                        comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "쪽지 남기기";
-                        comp.RequestButton.onClick.AddListener(() =>
-                        {
-                            selectedUserId = comp.id;
-                            noteCreatePanel.gameObject.SetActive(true);
-                            inputField.text = "";
-                        });
-                    }
-                    // 교실 놀러가기 버튼
-                    comp.PassButton.onClick.AddListener(() =>
-                    {
-                        DataManager.instance.mapType = DataManager.MapType.MyClassroom;
-                        DataManager.instance.mapId = comp.id;
-                        PhotonNetMgr.instance.roomName = friend.name;
-                        gameObject.SetActive(false);
-                        PhotonNetwork.LeaveRoom();
-                        PhotonNetMgr.instance.sceneNum = 2;
-                    });
-                    // 체크 버튼
-                    Transform btn = newPanel.transform.Find("CheckButton");
-                    btn.GetComponent<Button>().onClick.AddListener(() =>
-                    {
-                        if (btn.transform.GetChild(1).gameObject.activeSelf)
-                        {
-                            checkedNum--;
-                            if (checkedNum <= 0)
-                            {
-                                modifyBtnText.text = "취소";
-                                modifyBtnState = ModifyBtnState.Cancel;
-                            }
-                        }
-                        else
-                        {
-                            checkedNum++;
-                            modifyBtnText.text = "친구 삭제하기";
-                            modifyBtnState = ModifyBtnState.Confirm;
-                        }
-                        btn.transform.GetChild(1).gameObject.SetActive(!btn.transform.GetChild(1).gameObject.activeSelf);
-                    });
-                }
-            }
-            if (tab == 0) ChangeTab(tab);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[0].GetComponent<RectTransform>());
-        }
-        public void LoadFriendRequest(string res)
-        {
-            FriendList list = JsonUtility.FromJson<FriendList>(res);
-            if (list.friends != null)
-            {
-                for (int i = 0; i < list.friends.Length; i++)
-                {
-                    GameObject newPanel = Instantiate(requestedPrefab, contentsTabs[1]);
-                    FriendPanel comp = newPanel.GetComponent<FriendPanel>();
-                    UserInfo requester = list.friends[i].requester;
-                    comp.friendshipId = list.friends[i].id;
-                    comp.id = requester.id;
-                    comp.NickNameText.text = requester.name;
-                    comp.GradeText.text = requester.grade + "학년";
-                    comp.locationText.text = requester.school.schoolName;
-                    comp.InterestText.text = "#" + String.Join(" #", requester.interest);
-                    //if (requester.isOnline)
-                    //{
-                    //    comp.StateText.text = "<color=#F2884B>접속중";
-                    //}
-                    //else
-                    //{
-                    comp.StateText.text = "";
-                    //}
-                    // 거절
-                    comp.PassButton.onClick.AddListener(() =>
-                    {
-                        HttpManager.HttpInfo info3 = new HttpManager.HttpInfo();
-                        info3.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/reject?friendshipId=" + comp.friendshipId;
-                        info3.onComplete = (DownloadHandler res) =>
-                        {
-                        };
-                        StartCoroutine(HttpManager.GetInstance().Post(info3));
-                        Destroy(newPanel);
-                        StartCoroutine(ChangeTab1FrameAfter());
-                    });
-                    // 수락
-                    comp.RequestButton.onClick.AddListener(() =>
-                    {
-                        HttpManager.HttpInfo info3 = new HttpManager.HttpInfo();
-                        info3.url = HttpManager.GetInstance().SERVER_ADRESS + "/friendship/accept?friendshipId=" + comp.friendshipId;
-                        info3.onComplete = (DownloadHandler res) =>
-                        {
-                            RefreshFriends();
-                        };
-                        StartCoroutine(HttpManager.GetInstance().Post(info3));
-                    });
-                    // 친구 요청 사유 추가 필요
-                }
-            }
-            if (tab == 1) ChangeTab(tab);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(contentsTabs[1].GetComponent<RectTransform>());
-        }
-
         public void RefreshTab3(List<RecommFriend> _recommFriends)
         {
             // 삭제

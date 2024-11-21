@@ -434,34 +434,7 @@ namespace MJ
 
         public void OnMenuButtonClick()
         {
-            if (menuPanel.activeSelf)
-            {
-                iTween.Stop(menuPanel);
-                menuPanel.transform.position = new Vector3(267, menuPanel.transform.position.y, 0);
-                iTween.MoveTo(menuPanel, iTween.Hash(
-                    "x", 0,
-                    "time", 0.6f,
-                    "easetype", iTween.EaseType.easeOutBounce,
-                    "oncomplete", nameof(SetMenuPanel),
-                    "oncompletetarget", gameObject,
-                    "oncompleteparams", false
-                ));
-            }
-            else
-            {
-                iTween.Stop(menuPanel);
-                menuPanel.transform.position = new Vector3(0, menuPanel.transform.position.y, 0);
-                SetMenuPanel(true);
-                iTween.MoveTo(menuPanel, iTween.Hash(
-                    "x", 267,
-                    "time", 0.6f,
-                    "easetype", iTween.EaseType.easeOutBounce
-                ));
-            }
-        }
-        public void SetMenuPanel(bool value)
-        {
-            menuPanel.SetActive(value);
+            menuPanel.SetActive(!menuPanel.activeSelf);
         }
 
         public void OnFriendsPanel()
