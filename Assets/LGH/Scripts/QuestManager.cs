@@ -6,7 +6,7 @@ using UnityEngine;
 using static HttpManager;
 using UnityEngine.Networking;
 
-
+#region DTO
 // Æ©Åä¸®¾ó 
 [System.Serializable]
 public struct Tutorial
@@ -56,7 +56,7 @@ public struct UserQuestList
 {
     public List<UserQuest> data;
 }
-
+#endregion
 public class QuestManager : MonoBehaviour
 {
     public QuestManager instance;
@@ -88,6 +88,7 @@ public class QuestManager : MonoBehaviour
         {
             UserQuestListGet();
         }
+
         if (Input.GetKeyDown(KeyCode.U))
         {
             QuestPatch(3);
