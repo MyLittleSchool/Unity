@@ -1,11 +1,21 @@
+using GH;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using System;
+using SW;
+using System.Linq;
 
 public class Board : MonoBehaviour
 {
+    [Header("게시글 리스트")]
+    public GameObject content;
+    public GameObject contentPrefab;
     [Header("작성 패널")]
     public GameObject createPanel;
     public Button saveBoardButton;
@@ -13,6 +23,12 @@ public class Board : MonoBehaviour
     public TMP_InputField contentInputField;
     [Header("내용 패널")]
     public GameObject contentPanel;
+    public GameObject boardContents;
+    public TMP_Text titleText;
+    public TMP_Text contentText;
+    public TMP_Text likeCountText;
+    public Button likeButton;
+    public TMP_Text comentCountText;
     public TMP_InputField comentInputField;
     public Button saveComentButton;
     public void ClosePanel()
@@ -44,9 +60,30 @@ public class Board : MonoBehaviour
     public void SaveBoard()
     {
         // 생성 요청 통신
-
+        BoardPostInfo boardPostInfo = new BoardPostInfo();
+        boardPostInfo.title = titleInputField.text;
+        boardPostInfo.content = contentInputField.text;
+        HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board";
+        info.body = JsonUtility.ToJson(boardPostInfo);
+        info.contentType = "application/json";
+        info.onComplete = (DownloadHandler res) =>
+        {
+            ToastMessage.OnMessage("고민이 등록되었습니다");
+            LoadBoardData();
+        };
+        StartCoroutine(HttpManager.GetInstance().Post(info));
         SetCreatePanel();
+        titleInputField.text = "";
+        contentInputField.text = "";
     }
+    [Serializable]
+    private struct BoardPostInfo
+    {
+        public string title;
+        public string content;
+    }
+
     public void SetContentPanel()
     {
         if (contentPanel.activeSelf)
@@ -54,6 +91,7 @@ public class Board : MonoBehaviour
             contentPanel.SetActive(false);
             comentInputField.text = "";
             saveComentButton.interactable = false;
+            LoadBoardData();
         }
         else
         {
@@ -72,14 +110,79 @@ public class Board : MonoBehaviour
         // 댓글 저장 요청 통신
 
         comentInputField.text = "";
+        saveComentButton.interactable = false;
     }
 
     public void LoadBoardData()
     {
-        
-    }
-    public void LoadComentsData()
-    {
+        HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board/list";
+        info.onComplete = (DownloadHandler res) =>
+        {
+            // 제거
+            for (int i = 0; i < content.transform.childCount; i++)
+            {
+                Destroy(content.transform.GetChild(i).gameObject);
+            }
+            // 생성
+            BoardGetList boardGetList = JsonUtility.FromJson<BoardGetList>("{\"data\":" + res.text + "}");
+            for (int i = boardGetList.data.Length - 1; i >= 0; i--)
+            {
+                GameObject newPanel = Instantiate(contentPrefab, content.transform);
+                BoardContent comp = newPanel.GetComponent<BoardContent>();
+                comp.id = boardGetList.data[i].id;
+                comp.title = boardGetList.data[i].title;
+                comp.content = boardGetList.data[i].content;
+                comp.like= boardGetList.data[i].likeCount;
+                comp.text.text = comp.title;
+                comp.likeCountText.text = comp.like.ToString();
+                // 댓글 개수 구현 필요\
+                //comp.comentCountText.text = comp.
+                comp.button.onClick.AddListener(() =>
+                {
+                    contentPanel.SetActive(true);
+                    titleText.text = comp.title;
+                    contentText.text = comp.content;
+                    likeCountText.text = comp.like.ToString();
+                    comentCountText.text = comp.comentCount.ToString();
+                    LoadComentsData(comp.id);
+                    likeButton.onClick.AddListener(() =>
+                    {
+                        // 좋아요 버튼
 
+                    });
+                });
+            }
+        };
+        StartCoroutine(HttpManager.GetInstance().Get(info));
+    }
+    public void LoadComentsData(int id)
+    {
+        // 제거
+        for (int i = 2; i < boardContents.transform.childCount; i++)
+        {
+            Destroy(boardContents.transform.GetChild(i).gameObject);
+        }
+        // 생성
+        HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/comment/boardId?boardId=" + id;
+        info.onComplete = (DownloadHandler res) =>
+        {
+            // 댓글 생성
+        };
+    }
+    [Serializable]
+    private struct BoardGetList
+    {
+        public BoardGetInfo[] data;
+    }
+
+    [Serializable]
+    private struct BoardGetInfo
+    {
+        public int id;
+        public string title;
+        public string content;
+        public int likeCount;
     }
 }

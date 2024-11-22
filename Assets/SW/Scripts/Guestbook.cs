@@ -110,7 +110,7 @@ namespace SW
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
-                print("게시 요청 완료");
+                ToastMessage.OnMessage("작성을 완료하였습니다");
                 LoadGuestbookData();
             };
             StartCoroutine(httpManager.Post(info));

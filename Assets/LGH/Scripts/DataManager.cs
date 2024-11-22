@@ -1,4 +1,6 @@
 using Photon.Pun;
+using SW;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -26,9 +28,26 @@ namespace GH
             {
                 mapType = value;
                 // Ελ½Ε
-
+                UserPosInfo userPosInfo = new UserPosInfo();
+                userPosInfo.type = "USER_POS_INFO";
+                userPosInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                userPosInfo.mapId = mapId;
+                userPosInfo.mapType = mapType.ToString();
+                userPosInfo.isOnline = true;
+                WebSocketManager webSocketManager = WebSocketManager.GetInstance();
+                webSocketManager.Send(webSocketManager.friendWebSocket, JsonUtility.ToJson(userPosInfo));
             }
         }
+        [Serializable]
+        private struct UserPosInfo
+        {
+            public string type;
+            public int userId;
+            public int mapId;
+            public string mapType;
+            public bool isOnline;
+        }
+
         public GameObject setTileObj;
         public int setTileObjId;
 
