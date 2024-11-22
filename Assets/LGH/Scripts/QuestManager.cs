@@ -59,7 +59,7 @@ public struct UserQuestList
 #endregion
 public class QuestManager : MonoBehaviour
 {
-    public QuestManager instance;
+    public static QuestManager instance;
 
     private void Awake()
     {
@@ -95,7 +95,7 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-
+    //퀘스트 달성 보내기    
     public void QuestPatch(int questId)
     {
         HttpInfo info = new HttpInfo();
@@ -126,15 +126,8 @@ public class QuestManager : MonoBehaviour
                 print("Patch : " + downloadHandler.text);
             };
             StartCoroutine(HttpManager.GetInstance().Patch(info));
-
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
-
-
-
-
-
-       
     }
 
     public void UserQuestListGet()

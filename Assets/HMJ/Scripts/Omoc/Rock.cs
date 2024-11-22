@@ -8,11 +8,11 @@ public class ROCK : MonoBehaviour
     {
         NONE,
         WHITE,
-        RED,
+        PURPLE,
         YELLOW,
         GREEN,
-        BLUE,
-        BLACK,
+        ORANGE,
+        RED,
         ROCKDATA_END
     }
 
@@ -34,7 +34,7 @@ public class ROCK : MonoBehaviour
     public void SetColor(ROCKCOLOR _rockColor)
     {
         rockColor = _rockColor;
-
+        Color newColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
         switch (_rockColor)
         {
             case ROCKCOLOR.NONE:
@@ -43,22 +43,23 @@ public class ROCK : MonoBehaviour
             case ROCKCOLOR.WHITE:
                 spriteRenderer.color = Color.white;
                 break;
-            case ROCKCOLOR.RED:
-                spriteRenderer.color = Color.red;
+            case ROCKCOLOR.PURPLE:
+                ColorUtility.TryParseHtmlString("#6F4BF2", out newColor);
                 break;
             case ROCKCOLOR.YELLOW:
-                spriteRenderer.color = Color.yellow;
+                ColorUtility.TryParseHtmlString("#DFF24B", out newColor);
                 break;
             case ROCKCOLOR.GREEN:
-                spriteRenderer.color = Color.green;
+                ColorUtility.TryParseHtmlString("#80F2BD", out newColor);
                 break;
-            case ROCKCOLOR.BLUE:
-                spriteRenderer.color = Color.blue;
+            case ROCKCOLOR.ORANGE:
+                ColorUtility.TryParseHtmlString("#F28B50", out newColor);
                 break;
-            case ROCKCOLOR.BLACK:
-                spriteRenderer.color = Color.black;
+            case ROCKCOLOR.RED:
+                ColorUtility.TryParseHtmlString("#F23D3D", out newColor);
                 break;
         }
+        spriteRenderer.color = newColor;
     }
 
     public ROCKCOLOR GetColor()
