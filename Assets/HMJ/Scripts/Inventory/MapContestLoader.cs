@@ -184,11 +184,11 @@ namespace MJ
 
         public void LoadFurniture()
         {
-            SetTile setTile = dataManager.player.GetComponent<SetTile>();
-            foreach (ObjectContestInfo info in loadfurnitureList)
-            {
-                setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().items[info.objId].prefab, info.id);
-            }
+            //SetTile setTile = dataManager.player.GetComponent<SetTile>();
+            //foreach (ObjectContestInfo info in loadfurnitureList)
+            //{
+            //    setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().items[info.objId].prefab, info.id);
+            //}
         }
 
         public void MapContestEditSave(MapContestData mapContestInfo)

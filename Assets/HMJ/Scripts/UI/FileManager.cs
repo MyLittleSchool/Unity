@@ -58,6 +58,13 @@ namespace MJ
             // Resources 폴더 내에서 해당 경로의 모든 스프라이트 로드
             return Resources.LoadAll<Sprite>(folderPath);
         }
+
+        // Resources 폴더 내의 특정 경로에서 모든 GameObject 파일을 불러오는 함수
+        public GameObject LoadGameObjectFromResource(string folderPath)
+        {
+            // Resources 폴더 내에서 해당 경로의 모든 스프라이트 로드
+            return Resources.Load<GameObject>(folderPath);
+        }
     }
 }
     

@@ -79,6 +79,11 @@ namespace MJ
         [Header("학교 선택 완료 버튼")]
         public Button schoolSaveButton;
 
+        [Header("인벤토리 선택 버튼 - 공통")]
+        public Button commonButton;
+
+        [Header("인벤토리 선택 버튼 - 학교")]
+        public Button myClassRoomButton;
         #endregion
 
         #region Panel
@@ -275,6 +280,11 @@ namespace MJ
             if (avatarDecoOffButton)
                 avatarDecoOffButton.onClick.AddListener(OffDecorationPanel);
 
+            if (commonButton)
+                commonButton.onClick.AddListener(OnInventoryCommon);
+
+            if (myClassRoomButton)
+                myClassRoomButton.onClick.AddListener(OnInventoryMyClassRoom);
 
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {
@@ -712,6 +722,17 @@ namespace MJ
         {
             schoolSuch.text = schoolDropDown.options[option].text;
         }
+
+        public void OnInventoryMyClassRoom()
+        {
+            InventorySystem.GetInstance().SettingInventory(Item.ItemType.MyClassRoom);
+        }
+
+        public void OnInventoryCommon()
+        {
+            InventorySystem.GetInstance().SettingInventory(Item.ItemType.Common);
+        }
+
         IEnumerator CoSchoolGet()
         {
             yield return new WaitUntil(() => schooldata.data.Count > 0);

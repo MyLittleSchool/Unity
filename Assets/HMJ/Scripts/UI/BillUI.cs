@@ -70,32 +70,32 @@ public class BillUI : MonoBehaviour
         // 이때 프리셋 적용x
     }
 
-    public void calculateItem()
-    {
-        ItemMap.Clear();
-        foreach (ObjectContestInfo objectContestInfo in MapContestLoader.GetInstance().loadfurnitureList)
-        {
-            Item.ItemData item = inventorySystem.items[objectContestInfo.objId];
-            if (ItemMap.ContainsKey(item.itemName))
-                ItemMap[item.itemName]++;
-            else
-                ItemMap.Add(item.itemName, 1);
+    //public void calculateItem()
+    //{
+    //    ItemMap.Clear();
+    //    foreach (ObjectContestInfo objectContestInfo in MapContestLoader.GetInstance().loadfurnitureList)
+    //    {
+    //        Item.ItemData item = inventorySystem.items[objectContestInfo.objId];
+    //        if (ItemMap.ContainsKey(item.itemName))
+    //            ItemMap[item.itemName]++;
+    //        else
+    //            ItemMap.Add(item.itemName, 1);
 
-        }
-    }
+    //    }
+    //}
 
-    public void calculateDeleteItem()
-    {
-        if (MapContestLoader.GetInstance().deleteItemDataLists == null)
-            return;
-        // 현재 내 맵에서 삭제된 정보 인벤토리에 다시 넣기
-        foreach (DeleteItemData deleteItemData in MapContestLoader.GetInstance().deleteItemDataLists.response)
-            ++inventorySystem.items[deleteItemData.objectId].n;
-    }
+    //public void calculateDeleteItem()
+    //{
+    //    if (MapContestLoader.GetInstance().deleteItemDataLists == null)
+    //        return;
+    //    // 현재 내 맵에서 삭제된 정보 인벤토리에 다시 넣기
+    //    foreach (DeleteItemData deleteItemData in MapContestLoader.GetInstance().deleteItemDataLists.response)
+    //        ++inventorySystem.items[deleteItemData.objectId].n;
+    //}
 
     public void SettingBillData()
     {
-        calculateItem();
+        // calculateItem();
 
         BillText.text = "";
         foreach (KeyValuePair<string, int> item in ItemMap)
@@ -111,7 +111,7 @@ public class BillUI : MonoBehaviour
         StartCoroutine(WaitForConditionToBeTrue());
 
         // 지운 가구 데이터 계산
-        calculateDeleteItem();
+        // calculateDeleteItem();
 
         BuyItem();
         //
@@ -137,23 +137,23 @@ public class BillUI : MonoBehaviour
 
     public void BuyItem()
     {
-        Dictionary<string, int> sellItemMap = new Dictionary<string, int>();
-        foreach (KeyValuePair<string, int> item in ItemMap)
-        {
-            int remainData = inventorySystem.UseItem(item.Value, item.Key);
+        //Dictionary<string, int> sellItemMap = new Dictionary<string, int>();
+        //foreach (KeyValuePair<string, int> item in ItemMap)
+        //{
+        //    int remainData = inventorySystem.UseItem(item.Value, item.Key);
 
-            if (sellItemMap.ContainsKey(item.Key))
-                sellItemMap[item.Key] += -remainData;
-            else
-                sellItemMap.Add(item.Key, -remainData);
-        }
+        //    if (sellItemMap.ContainsKey(item.Key))
+        //        sellItemMap[item.Key] += -remainData;
+        //    else
+        //        sellItemMap.Add(item.Key, -remainData);
+        //}
 
-        int prices = 0;
-        foreach (KeyValuePair<string, int> item in sellItemMap)
-        {
-            prices += inventorySystem.GetPrice(item.Value, item.Key);
-        }
-        BillPrice.text = prices.ToString();
+        //int prices = 0;
+        //foreach (KeyValuePair<string, int> item in sellItemMap)
+        //{
+        //    prices += inventorySystem.GetPrice(item.Value, item.Key);
+        //}
+        //BillPrice.text = prices.ToString();
     }
 
 

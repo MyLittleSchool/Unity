@@ -34,16 +34,16 @@ namespace MJ
             MapContestLoader mapContestLoader = MapContestLoader.GetInstance();
             // 배치 로딩
 
-            while (inventorySystem.items.Count == 0)  // 아이템
-            {
-                yield return null;
-            }
+            //while (inventorySystem.items.Count == 0)  // 아이템
+            //{
+            //    yield return null;
+            //}
 
-            foreach (ObjectContestInfo info in mapContestLoader.loadfurnitureList)
-            {
-                if (inventorySystem.items[info.objId] != null)
-                    setTile.LoadData(new Vector3Int(info.x, info.y, 0), inventorySystem.items[info.objId].prefab, info.id);
-            }
+            //foreach (ObjectContestInfo info in mapContestLoader.loadfurnitureList)
+            //{
+            //    if (inventorySystem.items[info.objId] != null)
+            //        setTile.LoadData(new Vector3Int(info.x, info.y, 0), inventorySystem.items[info.objId].prefab, info.id);
+            //}
         }
     }
 

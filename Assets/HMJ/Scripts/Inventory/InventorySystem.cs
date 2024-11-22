@@ -4,12 +4,41 @@ using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using static HttpManager;
+using static InventorySystem;
 using static Item;
 
 public class InventorySystem : MonoBehaviour
 {
+    /// <summary>
+    /// 인벤토리 부모 및 자식 프리펩
+    /// </summary>
+    public GameObject parentPanel;
+    public Item[] itemComponents;
+    /// <summary>
+    /// 통신 구조체
+    /// </summary>
+    [Serializable]
+    public struct ItemData
+    {
+        public string itemName; // 아이템 이름
+        public int price; // 가격
+        public string itemType; // 아이템 타입
+        public int count; // 아이템 개수
+    }
+
+    [Serializable]
+    public struct ItemDatas
+    {
+        public List<ItemData> response;
+    }
+
     private static InventorySystem instance;
     public static InventorySystem GetInstance()
     {
@@ -22,155 +51,103 @@ public class InventorySystem : MonoBehaviour
         {
             instance = this;
         }
-        InitItem();
+        InitItemList();
     }
 
-    public GameObject itemPrefab;
-    public GameObject parentPanel;
-    private List<GameObject> itemObjects = new List<GameObject>();
+    // 현재 부모에 자식들을 넣어줘야 한다. 이걸 어떻게 넣어줄까?
+    // 만약 인벤토리의 내용물이 바뀌었다면?
+    // 그때 해당 인벤토리 아이템 정보를 가져온다.
+    // 해당 아이템 정보를 생성해서 넣어준다.
 
-    public List<Item.ItemData> items = new List<Item.ItemData>();
-    public List<Item> itemComponents = new List<Item>();
+    private List<Item>[] itemList = new List<Item>[(int)Item.ItemType.ItemTypeEnd];
+    private ItemType curInventoryItemType = ItemType.Common;
 
-    public ItemData choiceItem;
-
-    [Serializable]
-    public struct ItemInfoData
+    public void InitItemList()
     {
-        public int id;
-        public string itemName;
-        public int count;
-        public int price;
-        public int userId;
-        public string itemType;
+        for (int i = 0; i < itemList.Count(); i++)
+            itemList[i] = new List<Item>();
     }
 
-    [Serializable]
-    public class ItemInfoDataList
+    private void Start()
     {
-        public List<ItemInfoData> response;
+
+    }
+    public void FetchItemData()
+    {
+
     }
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void GetItemData(ItemType _itemType)
     {
-    }
+        itemList[(int)_itemType].Clear();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void InitItem()
-    {
-        foreach (Item.ItemData item in items)
+        HttpInfo info = new HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/inventory/list/" + DataManager.instance.mapId + "/" + _itemType.ToString();
+        info.onComplete = (DownloadHandler downloadHandler) =>
         {
-            GameObject itemGame = Instantiate(itemPrefab, parentPanel.transform);
-            Item itemComponent = itemGame.GetComponent<Item>();
-            itemComponent.SetItemData(item, ItemType.InventoryItem);
-            itemComponent.UpdateItemData();
-            itemComponents.Add(itemComponent);
-            itemObjects.Add(itemGame);
-        }
+            Debug.Log("GetItemData: " + downloadHandler.text);
+           
 
+            string wrappedJson = "{\"response\":" + downloadHandler.text + "}";
+       
+            print("a : "+wrappedJson);
+
+            ItemDatas itemData = JsonUtility.FromJson<ItemDatas>(wrappedJson);
+
+            foreach (ItemData itemdata in itemData.response)
+            {
+                GameObject itemPrefab = LoadItemData(_itemType, itemdata.itemName);
+                if (itemPrefab)
+                    Debug.Log("itemPrefab - Name: " + itemdata.itemName + ", " + itemdata.count);
+                else
+                    Debug.Log("Null - itemPrefab  - " + itemdata.itemName);
+                itemList[(int)_itemType].Add(new Item(itemdata.itemName, itemdata.price, _itemType, itemdata.count, itemPrefab));
+            }
+                
+
+        };
+        StartCoroutine(HttpManager.GetInstance().Get(info));
     }
 
-    public bool UseItem()                                                                                                                                                                                                                                   
+    public void SetItemComponent(ItemType _itemType)
     {
-        int idx = items.IndexOf(choiceItem);
-        if (items[idx].n <= 0)
-            return false;
-        else
-            --items[idx].n;
-        itemComponents[idx].UpdateItemData();
+        itemComponents = parentPanel.GetComponentsInChildren<Item>();
+        for(int i = 0; i < itemList[(int)_itemType].Count(); i++)
+            itemComponents[i].SetData(itemList[(int)_itemType][i].itemName, itemList[(int)_itemType][i].price, itemList[(int)_itemType][i].itemType, itemList[(int)_itemType][i].count, itemList[(int)_itemType][i].prefab);
 
-        return true;
+        //Debug.Log("ItemList: " + itemList[(int)_itemType].Count());
+        //for (int i = itemList[(int)_itemType].Count(); i < itemComponents.Count(); i++)
+        //    itemComponents[i].gameObject.SetActive(false);
     }
 
-    // 모자란 개수 반환
-    public int UseItem(int n, string ItemName)
+    public GameObject LoadItemData(ItemType _itemType, string _itemName)
     {
-        int remainData = 0;
-        int idx = ContainItem(ItemName);
-        if (idx >= 0)
-        {
-            remainData = items[idx].n - n;
-            if (items[idx].n - n < 0)
-                items[idx].n = 0;
-            else
-               items[idx].n -= n;
-            itemComponents[idx].UpdateItemData();
+        string ItemPath = "Inventory/" + _itemType.ToString() + "/" + _itemName;
 
-            if (remainData < 0)
-                return remainData;
-            else
-                return 0;
-        }
-        return 0;
-    }
-
-    public void AddItem(int n, string ItemName)
-    {
-        int idx = ContainItem(ItemName);
-        if (idx >= 0)
-            itemComponents[idx].AddItemN(n);
-    }
-
-    public int ContainItem(string ItemName)
-    {
-        for (int i = 0; i < itemComponents.Count; i++)
-        {
-            if (itemComponents[i].GetItemData().itemName == ItemName)
-                return i;
-        }
-
-        return -1;
-    }
-
-    public int GetPrice(int n, string ItemName)
-    {
-        int idx = ContainItem(ItemName);
-        return itemComponents[idx].GetItemData().price * n;
-    }
-
-    public bool CheckItem()
-    {
-        return choiceItem.n > 0;
-    }
-
-    public void SetChoiceItem(ItemData _itemData)
-    {
-        choiceItem = _itemData;
-        if (!CheckItem())
-        {
-            // UI 띄우기
-            SceneUIManager.GetInstance().OnMapInventoryErrorPanel();
-            return;
-        }
-        DataManager.instance.setTileObj = _itemData.prefab;
-        DataManager.instance.setTileObjId = GetItemIndex(_itemData);
-    }
-
-    public int GetItemIndex(Item.ItemData _itemData)
-    {
-        return items.IndexOf(_itemData);
-    }
-
-    public void UpdateItemData()
-    {
-        foreach (Item itemComponent in itemComponents)
-            itemComponent.UpdateItemData();
-    }
-
-    public void RegisterItem()
-    {
+        // 해당 인벤토리 게임 오브젝트
+        return FileManager.Instance.LoadGameObjectFromResource(ItemPath);
 
     }
 
     private void OnEnable()
     {
-        UpdateItemData();
+        SettingInventory(curInventoryItemType);
     }
+
+    IEnumerator WaitForConditionToBeTrue(ItemType _itemType)
+    {
+        GetItemData(_itemType);
+        Debug.Log("Waiting for condition...");
+        // 조건이 true가 될 때까지 대기
+        yield return new WaitUntil(() => itemList[0].Count + itemList[1].Count > 0);
+
+        SetItemComponent(_itemType);
+        Debug.Log("Condition met! Proceeding...");
+    }
+
+    public void SettingInventory(ItemType _itemType)
+    {
+        StartCoroutine(WaitForConditionToBeTrue(_itemType)); // 아이템 데
+    }
+
 }
