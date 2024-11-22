@@ -36,6 +36,7 @@ namespace GH
         public bool buttonDown = false;
 
         public GameObject firstLoginPanel;
+        private VerticalLayoutGroup emojiButPanelVerticalLayoutGroup;
         private void Awake()
         {
             if (instance == null)
@@ -52,6 +53,9 @@ namespace GH
         void Start()
         {
             emojiButtonPannel.SetActive(true);
+            emojiButPanelVerticalLayoutGroup = emojiButtonPannel.GetComponent<VerticalLayoutGroup>();
+            emojiRT = emojiButtonPannel.GetComponent<RectTransform>();
+            stingRT = stingButton.GetComponent<RectTransform>();
             interracBut.SetActive(false);
             CoSpwamPlayer();
             // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기(per seconds)
@@ -92,16 +96,63 @@ namespace GH
             if (onActivate)
             {
                 conversionImage.sprite = activateOff;
-                emojiButtonPannel.gameObject.SetActive(false);
+                //emojiButtonPannel.gameObject.SetActive(false);
                 onActivate = false;
+                iTween.Stop(emojiButtonPannel);
+                MoveEmojiButton(stingRT.anchoredPosition.y + 150);
+                emojiButPanelVerticalLayoutGroup.spacing = 15;
+                iTween.ValueTo(emojiButtonPannel, iTween.Hash(
+                    "from", stingRT.anchoredPosition.y + 150,
+                    "to", stingRT.anchoredPosition.y,
+                    "time", 0.6f,
+                    "easetype", iTween.EaseType.easeOutQuint,
+                    "onupdate", nameof(MoveEmojiButton),
+                    "onupdatetarget", gameObject
+                ));
+                iTween.ValueTo(emojiButtonPannel, iTween.Hash(
+                    "from", 15,
+                    "to", -130,
+                    "time", 0.6f,
+                    "easetype", iTween.EaseType.easeOutQuint,
+                    "onupdate", nameof(ChangeSpacing),
+                    "onupdatetarget", gameObject
+                ));
             }
             else
             {
                 conversionImage.sprite = activateOn;
-                emojiButtonPannel.gameObject.SetActive(true);
+                //emojiButtonPannel.gameObject.SetActive(true);
                 onActivate = true;
-
+                iTween.Stop(emojiButtonPannel);
+                MoveEmojiButton(stingRT.anchoredPosition.y);
+                emojiButPanelVerticalLayoutGroup.spacing = -130;
+                iTween.ValueTo(emojiButtonPannel, iTween.Hash(
+                    "from", stingRT.anchoredPosition.y,
+                    "to", stingRT.anchoredPosition.y + 150,
+                    "time", 0.6f,
+                    "easetype", iTween.EaseType.easeOutQuint,
+                    "onupdate", nameof(MoveEmojiButton),
+                    "onupdatetarget", gameObject
+                ));
+                iTween.ValueTo(emojiButtonPannel, iTween.Hash(
+                    "from", -130,
+                    "to", 15,
+                    "time", 0.6f,
+                    "easetype", iTween.EaseType.easeOutQuint,
+                    "onupdate", nameof(ChangeSpacing),
+                    "onupdatetarget", gameObject
+                ));
             }
+        }
+        RectTransform stingRT;
+        RectTransform emojiRT;
+        public void ChangeSpacing(float newValue)
+        {
+            emojiButPanelVerticalLayoutGroup.spacing = newValue;
+        }
+        public void MoveEmojiButton(float newValue)
+        {
+            emojiRT.anchoredPosition = new Vector3(emojiRT.anchoredPosition.x, newValue, 0);
         }
 
         public void InteractionButton()

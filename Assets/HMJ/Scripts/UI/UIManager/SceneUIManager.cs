@@ -114,6 +114,7 @@ namespace MJ
 
         [Header("메뉴 패널")]
         public GameObject menuPanel;
+        public RectTransform menuPanelRT;
 
         [Header("친구창 패널")]
         public GameObject friendsPanel;
@@ -434,7 +435,44 @@ namespace MJ
 
         public void OnMenuButtonClick()
         {
-            menuPanel.SetActive(!menuPanel.activeSelf);
+            if (menuPanel.activeSelf)
+            {
+                iTween.Stop(menuPanel);
+                MoveMenuPanel(267);
+                iTween.ValueTo(menuPanel, iTween.Hash(
+                    "from", 267,
+                    "to", 0,
+                    "time", 0.6f,
+                    "easetype", iTween.EaseType.easeOutBounce,
+                    "onupdate", nameof(MoveMenuPanel),
+                    "onupdatetarget", gameObject,
+                    "oncomplete", nameof(SetMenuPanel),
+                    "oncompletetarget", gameObject,
+                    "oncompleteparams", false
+                ));
+            }
+            else
+            {
+                iTween.Stop(menuPanel);
+                MoveMenuPanel(0);
+                SetMenuPanel(true);
+                iTween.ValueTo(menuPanel, iTween.Hash(
+                    "from", 0,
+                    "to", 267,
+                    "time", 0.6f,
+                    "easetype", iTween.EaseType.easeOutBounce,
+                    "onupdate", nameof(MoveMenuPanel),
+                    "onupdatetarget", gameObject
+                ));
+            }
+        }
+        public void SetMenuPanel(bool value)
+        {
+            menuPanel.SetActive(value);
+        }
+        public void MoveMenuPanel(float newValue)
+        {
+            menuPanelRT.anchoredPosition = new Vector3(newValue, menuPanelRT.anchoredPosition.y, 0);
         }
 
         public void OnFriendsPanel()
@@ -831,16 +869,7 @@ namespace MJ
             });
             comp.RequestButton.onClick.AddListener(() =>
             {
-                int myId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                int targetId = comp.id;
-                HttpManager httpManager = HttpManager.GetInstance();
-                HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-                info.url = httpManager.SERVER_ADRESS + "/friendship/request?requesterId=" + myId + "&receiverId=" + targetId;
-                info.onComplete = (DownloadHandler res) =>
-                {
-                    print(res.text);
-                };
-                StartCoroutine(HttpManager.GetInstance().Post(info));
+                WebSocketManager.GetInstance().RequestFriend(comp.id);
             });
         }
     }
