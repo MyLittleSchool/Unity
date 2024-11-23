@@ -77,24 +77,6 @@ public class QuestManager : MonoBehaviour
     public UserQuestList userQuestList;
     public UserQuest userQuestData;
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            UserQuestListGet();
-        }
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            QuestPatch(3);
-        }
-    }
-
     //퀘스트 달성 보내기    
     public void QuestPatch(int questId)
     {
@@ -129,6 +111,7 @@ public class QuestManager : MonoBehaviour
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+
 
     public void UserQuestListGet()
     {

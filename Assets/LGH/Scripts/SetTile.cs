@@ -217,7 +217,7 @@ namespace GH
                 //setObject.transform.position = tilePosition;
                 AddObject(setObject);
                 objectList.Last().id = id;
-                print(tilemap.HasTile(tilePosition));
+                //89print(tilemap.HasTile(tilePosition));
             }
         }
     }

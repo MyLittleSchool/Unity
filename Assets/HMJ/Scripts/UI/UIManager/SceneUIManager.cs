@@ -295,7 +295,11 @@ namespace MJ
         }
         private void Update()
         {
-            //ProfileEditCount();
+            if (myProfileEditPanel.activeSelf)
+            {
+                ProfileEditCount();
+
+            }
 
             if (firstSchoolPanel.activeSelf)
             {
@@ -514,7 +518,7 @@ namespace MJ
             PlayerAnimation.GetInstance().PatchAvatarData();
             DecorationPanel.SetActive(false);
         }
-        
+
 
         public void OffMapInventoryErrorPanel()
         {

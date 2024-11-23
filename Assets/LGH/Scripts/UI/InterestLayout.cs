@@ -15,6 +15,6 @@ public class InterestLayout : MonoBehaviour
 
     void Update()
     {
-        group.cellSize = new Vector2( ((Screen.width - 200) - (group.spacing.x * (group.constraintCount - 1))) / group.constraintCount, group.cellSize.y);
+        //group.cellSize = new Vector2( ((Screen.width - 200) - (group.spacing.x * (group.constraintCount - 1))) / group.constraintCount, group.cellSize.y);
     }
 }
