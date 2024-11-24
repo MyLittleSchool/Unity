@@ -677,6 +677,8 @@ namespace MJ
 
             AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(currentuserInfo);
             SetProfile();
+
+            QuestManager.instance.QuestPatch(1);
         }
 
         private void SetProfile()

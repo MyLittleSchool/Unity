@@ -80,6 +80,7 @@ public class QuestManager : MonoBehaviour
     //퀘스트 달성 보내기    
     public void QuestPatch(int questId)
     {
+        print("퀘스트 체크!!");
         HttpInfo info = new HttpInfo();
         info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-quest/" + questId + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
         info.onComplete = (DownloadHandler downloadHandler) =>
@@ -87,27 +88,29 @@ public class QuestManager : MonoBehaviour
             string jsonData = downloadHandler.text;
             userQuestData = JsonUtility.FromJson<UserQuest>(jsonData);
             print("get : " + jsonData);
-
-            QuestPatch questPatch = new QuestPatch();
-            questPatch.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
-            print(AuthManager.GetInstance().userAuthData.userInfo.id);
-            questPatch.questId = questId;
-            print(questId);
-            questPatch.userQuestId = userQuestData.userQuestId;
-            print(userQuestData.userQuestId);
-            questPatch.count = userQuestData.count--;
-            print(userQuestData.count--);
-            questPatch.isComplete = true;
-
-            HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-quest";
-            info.body = JsonUtility.ToJson(questPatch);
-            info.contentType = "application/json";
-            info.onComplete = (DownloadHandler downloadHandler) =>
+            if (userQuestData.isComplete == false)
             {
-                print("Patch : " + downloadHandler.text);
-            };
-            StartCoroutine(HttpManager.GetInstance().Patch(info));
+                QuestPatch questPatch = new QuestPatch();
+                questPatch.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                print(AuthManager.GetInstance().userAuthData.userInfo.id);
+                questPatch.questId = questId;
+                print(questId);
+                questPatch.userQuestId = userQuestData.userQuestId;
+                print(userQuestData.userQuestId);
+                questPatch.count = userQuestData.count--;
+                print(userQuestData.count--);
+                questPatch.isComplete = true;
+
+                HttpInfo info = new HttpInfo();
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-quest";
+                info.body = JsonUtility.ToJson(questPatch);
+                info.contentType = "application/json";
+                info.onComplete = (DownloadHandler downloadHandler) =>
+                {
+                    print("Patch : " + downloadHandler.text);
+                };
+                StartCoroutine(HttpManager.GetInstance().Patch(info));
+            }
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
