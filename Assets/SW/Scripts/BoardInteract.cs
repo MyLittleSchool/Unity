@@ -1,3 +1,4 @@
+using MJ;
 using SW;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace SW
     {
         public override void Interact()
         {
-            
+            SceneUIManager.GetInstance().OnBoardPanel();
         }
     }
 }

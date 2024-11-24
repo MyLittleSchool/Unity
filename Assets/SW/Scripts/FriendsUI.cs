@@ -660,7 +660,7 @@ namespace SW
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
-                
+                ToastMessage.OnMessage("작성을 완료하였습니다");
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
             CloseNoteCreatePanel();

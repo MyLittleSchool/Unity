@@ -87,7 +87,7 @@ namespace SW
                 // 친구 수락 콜백
                 else if (type.type == "ACCEPT_FRIENDSHIP_REQUEST_CALLBACK")
                 {
-                    friendsUI.RefreshFriends();
+                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
                 }
                 // 보낸 요청
                 else if (type.type == "PENDING_REQUESTS_BY_REQUESTER")
@@ -97,7 +97,27 @@ namespace SW
                 // 상대방이 수락
                 else if (type.type == "ACCEPT_FRIENDSHIP_REQUEST")
                 {
-                    friendsUI.RefreshFriends();
+                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
+                }
+                // 친구 삭제
+                else if (type.type == "COMPLETE_DELETE_FRIEND_REQUEST")
+                {
+                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
+                }
+                // 요청 취소
+                else if (type.type == "NOTIFICATION_DELETE_FRIEND_REQUEST")
+                {
+                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
+                }
+                // 친구 위치 이동
+                else if (type.type == "ACCEPT_FRIEND_POS_INFO")
+                {
+                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
+                }
+                // 친구 종료
+                else if (type.type == "OFFLINE_USER")
+                {
+                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
                 }
             }
         }
@@ -148,6 +168,7 @@ namespace SW
         }
         public void RequestFriend(int userId)
         {
+            ToastMessage.OnMessage("친구 추가를 요청하였습니다");
             Send(friendWebSocket, "{\"type\": \"FRIEND_REQUEST\", \"requesterId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + ", \"receiverId\": " + userId + "}");
         }
     }
