@@ -7,6 +7,7 @@ using System.Reflection;
 using TMPro;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using MJ;
 
 namespace GH
 {
@@ -172,6 +173,7 @@ namespace GH
             //성공적으로 방이 만들어졌다.
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
 
+
         }
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
@@ -196,9 +198,7 @@ namespace GH
                 joyStick.GetComponent<Joystick>().ResetJoystick();
             }
 
-
-            
-
+            PlayerAnimation.GetInstance().SettingAvatar();
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)

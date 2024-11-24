@@ -146,8 +146,15 @@ namespace MJ
 
         [Header("학교 방문 패널")]
         public GameObject visitOtherSchoolPanel;
+
         [Header("프라이빗 룸 패널")]
         public GameObject privateRoomPanel;
+
+        [Header("퀴즈 카테고리 패널")]
+        public GameObject quizCategoryPanel;
+
+        [Header("퀴즈 문제 패널")]
+        public GameObject quizQuestionPanel;
 
         [Header("보이스 패널")]
         public GameObject voicePanel;
@@ -525,6 +532,27 @@ namespace MJ
             voicePanel.SetActive(false);
         }
 
+        public void OnQuizCategoryPanel()
+        {
+            quizCategoryPanel.SetActive(true);
+        }
+
+        public void OffQuizCategoryPanel()
+        {
+            quizCategoryPanel.SetActive(false);
+        }
+
+        public void OnQuizQuestionPanel()
+        {
+            quizQuestionPanel.SetActive(true);
+        }
+
+        public void OffQuizQuestionPanel()
+        {
+            quizQuestionPanel.SetActive(false);
+        }
+
+        
         public void ProfileEditCount()
         {
             nickNameText.text = nickNameInputField.text.Length + "/10";
