@@ -414,6 +414,7 @@ namespace MJ
             if (DataManager.instance.player != null)
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = false;
+                QuestManager.instance.QuestPatch(4);
             }
         }
 
