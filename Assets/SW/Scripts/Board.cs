@@ -108,10 +108,29 @@ public class Board : MonoBehaviour
     public void SaveComent()
     {
         // 댓글 저장 요청 통신
-
+        CommentInfo commentInfo = new CommentInfo();
+        commentInfo.content = comentInputField.text;
+        commentInfo.boardId = loadedContent.id;
+        HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/comment";
+        info.body = JsonUtility.ToJson(commentInfo);
+        info.contentType = "application/json";
+        info.onComplete = (DownloadHandler res) =>
+        {
+            ToastMessage.OnMessage("댓글이 등록되었습니다");
+            LoadComentsData(loadedContent.id);
+        };
         comentInputField.text = "";
         saveComentButton.interactable = false;
+        StartCoroutine(HttpManager.GetInstance().Post(info));
     }
+    [Serializable]
+    private struct CommentInfo
+    {
+        public string content;
+        public int boardId;
+    }
+
     public GameObject[] sortTabs;
     private bool sortByLike;
     public void SortByLike(bool value)
@@ -129,6 +148,7 @@ public class Board : MonoBehaviour
         }
         LoadBoardData();
     }
+    private BoardContent loadedContent;
     public void LoadBoardData()
     {
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
@@ -148,7 +168,7 @@ public class Board : MonoBehaviour
                 {
                     int result = a.likeCount.CompareTo(b.likeCount);
                     if (result == 0)
-                        result = a.id.CompareTo(b.id);
+                        result = a.boardId.CompareTo(b.boardId);
                     return result;
                 });
             }
@@ -156,7 +176,7 @@ public class Board : MonoBehaviour
             {
                 GameObject newPanel = Instantiate(contentPrefab, content.transform);
                 BoardContent comp = newPanel.GetComponent<BoardContent>();
-                comp.id = boardGetList.data[i].id;
+                comp.id = boardGetList.data[i].boardId;
                 comp.title = boardGetList.data[i].title;
                 comp.content = boardGetList.data[i].content;
                 comp.like= boardGetList.data[i].likeCount;
@@ -166,6 +186,7 @@ public class Board : MonoBehaviour
                 //comp.comentCountText.text = comp.
                 comp.button.onClick.AddListener(() =>
                 {
+                    loadedContent = comp;
                     contentPanel.SetActive(true);
                     titleText.text = comp.title;
                     contentText.text = comp.content;
@@ -182,6 +203,7 @@ public class Board : MonoBehaviour
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+    public GameObject commentPrefab;
     public void LoadComentsData(int id)
     {
         // 제거
@@ -191,12 +213,32 @@ public class Board : MonoBehaviour
         }
         // 생성
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/comment/boardId?boardId=" + id;
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/comment/" + id;
         info.onComplete = (DownloadHandler res) =>
         {
-            // 댓글 생성
+            CommentList data = JsonUtility.FromJson<CommentList>("{\"data\":" + res.text + "}");
+            for (int i = 0; i < data.data.Length; i++)
+            {
+                // 댓글 생성
+                GameObject newPanel = Instantiate(commentPrefab, boardContents.transform);
+                newPanel.transform.GetComponentInChildren<TMP_Text>().text = data.data[i].content;
+            }
         };
+        StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+    [Serializable]
+    private struct CommentResInfo
+    {
+        public int commentId;
+        public string content;
+        public int boardId;
+    }
+    [Serializable]
+    private struct CommentList
+    {
+        public CommentResInfo[] data;
+    }
+
     [Serializable]
     private struct BoardGetList
     {
@@ -206,7 +248,7 @@ public class Board : MonoBehaviour
     [Serializable]
     private struct BoardGetInfo
     {
-        public int id;
+        public int boardId;
         public string title;
         public string content;
         public int likeCount;
