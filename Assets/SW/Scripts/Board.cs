@@ -112,7 +112,23 @@ public class Board : MonoBehaviour
         comentInputField.text = "";
         saveComentButton.interactable = false;
     }
-
+    public GameObject[] sortTabs;
+    private bool sortByLike;
+    public void SortByLike(bool value)
+    {
+        sortByLike = value;
+        if (value)
+        {   // 인기순
+            sortTabs[0].gameObject.SetActive(false);
+            sortTabs[1].gameObject.SetActive(true);
+        }
+        else
+        {   // 최신순
+            sortTabs[0].gameObject.SetActive(true);
+            sortTabs[1].gameObject.SetActive(false);
+        }
+        LoadBoardData();
+    }
     public void LoadBoardData()
     {
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
@@ -126,7 +142,17 @@ public class Board : MonoBehaviour
             }
             // 생성
             BoardGetList boardGetList = JsonUtility.FromJson<BoardGetList>("{\"data\":" + res.text + "}");
-            for (int i = boardGetList.data.Length - 1; i >= 0; i--)
+            if (sortByLike)
+            {
+                boardGetList.data.Sort((a, b) =>
+                {
+                    int result = a.likeCount.CompareTo(b.likeCount);
+                    if (result == 0)
+                        result = a.id.CompareTo(b.id);
+                    return result;
+                });
+            }
+            for (int i = boardGetList.data.Count - 1; i >= 0; i--)
             {
                 GameObject newPanel = Instantiate(contentPrefab, content.transform);
                 BoardContent comp = newPanel.GetComponent<BoardContent>();
@@ -174,7 +200,7 @@ public class Board : MonoBehaviour
     [Serializable]
     private struct BoardGetList
     {
-        public BoardGetInfo[] data;
+        public List<BoardGetInfo> data;
     }
 
     [Serializable]
