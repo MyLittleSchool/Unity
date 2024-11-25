@@ -9,17 +9,37 @@ using TMPro;
 using GH;
 using Photon.Pun;
 using System.Numerics;
+using static QuizCategory;
 
+[Serializable]
+public class QuizData
+{
+    public string quizText;
+    public bool quizBoolean;
+}
 
+[Serializable]
+public class QuizDataGroup
+{
+    public List<QuizData> quizDatas;
+}
 public class QuizLogic : MonoBehaviour
 {
-
-    [Serializable]
-    public struct QuizData
+    static QuizLogic instance;
+    public static QuizLogic GetInstance()
     {
-        public string quizText;
-        public bool quizBoolean;
+        return instance;
     }
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    public List<QuizDataGroup> quizList;
 
     public enum QuizState
     {
@@ -40,8 +60,6 @@ public class QuizLogic : MonoBehaviour
 
     int minimumPlayer = 2;
 
-    public List<QuizData> quizList;
-
 
     QuizState m_eNextQuizOrder = QuizState.QuizNoneState;
     QuizState m_eCurQuizOrder = QuizState.QuizNoneState;
@@ -53,6 +71,8 @@ public class QuizLogic : MonoBehaviour
     Dictionary<string, int> correctAnswers = new Dictionary<string, int>();
 
     string winnerData;
+
+    QUIZCATEGORY curQuizCategory;
 
     private void Start()
     {
@@ -69,7 +89,7 @@ public class QuizLogic : MonoBehaviour
     /// <param name="quizData"></param>
     public void AddQuizData(QuizData quizData)
     {
-        quizList.Add(quizData);
+        quizList[(int)curQuizCategory].quizDatas.Add(quizData);
     }
 
     /// <summary>
@@ -124,7 +144,7 @@ public class QuizLogic : MonoBehaviour
     /// </summary>
     public void QuizTimeLimit()
     {
-        text.text = quizList[idx].quizText;
+        text.text = quizList[(int)curQuizCategory].quizDatas[idx].quizText;
 
         StartCoroutine(ProceedQuiz(quizTime));
     }
@@ -154,7 +174,7 @@ public class QuizLogic : MonoBehaviour
     {
         GameObject player = DataManager.instance.player;
         Debug.Log("플레이어 x:" + player.transform.position.x);
-        if (((player.transform.position.x > 0) && !quizList[idx].quizBoolean) || ((player.transform.position.x < 0) && quizList[idx].quizBoolean))// x
+        if (((player.transform.position.x > 0) && !quizList[(int)curQuizCategory].quizDatas[idx].quizBoolean) || ((player.transform.position.x < 0) && quizList[(int)curQuizCategory].quizDatas[idx].quizBoolean))// x
         {
             quizClear = true;
             SendMasterQuizClearCheck();
@@ -264,5 +284,10 @@ public class QuizLogic : MonoBehaviour
     public void shuffleQuizList()
     {
         quizList.OrderBy(a => Guid.NewGuid()).ToList();
+    }
+
+    public void SelectQuiz(QUIZCATEGORY _quizCategory)
+    {
+        curQuizCategory = _quizCategory;
     }
 }

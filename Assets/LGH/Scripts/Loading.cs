@@ -122,6 +122,7 @@ public class Loading : MonoBehaviour
         currentTime = 0;
         RandomSet();
         yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
+        yield return new WaitForSeconds(0.2f);
         gameObject.SetActive(false);
     }
 }

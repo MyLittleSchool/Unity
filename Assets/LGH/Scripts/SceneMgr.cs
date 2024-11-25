@@ -97,14 +97,18 @@ public class SceneMgr : MonoBehaviour
 
     }
 
-    public void QuizIn()
+    public void QuizIn(string quizRoomName)
     {
-        DataManager.instance.playerCurrChannel = "퀴즈";
-        PhotonNetMgr.instance.roomName = "퀴즈";
+        DataManager.instance.playerCurrChannel = quizRoomName;
+        PhotonNetMgr.instance.roomName = quizRoomName;
         DataManager.instance.mapId = 0;
         DataManager.instance.MapTypeState = DataManager.MapType.Quiz;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 4;
+
+        // 퀴즈 방에 따라 Count 구해서 마스터 클라이언트로 전달
+
+        PlayerAnimation.GetInstance().SettingAvatar();
     }
 
     public void QuizSquareIn()
@@ -126,6 +130,4 @@ public class SceneMgr : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 6;
     }
-
-   
 }

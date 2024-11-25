@@ -1,5 +1,6 @@
 using GH;
 using Photon.Pun;
+using SW;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -102,7 +103,7 @@ namespace MJ
             InitPlayerAnimation();
 
             AvatarIndexData avatarInfoList = new AvatarIndexData();
-            avatarInfoList.userId = DataManager.instance.mapId;
+            avatarInfoList.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
             avatarInfoList.infoList = animatorIndex.ToList();
 
             HttpInfo info = new HttpInfo();
@@ -124,7 +125,7 @@ namespace MJ
         public void PatchAvatarData()
         {
             AvatarIndexData avatarInfoList = new AvatarIndexData();
-            avatarInfoList.userId = DataManager.instance.mapId;
+            avatarInfoList.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
             avatarInfoList.infoList = animatorIndex.ToList();
 
             HttpInfo info = new HttpInfo();
@@ -144,7 +145,7 @@ namespace MJ
         public void GetAvatarData()
         {
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/avatar?userId=" + DataManager.instance.mapId;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/avatar?userId=" + AuthManager.GetInstance().userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 avatarIndexData = JsonUtility.FromJson<AvatarIndexData>(downloadHandler.text);
@@ -172,6 +173,12 @@ namespace MJ
             {
                 player.GetPhotonView().RPC("SetAvatarPart", RpcTarget.AllBuffered, skinId, clothesId, faceId, hairId);
             }
+        }
+
+        public void SettingAvatar()
+        {
+            GetAvatarData();
+            AvatarEdit(animatorIndex[0], animatorIndex[3], animatorIndex[1], animatorIndex[2]);
         }
     }
 }

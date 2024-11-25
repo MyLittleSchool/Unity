@@ -1,3 +1,4 @@
+using MJ;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ public class IntoQuiz : MonoBehaviour
         {
             SceneMgr.instance.QuizIn();
             QuestManager.instance.QuestPatch(5);
+            SceneUIManager.GetInstance().OnQuizCategoryPanel();
         }
     }
 }

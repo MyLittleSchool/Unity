@@ -79,6 +79,11 @@ namespace MJ
         [Header("학교 선택 완료 버튼")]
         public Button schoolSaveButton;
 
+        [Header("인벤토리 선택 버튼 - 공통")]
+        public Button commonButton;
+
+        [Header("인벤토리 선택 버튼 - 학교")]
+        public Button myClassRoomButton;
         #endregion
 
         #region Panel
@@ -142,8 +147,15 @@ namespace MJ
 
         [Header("학교 방문 패널")]
         public GameObject visitOtherSchoolPanel;
+
         [Header("프라이빗 룸 패널")]
         public GameObject privateRoomPanel;
+
+        [Header("퀴즈 카테고리 패널")]
+        public GameObject quizCategoryPanel;
+
+        [Header("퀴즈 문제 패널")]
+        public GameObject quizQuestionPanel;
 
         [Header("보이스 패널")]
         public GameObject voicePanel;
@@ -281,6 +293,11 @@ namespace MJ
             if (avatarDecoOffButton)
                 avatarDecoOffButton.onClick.AddListener(OffDecorationPanel);
 
+            //if (commonButton)
+            //    commonButton.onClick.AddListener(OnInventoryCommon);
+
+            //if (myClassRoomButton)
+            //    myClassRoomButton.onClick.AddListener(OnInventoryMyClassRoom);
 
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {
@@ -563,6 +580,27 @@ namespace MJ
             voicePanel.SetActive(false);
         }
 
+        public void OnQuizCategoryPanel()
+        {
+            quizCategoryPanel.SetActive(true);
+        }
+
+        public void OffQuizCategoryPanel()
+        {
+            quizCategoryPanel.SetActive(false);
+        }
+
+        public void OnQuizQuestionPanel()
+        {
+            quizQuestionPanel.SetActive(true);
+        }
+
+        public void OffQuizQuestionPanel()
+        {
+            quizQuestionPanel.SetActive(false);
+        }
+
+        
         public void ProfileEditCount()
         {
             nickNameText.text = nickNameInputField.text.Length + "/10";
@@ -762,6 +800,7 @@ namespace MJ
         {
             schoolSuch.text = schoolDropDown.options[option].text;
         }
+
         IEnumerator CoSchoolGet()
         {
             yield return new WaitUntil(() => schooldata.data.Count > 0);

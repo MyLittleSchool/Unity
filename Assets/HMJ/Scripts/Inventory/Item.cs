@@ -8,108 +8,62 @@ using static Item;
 
 public class Item : MonoBehaviour
 {
+    public TmpItem tmpItem;
+    public ClickButton clickButton;
+
     public enum ItemType
-    { 
-        InventoryItem,
-        ShopItem,
-        ItemType_End
+    {
+        MyClassRoom,
+        Common,
+        All,
+        ItemTypeEnd
     }
 
-    private ItemType itemType;
     /// <summary>
-    /// 인스펙터 연결 데이터
+    /// 실제 아이템 데이터
     /// </summary>
-    public RawImage image;
-    public TMP_Text name;
-    public TMP_Text N;
-    public Button button;
+    public string itemName;
+    public int price;
+    public ItemType itemType;
+    public int count;
 
-    [Serializable]
-    public class ItemData
+    /// <summary>
+    /// 프리펩 데이터
+    /// </summary>
+    public GameObject prefab;
+
+    public Item(string _itemName, int _price, ItemType _itemType, int _count, GameObject gameObject)
     {
-        public Texture image;
-        public string itemName;
-        public int n;
-        public int price;
-        public GameObject prefab;
-
-        public ItemData(ItemData itemData)
-        {
-            image = itemData.image;
-            itemName = itemData.itemName;
-            n = itemData.n;
-            price = itemData.price;
-            prefab = itemData.prefab;
-        }
-        public int N
-        {
-            get { return n; }
-            set
-            {
-                n = value;
-            }
-        }
-    }
-
-    private ItemData itemdata;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    public void SetItemData(ItemData _itemData, ItemType _itemType)
-    {
-        itemdata = _itemData;
-        image.texture = itemdata.image;
-        name.text = itemdata.itemName;
-
+        itemName = _itemName;
+        price = _price;
         itemType = _itemType;
-        ItemTypeSetting();
-    }
+        count = _count;
 
-    public void ItemTypeSetting()
-    {
-        switch (itemType)
+        prefab = gameObject;
+
+        if (tmpItem)
         {
-            case ItemType.InventoryItem:
-                button.onClick.AddListener(() => InventorySystem.GetInstance().SetChoiceItem(itemdata));
-                break;
-            case ItemType.ShopItem:
-                button.onClick.AddListener(() => SellSystem.GetInstance().SetChoiceItem(itemdata));
-                // Sell 시스템 아이템 데이터 업데이트
-                button.onClick.AddListener(SellSystem.GetInstance().UpdateChoiceItemData);
-                break;
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            tmpItem.SetText_Image(_itemName, _count, spriteRenderer.sprite.texture);
         }
-
+           
     }
 
-    public void UpdateItemData()
+
+    public void SetData(string _itemName, int _price, ItemType _itemType, int _count, GameObject gameObject)
     {
-        image.texture = itemdata.image;
-        name.text = itemdata.itemName;
-        N.text = itemdata.N.ToString();
-    }
-    public void SetItemPrefab()
-    {
-        InventorySystem.GetInstance().SetChoiceItem(itemdata);
-        SellSystem.GetInstance().SetChoiceItem(itemdata);
+        itemName = _itemName;
+        price = _price;
+        itemType = _itemType;
+        count = _count;
+
+        prefab = gameObject;
+
+        if (tmpItem)
+        {
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            tmpItem.SetText_Image(_itemName, _count, spriteRenderer.sprite.texture);
+        }
     }
 
-    public ItemData GetItemData()
-    {
-        return itemdata;
-    }
-
-    public void AddItemN(int n)
-    {
-        itemdata.n += n;
-    }
 }
