@@ -77,6 +77,7 @@ namespace SW
             {
                 string data = receiveQueue.Dequeue();
                 print(data);
+                if (friendsUI == null) continue;
                 GetReceiveType type = JsonUtility.FromJson<GetReceiveType>(data);
                 // 模备 格废
                 if (type.type == "FRIEND_LIST")
@@ -116,12 +117,17 @@ namespace SW
                 // 模备 困摹 捞悼
                 else if (type.type == "ACCEPT_FRIEND_POS_INFO")
                 {
-                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
+                    if (friendsUI.gameObject.activeSelf) friendsUI.SetFriendStatus(data, true);
+                }
+                // 模备 柯扼牢
+                else if (type.type == "CHECK_USER_ONLINE_STATUS")
+                {
+                    if (friendsUI.gameObject.activeSelf) friendsUI.SetFriendStatus(data, true);
                 }
                 // 模备 辆丰
                 else if (type.type == "OFFLINE_USER")
                 {
-                    if (friendsUI.gameObject.activeSelf) friendsUI.RefreshFriends();
+                    if (friendsUI.gameObject.activeSelf) friendsUI.SetFriendStatus(data, false);
                 }
             }
         }

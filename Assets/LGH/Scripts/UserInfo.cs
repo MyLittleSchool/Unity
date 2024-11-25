@@ -23,6 +23,8 @@ namespace GH
         public int exp;
         public int maxExp;
         public bool isOnline;
+        public int mapId;
+        public string mapType;
         public School school;
     }
 

@@ -44,11 +44,19 @@ public class SceneMgr : MonoBehaviour
 
         SceneManager.LoadScene(2);
     }
-    public void ClassIn()
+    public void ClassIn(string roomName = null, int mapId = -1)
     {
         DataManager.instance.playerCurrChannel = DataManager.instance.playerName;
-        PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
-        DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
+        if (roomName == null)
+        {
+            PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
+            DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
+        }
+        else
+        {
+            PhotonNetMgr.instance.roomName = roomName;
+            DataManager.instance.mapId = mapId;
+        }
         DataManager.instance.MapTypeState = DataManager.MapType.MyClassroom;
 
         //DataManager.instance.player = null;
@@ -68,12 +76,20 @@ public class SceneMgr : MonoBehaviour
         PhotonNetMgr.instance.sceneNum = 3;
     }
 
-    public void SchoolIn()
+    public void SchoolIn(string roomName = null, int mapId = -1)
     {
         //DataManager.instance.playerCurrChannel = DataManager.instance.playerSchool;
         //PhotonNetMgr.instance.roomName = DataManager.instance.playerSchool;
-        PhotonNetMgr.instance.roomName = AuthManager.GetInstance().userAuthData.userInfo.school.schoolName;
-        DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.school.id;
+        if (roomName == null)
+        {
+            PhotonNetMgr.instance.roomName = AuthManager.GetInstance().userAuthData.userInfo.school.schoolName;
+            DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.school.id;
+        }
+        else
+        {
+            PhotonNetMgr.instance.roomName = roomName;
+            DataManager.instance.mapId = mapId;
+        }
         DataManager.instance.MapTypeState = DataManager.MapType.School;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 1;
