@@ -50,17 +50,33 @@ namespace SW
         }
         public void ReqChat(string text)
         {
+            ChatReqInfo chatReqInfo = new ChatReqInfo();
+            chatReqInfo.user_type = "ÁßÇÐ»ý";
+            chatReqInfo.message = text;
+            chatReqInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/chat-bot-log";
-            //info.body = 
+            info.body = JsonUtility.ToJson(chatReqInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>
             {
-                chatBallonText.text = res.text;
+                ChatResInfo chatResInfo = JsonUtility.FromJson<ChatResInfo>(res.text);
+                chatBallonText.text = chatResInfo.aiMessage;
                 ChatEnable = true;
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
         }
+        private struct ChatReqInfo
+        {
+            public string user_type;
+            public string message;
+            public int userId;
+        }
+        private struct ChatResInfo
+        {
+            public string aiMessage;
+        }
+
         public override void Interact()
         {
             IsInteracting = true;
@@ -76,10 +92,6 @@ namespace SW
         public override void HighlightOff()
         {
             base.HighlightOff();
-            if (ChatEnable)
-            {
-                ChatEnable = false;
-            }
             if (IsInteracting) IsInteracting = false;
         }
         private void OnDestroy()
