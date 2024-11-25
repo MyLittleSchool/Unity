@@ -255,7 +255,7 @@ namespace SW
                     comp.StateText.text = "<color=#F2884B>ДыБо";
                     comp.PassButton.onClick.AddListener(() =>
                     {
-                        SceneMgr.instance.QuizIn();
+                        SceneMgr.instance.QuizSquareIn();
                     });
                 }
                 else if (mapType == DataManager.MapType.QuizSquare.ToString())
