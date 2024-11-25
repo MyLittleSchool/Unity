@@ -255,7 +255,7 @@ namespace SW
                     comp.StateText.text = "<color=#F2884B>퀴즈";
                     comp.PassButton.onClick.AddListener(() =>
                     {
-                        SceneMgr.instance.QuizSquareIn();
+                        SceneMgr.instance.QuizIn();
                     });
                 }
                 else if (mapType == DataManager.MapType.QuizSquare.ToString())
@@ -490,6 +490,7 @@ namespace SW
             {
                 for (int i = 0; i < list.friends.Length; i++)
                 {
+                    //친구 리스트------------------------------------------------------------------
                     GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
                     UserInfo friend = list.friends[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.friends[i].receiver : list.friends[i].requester;
@@ -517,6 +518,8 @@ namespace SW
             {
                 for (int i = 0; i < list.requests.Length; i++)
                 {
+                    //친구 리스트------------------------------------------------------------------
+
                     UserInfo requester = list.requests[i].requester;
                     // 내가 받은 요청
                     GameObject newPanel = Instantiate(requestedPrefab, contentsTabs[1]);
@@ -571,6 +574,8 @@ namespace SW
             {
                 for (int i = 0; i < list.requests.Length; i++)
                 {
+                    //친구 리스트------------------------------------------------------------------
+
                     UserInfo requester = list.requests[i].requester;
                     // 내가 보낸 요청
                     GameObject newPanel = Instantiate(requestingPrefab, contentsTabs[2]);
@@ -619,6 +624,8 @@ namespace SW
                 AIRecommendList list = JsonUtility.FromJson<AIRecommendList>("{\"data\" : " + res.text + "}");
                 foreach (var each in list.data)
                 {
+                    //AI추천 리스트------------------------------------------------------------------
+
                     GameObject newPanel = Instantiate(recommFriendPrefab, contentsTabs[3]);
                     FriendPanel friendPanel = newPanel.GetComponent<FriendPanel>();
                     friendPanel.id = each.recommendedUserId;
