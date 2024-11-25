@@ -20,7 +20,6 @@ public class IntoQuiz : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player") && collision.gameObject.GetComponent<PhotonView>().IsMine)
         {
-            SceneMgr.instance.QuizIn();
             QuestManager.instance.QuestPatch(5);
             SceneUIManager.GetInstance().OnQuizCategoryPanel();
         }
