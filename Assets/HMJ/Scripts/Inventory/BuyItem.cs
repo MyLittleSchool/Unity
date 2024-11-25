@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 public class BuyItem : MonoBehaviour
 {
     public TMP_Text itemName;
@@ -25,5 +26,11 @@ public class BuyItem : MonoBehaviour
         itemName.text = _itemName;
         itemN.text = _n.ToString();
         itemPrice.text = _price.ToString();
+    }
+    
+    // 아이템 정보 반환 ((INT) 관련 Text => ItemData
+    public InventorySystem.ItemData GetData()
+    {
+        return new InventorySystem.ItemData(itemName.text, Int32.Parse(itemPrice.text), "", Int32.Parse(itemN.text));
     }
 }

@@ -8,6 +8,10 @@ public class ClickButton : MonoBehaviour
 {
     public TMP_Text clickN;
 
+    public Item item;
+
+    public BuyItemList buyItemList;
+
     private bool bClick = false;
     private Button button;
     private Image buttonImage;
@@ -32,6 +36,7 @@ public class ClickButton : MonoBehaviour
         bClick = true;
         buttonImage.color = new Color(242.0f, 106.0f, 27.0f);
         iClickN++;
+        buyItemList.AddBuyItem(item.itemName, item.price);
         SettingClickText();
     }
 
@@ -45,7 +50,10 @@ public class ClickButton : MonoBehaviour
 
     public void SettingClickText()
     {
-        clickN.text = "x" + iClickN.ToString();
+        if (iClickN <= 0)
+            clickN.text = "";
+        else
+            clickN.text = "x" + iClickN.ToString();
     }
 
 }

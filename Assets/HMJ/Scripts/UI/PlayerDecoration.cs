@@ -105,18 +105,6 @@ namespace MJ
         /// </summary>
         public void LoadDecorationData()
         {
-            //string ImagePath = "Assets/Resources/Image/PlayerDecoration/";
-            //string[] DecorationData = { "Skin", "Face", "Hair", "Cloth" };
-            //// 폴더명
-            //for(int i = 0; i < DecorationData.Length; i++)
-            //{
-            //    FileInfo[] fileInfos = FileManager.Instance.GetFileInfo(ImagePath + DecorationData[i], "png");
-            //    for (int j = 0; j < fileInfos.Length; j++) // 특정 아이템 이미지 데이터 가져오기
-            //    {
-            //        string data = "Image/PlayerDecoration/" + DecorationData[i] + "/" + Path.GetFileNameWithoutExtension(fileInfos[j].Name);
-            //        loadDecorationImage[i, j] = Resources.LoadAll<Sprite>(data)[0].texture;
-            //    }
-            //}
 
             string ImagePath = "Image/PlayerDecoration/"; // Resources 폴더 내 경로
             string[] DecorationData = { "Skin", "Face", "Hair", "Cloth" };

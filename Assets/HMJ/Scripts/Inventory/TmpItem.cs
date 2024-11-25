@@ -22,8 +22,11 @@ public class TmpItem : MonoBehaviour
 
     public void SetText_Image(string _name, int _count, Texture _texture)
     {
-        itemName.text = _name;
-        itemCount.text = _count.ToString();
-        rawImage.texture = _texture;
+        if(itemName)
+            itemName.text = _name;
+        if(itemCount)
+            itemCount.text = _count.ToString();
+        if(rawImage)
+            rawImage.texture = _texture;
     }
 }

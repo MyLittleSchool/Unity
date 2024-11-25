@@ -112,29 +112,29 @@ namespace GH
         }
         public void OnTile()
         {
-            if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
-            {
-                tilemap.SetTile(tilePosition, emptyTilebase);
-                GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
-                //setObject.transform.position = tilePosition;
-                AddObject(setObject);
+            //if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
+            //{
+            //    tilemap.SetTile(tilePosition, emptyTilebase);
+            //    GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
+            //    //setObject.transform.position = tilePosition;
+            //    AddObject(setObject);
 
-                InventorySystem.GetInstance().UseItem();
-                print(tilemap.HasTile(tilePosition));
-                // 통신
-                ObjectInfo obj = objectList.Last();
-                PlaceManager.ObjectInfo objectInfo = new PlaceManager.ObjectInfo();
-                objectInfo.objId = setObjectId;
-                objectInfo.x = tilePosition.x;
-                objectInfo.y = tilePosition.y;
-                //objectInfo.rot =
-                objectInfo.mapId = DataManager.instance.mapId;
-                objectInfo.mapType = DataManager.instance.MapTypeState;
-                PlaceManager.GetInstance().CreatePlace(objectInfo, (PlaceManager.PlaceInfo callBack) =>
-                {
-                    obj.id = callBack.id;
-                });
-            }
+            //    InventorySystem.GetInstance().UseItem();
+            //    print(tilemap.HasTile(tilePosition));
+            //    // 통신
+            //    ObjectInfo obj = objectList.Last();
+            //    PlaceManager.ObjectInfo objectInfo = new PlaceManager.ObjectInfo();
+            //    objectInfo.objId = setObjectId;
+            //    objectInfo.x = tilePosition.x;
+            //    objectInfo.y = tilePosition.y;
+            //    //objectInfo.rot =
+            //    objectInfo.mapId = DataManager.instance.mapId;
+            //    objectInfo.mapType = DataManager.instance.MapTypeState;
+            //    PlaceManager.GetInstance().CreatePlace(objectInfo, (PlaceManager.PlaceInfo callBack) =>
+            //    {
+            //        obj.id = callBack.id;
+            //    });
+            //}
         }
 
         public void CopyTile(Vector3Int _tilePosition, int objId)

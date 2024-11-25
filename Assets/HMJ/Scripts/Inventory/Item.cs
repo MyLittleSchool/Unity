@@ -9,11 +9,13 @@ using static Item;
 public class Item : MonoBehaviour
 {
     public TmpItem tmpItem;
+    public ClickButton clickButton;
 
     public enum ItemType
     {
         MyClassRoom,
         Common,
+        All,
         ItemTypeEnd
     }
 
