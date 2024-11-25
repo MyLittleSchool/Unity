@@ -147,6 +147,9 @@ namespace MJ
 
         [Header("º¸ÀÌ½º ÆÐ³Î")]
         public GameObject voicePanel;
+
+        [Header("¸Ê Æ©Åä¸®¾ó ÆÐ³Î")]
+        public GameObject tutorialPanel;
         #endregion
 
         #region SingleTone
@@ -221,6 +224,8 @@ namespace MJ
         public TMP_Dropdown schoolGradeDropDown;
 
         public List<string> schoolName;
+
+        MapCount mapCount;
         #endregion
 
         private void Start()
@@ -414,6 +419,7 @@ namespace MJ
             if (DataManager.instance.player != null)
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = false;
+                QuestManager.instance.QuestPatch(4);
             }
         }
 
@@ -877,6 +883,39 @@ namespace MJ
             {
                 WebSocketManager.GetInstance().RequestFriend(comp.id);
             });
+        }
+
+        public void MapTutorial()
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-pos-visit-count/" + DataManager.instance.mapId + "/" + DataManager.instance.mapType + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = downloadHandler.text;
+                mapCount = JsonUtility.FromJson<MapCount>(jsonData);
+                print("¸ÊÄ«!!!!!!! : " + mapCount.count);
+                if (mapCount.count < 1)
+                {
+                    
+                    tutorialPanel.SetActive(true);
+
+                    tutorialPanel.GetComponent<TutorialText>().TextChange(DataManager.instance.mapType);
+                }
+
+                info = new HttpInfo();
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-pos-visit-count/" + DataManager.instance.mapId + "/" + DataManager.instance.mapType + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+                info.contentType = "application/json";
+                info.onComplete = (DownloadHandler downloadHandler) =>
+                {
+                    print(downloadHandler.text);
+                };
+                StartCoroutine(HttpManager.GetInstance().Patch(info));
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+
+
+
+
         }
     }
 }

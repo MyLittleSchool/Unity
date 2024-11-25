@@ -174,6 +174,7 @@ namespace SW
         {
             ToastMessage.OnMessage("친구 추가를 요청하였습니다");
             Send(friendWebSocket, "{\"type\": \"FRIEND_REQUEST\", \"requesterId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + ", \"receiverId\": " + userId + "}");
+            QuestManager.instance.QuestPatch(2);
         }
     }
 }

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using static HttpManager;
 using UnityEngine.Networking;
+using TMPro;
+using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 #region DTO
 // 튜토리얼 
@@ -42,12 +45,14 @@ public struct UserQuest
 [System.Serializable]
 public struct QuestInfo
 {
-    public int id;
+    public int questId;
+    public string title;
     public string content;
     public int count;
     public string questType;
     public int gold;
     public int exp;
+    public List<QuestRewardItem> rewardInfo;
 }
 
 
@@ -56,6 +61,15 @@ public struct UserQuestList
 {
     public List<UserQuest> data;
 }
+
+[System.Serializable]
+public struct QuestRewardItem
+{
+    public int itemIdx;
+    public int itemCount;
+}
+
+
 #endregion
 public class QuestManager : MonoBehaviour
 {
@@ -77,6 +91,23 @@ public class QuestManager : MonoBehaviour
     public UserQuestList userQuestList;
     public UserQuest userQuestData;
 
+    [Header("퀘스트UI")]
+    public List<GameObject> questItemList;
+    public GameObject questPanel;
+    public TMP_Text expText;
+    public TMP_Text gemText;
+    public RectTransform questImageTransform;
+    public GameObject questItemPrefabs;
+    public TMP_Text questTitle;
+
+
+    private void Update()
+    {
+        if (Input.touchCount == 1 || Input.GetMouseButtonDown(0))
+        {
+            questPanel.SetActive(false);
+        }
+    }
     //퀘스트 달성 보내기    
     public void QuestPatch(int questId)
     {
@@ -88,17 +119,14 @@ public class QuestManager : MonoBehaviour
             string jsonData = downloadHandler.text;
             userQuestData = JsonUtility.FromJson<UserQuest>(jsonData);
             print("get : " + jsonData);
+            // 퀘스트 상태가 false면
             if (userQuestData.isComplete == false)
             {
                 QuestPatch questPatch = new QuestPatch();
                 questPatch.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                print(AuthManager.GetInstance().userAuthData.userInfo.id);
                 questPatch.questId = questId;
-                print(questId);
                 questPatch.userQuestId = userQuestData.userQuestId;
-                print(userQuestData.userQuestId);
                 questPatch.count = userQuestData.count--;
-                print(userQuestData.count--);
                 questPatch.isComplete = true;
 
                 HttpInfo info = new HttpInfo();
@@ -108,14 +136,39 @@ public class QuestManager : MonoBehaviour
                 info.onComplete = (DownloadHandler downloadHandler) =>
                 {
                     print("Patch : " + downloadHandler.text);
+                    //퀘스트 완료 창 띄우기
+                    QuestSuccess(userQuestData);
                 };
                 StartCoroutine(HttpManager.GetInstance().Patch(info));
             }
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+    private void QuestSuccess(UserQuest userQuest)
+    {
+        questPanel.SetActive(true);
+        for (int i = 0; i < questItemList.Count; i++)
+        {
+            Destroy(questItemList[i]);
+        }
+        questItemList.Clear();
+        // 퀘스트 아이텔 프리펩 생성하기
+        for (int i = 0; i < userQuest.quest.rewardInfo.Count; i++)
+        {
+            GameObject rewardItem = Instantiate(questItemPrefabs, questImageTransform);
+            questItemList.Add(rewardItem);
+            //아이템 인덱스로 아이템 이미지, 이름 받아오기
+            //rewardItem.GetComponent<Image>().sprite
+            rewardItem.GetComponent<TMP_Text>().text = "이름" + " x " + userQuest.quest.rewardInfo[i].itemCount;
+        }
+        // 잼이랑 경험치 수치 수정하기
+        gemText.text = "잼 +" + userQuest.quest.gold;
+        expText.text = "경험치 +" + userQuest.quest.exp;
+        questTitle.text = userQuest.quest.title;
 
+        
 
+    }
     public void UserQuestListGet()
     {
 
@@ -131,4 +184,6 @@ public class QuestManager : MonoBehaviour
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+
+
 }
