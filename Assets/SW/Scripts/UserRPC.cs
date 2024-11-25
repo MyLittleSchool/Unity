@@ -2,6 +2,7 @@ using GH;
 using MJ;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using UnityEngine;
 namespace SW
 {
@@ -33,8 +34,9 @@ namespace SW
         }
         public void JoinReq()
         {
-            PlayerList.instance.JoinReq();
+            PlayerPanel panel = PlayerList.instance.JoinReq();
             photonView.RPC(nameof(GetJoin), RpcTarget.Others, PhotonNetwork.LocalPlayer.ActorNumber, JsonUtility.ToJson(AuthManager.GetInstance().userAuthData.userInfo));
+            StartCoroutine(Co_SetAvatar(AuthManager.GetInstance().userAuthData.userInfo.id, panel));
         }
         [PunRPC]
         public void GetJoin(int actorNumber, string _userInfo)
@@ -44,6 +46,7 @@ namespace SW
             playerPanel = playerUI.GetComponent<PlayerPanel>();
             playerPanel.userRPC = this;
             userInfo = JsonUtility.FromJson<UserInfo>(_userInfo);
+            StartCoroutine(Co_SetAvatar(playerPanel.userRPC.userInfo.id, playerPanel));
         }
         [PunRPC]
         public void JoinRes(int actorNumber, string _userInfo)
@@ -52,6 +55,16 @@ namespace SW
             playerPanel = playerUI.GetComponent<PlayerPanel>();
             playerPanel.userRPC = this;
             userInfo = JsonUtility.FromJson<UserInfo>(_userInfo);
+            StartCoroutine(Co_SetAvatar(playerPanel.userRPC.userInfo.id, playerPanel));
+        }
+        IEnumerator Co_SetAvatar(int id, PlayerPanel panel)
+        {
+            yield return new WaitUntil(() => { return panel.gameObject.activeInHierarchy; });
+            SetAvatar(id, panel);
+        }
+        public void SetAvatar(int id, PlayerPanel panel)
+        {
+            panel.userImage.AvatarGet(id);
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)

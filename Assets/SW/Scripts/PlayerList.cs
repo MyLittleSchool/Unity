@@ -36,7 +36,7 @@ namespace SW
             }
             PlayerNum = 1;
         }
-        public void JoinReq()
+        public PlayerPanel JoinReq()
         {
             GameObject newPanel = Instantiate(playerPanelPrefab, contentPanel);
             newPanel.transform.Find("NicknameText").GetComponent<TMP_Text>().text = PhotonNetwork.LocalPlayer.NickName;
@@ -44,6 +44,7 @@ namespace SW
             {
                 newPanel.transform.GetChild(i).gameObject.SetActive(false);
             }
+            return newPanel.GetComponent<PlayerPanel>();
         }
         public void GetJoin(int actorNumber, ref GameObject ui)
         {

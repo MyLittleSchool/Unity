@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -499,6 +500,9 @@ namespace SW
                     comp.NickNameText.text = friend.name;
                     friendDic[comp.id] = comp;
                     SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
+                    comp.ProfileImage.AvatarGet(list.friends[i].requester.id);
+
+
                 }
             }
             if (tab == 0) ChangeTab(tab);
@@ -530,6 +534,7 @@ namespace SW
                     comp.GradeText.text = requester.grade + "切斥";
                     comp.locationText.text = requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
+                    comp.ProfileImage.AvatarGet(requester.id);
                     //if (requester.isOnline)
                     //{
                     //    comp.StateText.text = "<color=#F2884B>立加吝";
@@ -584,6 +589,8 @@ namespace SW
                     comp.friendshipId = list.requests[i].id;
                     comp.id = receiver.id;
                     comp.NickNameText.text = receiver.name;
+                    comp.ProfileImage.AvatarGet(list.requests[i].id);
+
                     if (receiver.isOnline)
                     {
                         comp.StateText.text = "<color=#F2884B>立加吝";
@@ -637,6 +644,7 @@ namespace SW
                     friendPanel.locationText.text = each.schoolLocation;
                     friendPanel.InterestText.text = "#" + String.Join(" #", each.interests);
                     friendPanel.MessageText.text = each.similarityMessage;
+                    friendPanel.ProfileImage.AvatarGet(each.recommendedUserId);
                     friendPanel.PassButton.onClick.AddListener(() =>
                     {
                         Destroy(newPanel);

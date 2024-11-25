@@ -8,7 +8,9 @@ namespace SW
 {
     public class PlayerPanel : MonoBehaviour
     {
+        public UserImage userImage;
         public UserRPC userRPC;
+
         public void OnFriendReqButtonClick()
         {
             WebSocketManager.GetInstance().RequestFriend(userRPC.userInfo.id);

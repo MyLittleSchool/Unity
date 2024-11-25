@@ -10,7 +10,7 @@ namespace SW
     {
         public int id;
         public int friendshipId;
-        public Image ProfileImage;
+        public UserImage ProfileImage;
         public TMP_Text NickNameText;
         public TMP_Text SimilarityText;
         public TMP_Text StateText;
