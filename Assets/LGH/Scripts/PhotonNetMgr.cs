@@ -7,6 +7,7 @@ using System.Reflection;
 using TMPro;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using MJ;
 
 namespace GH
 {
@@ -32,6 +33,8 @@ namespace GH
         //로딩 패널
         public GameObject loadingPanel;
         public Loading loading;
+
+        public SceneUIManager sceneUIManager;
 
         private void Awake()
         {
@@ -220,6 +223,7 @@ namespace GH
             PhotonNetwork.LoadLevel(sceneNum);
             loadingPanel.SetActive(true);
             StartCoroutine(loading.SceneMove());
+            sceneUIManager.MapTutorial();
             GameManager.instance.CoSpwamPlayer();
             VoiceManager.GetInstance().MoveScene();
 

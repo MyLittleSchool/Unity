@@ -68,6 +68,8 @@ public struct QuestRewardItem
     public int itemIdx;
     public int itemCount;
 }
+
+
 #endregion
 public class QuestManager : MonoBehaviour
 {
@@ -97,6 +99,7 @@ public class QuestManager : MonoBehaviour
     public RectTransform questImageTransform;
     public GameObject questItemPrefabs;
     public TMP_Text questTitle;
+
 
     private void Update()
     {
@@ -181,4 +184,6 @@ public class QuestManager : MonoBehaviour
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+
+
 }

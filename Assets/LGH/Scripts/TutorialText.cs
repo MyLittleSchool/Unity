@@ -1,8 +1,20 @@
+using GH;
+using Photon.Pun;
+using SW;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using static GH.DataManager;
-
+using static HttpManager;
+[System.Serializable]
+public struct MapCount
+{
+    public int mapId;
+    public string mapType;
+    public int userId;
+    public int count;
+}
 public class TutorialText : MonoBehaviour
 {
     private TMP_Text tutorialText;
@@ -10,10 +22,11 @@ public class TutorialText : MonoBehaviour
 
     private bool texting = false;
 
+
+
     void Start()
     {
         tutorialText = GetComponentInChildren<TMP_Text>();
-        TextChange(MapType.MyClassroom);
     }
 
     void Update()
@@ -42,6 +55,8 @@ public class TutorialText : MonoBehaviour
     }
     IEnumerator ClassText()
     {
+      
+
         StartCoroutine(TextPrint("마이리틀스쿨에 입학한 걸 환영해!\r\n나는 로우야!!"));
         yield return new WaitUntil(() => texting && (Input.touchCount == 1 || Input.GetMouseButtonDown(0)));
         yield return null;
@@ -53,6 +68,8 @@ public class TutorialText : MonoBehaviour
     // 텍스트 하나씩 생기게 하기
     IEnumerator TextPrintDone(string text)
     {
+        yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
+        yield return new WaitForSeconds(0.3f);
         int count = 0;
         tutorialText.text = "";
 
@@ -83,6 +100,8 @@ public class TutorialText : MonoBehaviour
     // 텍스트 하나씩 생기게 하기
     IEnumerator TextPrint(string text)
     {
+        yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
+        yield return new WaitForSeconds(0.3f);
         int count = 0;
         texting = false;
         tutorialText.text = "";
@@ -108,4 +127,6 @@ public class TutorialText : MonoBehaviour
             texting = true;
         }
     }
+
+ 
 }

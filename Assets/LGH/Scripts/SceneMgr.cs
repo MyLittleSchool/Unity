@@ -1,18 +1,20 @@
 using GH;
+using MJ;
 using Photon.Pun;
 using SW;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using static HttpManager;
 
 public class SceneMgr : MonoBehaviour
 {
     public static SceneMgr instance;
-    [Header("·Î±×ÀÎ ¾À")]
-    public TMP_InputField nameInputField;
-    public TMP_InputField schoolInputField;
+    
+
     private void Awake()
     {
         if (instance == null)
@@ -31,16 +33,13 @@ public class SceneMgr : MonoBehaviour
     {
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
+
     public void Login()
     {
-        //¾À ³Ñ¾î°¡±â
-        DataManager.instance.playerName = nameInputField.text;
-        DataManager.instance.playerSchool = schoolInputField.text;
 
         SceneManager.LoadScene(2);
 
@@ -67,6 +66,7 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.MapTypeState = DataManager.MapType.Square;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 3;
+
     }
 
     public void SchoolIn()
@@ -78,6 +78,7 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.MapTypeState = DataManager.MapType.School;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 1;
+
     }
 
     public void QuizIn()
@@ -98,6 +99,7 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.MapTypeState = DataManager.MapType.QuizSquare;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 5;
+
     }
 
     public void MapContestMapIn(string roomName)
@@ -108,4 +110,6 @@ public class SceneMgr : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 6;
     }
+
+   
 }

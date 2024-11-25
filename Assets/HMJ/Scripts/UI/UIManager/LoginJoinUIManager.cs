@@ -383,7 +383,7 @@ namespace GH
                 AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
                 //¾À ³Ñ¾î°¡±â
                 DataManager.instance.playerName = getUserInfo.data.name;
-                SceneManager.LoadScene(2);
+                SceneMgr.instance.Login();
             }
             else
             {
