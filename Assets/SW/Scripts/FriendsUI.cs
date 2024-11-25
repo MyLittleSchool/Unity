@@ -9,7 +9,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using static Unity.Burst.Intrinsics.X86.Avx;
 namespace SW
 {
     public class FriendsUI : MonoBehaviour
@@ -173,7 +172,162 @@ namespace SW
                 }
             }
         }
+        public void SetFriendStatus(string json, bool isOnline)
+        {
+            StatusInfo status = JsonUtility.FromJson<StatusInfo>(json);
+            FriendPanel comp = friendDic[status.userId];
+            SetFriendPanel(comp, isOnline, status.mapType, status.mapId);
+            // 체크 버튼
+            Transform btn = comp.transform.Find("CheckButton");
+            btn.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                if (btn.transform.GetChild(1).gameObject.activeSelf)
+                {
+                    checkedNum--;
+                    if (checkedNum <= 0)
+                    {
+                        modifyBtnText.text = "취소";
+                        modifyBtnState = ModifyBtnState.Cancel;
+                    }
+                }
+                else
+                {
+                    checkedNum++;
+                    modifyBtnText.text = "친구 삭제하기";
+                    modifyBtnState = ModifyBtnState.Confirm;
+                }
+                btn.transform.GetChild(1).gameObject.SetActive(!btn.transform.GetChild(1).gameObject.activeSelf);
+            });
+        }
+        private struct StatusInfo
+        {
+            public int userId;
+            public int mapId;
+            public string mapType;
+        }
+        public void SetFriendPanel(FriendPanel comp, bool isOnline, string mapType, int mapId)
+        {
+            comp.RequestButton.onClick.RemoveAllListeners();
+            comp.PassButton.onClick.RemoveAllListeners();
+            if (isOnline)
+            {
+                // 위치
+                if (mapType == DataManager.MapType.School.ToString())
+                {
+                    HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/school?schoolId=" + mapId;
+                    info.onComplete = (DownloadHandler res) =>
+                    {
+                        School school = JsonUtility.FromJson<School>(res.text);
+                        comp.StateText.text = "<color=#F2884B>" + school.schoolName;
+                        comp.PassButton.onClick.AddListener(() =>
+                        {
+                            SceneMgr.instance.SchoolIn(school.schoolName, mapId);
+                        });
+                    };
+                    StartCoroutine(HttpManager.GetInstance().Get(info));
+                }
+                else if (mapType == DataManager.MapType.MyClassroom.ToString())
+                {
+                    HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/" + mapId;
+                    info.onComplete = (DownloadHandler res) =>
+                    {
+                        UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
+                        comp.StateText.text = "<color=#F2884B>" + userInfo.name + "님의 교실";
+                        comp.PassButton.onClick.AddListener(() =>
+                        {
+                            SceneMgr.instance.ClassIn(userInfo.name, mapId);
+                        });
+                    };
+                    StartCoroutine(HttpManager.GetInstance().Get(info));
+                }
+                else if (mapType == DataManager.MapType.Square.ToString())
+                {
+                    comp.StateText.text = "<color=#F2884B>만남의 광장";
+                    comp.PassButton.onClick.AddListener(() =>
+                    {
+                        SceneMgr.instance.SquareIn();
+                    });
+                }
+                else if (mapType == DataManager.MapType.Quiz.ToString())
+                {
+                    comp.StateText.text = "<color=#F2884B>퀴즈";
+                    comp.PassButton.onClick.AddListener(() =>
+                    {
+                        SceneMgr.instance.QuizIn();
+                    });
+                }
+                else if (mapType == DataManager.MapType.QuizSquare.ToString())
+                {
+                    comp.StateText.text = "<color=#F2884B>퀴즈 광장";
+                    comp.PassButton.onClick.AddListener(() =>
+                    {
+                        SceneMgr.instance.QuizSquareIn();
+                    });
+                }
+                else if (mapType == DataManager.MapType.ContestClassroom.ToString())
+                {
+                    HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/" + mapId;
+                    info.onComplete = (DownloadHandler res) =>
+                    {
+                        UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
+                        comp.StateText.text = "<color=#F2884B>" + userInfo.name + "님의 맵 콘테스트";
+                        comp.PassButton.onClick.AddListener(() =>
+                        {
+                            ToastMessage.OnMessage("따라갈 수 없는 위치에 있습니다");
+                        });
+                    };
+                    StartCoroutine(HttpManager.GetInstance().Get(info));
+                }
+                else
+                {
+                    comp.StateText.text = "<color=#F2884B>접속중";
+                    ToastMessage.OnMessage("따라갈 수 없는 위치에 있습니다");
+                }
+                // 귓속말 보내기
+                comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "귓속말 보내기";
+                comp.RequestButton.onClick.AddListener(() =>
+                {
+                    PhotonChatMgr.instance.OneToOneChat(comp.NickNameText.text);
+                    gameObject.SetActive(false);
+                });
+                // 따라가기 버튼
+                comp.PassButton.GetComponentInChildren<TMP_Text>().text = "따라가기";
+                comp.PassButton.onClick.AddListener(() =>
+                {
+                    DataManager.instance.mapId = mapId;
+                    DataManager.instance.MapTypeState = (DataManager.MapType)Enum.Parse(typeof(DataManager.MapType), mapType);
+
+                });
+            }
+            else
+            {
+                comp.StateText.text = "";
+                // 쪽지 버튼
+                comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "쪽지 남기기";
+                comp.RequestButton.onClick.AddListener(() =>
+                {
+                    selectedUserId = comp.id;
+                    noteCreatePanel.gameObject.SetActive(true);
+                    inputField.text = "";
+                });
+                // 교실 놀러가기 버튼
+                comp.PassButton.GetComponentInChildren<TMP_Text>().text = "교실 놀러가기";
+                comp.PassButton.onClick.AddListener(() =>
+                {
+                    DataManager.instance.mapId = comp.id;
+                    DataManager.instance.MapTypeState = DataManager.MapType.MyClassroom;
+                    PhotonNetMgr.instance.roomName = comp.NickNameText.text;
+                    gameObject.SetActive(false);
+                    PhotonNetwork.LeaveRoom();
+                    PhotonNetMgr.instance.sceneNum = 2;
+                });
+            }
+        }
         private int selectedUserId;
+        private Dictionary<int, FriendPanel> friendDic;
         public void RefreshFriends()
         {
             modifyBtnState = ModifyBtnState.Modify;
@@ -186,6 +340,7 @@ namespace SW
             contentsTabs[0] = Instantiate(tabPrefab, contents).transform;
             contentsTabs[1] = Instantiate(tabPrefab, contents).transform;
             contentsTabs[2] = Instantiate(tabPrefab, contents).transform;
+            friendDic = new Dictionary<int, FriendPanel>();
             // 서버 요청
             // 내 친구 목록
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
@@ -203,60 +358,8 @@ namespace SW
                         comp.friendshipId = list.response[i].id;
                         comp.id = friend.id;
                         comp.NickNameText.text = friend.name;
-                        if (friend.isOnline)
-                        {
-                            comp.StateText.text = "<color=#F2884B>접속중";
-                            // 귓속말 보내기
-                            comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "귓속말 보내기";
-                            comp.RequestButton.onClick.AddListener(() =>
-                            {
-                                PhotonChatMgr.instance.OneToOneChat(friend.name);
-                                gameObject.SetActive(false);
-                            });
-                        }
-                        else
-                        {
-                            comp.StateText.text = "";
-                            // 쪽지 버튼
-                            comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "쪽지 남기기";
-                            comp.RequestButton.onClick.AddListener(() =>
-                            {
-                                selectedUserId = comp.id;
-                                noteCreatePanel.gameObject.SetActive(true);
-                                inputField.text = "";
-                            });
-                        }
-                        // 교실 놀러가기 버튼
-                        comp.PassButton.onClick.AddListener(() =>
-                        {
-                            DataManager.instance.MapTypeState = DataManager.MapType.MyClassroom;
-                            DataManager.instance.mapId = comp.id;
-                            PhotonNetMgr.instance.roomName = friend.name;
-                            gameObject.SetActive(false);
-                            PhotonNetwork.LeaveRoom();
-                            PhotonNetMgr.instance.sceneNum = 2;
-                        });
-                        // 체크 버튼
-                        Transform btn = newPanel.transform.Find("CheckButton");
-                        btn.GetComponent<Button>().onClick.AddListener(() =>
-                        {
-                            if (btn.transform.GetChild(1).gameObject.activeSelf)
-                            {
-                                checkedNum--;
-                                if (checkedNum <= 0)
-                                {
-                                    modifyBtnText.text = "취소";
-                                    modifyBtnState = ModifyBtnState.Cancel;
-                                }
-                            }
-                            else
-                            {
-                                checkedNum++;
-                                modifyBtnText.text = "친구 삭제하기";
-                                modifyBtnState = ModifyBtnState.Confirm;
-                            }
-                            btn.transform.GetChild(1).gameObject.SetActive(!btn.transform.GetChild(1).gameObject.activeSelf);
-                        });
+                        friendDic[comp.id] = comp;
+                        SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                     }
                 }
                 if (tab == 0) ChangeTab(tab);
@@ -393,60 +496,8 @@ namespace SW
                     comp.friendshipId = list.friends[i].id;
                     comp.id = friend.id;
                     comp.NickNameText.text = friend.name;
-                    if (friend.isOnline)
-                    {
-                        comp.StateText.text = "<color=#F2884B>접속중";
-                        // 귓속말 보내기
-                        comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "귓속말 보내기";
-                        comp.RequestButton.onClick.AddListener(() =>
-                        {
-                            PhotonChatMgr.instance.OneToOneChat(friend.name);
-                            gameObject.SetActive(false);
-                        });
-                    }
-                    else
-                    {
-                        comp.StateText.text = "";
-                        // 쪽지 버튼
-                        comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "쪽지 남기기";
-                        comp.RequestButton.onClick.AddListener(() =>
-                        {
-                            selectedUserId = comp.id;
-                            noteCreatePanel.gameObject.SetActive(true);
-                            inputField.text = "";
-                        });
-                    }
-                    // 교실 놀러가기 버튼
-                    comp.PassButton.onClick.AddListener(() =>
-                    {
-                        DataManager.instance.mapType = DataManager.MapType.MyClassroom;
-                        DataManager.instance.mapId = comp.id;
-                        PhotonNetMgr.instance.roomName = friend.name;
-                        gameObject.SetActive(false);
-                        PhotonNetwork.LeaveRoom();
-                        PhotonNetMgr.instance.sceneNum = 2;
-                    });
-                    // 체크 버튼
-                    Transform btn = newPanel.transform.Find("CheckButton");
-                    btn.GetComponent<Button>().onClick.AddListener(() =>
-                    {
-                        if (btn.transform.GetChild(1).gameObject.activeSelf)
-                        {
-                            checkedNum--;
-                            if (checkedNum <= 0)
-                            {
-                                modifyBtnText.text = "취소";
-                                modifyBtnState = ModifyBtnState.Cancel;
-                            }
-                        }
-                        else
-                        {
-                            checkedNum++;
-                            modifyBtnText.text = "친구 삭제하기";
-                            modifyBtnState = ModifyBtnState.Confirm;
-                        }
-                        btn.transform.GetChild(1).gameObject.SetActive(!btn.transform.GetChild(1).gameObject.activeSelf);
-                    });
+                    friendDic[comp.id] = comp;
+                    SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                 }
             }
             if (tab == 0) ChangeTab(tab);
