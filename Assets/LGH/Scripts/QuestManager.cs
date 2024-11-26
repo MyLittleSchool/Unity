@@ -66,7 +66,7 @@ public struct UserQuestList
 public struct QuestRewardItem
 {
     public int itemIdx;
-    public int itemCount;
+    public int count;
 }
 
 
@@ -183,7 +183,7 @@ public class QuestManager : MonoBehaviour
             //아이템 인덱스로 이름 받아오기! ==== 규할일 ====
 
             //rewardItem.GetComponent<Image>().sprite
-            rewardItem.GetComponent<TMP_Text>().text = "이름" + " x " + userQuest.quest.rewardInfo[i].itemCount;
+            rewardItem.GetComponent<TMP_Text>().text = "이름" + " x " + userQuest.quest.rewardInfo[i].count;
         }
         // 잼이랑 경험치 수치 수정하기
         gemText.text = "잼 +" + userQuest.quest.gold;
@@ -231,7 +231,8 @@ public class QuestManager : MonoBehaviour
         info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-quest/list/not-completed/" + AuthManager.GetInstance().userAuthData.userInfo.id;
         info.onComplete = (DownloadHandler downloadHandler) =>
         {
-            string jsonData = downloadHandler.text;
+            print(downloadHandler.text);
+            string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
 
             userQuestList = JsonUtility.FromJson<UserQuestList>(jsonData);
 
@@ -241,7 +242,7 @@ public class QuestManager : MonoBehaviour
                 missionList.Add(missionItemInfo.gameObject);
 
                 missionItemInfo.title.text = userQuestList.data[i].quest.title;
-                missionItemInfo.content.text = userQuestList.data[i].quest.content;
+                missionItemInfo.content.text = "- "+userQuestList.data[i].quest.content;
                 missionItemInfo.rewardEXP.text = userQuestList.data[i].quest.exp.ToString();
                 missionItemInfo.rewardGem.text = userQuestList.data[i].quest.gold.ToString();
                 //아이템 인덱스로 이름 받아오기! ==== 규할일 ====
