@@ -117,6 +117,8 @@ namespace MJ
                 Debug.Log("아바타 데이터-------------------");
                 Debug.Log(downloadHandler.text);
                 Debug.Log("--------------------------------");
+                SceneUIManager.GetInstance().ProfileSet();
+
             };
 
             StartCoroutine(HttpManager.GetInstance().Post(info));

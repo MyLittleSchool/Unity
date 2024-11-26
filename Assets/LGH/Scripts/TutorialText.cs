@@ -57,7 +57,7 @@ public class TutorialText : MonoBehaviour
     {
       
 
-        StartCoroutine(TextPrint("마이리틀스쿨에 입학한 걸 환영해!\r\n나는 로우야!!"));
+        StartCoroutine(TextPrint("마이리틀스쿨에 입학한 걸 환영해!\r\n나는 로우야!!\r\n새로운 친구들을 사귈 수 있게 도와주고 있어!"));
         yield return new WaitUntil(() => texting && (Input.touchCount == 1 || Input.GetMouseButtonDown(0)));
         yield return null;
 

@@ -845,8 +845,7 @@ namespace MJ
 
 
             print("학교 정보 불러오기");
-
-
+            
 
         }
         private void SetSchoolName(int option)
@@ -888,6 +887,10 @@ namespace MJ
                 AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(JsonUtility.FromJson<UserInfoData>(jsonData).data);
             };
             StartCoroutine(HttpManager.GetInstance().Get(info2));
+
+            //프로필 아바타
+            ProfileSet();
+
         }
         private void TouchPlayer()
         {
