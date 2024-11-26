@@ -36,9 +36,9 @@ namespace MJ
 
             foreach (ObjectContestInfo info in mapContestLoader.loadfurnitureList)
             {
-                GameObject item = InventorySystem.GetInstance().GetItemIndex(info.id);
+                GameObject item = InventorySystem.GetInstance().GetItemIndex(info.objId);
                 if (item != null)
-                    setTile.LoadData(new Vector3Int(info.x, info.y, 0), item, info.id);
+                    setTile.LoadData(new Vector3Int(info.x, info.y, 0), item, info.objId);
             }
         }
     }

@@ -144,7 +144,7 @@ namespace GH
         public void CopyTile(Vector3Int _tilePosition, int objId)
         {
             tilemap.SetTile(_tilePosition, emptyTilebase);
-            GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, _tilePosition, Quaternion.identity);
+            GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + InventorySystem.GetInstance().GetItemData(objId).itemName, _tilePosition, Quaternion.identity);
             //setObject.transform.position = tilePosition;
             AddObject(setObject);
 
@@ -156,7 +156,7 @@ namespace GH
             objectInfo.x = _tilePosition.x;
             objectInfo.y = _tilePosition.y;
             //objectInfo.rot =
-            objectInfo.mapId = DataManager.instance.mapId;
+            objectInfo.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
             objectInfo.mapType = MapType.MyClassroom;
             PlaceManager.GetInstance().CreatePlace(objectInfo, (PlaceManager.PlaceInfo callBack) =>
             {

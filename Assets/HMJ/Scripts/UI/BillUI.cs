@@ -16,17 +16,13 @@ public class BillUI : MonoBehaviour
 
     public TMP_Text BillPrice;
 
-    private InventorySystem inventorySystem;
-    private MapContestLoader mapContestLoader;
+    public TMP_Text BillGold;
+    int price = 0;
 
     Dictionary<string, int> ItemMap = new Dictionary<string, int>();
     // Start is called before the first frame update
     void Start()
     {
-        inventorySystem = InventorySystem.GetInstance();
-
-        mapContestLoader = MapContestLoader.GetInstance();
-
         SettingButton();
     }
 
@@ -39,15 +35,21 @@ public class BillUI : MonoBehaviour
     public void SettingButton()
     {
         billButton.onClick.AddListener(OnBillPanel);
+
+        buyButton.onClick.AddListener(BuyFunitureItem);
         buyButton.onClick.AddListener(ClickBuyButton);
+
+        
         noBuyButton.onClick.AddListener(ClickNoBuyButton);
     }
 
     public void OnBillPanel()
     {
+        billButton.gameObject.SetActive(false);
         BillPanel.SetActive(true);
         SettingBillData();
-        BuyFunitureItem();
+
+        BillGold.text = InventorySystem.GetInstance().Gold.ToString();
     }
 
     public void OffBillPanel()
@@ -59,68 +61,78 @@ public class BillUI : MonoBehaviour
     {
         OffBillPanel();
         // 이때 프리셋 적용
-        mapContestLoader.MapCopyFurniture();
+        MapContestLoader.GetInstance().MapCopyFurniture();
+
+        InventorySystem.GetInstance().Gold -= price;
 
     }
 
     public void ClickNoBuyButton()
     {
         OffBillPanel();
-
+        billButton.gameObject.SetActive(true);
         // 이때 프리셋 적용x
     }
 
-    //public void calculateItem()
-    //{
-    //    ItemMap.Clear();
-    //    foreach (ObjectContestInfo objectContestInfo in MapContestLoader.GetInstance().loadfurnitureList)
-    //    {
-    //        Item.ItemData item = inventorySystem.items[objectContestInfo.objId];
-    //        if (ItemMap.ContainsKey(item.itemName))
-    //            ItemMap[item.itemName]++;
-    //        else
-    //            ItemMap.Add(item.itemName, 1);
+    public void calculateItem()
+    {
+        price = 0;
+        ItemMap.Clear();
+        foreach (ObjectContestInfo objectContestInfo in MapContestLoader.GetInstance().loadfurnitureList)
+        {
+            InventorySystem.ItemData item = InventorySystem.GetInstance().GetItemData(objectContestInfo.objId);
 
-    //    }
-    //}
+            if(item != null)
+            {
+                if (ItemMap.ContainsKey(item.itemName))
+                    ItemMap[item.itemName]++;
+                else
+                    ItemMap.Add(item.itemName, 1);
 
-    //public void calculateDeleteItem()
-    //{
-    //    if (MapContestLoader.GetInstance().deleteItemDataLists == null)
-    //        return;
-    //    // 현재 내 맵에서 삭제된 정보 인벤토리에 다시 넣기
-    //    foreach (DeleteItemData deleteItemData in MapContestLoader.GetInstance().deleteItemDataLists.response)
-    //        ++inventorySystem.items[deleteItemData.objectId].n;
-    //}
+                price += item.price;
+            }
+
+        }
+    }
+
+    public void calculateDeleteItem()
+    {
+        if (MapContestLoader.GetInstance().deleteItemDataLists == null)
+            return;
+        // 현재 내 맵에서 삭제된 정보 인벤토리에 다시 넣기
+        foreach (DeleteItemData deleteItemData in MapContestLoader.GetInstance().deleteItemDataLists.response)
+        {
+            InventorySystem.GetInstance().PatchItemData(deleteItemData.objectId, 1);
+        }
+    }
 
     public void SettingBillData()
     {
-        // calculateItem();
+        calculateItem();
 
         BillText.text = "";
         foreach (KeyValuePair<string, int> item in ItemMap)
             BillText.text += item.Key + " X " + item.Value + "\n";
+
+        BillPrice.text = price.ToString();
     }
 
     public void BuyFunitureItem()
     {
-
         // 가구 모두 지우기
         MapContestLoader.GetInstance().MapContestDeleteAllFurniture();
 
         StartCoroutine(WaitForConditionToBeTrue());
 
         // 지운 가구 데이터 계산
-        // calculateDeleteItem();
+        calculateDeleteItem();
 
-        BuyItem();
-        //
 
     }
 
     public bool LoadDeleteItemComplete()
     {
-        if (mapContestLoader.deleteItemDataLists == null || mapContestLoader.deleteItemDataLists.response.Count == 0)
+        if (MapContestLoader.GetInstance().deleteItemDataLists == null || MapContestLoader.GetInstance().deleteItemDataLists.response.Count == 0)
             return false;
 
         return true;
@@ -135,26 +147,6 @@ public class BillUI : MonoBehaviour
         Debug.Log("Condition met! Proceeding...");
     }
 
-    public void BuyItem()
-    {
-        //Dictionary<string, int> sellItemMap = new Dictionary<string, int>();
-        //foreach (KeyValuePair<string, int> item in ItemMap)
-        //{
-        //    int remainData = inventorySystem.UseItem(item.Value, item.Key);
-
-        //    if (sellItemMap.ContainsKey(item.Key))
-        //        sellItemMap[item.Key] += -remainData;
-        //    else
-        //        sellItemMap.Add(item.Key, -remainData);
-        //}
-
-        //int prices = 0;
-        //foreach (KeyValuePair<string, int> item in sellItemMap)
-        //{
-        //    prices += inventorySystem.GetPrice(item.Value, item.Key);
-        //}
-        //BillPrice.text = prices.ToString();
-    }
 
 
 }

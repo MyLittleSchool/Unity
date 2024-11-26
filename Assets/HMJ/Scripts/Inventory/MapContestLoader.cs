@@ -207,7 +207,7 @@ namespace MJ
         public void MapContestDeleteAllFurniture()
         {
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/furniture/list/" + DataManager.instance.mapId;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/furniture/list/" + AuthManager.GetInstance().userAuthData.userInfo.id;
             Debug.Log("MapContestDeleteAllFurniture: " + info.url);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler res) =>

@@ -71,20 +71,6 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-
-    /*
-     
-      "inventoryId": 0,
-  "itemIdx": 0,
-  "count": 0,
-  "itemType": "string"
-
-       "itemIdx": 0,
-    "itemName": "string",
-    "price": 0,
-    "itemType": "string",
-    "count": 0
-     */
     [Serializable]
     public struct ItemDatas
     {
@@ -116,6 +102,8 @@ public class InventorySystem : MonoBehaviour
     private ItemType curInventoryItemType = ItemType.Common;
 
     private ItemDatas[] loadItemData = new ItemDatas[2];
+
+    public int Gold = 10000000;
 
     public void InitItemList()
     {
@@ -199,6 +187,53 @@ public class InventorySystem : MonoBehaviour
         StartCoroutine(HttpManager.GetInstance().Patch(info));
     }
 
+    public void PatchItemData(string _itemName, int _Count)
+    {
+        ItemData itemData = null;
+        // /list/" + DataManager.instance.mapId + "/" + itemData.itemType;
+        for (int i = 0; i < 2; i++)
+        {
+            itemData = loadItemData[i].response.Find(x => _itemName == x.itemName);
+            if (null != itemData)
+                break;
+        }
+        
+        itemData.count += _Count;
+
+        if (null == itemData)
+            return;
+
+        HttpInfo info = new HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/inventory";
+        info.body = JsonUtility.ToJson(itemData);
+        info.contentType = "application/json";
+        info.onComplete = (DownloadHandler downloadHandler) =>
+        {
+            print(downloadHandler.text);
+        };
+        StartCoroutine(HttpManager.GetInstance().Patch(info));
+    }
+
+    public void PatchItemData(int idx, int _Count)
+    {
+        ItemData itemData = InventorySystem.GetInstance().GetItemData(idx);
+
+        itemData.count += _Count;
+
+        if (null == itemData)
+            return;
+
+        HttpInfo info = new HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/inventory";
+        info.body = JsonUtility.ToJson(itemData);
+        info.contentType = "application/json";
+        info.onComplete = (DownloadHandler downloadHandler) =>
+        {
+            print(downloadHandler.text);
+        };
+        StartCoroutine(HttpManager.GetInstance().Patch(info));
+    }
+
     public void GetItemData(ItemType _itemType)
     {
         // itemList[(int)_itemType].Clear();
@@ -231,6 +266,7 @@ public class InventorySystem : MonoBehaviour
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+
 
     public void SetItemComponent(ItemType _itemType)
     {
@@ -401,5 +437,14 @@ public class InventorySystem : MonoBehaviour
         return LoadItemData(itemType, itemdata.itemName);
 
         // 이름, 이미지
+    }
+
+    public ItemData GetItemData(int idx) // 인덱스
+    {
+        // 각 카테고리별 카운트 계산
+        if (idx < loadItemData[(int)ItemType.MyClassRoom].response.Count()) //  MyClassRoom 타입 인덱스
+            return loadItemData[(int)ItemType.MyClassRoom].response[idx];
+        else
+            return loadItemData[(int)ItemType.Common].response[idx - loadItemData[(int)ItemType.MyClassRoom].response.Count];
     }
 }
