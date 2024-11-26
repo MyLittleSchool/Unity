@@ -106,6 +106,7 @@ public class QuestManager : MonoBehaviour
     public Button missonOnButton;
     public Button dailyMissonButton;
     public Button allMissonOnButton;
+    public Button MissonOffButton;
 
     [Header("미션 아이템 프리펩")]
     public GameObject missionPrefabs;
@@ -114,11 +115,14 @@ public class QuestManager : MonoBehaviour
 
     public List<GameObject> missionList;
 
+    public GameObject missionPanel;
+
     private void Start()
     {
-        missonOnButton.onClick.AddListener(MissionGet);
+        missonOnButton.onClick.AddListener(MissionPanelOn);
         dailyMissonButton.onClick.AddListener(MissionGet);
         allMissonOnButton.onClick.AddListener(MissionGet);
+        MissonOffButton.onClick.AddListener(MissionPanelOff);
     }
     private void Update()
     {
@@ -203,6 +207,16 @@ public class QuestManager : MonoBehaviour
             //print("get : " + userQuestList);
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
+    }
+
+    public void MissionPanelOn()
+    {
+        missionPanel.SetActive(true);
+        MissionGet();
+    } 
+    public void MissionPanelOff()
+    {
+        missionPanel.SetActive(false);
     }
     private void MissionGet()
     {

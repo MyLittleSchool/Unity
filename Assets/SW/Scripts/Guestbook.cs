@@ -133,6 +133,8 @@ namespace SW
             int mapId = DataManager.instance.mapId;
             DataManager.MapType mapType = DataManager.instance.MapTypeState;
             bool isMyClassroom = false;
+            print(mapId);
+            print(mapType);
             // 쪽지함은 내 교실일 때
             if (mapId == AuthManager.GetInstance().userAuthData.userInfo.id && mapType == DataManager.MapType.MyClassroom)
             {

@@ -13,7 +13,7 @@ namespace SW
 
         public void OnFriendReqButtonClick()
         {
-            WebSocketManager.GetInstance().RequestFriend(userRPC.userInfo.id);
+            WebSocketManager.GetInstance().OnRequestFriendPanel(userRPC.userInfo.id);
         }
     }
 }

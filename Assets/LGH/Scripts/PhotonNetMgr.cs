@@ -201,6 +201,8 @@ namespace GH
             }
 
             PlayerAnimation.GetInstance().SettingAvatar();
+            sceneUIManager.MapTutorial();
+
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
@@ -222,7 +224,6 @@ namespace GH
             PhotonNetwork.LoadLevel(sceneNum);
             loadingPanel.SetActive(true);
             StartCoroutine(loading.SceneMove());
-            sceneUIManager.MapTutorial();
             GameManager.instance.CoSpwamPlayer();
             VoiceManager.GetInstance().MoveScene();
 

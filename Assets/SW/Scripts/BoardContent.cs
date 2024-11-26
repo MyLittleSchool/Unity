@@ -11,6 +11,7 @@ namespace SW {
         public string content;
         public int like;
         public int comentCount;
+        public bool isExistLike;
         public TMP_Text text;
         public TMP_Text likeCountText;
         public TMP_Text comentCountText;

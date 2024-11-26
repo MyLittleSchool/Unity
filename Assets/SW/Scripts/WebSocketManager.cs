@@ -1,3 +1,4 @@
+using MJ;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -176,11 +177,9 @@ namespace SW
                 Debug.Log(e.ToString());
             }
         }
-        public void RequestFriend(int userId)
+        public void OnRequestFriendPanel(int userId)
         {
-            ToastMessage.OnMessage("친구 추가를 요청하였습니다");
-            Send(friendWebSocket, "{\"type\": \"FRIEND_REQUEST\", \"requesterId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + ", \"receiverId\": " + userId + "}");
-            QuestManager.instance.QuestPatch(2);
+            SceneUIManager.GetInstance().OnReqFriendPanel(userId);
         }
     }
 }

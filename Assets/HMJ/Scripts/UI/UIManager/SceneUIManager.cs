@@ -126,6 +126,7 @@ namespace MJ
 
         [Header("친구창 패널")]
         public GameObject friendsPanel;
+        public GameObject requestFriendPanel;
 
         [Header("채팅 패널")]
         public GameObject ChatPanel;
@@ -525,7 +526,11 @@ namespace MJ
             friendsPanel.SetActive(true);
             friendsPanel.GetComponent<FriendsUI>().RefreshFriends();
         }
-
+        public void OnReqFriendPanel(int id)
+        {
+            requestFriendPanel.SetActive(true);
+            requestFriendPanel.GetComponent<RequestFriendPanel>().receiverId = id;
+        }
         public void OffAllMapPanel()
         {
             if (mapContestPanel)
@@ -840,8 +845,7 @@ namespace MJ
 
 
             print("학교 정보 불러오기");
-
-
+            
 
         }
         private void SetSchoolName(int option)
@@ -883,6 +887,10 @@ namespace MJ
                 AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(JsonUtility.FromJson<UserInfoData>(jsonData).data);
             };
             StartCoroutine(HttpManager.GetInstance().Get(info2));
+
+            //프로필 아바타
+            ProfileSet();
+
         }
         private void TouchPlayer()
         {
@@ -968,7 +976,7 @@ namespace MJ
             });
             comp.RequestButton.onClick.AddListener(() =>
             {
-                WebSocketManager.GetInstance().RequestFriend(comp.id);
+                WebSocketManager.GetInstance().OnRequestFriendPanel(comp.id);
             });
         }
 
