@@ -123,10 +123,15 @@ namespace MJ
             }
         }
 
-        private void OnEnable()
+        public void OnEnableDecorationPanel()
         {
             curDecorationPanel = DECORATION_DATA.SKIN;
             SetPlayerDecorationData(curDecorationPanel);
+        }
+
+        private void OnEnable()
+        {
+
         }
     }
 

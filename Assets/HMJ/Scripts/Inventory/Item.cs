@@ -45,6 +45,7 @@ public class Item : MonoBehaviour
         {
             SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             tmpItem.SetText_Image(_itemName, _count, spriteRenderer.sprite.texture);
+
         }
            
     }

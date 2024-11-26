@@ -187,7 +187,7 @@ namespace MJ
             SetTile setTile = dataManager.player.GetComponent<SetTile>();
             foreach (ObjectContestInfo info in loadfurnitureList)
             {
-                setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().GetItemPrefab(info.id), info.id);
+                setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().GetItemIndex(info.id), info.id);
             }
         }
 

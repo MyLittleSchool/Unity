@@ -18,11 +18,13 @@ using static InventorySystem;
 using static Item;
 using static SellSystem;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 public class InventorySystem : MonoBehaviour
 {
     // 인벤토리 종류 버튼
     public Button[] inventoryTypeButton;
+    public Button installButton;
 
     /// <summary>
     /// 인벤토리 부모 및 자식 프리펩
@@ -56,6 +58,19 @@ public class InventorySystem : MonoBehaviour
             count = _count;
         }
     }
+
+    public struct QuestItem
+    {
+        public string ItemName;
+        public Sprite textureSprite;
+
+        public QuestItem(string _ItemName, Sprite _textureSprite)
+        {
+            ItemName = _ItemName;
+            textureSprite = _textureSprite;
+        }
+    }
+
 
     /*
      
@@ -124,7 +139,11 @@ public class InventorySystem : MonoBehaviour
             inventoryTypeButton[i].onClick.AddListener(
             () => SelectButton((ItemType)data)
             );
+            inventoryTypeButton[i].onClick.AddListener(
+            ResetChoiceItem);
         }
+
+        installButton.onClick.AddListener(InstallItem);
     }
     private void Start()
     {
@@ -133,11 +152,14 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("현재 인벤토리 상태: " + curInventoryItemType.ToString());
     }
+
     public ItemType GetCurItemType()
     {
-        return curInventoryItemType;
+        if (choiceItem)
+            return choiceItem.itemType;
+        else
+            return ItemType.ItemTypeEnd;
     }
 
     public void UpdateItemData(string itemType, string itemName, int _Count)
@@ -203,7 +225,6 @@ public class InventorySystem : MonoBehaviour
                     Debug.Log("itemPrefab - Name: " + itemdata.itemName + ", " + itemdata.count);
                 else
                     Debug.Log("Null - itemPrefab  - " + itemdata.itemName);
-                //itemList[(int)_itemType].Add(new Item(itemdata.itemName, itemdata.price, _itemType, itemdata.count, itemPrefab));
             }
 
 
@@ -275,7 +296,6 @@ public class InventorySystem : MonoBehaviour
         // 조건이 true가 될 때까지 대기
         yield return new WaitUntil(() => (loadItemData[0].response != null && loadItemData[0].response.Count() > 0) && (loadItemData[1].response != null && loadItemData[1].response.Count() > 0));
 
-        gameObject.SetActive(false);
         Debug.Log("Condition met! Proceeding...");
     }
 
@@ -303,7 +323,25 @@ public class InventorySystem : MonoBehaviour
         if (choiceItem && choiceItem.count > 0)
             return true;
         return false;
+    }
 
+    public QuestItem GetQuestItemIndex(int idx) // 인덱스
+    {
+        ItemData itemdata;
+        ItemType itemType = ItemType.MyClassRoom;
+
+        // 각 카테고리별 카운트 계산
+        if (idx < loadItemData[(int)ItemType.MyClassRoom].response.Count()) //  MyClassRoom 타입 인덱스
+            itemdata = loadItemData[(int)ItemType.MyClassRoom].response[idx];
+        else
+            itemdata = loadItemData[(int)ItemType.Common].response[idx - loadItemData[(int)ItemType.MyClassRoom].response.Count];
+
+        if (itemdata.itemType == "Common")
+            itemType = ItemType.Common;
+
+        SpriteRenderer spriteRenderer = GetItemIndex(idx).GetComponent<SpriteRenderer>();
+        return new QuestItem(itemdata.itemName, spriteRenderer.sprite);
+        // 이름, 이미지
     }
 
     //public void AddItemData(ItemType _itemType, string _itemName, int _itemCount)
@@ -326,50 +364,42 @@ public class InventorySystem : MonoBehaviour
     {
         choiceItem = itemCom;
         DataManager.instance.setTileObj = choiceItem.prefab;
+        for (int i = 0; i < 2; i++)
+        {
+            ItemData findItemData = loadItemData[i].response.Find(x => choiceItem.prefab.name == x.itemName);
+            if (null != findItemData)
+                DataManager.instance.setTileObjId = findItemData.itemIdx;
+        }
+
     }
 
-    // 타입, 이름
-    // 타입 정
 
-    // 현재 열고 있는 창 기준
-    public GameObject GetItemPrefab(int idx)
+    public void InstallItem()
     {
-        //if (loadItemData[0].response.Count - 1 < idx) // 0번째 타입보다 더 많으면
-        //{
-        //    loadItemData[0].response[idx - loadItemData[0].response.Count]
-        //}
-        //else
-        //{
-
-        //}
-        //for(int i = 0; i < (int)ItemType.Common + 1; i++)
-        //{
-        //    for(int j = 0; j < loadItemData[i].response.Count(); j++)
-        //    {
-
-        //    }
-        //}
-
-        //if(idx >= 50) // Common
-        //{
-        //    itemType.to
-        //}
-        //else // MyClassRoom
-        //{
-
-        //}
-        //// 아이템 타입에 따라 50씩 차이나도록
-
-        //loadItemData[(int)ItemType]
-        //string _itemName = loadItemData[(int)curInventoryItemType].response[(int)curInventoryItemType * 100 + idx].itemName;
-        //string _itemType = loadItemData.response[idx].itemType;
-
-        //if(_itemType == "MyClassRoom")
-        //    return itemList[0].Find(x => _itemName == x.itemName).prefab;
-        //else
-        //    return itemList[1].Find(x => _itemName == x.itemName).prefab;
-
-        return gameObject;
+        SetTile.instance.OnTile();
     }
 
+    public void ResetChoiceItem()
+    {
+        choiceItem = null;
+    }
+
+    public GameObject GetItemIndex(int idx) // 인덱스
+    {
+        ItemData itemdata;
+        ItemType itemType = ItemType.MyClassRoom;
+
+        // 각 카테고리별 카운트 계산
+        if (idx < loadItemData[(int)ItemType.MyClassRoom].response.Count()) //  MyClassRoom 타입 인덱스
+            itemdata = loadItemData[(int)ItemType.MyClassRoom].response[idx];
+        else
+            itemdata = loadItemData[(int)ItemType.Common].response[idx - loadItemData[(int)ItemType.MyClassRoom].response.Count];
+
+        if (itemdata.itemType == "Common")
+            itemType = ItemType.Common;
+
+        return LoadItemData(itemType, itemdata.itemName);
+
+        // 이름, 이미지
+    }
 }
