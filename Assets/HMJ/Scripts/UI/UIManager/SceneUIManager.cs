@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -34,7 +35,10 @@ namespace MJ
         public UnityEngine.UI.Button[] decorationChoiceButton;
 
         [Header("맵 등록 패널 - 맵 등록 패널 버튼")]
-        public UnityEngine.UI.Button mapRegisterButton;
+        public UnityEngine.UI.Button onMapRegisterButton;
+
+        [Header("맵 등록 패널 - 맵 콘테스트 업로드 버튼")]
+        public UnityEngine.UI.Button contestUpload_Button;
 
         [Header("맵 등록 패널 - 맵 콘테스트 패널 버튼")]
         public UnityEngine.UI.Button mapContestButton;
@@ -84,6 +88,7 @@ namespace MJ
 
         [Header("인벤토리 선택 버튼 - 학교")]
         public Button myClassRoomButton;
+
         #endregion
 
         #region Panel
@@ -166,6 +171,9 @@ namespace MJ
 
         [Header("맵 튜토리얼 패널")]
         public GameObject tutorialPanel;
+
+        [Header("맵 콘테스트 계산 영수증 - 맵 콘테스트")]
+        public GameObject mapContestBill;
         #endregion
 
         #region SingleTone
@@ -266,14 +274,10 @@ namespace MJ
             myProfileEditPanel.SetActive(false);
             myProfilePanel.SetActive(false);
 
-            if (mapRegisterButton)
-            {
-                mapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
-            }
+
             if (MapRegisterCloseButton)
             {
                 MapRegisterCloseButton.onClick.AddListener(CloseMapRegisterPanel);
-                MapRegisterCloseButton.onClick.AddListener(OnMapContestPanel);
             }
 
             if (MapContestCloseButton)
@@ -285,9 +289,15 @@ namespace MJ
 
             if (mapContestButton)
                 mapContestButton.onClick.AddListener(OnMapConfirmPanel);
+            if (onMapRegisterButton)
+            {
+                onMapRegisterButton.onClick.AddListener(OnMapRegisterPanel);
+                mapContestButton.onClick.AddListener(OnMapConfirmPanel);
+            }
 
-            if (MapConfirmYesButton)
-                MapConfirmYesButton.onClick.AddListener(OnMapRegisterPanel);
+            //if (MapConfirmYesButton)
+            //    MapConfirmYesButton.onClick.AddListener(OnMapRegisterPanel);
+
             if (MapConfirmYesButton)
                 MapConfirmYesButton.onClick.AddListener(OffMapConfirmPanel);
             if (MapConfirmNoButton)
@@ -414,7 +424,8 @@ namespace MJ
         {
             mapRegisterPanel.SetActive(false);
             mapContestPanel.SetActive(true);
-            mapContestButton.gameObject.SetActive(false);
+            mapContestButton.gameObject.SetActive(true);
+            SettingMapPanel.GetInstance().OnMapContestPanel();
         }
 
         IEnumerator coMapInventoryGameObject()
@@ -434,6 +445,7 @@ namespace MJ
                 DataManager.instance.player.GetComponent<SetTile>().setMode = true;
             }
         }
+
 
         public void CloseMapRegisterPanel()
         {
@@ -459,6 +471,25 @@ namespace MJ
             }
         }
 
+        public void OnInventoryUI()
+        {
+            mapInventoryPanel.SetActive(false);
+            InventoryCloseButton.gameObject.SetActive(false);
+            InventoryButton.gameObject.SetActive(true);
+        }
+
+        public void OffInventoryUI()
+        {
+            mapInventoryPanel.SetActive(false);
+            InventoryCloseButton.gameObject.SetActive(false);
+            InventoryButton.gameObject.SetActive(false);
+            ChatPanel.gameObject.SetActive(true);
+            if (DataManager.instance.player != null)
+            {
+                DataManager.instance.player.GetComponent<SetTile>().setMode = false;
+            }
+        }
+
         public void OnMapConfirmPanel()
         {
             mapConfirmPanel.SetActive(true);
@@ -476,7 +507,7 @@ namespace MJ
 
         public void OffMapSuccessRegisterPanel()
         {
-            mapSuccessRegisterPanel.SetActive(false);
+            // mapSuccessRegisterPanel.SetActive(false);
         }
 
         public void OnMenuButtonClick()
@@ -564,6 +595,8 @@ namespace MJ
         public void OnDecorationPanel()
         {
             DecorationPanel.SetActive(true);
+            PlayerDecoration.GetInstance().OnEnableDecorationPanel();
+
         }
 
         public void OffDecorationPanel()
@@ -632,6 +665,15 @@ namespace MJ
             quizQuestionPanel.SetActive(false);
         }
 
+        public void OnMapContestBillPanel()
+        {
+            mapContestBill.gameObject.SetActive(true);
+        }
+
+        public void OffMapContestBillPanel()
+        {
+            mapContestBill.gameObject.SetActive(false);
+        }
 
         public void ProfileEditCount()
         {

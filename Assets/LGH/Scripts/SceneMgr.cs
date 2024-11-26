@@ -62,6 +62,8 @@ public class SceneMgr : MonoBehaviour
         //DataManager.instance.player = null;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 2;
+
+        SceneUIManager.GetInstance().OnInventoryUI();
         //SceneManager.LoadScene(2);
         //PhotonNetMgr.instance.CreateRoom();
     }
@@ -74,7 +76,7 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.MapTypeState = DataManager.MapType.Square;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 3;
-
+        SceneUIManager.GetInstance().OffInventoryUI();
     }
 
     public void SchoolIn(string roomName = null, int mapId = -1)
@@ -94,7 +96,7 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.MapTypeState = DataManager.MapType.School;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 1;
-
+        SceneUIManager.GetInstance().OnInventoryUI();
     }
 
     public void QuizIn(string quizRoomName)
@@ -109,6 +111,7 @@ public class SceneMgr : MonoBehaviour
         // 퀴즈 방에 따라 Count 구해서 마스터 클라이언트로 전달
 
         PlayerAnimation.GetInstance().SettingAvatar();
+        SceneUIManager.GetInstance().OffInventoryUI();
     }
 
     public void QuizSquareIn()
@@ -119,6 +122,7 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.MapTypeState = DataManager.MapType.QuizSquare;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 5;
+        SceneUIManager.GetInstance().OffInventoryUI();
 
     }
 
@@ -129,5 +133,6 @@ public class SceneMgr : MonoBehaviour
         DataManager.instance.MapTypeState = DataManager.MapType.ContestClassroom;
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 6;
+        SceneUIManager.GetInstance().OffInventoryUI();
     }
 }

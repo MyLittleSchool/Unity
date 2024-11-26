@@ -22,6 +22,7 @@ public class MapContestScrollUI : ScrollUI
 
     }
 
+    
     public override void AddItem()
     {
         GameObject registerObject = myMapRegisterScrollUIcp.GetRegisterGameObject();
@@ -50,12 +51,6 @@ public class MapContestScrollUI : ScrollUI
             //item.set
             MJ.MapContestDataUI mapContestDataUI = item.GetComponent<MJ.MapContestDataUI>();
 
-            //MapRegisterData mapRegisterData = new MapRegisterData();
-            //mapRegisterData.title = mapContestData.title;
-            //mapRegisterData.Description = mapContestData.description;
-            //mapRegisterData.likes = mapContestData.likeCount;
-            //mapRegisterData.views = mapContestData.viewCount;
-
             if (MapContestLoader.GetInstance().sprites.Count != 0)
             {
                 mapContestDataUI.SetRegisterData(respon[i], MapContestLoader.GetInstance().sprites[i]);
@@ -76,7 +71,13 @@ public class MapContestScrollUI : ScrollUI
     {
         // 맵 데이터 로드
         MapContestLoader.GetInstance().LoadMapData();
+        LoadMapData();
+    }
 
+    public void MapDataLoad()
+    {
+        // 맵 데이터 로드
+        MapContestLoader.GetInstance().LoadMapData();
         LoadMapData();
     }
 

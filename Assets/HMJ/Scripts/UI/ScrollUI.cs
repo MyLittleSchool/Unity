@@ -15,7 +15,12 @@ public class ScrollUI : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        if(addItemButton)
+
+    }
+
+    public void InitScrollUI()
+    {
+        if (addItemButton)
             addItemButton.onClick.AddListener(AddItem);
         LoadItem();
     }

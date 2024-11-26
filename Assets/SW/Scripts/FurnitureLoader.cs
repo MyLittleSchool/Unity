@@ -42,7 +42,7 @@ namespace SW
                 {
                     try
                     {
-                        //setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().items[info.objId].prefab, info.id);
+                        setTile.LoadData(new Vector3Int(info.x, info.y, 0), InventorySystem.GetInstance().GetItemIndex(info.objId), info.id);
                     }
                     catch
                     {

@@ -31,7 +31,7 @@ namespace SW
         }
         public override void Interact()
         {
-            SceneUIManager.GetInstance().OnMapConfirmPanel();
+            SceneUIManager.GetInstance().OnMapContestPanel();
         }
         protected override void Start()
         {
