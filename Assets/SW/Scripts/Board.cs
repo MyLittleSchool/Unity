@@ -205,22 +205,24 @@ public class Board : MonoBehaviour
                         // 좋아요 버튼
                         if (comp.isExistLike)
                         {
-                            comp.isExistLike = false;
-                            SetLikeButton(false);
-                            comp.like--;
-                            likeButtonText.text = comp.like.ToString();
-                            LikeInfo likeInfo = new LikeInfo();
-                            likeInfo.boardId = comp.id;
-                            likeInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-                            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board-like";
-                            info.body = JsonUtility.ToJson(likeInfo);
-                            info.contentType = "application/json";
-                            info.onComplete = (DownloadHandler res) =>
-                            {
-                                print("좋아요 취소");
-                            };
-                            StartCoroutine(HttpManager.GetInstance().Delete(info));
+                            //comp.isExistLike = false;
+                            //SetLikeButton(false);
+                            //comp.like--;
+                            //likeButtonText.text = comp.like.ToString();
+                            //LikeInfo likeInfo = new LikeInfo();
+                            //likeInfo.boardId = comp.id;
+                            //likeInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                            //print(likeInfo.boardId + "/" + likeInfo.userId);
+                            //HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                            //info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board-like";
+                            //info.body = JsonUtility.ToJson(likeInfo);
+                            //print(info.body);
+                            //info.contentType = "application/json";
+                            //info.onComplete = (DownloadHandler res) =>
+                            //{
+                            //    print("좋아요 취소");
+                            //};
+                            //StartCoroutine(HttpManager.GetInstance().Delete(info));
                         }
                         else
                         {
@@ -231,9 +233,11 @@ public class Board : MonoBehaviour
                             LikeInfo likeInfo = new LikeInfo();
                             likeInfo.boardId = comp.id;
                             likeInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                            print(likeInfo.boardId + "/" + likeInfo.userId);
                             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
                             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board-like/add-like";
                             info.body = JsonUtility.ToJson(likeInfo);
+                            print(info.body);
                             info.contentType = "application/json";
                             info.onComplete = (DownloadHandler res) =>
                             {
@@ -248,6 +252,7 @@ public class Board : MonoBehaviour
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+    [Serializable]
     private struct LikeInfo
     {
         public int boardId;
