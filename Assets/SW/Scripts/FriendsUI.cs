@@ -6,7 +6,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -66,7 +65,7 @@ namespace SW
             }
 
             //RefreshTab0(friends);
-            RefreshTab3(recommFriends);
+            //RefreshTab3(recommFriends);
             ChangeTab(0);
         }
         private void ClosePanel()
@@ -135,7 +134,7 @@ namespace SW
             catch { }
         }
         private int tab;
-        private void ChangeTab(int num)
+        public void ChangeTab(int num)
         {
             tab = num;
             if (num == 0)
@@ -155,7 +154,8 @@ namespace SW
                     numText.text = "내가 보낸 요청 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
                 }
                 else if (num == 3)
-                {
+                {   // AI 추천
+                    RefreshTab3(recommFriends);
                     numText.text = "추천 인원 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
                 }
             }
@@ -479,6 +479,8 @@ namespace SW
             webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_PENDING_REQUESTS\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
             // 보낸 요청 목록 조회
             webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_PENDING_REQUESTS_BY_REQUESTER\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
+            // AI 추천
+            if (tab == 3) RefreshTab3(recommFriends);
         }
         [Serializable]
         public class FriendList
@@ -537,6 +539,7 @@ namespace SW
                     comp.locationText.text = requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
                     comp.ProfileImage.AvatarGet(requester.id);
+                    comp.MessageText.text = list.requests[i].message;
                     //if (requester.isOnline)
                     //{
                     //    comp.StateText.text = "<color=#F2884B>접속중";
@@ -592,7 +595,7 @@ namespace SW
                     comp.id = receiver.id;
                     comp.NickNameText.text = receiver.name;
                     comp.ProfileImage.AvatarGet(list.requests[i].id);
-
+                    comp.MessageText.text = list.requests[i].message;
                     if (receiver.isOnline)
                     {
                         comp.StateText.text = "<color=#F2884B>접속중";
@@ -654,7 +657,7 @@ namespace SW
                     });
                     friendPanel.RequestButton.onClick.AddListener(() =>
                     {
-                        WebSocketManager.GetInstance().RequestFriend(friendPanel.id);
+                        WebSocketManager.GetInstance().OnRequestFriendPanel(friendPanel.id);
                     });
                 }
                 if (tab == 3) ChangeTab(tab);
@@ -747,6 +750,7 @@ namespace SW
             public int id;
             public UserInfo requester;
             public UserInfo receiver;
+            public string message;
             public bool accepted;
         }
         [Serializable]

@@ -126,6 +126,7 @@ namespace MJ
 
         [Header("친구창 패널")]
         public GameObject friendsPanel;
+        public GameObject requestFriendPanel;
 
         [Header("채팅 패널")]
         public GameObject ChatPanel;
@@ -515,7 +516,11 @@ namespace MJ
             friendsPanel.SetActive(true);
             friendsPanel.GetComponent<FriendsUI>().RefreshFriends();
         }
-
+        public void OnReqFriendPanel(int id)
+        {
+            requestFriendPanel.SetActive(true);
+            requestFriendPanel.GetComponent<RequestFriendPanel>().receiverId = id;
+        }
         public void OffAllMapPanel()
         {
             if (mapContestPanel)
@@ -928,7 +933,7 @@ namespace MJ
             });
             comp.RequestButton.onClick.AddListener(() =>
             {
-                WebSocketManager.GetInstance().RequestFriend(comp.id);
+                WebSocketManager.GetInstance().OnRequestFriendPanel(comp.id);
             });
         }
 

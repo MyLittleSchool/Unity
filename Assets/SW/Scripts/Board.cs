@@ -28,6 +28,8 @@ public class Board : MonoBehaviour
     public TMP_Text contentText;
     public TMP_Text likeCountText;
     public Button likeButton;
+    public Image likeButtonImage;
+    public TMP_Text likeButtonText;
     public TMP_Text comentCountText;
     public TMP_InputField comentInputField;
     public Button saveComentButton;
@@ -152,7 +154,7 @@ public class Board : MonoBehaviour
     public void LoadBoardData()
     {
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board/list";
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board/list/" + AuthManager.GetInstance().userAuthData.userInfo.id;
         info.onComplete = (DownloadHandler res) =>
         {
             // 제거
@@ -182,6 +184,9 @@ public class Board : MonoBehaviour
                 comp.like= boardGetList.data[i].likeCount;
                 comp.text.text = comp.title;
                 comp.likeCountText.text = comp.like.ToString();
+                comp.comentCount = boardGetList.data[i].commentCount;
+                comp.comentCountText.text = comp.comentCount.ToString();
+                comp.isExistLike = boardGetList.data[i].isExistLike;
                 // 댓글 개수 구현 필요\
                 //comp.comentCountText.text = comp.
                 comp.button.onClick.AddListener(() =>
@@ -191,18 +196,76 @@ public class Board : MonoBehaviour
                     titleText.text = comp.title;
                     contentText.text = comp.content;
                     likeCountText.text = comp.like.ToString();
-                    comentCountText.text = comp.comentCount.ToString();
+                    // 좋아요 이미 누름
+                    SetLikeButton(comp.isExistLike);
                     LoadComentsData(comp.id);
+                    likeButton.onClick.RemoveAllListeners();
                     likeButton.onClick.AddListener(() =>
                     {
                         // 좋아요 버튼
-
+                        if (comp.isExistLike)
+                        {
+                            comp.isExistLike = false;
+                            SetLikeButton(false);
+                            comp.like--;
+                            likeButtonText.text = comp.like.ToString();
+                            LikeInfo likeInfo = new LikeInfo();
+                            likeInfo.boardId = comp.id;
+                            likeInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board-like";
+                            info.body = JsonUtility.ToJson(likeInfo);
+                            info.contentType = "application/json";
+                            info.onComplete = (DownloadHandler res) =>
+                            {
+                                print("좋아요 취소");
+                            };
+                            StartCoroutine(HttpManager.GetInstance().Delete(info));
+                        }
+                        else
+                        {
+                            comp.isExistLike = true;
+                            SetLikeButton(true);
+                            comp.like++;
+                            likeButtonText.text = comp.like.ToString();
+                            LikeInfo likeInfo = new LikeInfo();
+                            likeInfo.boardId = comp.id;
+                            likeInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+                            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+                            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board-like/add-like";
+                            info.body = JsonUtility.ToJson(likeInfo);
+                            info.contentType = "application/json";
+                            info.onComplete = (DownloadHandler res) =>
+                            {
+                                print("좋아요 완료");
+                            };
+                            StartCoroutine(HttpManager.GetInstance().Post(info));
+                        }
                     });
                 });
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
+    }
+    private struct LikeInfo
+    {
+        public int boardId;
+        public int userId;
+    }
+
+    private void SetLikeButton(bool value)
+    {
+        if (value)
+        {
+            likeButtonImage.color = new Color(1, 0.3882353f, 0.5019608f);
+            likeButtonText.color = Color.white;
+        }
+        else
+        {
+            likeButtonImage.color = Color.white;
+            likeButtonText.color = likeButtonText.color = Color.black;
+        }
     }
     public GameObject commentPrefab;
     public void LoadComentsData(int id)
@@ -224,6 +287,7 @@ public class Board : MonoBehaviour
                 GameObject newPanel = Instantiate(commentPrefab, boardContents.transform);
                 newPanel.transform.GetComponentInChildren<TMP_Text>().text = data.data[i].content;
             }
+            comentCountText.text = data.data.Length.ToString();
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
@@ -253,5 +317,7 @@ public class Board : MonoBehaviour
         public string title;
         public string content;
         public int likeCount;
+        public int commentCount;
+        public bool isExistLike;
     }
 }
