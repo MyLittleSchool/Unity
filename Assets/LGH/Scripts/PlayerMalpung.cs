@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Photon.Pun;
+using SW;
 
 namespace GH
 {
@@ -34,7 +35,7 @@ namespace GH
 
             // 말풍 텍스트 초기화
             malpungText.text = "";
-            playerNameText.text = photonView.Owner.NickName;
+            playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.name;
         }
 
         // Update is called once per frame
@@ -43,6 +44,12 @@ namespace GH
 
             OnMalpung();
             malpungPanel.SetActive(onMalpung);
+        }
+        public void PlayerNameSet()
+        {
+            playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.name;
+            PhotonNetMgr.instance.ChangeNickname(AuthManager.GetInstance().userAuthData.userInfo.name);
+
         }
 
         //말풍선 생기기

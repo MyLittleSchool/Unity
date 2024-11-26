@@ -538,7 +538,7 @@ namespace SW
                     comp.GradeText.text = requester.grade + "학년";
                     comp.locationText.text = requester.school.location + " " + requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
-                    comp.ProfileImage.AvatarGet(requester.id);
+                    comp.ProfileImage.AvatarGet(list.requests[i].id);
                     comp.MessageText.text = list.requests[i].message;
                     if (requester.isOnline)
                     {
@@ -597,7 +597,7 @@ namespace SW
                     comp.GradeText.text = receiver.grade + "학년";
                     comp.locationText.text = receiver.school.location + " " + receiver.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", receiver.interest);
-                    comp.ProfileImage.AvatarGet(list.requests[i].id);
+                    comp.ProfileImage.AvatarGet(receiver.id);
                     comp.MessageText.text = list.requests[i].message;
                     if (receiver.isOnline)
                     {

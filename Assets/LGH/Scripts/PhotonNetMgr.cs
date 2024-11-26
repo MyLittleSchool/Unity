@@ -227,7 +227,21 @@ namespace GH
             VoiceManager.GetInstance().MoveScene();
 
         }
+        // 닉네임 변경 메서드
+        public void ChangeNickname(string newNickname)
+        {
+            // 현재 로컬 플레이어의 닉네임 변경
+            if (PhotonNetwork.IsMessageQueueRunning)
+            {
+                // 포톤 네트워크 내 플레이어 닉네임 설정
+                PhotonNetwork.LocalPlayer.NickName = newNickname;
 
+            }
+        }
+
+
+
+        
     }
     
 }
