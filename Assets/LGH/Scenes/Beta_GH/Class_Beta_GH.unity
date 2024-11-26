@@ -8442,7 +8442,8 @@ MonoBehaviour:
   - {fileID: 1645021354}
   - {fileID: 1645021353}
   - {fileID: 1645021352}
-  mapRegisterButton: {fileID: 1645021340}
+  onMapRegisterButton: {fileID: 0}
+  contestUpload_Button: {fileID: 0}
   mapContestButton: {fileID: 1645021346}
   MapConfirmYesButton: {fileID: 1645021342}
   MapConfirmNoButton: {fileID: 1645021344}
@@ -8488,6 +8489,7 @@ MonoBehaviour:
   quizQuestionPanel: {fileID: 1096748866}
   voicePanel: {fileID: 3301893120859453227}
   tutorialPanel: {fileID: 1668535429}
+  mapContestBill: {fileID: 0}
   nickNameInputField: {fileID: 4085812230642147419}
   interestInputField: {fileID: 4204886306202548620}
   myMessageInputField: {fileID: 2665098521616670273}
@@ -9397,6 +9399,7 @@ MonoBehaviour:
   inventoryTypeButton:
   - {fileID: 409638095}
   - {fileID: 409638096}
+  installButton: {fileID: 0}
   parentPanel: {fileID: 409638098}
   itemComponents: []
   childPanel:
@@ -23611,18 +23614,6 @@ RectTransform:
 --- !u!114 &1645021339 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4231778002258843046, guid: 9e8cc1901b891ae4bb00706d57030c1e,
-    type: 3}
-  m_PrefabInstance: {fileID: 6482354678806559788}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1645021340 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7920029640595058175, guid: 9e8cc1901b891ae4bb00706d57030c1e,
     type: 3}
   m_PrefabInstance: {fileID: 6482354678806559788}
   m_PrefabAsset: {fileID: 0}
@@ -48032,41 +48023,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: VisitOtherSchool
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625167635868834112, guid: 5f7cc0e30cba89648ae018a17482237c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5410705693859223279, guid: 5f7cc0e30cba89648ae018a17482237c,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5410705693859223279, guid: 5f7cc0e30cba89648ae018a17482237c,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5410705693859223279, guid: 5f7cc0e30cba89648ae018a17482237c,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -17
-      objectReference: {fileID: 0}
-    - target: {fileID: 8210465479187273232, guid: 5f7cc0e30cba89648ae018a17482237c,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8210465479187273232, guid: 5f7cc0e30cba89648ae018a17482237c,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8267758319526612622, guid: 5f7cc0e30cba89648ae018a17482237c,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
