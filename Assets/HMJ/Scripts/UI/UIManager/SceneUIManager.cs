@@ -241,6 +241,14 @@ namespace MJ
         public List<string> schoolName;
 
         MapCount mapCount;
+
+        [Header("우측 상단 프로필")]
+        public UserImage mineUserImage;
+
+        [Header("프로필 편집 인풋필드 리스트")]
+        public List<TMP_InputField> profileInputField;
+
+  
         #endregion
 
         private void Start()
@@ -317,6 +325,8 @@ namespace MJ
             initDecorationPanel();
             InitOtherPlayerPanel();
             initDecorationPanel();
+            ProfileSet();
+
         }
         private void Update()
         {
@@ -533,9 +543,16 @@ namespace MJ
             //버튼으로 키고 끄기
             myProfilePanel.SetActive(!myProfilePanel.activeSelf);
 
-            Image myProfileImage = myProfileButton.GetComponentInChildren<Image>();
-            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(29, 27, 32, 255);
+            Image myProfileImage = myProfileButton.transform.GetChild(0).GetComponent<Image>();
+            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(202, 202, 202, 255);
             myProfileImage.color = myprofileColor;
+
+        }
+        //우측상단 이미지 새로 고침
+        public void ProfileSet()
+        {
+            int userId = AuthManager.GetInstance().userAuthData.userInfo.id;
+            mineUserImage.AvatarGet(userId);
 
         }
 
@@ -548,6 +565,7 @@ namespace MJ
         {
             PlayerAnimation.GetInstance().PatchAvatarData();
             DecorationPanel.SetActive(false);
+            ProfileSet();
         }
 
 
@@ -563,6 +581,7 @@ namespace MJ
 
         public void OnMyProfileEdit()
         {
+            ProfileFirstSet();
             myProfileEditPanel.SetActive(true);
             myProfilePanel.SetActive(false);
         }
@@ -608,7 +627,7 @@ namespace MJ
             quizQuestionPanel.SetActive(false);
         }
 
-        
+
         public void ProfileEditCount()
         {
             nickNameText.text = nickNameInputField.text.Length + "/10";
@@ -659,7 +678,6 @@ namespace MJ
                     if (selectedInterest[i] == key)
                     {
                         test = true;
-                        print("11");
 
                         image.color = noneSelectColor;
                         selectedInterest.RemoveAt(i);
@@ -668,7 +686,6 @@ namespace MJ
                     else
                     {
                         test = false;
-                        print("22");
 
                     }
                     // interestText.text += "#" + selectedInterest[i] + " ";
@@ -704,6 +721,24 @@ namespace MJ
 
         }
 
+        //프로필 편집 초기값
+        private void ProfileFirstSet()
+        {
+            UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
+            //이름 창 세팅
+            profileInputField[0].text = userInfo.name;
+            //상태메시지 세팅
+            profileInputField[1].text = userInfo.statusMesasge;
+
+
+            //인터레스트 창 세팅
+            interestInputField.text = "";
+            for (int i = 0; i < userInfo.interest.Count; i++)
+            {
+                interestInputField.text += "#" + userInfo.interest[i] + " ";
+            }
+        }
+
         private void ProfileEditSave()
         {
             UserInfo joinInfo = AuthManager.GetInstance().userAuthData.userInfo;
@@ -731,6 +766,11 @@ namespace MJ
             SetProfile();
 
             QuestManager.instance.QuestPatch(1);
+
+            //프로필 이미지 변경 및 이름 변경
+            ProfileSet();
+            DataManager.instance.player.GetComponent<PlayerMalpung>().PlayerNameSet();
+
         }
 
         private void SetProfile()
@@ -934,6 +974,11 @@ namespace MJ
 
         public void MapTutorial()
         {
+            if (DataManager.instance.mapType == DataManager.MapType.Quiz || DataManager.instance.mapType == DataManager.MapType.Login || DataManager.instance.mapType == DataManager.MapType.ContestClassroom || DataManager.instance.mapType == DataManager.MapType.Note || DataManager.instance.mapType == DataManager.MapType.Others)
+                return;
+
+
+
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-pos-visit-count/" + DataManager.instance.mapType + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -943,7 +988,7 @@ namespace MJ
                 print("맵카!!!!!!! : " + mapCount.count);
                 if (mapCount.count < 1)
                 {
-                    
+
                     tutorialPanel.SetActive(true);
 
                     tutorialPanel.GetComponent<TutorialText>().TextChange(DataManager.instance.mapType);
@@ -959,10 +1004,7 @@ namespace MJ
                 StartCoroutine(HttpManager.GetInstance().Patch(info));
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
-
-
-
-
         }
+   
     }
 }

@@ -536,7 +536,7 @@ namespace SW
                     comp.GradeText.text = requester.grade + "학년";
                     comp.locationText.text = requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
-                    comp.ProfileImage.AvatarGet(requester.id);
+                    comp.ProfileImage.AvatarGet(list.requests[i].id);
                     //if (requester.isOnline)
                     //{
                     //    comp.StateText.text = "<color=#F2884B>접속중";
@@ -591,7 +591,7 @@ namespace SW
                     comp.friendshipId = list.requests[i].id;
                     comp.id = receiver.id;
                     comp.NickNameText.text = receiver.name;
-                    comp.ProfileImage.AvatarGet(list.requests[i].id);
+                    comp.ProfileImage.AvatarGet(receiver.id);
 
                     if (receiver.isOnline)
                     {

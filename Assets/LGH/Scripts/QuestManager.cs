@@ -101,6 +101,25 @@ public class QuestManager : MonoBehaviour
     public TMP_Text questTitle;
 
 
+
+    [Header("미션 버튼")]
+    public Button missonOnButton;
+    public Button dailyMissonButton;
+    public Button allMissonOnButton;
+
+    [Header("미션 아이템 프리펩")]
+    public GameObject missionPrefabs;
+
+    public RectTransform missionListTransform;
+
+    public List<GameObject> missionList;
+
+    private void Start()
+    {
+        missonOnButton.onClick.AddListener(MissionGet);
+        dailyMissonButton.onClick.AddListener(MissionGet);
+        allMissonOnButton.onClick.AddListener(MissionGet);
+    }
     private void Update()
     {
         if (Input.touchCount == 1 || Input.GetMouseButtonDown(0))
@@ -157,7 +176,8 @@ public class QuestManager : MonoBehaviour
         {
             GameObject rewardItem = Instantiate(questItemPrefabs, questImageTransform);
             questItemList.Add(rewardItem);
-            //아이템 인덱스로 아이템 이미지, 이름 받아오기
+            //아이템 인덱스로 이름 받아오기! ==== 규할일 ====
+
             //rewardItem.GetComponent<Image>().sprite
             rewardItem.GetComponent<TMP_Text>().text = "이름" + " x " + userQuest.quest.rewardInfo[i].itemCount;
         }
@@ -166,7 +186,7 @@ public class QuestManager : MonoBehaviour
         expText.text = "경험치 +" + userQuest.quest.exp;
         questTitle.text = userQuest.quest.title;
 
-        
+
 
     }
     public void UserQuestListGet()
@@ -184,6 +204,37 @@ public class QuestManager : MonoBehaviour
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }
+    private void MissionGet()
+    {
+        for(int i = 0; i < missionList.Count; i++)
+        {
+            Destroy(missionList[i]);
+        }
+        missionList.Clear();
 
+
+        HttpInfo info = new HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-quest/list/not-completed/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+        info.onComplete = (DownloadHandler downloadHandler) =>
+        {
+            string jsonData = downloadHandler.text;
+
+            userQuestList = JsonUtility.FromJson<UserQuestList>(jsonData);
+
+            for (int i = 0; i < userQuestList.data.Count; i++)
+            {
+                MissionItemInfo missionItemInfo = Instantiate(missionPrefabs, missionListTransform).GetComponent<MissionItemInfo>();
+                missionList.Add(missionItemInfo.gameObject);
+
+                missionItemInfo.title.text = userQuestList.data[i].quest.title;
+                missionItemInfo.content.text = userQuestList.data[i].quest.content;
+                missionItemInfo.rewardEXP.text = userQuestList.data[i].quest.exp.ToString();
+                missionItemInfo.rewardGem.text = userQuestList.data[i].quest.gold.ToString();
+                //아이템 인덱스로 이름 받아오기! ==== 규할일 ====
+               
+            }
+        };
+        StartCoroutine(HttpManager.GetInstance().Get(info));
+    }
 
 }
