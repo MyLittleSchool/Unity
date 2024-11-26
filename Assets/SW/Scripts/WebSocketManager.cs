@@ -33,7 +33,7 @@ namespace SW
         }
         #endregion
 
-        public string SERVER_ADDRESS { get; } = "ws://My-little-school-dev-env.eba-rfqxtdpp.ap-northeast-2.elasticbeanstalk.com";
+        public string SERVER_ADDRESS { get; } = "ws://125.132.216.190:5544";
         /*
         ws://My-little-school-dev-env.eba-rfqxtdpp.ap-northeast-2.elasticbeanstalk.com
         ws://125.132.216.190:5544

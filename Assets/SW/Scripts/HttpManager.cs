@@ -43,7 +43,7 @@ public class HttpManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public string SERVER_ADRESS { get; } = "http://my-little-school-dev-env.eba-rfqxtdpp.ap-northeast-2.elasticbeanstalk.com";
+    public string SERVER_ADRESS { get; } = "http://125.132.216.190:5544";
     /*
     http://my-little-school-dev-env.eba-rfqxtdpp.ap-northeast-2.elasticbeanstalk.com
     http://125.132.216.190:5544
