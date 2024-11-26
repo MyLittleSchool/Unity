@@ -36,7 +36,7 @@ public class ClickButton : MonoBehaviour
         bClick = true;
         buttonImage.color = new Color(242.0f, 106.0f, 27.0f);
         iClickN++;
-        buyItemList.AddBuyItem(item.itemName, item.price);
+        buyItemList.AddBuyItem(item.itemType, item.itemName, item.price);
         SettingClickText();
     }
 
