@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -490,6 +491,7 @@ namespace SW
             {
                 for (int i = 0; i < list.friends.Length; i++)
                 {
+                    //친구 리스트------------------------------------------------------------------
                     GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
                     UserInfo friend = list.friends[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.friends[i].receiver : list.friends[i].requester;
@@ -498,6 +500,9 @@ namespace SW
                     comp.NickNameText.text = friend.name;
                     friendDic[comp.id] = comp;
                     SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
+                    comp.ProfileImage.AvatarGet(list.friends[i].requester.id);
+
+
                 }
             }
             if (tab == 0) ChangeTab(tab);
@@ -517,6 +522,8 @@ namespace SW
             {
                 for (int i = 0; i < list.requests.Length; i++)
                 {
+                    //친구 리스트------------------------------------------------------------------
+
                     UserInfo requester = list.requests[i].requester;
                     // 내가 받은 요청
                     GameObject newPanel = Instantiate(requestedPrefab, contentsTabs[1]);
@@ -527,6 +534,7 @@ namespace SW
                     comp.GradeText.text = requester.grade + "학년";
                     comp.locationText.text = requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
+                    comp.ProfileImage.AvatarGet(requester.id);
                     //if (requester.isOnline)
                     //{
                     //    comp.StateText.text = "<color=#F2884B>접속중";
@@ -571,6 +579,8 @@ namespace SW
             {
                 for (int i = 0; i < list.requests.Length; i++)
                 {
+                    //친구 리스트------------------------------------------------------------------
+
                     UserInfo requester = list.requests[i].requester;
                     // 내가 보낸 요청
                     GameObject newPanel = Instantiate(requestingPrefab, contentsTabs[2]);
@@ -579,6 +589,8 @@ namespace SW
                     comp.friendshipId = list.requests[i].id;
                     comp.id = receiver.id;
                     comp.NickNameText.text = receiver.name;
+                    comp.ProfileImage.AvatarGet(list.requests[i].id);
+
                     if (receiver.isOnline)
                     {
                         comp.StateText.text = "<color=#F2884B>접속중";
@@ -619,6 +631,8 @@ namespace SW
                 AIRecommendList list = JsonUtility.FromJson<AIRecommendList>("{\"data\" : " + res.text + "}");
                 foreach (var each in list.data)
                 {
+                    //AI추천 리스트------------------------------------------------------------------
+
                     GameObject newPanel = Instantiate(recommFriendPrefab, contentsTabs[3]);
                     FriendPanel friendPanel = newPanel.GetComponent<FriendPanel>();
                     friendPanel.id = each.recommendedUserId;
@@ -630,6 +644,7 @@ namespace SW
                     friendPanel.locationText.text = each.schoolLocation;
                     friendPanel.InterestText.text = "#" + String.Join(" #", each.interests);
                     friendPanel.MessageText.text = each.similarityMessage;
+                    friendPanel.ProfileImage.AvatarGet(each.recommendedUserId);
                     friendPanel.PassButton.onClick.AddListener(() =>
                     {
                         Destroy(newPanel);
