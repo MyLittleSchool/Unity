@@ -935,7 +935,7 @@ namespace MJ
         public void MapTutorial()
         {
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-pos-visit-count/" + DataManager.instance.mapId + "/" + DataManager.instance.mapType + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-pos-visit-count/" + DataManager.instance.mapType + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 string jsonData = downloadHandler.text;
@@ -950,7 +950,7 @@ namespace MJ
                 }
 
                 info = new HttpInfo();
-                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-pos-visit-count/" + DataManager.instance.mapId + "/" + DataManager.instance.mapType + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user-pos-visit-count/" + DataManager.instance.mapType + "/" + AuthManager.GetInstance().userAuthData.userInfo.id;
                 info.contentType = "application/json";
                 info.onComplete = (DownloadHandler downloadHandler) =>
                 {
