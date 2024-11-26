@@ -101,7 +101,7 @@ namespace GH
                     RPC_DeleteTile();
                 }
                 tileObjCheck = tilemap.HasTile(tilePosition);
-                print(tileObjCheck);
+                //print(tileObjCheck);
 
             }
         }
