@@ -9,6 +9,11 @@ namespace SW
         public override void Interact()
         {
             SceneUIManager.GetInstance().OnFriendsPanel();
+            StartCoroutine(NextFrame());
+        }
+        IEnumerator NextFrame()
+        {
+            yield return null;
             WebSocketManager.GetInstance().friendsUI.ChangeTab(3);
         }
     }

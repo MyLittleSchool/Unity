@@ -65,10 +65,10 @@ namespace SW
             ));
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                OnMessage("테스트 메시지입니다.");
-        }
+        //private void Update()
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Alpha1))
+        //        OnMessage("테스트 메시지입니다.");
+        //}
     }
 }

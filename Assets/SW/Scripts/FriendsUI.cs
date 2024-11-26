@@ -154,8 +154,7 @@ namespace SW
                     numText.text = "내가 보낸 요청 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
                 }
                 else if (num == 3)
-                {   // AI 추천
-                    RefreshTab3(recommFriends);
+                {   
                     numText.text = "추천 인원 " + contentsTabs[num].transform.childCount.ToString("D2") + "명";
                 }
             }
@@ -480,7 +479,7 @@ namespace SW
             // 보낸 요청 목록 조회
             webSocketManager.Send(webSocketManager.friendWebSocket, "{\"type\": \"FETCH_PENDING_REQUESTS_BY_REQUESTER\", \"userId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + "}");
             // AI 추천
-            if (tab == 3) RefreshTab3(recommFriends);
+            RefreshTab3(recommFriends);
         }
         [Serializable]
         public class FriendList
@@ -627,6 +626,7 @@ namespace SW
 
         public void RefreshTab3(List<RecommFriend> _recommFriends)
         {
+            print("test1");
             // 삭제
             Destroy(contentsTabs[3].gameObject);
             // 생성
@@ -637,6 +637,7 @@ namespace SW
             info.onComplete = (DownloadHandler res) =>
             {
                 AIRecommendList list = JsonUtility.FromJson<AIRecommendList>("{\"data\" : " + res.text + "}");
+                print("test1 :" + res.text);
                 foreach (var each in list.data)
                 {
                     //AI추천 리스트------------------------------------------------------------------
