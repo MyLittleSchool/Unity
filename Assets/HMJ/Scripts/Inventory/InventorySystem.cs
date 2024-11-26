@@ -79,24 +79,17 @@ public class InventorySystem : MonoBehaviour
     private static InventorySystem instance;
     public static InventorySystem GetInstance()
     {
-        if (instance == null)
-        {
-            GameObject go = new GameObject();
-            go.name = "InventorySystem";
-            go.AddComponent<InventorySystem>();
-        }
         return instance;
     }
 
-    private void Awake()
+    private void Awake()                            
     {
         if (instance == null)
         {
             instance = this;
         }
-        InitItemList();
-        GetItemComponents();
-        InitInventoryButtons();
+
+        StartCoroutine(FirstLoadData());
     }
 
     // 현재 부모에 자식들을 넣어줘야 한다. 이걸 어떻게 넣어줄까?
@@ -221,6 +214,8 @@ public class InventorySystem : MonoBehaviour
     public void SetItemComponent(ItemType _itemType)
     {
         ResetItemComponents();
+        if (loadItemData[(int)_itemType].response == null || loadItemData[(int)_itemType].response.Count <= 0 || childPanel.Count() <= 0)
+            return;
         for (int i = 0; i < loadItemData[(int)_itemType].response.Count(); i++)
         {
             childPanel[i].SetActive(true);
@@ -269,6 +264,18 @@ public class InventorySystem : MonoBehaviour
         yield return new WaitUntil(() => loadItemData[(int)_itemType].response != null && loadItemData[(int)_itemType].response.Count() > 0);
 
         SetItemComponent(_itemType);
+        Debug.Log("Condition met! Proceeding...");
+    }
+
+    IEnumerator FirstLoadData()
+    {
+        InitItemList();
+        GetItemComponents();
+        InitInventoryButtons();
+        // 조건이 true가 될 때까지 대기
+        yield return new WaitUntil(() => (loadItemData[0].response != null && loadItemData[0].response.Count() > 0) && (loadItemData[1].response != null && loadItemData[1].response.Count() > 0));
+
+        gameObject.SetActive(false);
         Debug.Log("Condition met! Proceeding...");
     }
 

@@ -78,6 +78,7 @@ public class QuizCategory : MonoBehaviourPunCallbacks
         SceneUIManager.GetInstance().OffQuizCategoryPanel();
         SceneMgr.instance.QuizIn(curQuizRoomName[(int)curQuizCategory]);
         SceneUIManager.GetInstance().OnQuizQuestionPanel();
+        QuizLogic.GetInstance().SetQuizStart();
     }
 
     public void RoomListUpdate()

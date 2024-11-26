@@ -74,12 +74,21 @@ public class QuizLogic : MonoBehaviour
 
     QUIZCATEGORY curQuizCategory;
 
+    bool quizStart = false;
+
+    public void SetQuizStart()
+    {
+        quizStart = true;
+    }
     private void Start()
     {
         pv = GetComponent<PhotonView>();
     }
     private void Update()
     {
+        if (!quizStart)
+            return;
+
         StartQuiz();
         NextQuizState();
     }
@@ -236,6 +245,8 @@ public class QuizLogic : MonoBehaviour
         yield return new WaitForSeconds(_lastTime);
 
         text.text = winnerData;
+
+        quizStart = false;
     }
 
     public void SendAllQuizWinnerData()
