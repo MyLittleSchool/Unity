@@ -50,11 +50,15 @@ public class Item : MonoBehaviour
     }
 
 
-    public void SetData(string _itemName, int _price, ItemType _itemType, int _count, GameObject gameObject)
+    public void SetData(string _itemName, int _price, string _itemType, int _count, GameObject gameObject)
     {
         itemName = _itemName;
         price = _price;
-        itemType = _itemType;
+
+        itemType = ItemType.Common;
+        if (_itemType == "MyClassRoom")
+            itemType = ItemType.MyClassRoom;
+
         count = _count;
 
         prefab = gameObject;

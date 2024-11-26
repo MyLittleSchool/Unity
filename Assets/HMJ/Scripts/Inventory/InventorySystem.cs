@@ -7,13 +7,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Unity.Burst.Intrinsics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 using static HttpManager;
 using static InventorySystem;
 using static Item;
+using static SellSystem;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -26,19 +30,26 @@ public class InventorySystem : MonoBehaviour
     public GameObject parentPanel;
     public Item[] itemComponents;
     public GameObject[] childPanel;
+
+    Item choiceItem;
+
     /// <summary>
     /// 통신 구조체
     /// </summary>
     [Serializable]
-    public struct ItemData
+    public class ItemData
     {
+        public int inventoryId;
+        public int itemIdx;
         public string itemName; // 아이템 이름
         public int price; // 가격
         public string itemType; // 아이템 타입
         public int count; // 아이템 개수
 
-        public ItemData(string _itemName, int _price, string _itemType, int _count)
+        public ItemData(int _inventoryId, int _itemIdx, string _itemName, int _price, string _itemType, int _count)
         {
+            inventoryId = _inventoryId;
+            itemIdx = _itemIdx;
             itemName = _itemName;
             price = _price;
             itemType = _itemType;
@@ -46,6 +57,19 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    /*
+     
+      "inventoryId": 0,
+  "itemIdx": 0,
+  "count": 0,
+  "itemType": "string"
+
+       "itemIdx": 0,
+    "itemName": "string",
+    "price": 0,
+    "itemType": "string",
+    "count": 0
+     */
     [Serializable]
     public struct ItemDatas
     {
@@ -58,15 +82,14 @@ public class InventorySystem : MonoBehaviour
         return instance;
     }
 
-    private void Awake()
+    private void Awake()                            
     {
         if (instance == null)
         {
             instance = this;
         }
-        InitItemList();
-        GetItemComponents();
-        InitInventoryButtons();
+
+        StartCoroutine(FirstLoadData());
     }
 
     // 현재 부모에 자식들을 넣어줘야 한다. 이걸 어떻게 넣어줄까?
@@ -74,13 +97,17 @@ public class InventorySystem : MonoBehaviour
     // 그때 해당 인벤토리 아이템 정보를 가져온다.
     // 해당 아이템 정보를 생성해서 넣어준다.
 
-    private List<Item>[] itemList = new List<Item>[2];
+    //private List<Item>[] itemList = new List<Item>[2];
     private ItemType curInventoryItemType = ItemType.Common;
+
+    private ItemDatas[] loadItemData = new ItemDatas[2];
 
     public void InitItemList()
     {
-        for (int i = 0; i < itemList.Count(); i++)
-            itemList[i] = new List<Item>();
+        SettingInventory(ItemType.MyClassRoom);
+        SettingInventory(ItemType.Common);
+
+        ResetButton();
     }
 
     public void InitInventoryButtons()
@@ -103,15 +130,58 @@ public class InventorySystem : MonoBehaviour
     {
 
     }
-    public void FetchItemData()
-    {
 
+    private void Update()
+    {
+        Debug.Log("현재 인벤토리 상태: " + curInventoryItemType.ToString());
+    }
+    public ItemType GetCurItemType()
+    {
+        return curInventoryItemType;
+    }
+
+    public void UpdateItemData(string itemType, string itemName, int _Count)
+    {
+        ItemData searchItem;
+        ItemType _itemType = ItemType.Common;
+        if (itemType == "MyClassRoom")
+            _itemType = ItemType.MyClassRoom;
+
+        searchItem = loadItemData[(int)_itemType].response.Find(x => itemName == x.itemName);
+        if(searchItem != null)
+            searchItem.count += _Count;
+
+        SetItemComponent(_itemType);
+    }
+
+    public void PatchItemData(ItemType _itemType, string _itemName, int _Count)
+    {
+        // /list/" + DataManager.instance.mapId + "/" + itemData.itemType;
+        ItemData itemData = loadItemData[(int)_itemType].response.Find(x => _itemName == x.itemName);
+        itemData.count += _Count;
+
+        //UpdateItemData(itemData.itemType, _itemName, _Count);
+
+        if (null == itemData)
+            return;
+
+        HttpInfo info = new HttpInfo();
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/inventory";
+        info.body = JsonUtility.ToJson(itemData);
+        info.contentType = "application/json";
+        info.onComplete = (DownloadHandler downloadHandler) =>
+        {
+            SetItemComponent(_itemType);
+            print(downloadHandler.text);
+        };
+        StartCoroutine(HttpManager.GetInstance().Patch(info));
     }
 
     public void GetItemData(ItemType _itemType)
     {
-        itemList[(int)_itemType].Clear();
+        // itemList[(int)_itemType].Clear();
 
+        ItemDatas itemData;
         HttpInfo info = new HttpInfo();
         info.url = HttpManager.GetInstance().SERVER_ADRESS + "/inventory/list/" + DataManager.instance.mapId + "/" + _itemType.ToString();
         info.onComplete = (DownloadHandler downloadHandler) =>
@@ -123,16 +193,17 @@ public class InventorySystem : MonoBehaviour
 
             print("a : " + wrappedJson);
 
-            ItemDatas itemData = JsonUtility.FromJson<ItemDatas>(wrappedJson);
+            itemData = JsonUtility.FromJson<ItemDatas>(wrappedJson);
+            loadItemData[(int)_itemType] = itemData;
 
-            foreach (ItemData itemdata in itemData.response)
+            foreach (ItemData itemdata in loadItemData[(int)_itemType].response)
             {
                 GameObject itemPrefab = LoadItemData(_itemType, itemdata.itemName);
                 if (itemPrefab)
                     Debug.Log("itemPrefab - Name: " + itemdata.itemName + ", " + itemdata.count);
                 else
                     Debug.Log("Null - itemPrefab  - " + itemdata.itemName);
-                itemList[(int)_itemType].Add(new Item(itemdata.itemName, itemdata.price, _itemType, itemdata.count, itemPrefab));
+                //itemList[(int)_itemType].Add(new Item(itemdata.itemName, itemdata.price, _itemType, itemdata.count, itemPrefab));
             }
 
 
@@ -143,10 +214,13 @@ public class InventorySystem : MonoBehaviour
     public void SetItemComponent(ItemType _itemType)
     {
         ResetItemComponents();
-        for (int i = 0; i < itemList[(int)_itemType].Count(); i++)
+        if (loadItemData[(int)_itemType].response == null || loadItemData[(int)_itemType].response.Count <= 0 || childPanel.Count() <= 0)
+            return;
+        for (int i = 0; i < loadItemData[(int)_itemType].response.Count(); i++)
         {
             childPanel[i].SetActive(true);
-            itemComponents[i].SetData(itemList[(int)_itemType][i].itemName, itemList[(int)_itemType][i].price, itemList[(int)_itemType][i].itemType, itemList[(int)_itemType][i].count, itemList[(int)_itemType][i].prefab);
+            GameObject itemPrefab = LoadItemData(_itemType, loadItemData[(int)_itemType].response[i].itemName);
+            itemComponents[i].SetData(loadItemData[(int)_itemType].response[i].itemName, loadItemData[(int)_itemType].response[i].price, loadItemData[(int)_itemType].response[i].itemType.ToString(), loadItemData[(int)_itemType].response[i].count, itemPrefab);
         }
     }
 
@@ -173,11 +247,11 @@ public class InventorySystem : MonoBehaviour
 
     private void OnEnable()
     {
-        SettingInventory(ItemType.Common);
-        SettingInventory(ItemType.MyClassRoom);
+        //SettingInventory(ItemType.MyClassRoom);
+        //SettingInventory(ItemType.Common);
 
-        ResetButton();
-        SelectButton(ItemType.MyClassRoom);
+        SetItemComponent(ItemType.Common);
+        //ResetButton();
     }
 
 
@@ -187,9 +261,21 @@ public class InventorySystem : MonoBehaviour
         Debug.Log("ItemType: " + _itemType.ToString());
         Debug.Log("Waiting for condition...");
         // 조건이 true가 될 때까지 대기
-        yield return new WaitUntil(() => itemList[(int)_itemType].Count > 0);
+        yield return new WaitUntil(() => loadItemData[(int)_itemType].response != null && loadItemData[(int)_itemType].response.Count() > 0);
 
         SetItemComponent(_itemType);
+        Debug.Log("Condition met! Proceeding...");
+    }
+
+    IEnumerator FirstLoadData()
+    {
+        InitItemList();
+        GetItemComponents();
+        InitInventoryButtons();
+        // 조건이 true가 될 때까지 대기
+        yield return new WaitUntil(() => (loadItemData[0].response != null && loadItemData[0].response.Count() > 0) && (loadItemData[1].response != null && loadItemData[1].response.Count() > 0));
+
+        gameObject.SetActive(false);
         Debug.Log("Condition met! Proceeding...");
     }
 
@@ -209,6 +295,81 @@ public class InventorySystem : MonoBehaviour
     public void SelectButton(ItemType _itemType)
     {
         inventoryTypeButton[(int)_itemType].GetComponent<Image>().color = new Color32(242, 106, 27, 255);
+        curInventoryItemType = _itemType;
+    }
+
+    public bool CheckItem()
+    {
+        if (choiceItem && choiceItem.count > 0)
+            return true;
+        return false;
+
+    }
+
+    //public void AddItemData(ItemType _itemType, string _itemName, int _itemCount)
+    //{
+    //    // 해당하는 아이템 정보가 있으면
+    //    Item itemData = itemList[(int)_itemType].Find(x => _itemName == x.itemName);
+    //    if (itemData)
+    //    {
+    //        int idx = itemList[(int)_itemType].IndexOf(itemData);
+    //        itemData.count += _itemCount;
+    //    }
+    //}
+
+    //public Item GetItemData(ItemType _itemType, string _itemName)
+    //{
+    //    return itemList[(int)_itemType].Find(x => _itemName == x.itemName);
+    //}
+
+    public void SetChoiceItem(Item itemCom)
+    {
+        choiceItem = itemCom;
+        DataManager.instance.setTileObj = choiceItem.prefab;
+    }
+
+    // 타입, 이름
+    // 타입 정
+
+    // 현재 열고 있는 창 기준
+    public GameObject GetItemPrefab(int idx)
+    {
+        //if (loadItemData[0].response.Count - 1 < idx) // 0번째 타입보다 더 많으면
+        //{
+        //    loadItemData[0].response[idx - loadItemData[0].response.Count]
+        //}
+        //else
+        //{
+
+        //}
+        //for(int i = 0; i < (int)ItemType.Common + 1; i++)
+        //{
+        //    for(int j = 0; j < loadItemData[i].response.Count(); j++)
+        //    {
+
+        //    }
+        //}
+
+        //if(idx >= 50) // Common
+        //{
+        //    itemType.to
+        //}
+        //else // MyClassRoom
+        //{
+
+        //}
+        //// 아이템 타입에 따라 50씩 차이나도록
+
+        //loadItemData[(int)ItemType]
+        //string _itemName = loadItemData[(int)curInventoryItemType].response[(int)curInventoryItemType * 100 + idx].itemName;
+        //string _itemType = loadItemData.response[idx].itemType;
+
+        //if(_itemType == "MyClassRoom")
+        //    return itemList[0].Find(x => _itemName == x.itemName).prefab;
+        //else
+        //    return itemList[1].Find(x => _itemName == x.itemName).prefab;
+
+        return gameObject;
     }
 
 }

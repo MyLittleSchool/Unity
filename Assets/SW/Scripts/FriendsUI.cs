@@ -224,6 +224,7 @@ namespace SW
                         comp.PassButton.onClick.AddListener(() =>
                         {
                             SceneMgr.instance.SchoolIn(school.schoolName, mapId);
+                            gameObject.SetActive(false);
                         });
                     };
                     StartCoroutine(HttpManager.GetInstance().Get(info));
@@ -239,6 +240,7 @@ namespace SW
                         comp.PassButton.onClick.AddListener(() =>
                         {
                             SceneMgr.instance.ClassIn(userInfo.name, mapId);
+                            gameObject.SetActive(false);
                         });
                     };
                     StartCoroutine(HttpManager.GetInstance().Get(info));
@@ -249,6 +251,7 @@ namespace SW
                     comp.PassButton.onClick.AddListener(() =>
                     {
                         SceneMgr.instance.SquareIn();
+                        gameObject.SetActive(false);
                     });
                 }
                 else if (mapType == DataManager.MapType.Quiz.ToString())
@@ -257,6 +260,7 @@ namespace SW
                     comp.PassButton.onClick.AddListener(() =>
                     {
                         SceneMgr.instance.QuizSquareIn();
+                        gameObject.SetActive(false);
                     });
                 }
                 else if (mapType == DataManager.MapType.QuizSquare.ToString())
@@ -265,6 +269,7 @@ namespace SW
                     comp.PassButton.onClick.AddListener(() =>
                     {
                         SceneMgr.instance.QuizSquareIn();
+                        gameObject.SetActive(false);
                     });
                 }
                 else if (mapType == DataManager.MapType.ContestClassroom.ToString())
@@ -285,7 +290,10 @@ namespace SW
                 else
                 {
                     comp.StateText.text = "<color=#F2884B>접속중";
-                    ToastMessage.OnMessage("따라갈 수 없는 위치에 있습니다");
+                    comp.PassButton.onClick.AddListener(() =>
+                    {
+                        ToastMessage.OnMessage("따라갈 수 없는 위치에 있습니다");
+                    });
                 }
                 // 귓속말 보내기
                 comp.RequestButton.GetComponentInChildren<TMP_Text>().text = "귓속말 보내기";
@@ -296,12 +304,6 @@ namespace SW
                 });
                 // 따라가기 버튼
                 comp.PassButton.GetComponentInChildren<TMP_Text>().text = "따라가기";
-                comp.PassButton.onClick.AddListener(() =>
-                {
-                    DataManager.instance.mapId = mapId;
-                    DataManager.instance.MapTypeState = (DataManager.MapType)Enum.Parse(typeof(DataManager.MapType), mapType);
-
-                });
             }
             else
             {

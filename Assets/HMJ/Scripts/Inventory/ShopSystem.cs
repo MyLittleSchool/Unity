@@ -97,6 +97,9 @@ public class SellSystem : MonoBehaviour
             shopTypeButton[i].onClick.AddListener(
             () => SelectButton((ItemType)data)
             );
+            shopTypeButton[i].onClick.AddListener(
+            () => BuyItemList.GetInstance().ClearBuyData()
+            );
         }
     }
     private void Start()
@@ -151,7 +154,7 @@ public class SellSystem : MonoBehaviour
                 for (int j = 0; j < itemList[i].Count(); j++)
                 {
                     childPanel[idx].SetActive(true);
-                    itemComponents[idx++].SetData(itemList[i][j].itemName, itemList[i][j].price, itemList[i][j].itemType, itemList[i][j].count, itemList[i][j].prefab);
+                    itemComponents[idx++].SetData(itemList[i][j].itemName, itemList[i][j].price, itemList[i][j].itemType.ToString(), itemList[i][j].count, itemList[i][j].prefab);
                 }
             }
 
@@ -161,7 +164,7 @@ public class SellSystem : MonoBehaviour
             for (int i = 0; i < itemList[(int)_itemType].Count(); i++)
             {
                 childPanel[i].SetActive(true);
-                itemComponents[i].SetData(itemList[(int)_itemType][i].itemName, itemList[(int)_itemType][i].price, itemList[(int)_itemType][i].itemType, itemList[(int)_itemType][i].count, itemList[(int)_itemType][i].prefab);
+                itemComponents[i].SetData(itemList[(int)_itemType][i].itemName, itemList[(int)_itemType][i].price, itemList[(int)_itemType][i].itemType.ToString(), itemList[(int)_itemType][i].count, itemList[(int)_itemType][i].prefab);
             }
         }
 

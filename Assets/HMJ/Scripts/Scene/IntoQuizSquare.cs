@@ -1,3 +1,4 @@
+using MJ;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ public class IntoQuizSquare : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player") && collision.gameObject.GetComponent<PhotonView>().IsMine)
         {
+            SceneUIManager.GetInstance().OffQuizCategoryPanel();
+            SceneUIManager.GetInstance().OffQuizQuestionPanel();
             SceneMgr.instance.QuizSquareIn();
         }
     }

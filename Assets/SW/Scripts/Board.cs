@@ -200,6 +200,7 @@ public class Board : MonoBehaviour
                     });
                 });
             }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
     }

@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static GH.DataManager;
+using static Item;
 
 namespace GH
 {
@@ -34,6 +35,7 @@ namespace GH
         private Vector3Int tilePosition;
         private Grid grid;
         public GameObject setGameObject;
+        public ItemType setItemType;
         public TileBase emptyTilebase;
         public GameObject tileLine;
 
@@ -112,29 +114,31 @@ namespace GH
         }
         public void OnTile()
         {
-            //if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
-            //{
-            //    tilemap.SetTile(tilePosition, emptyTilebase);
-            //    GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
-            //    //setObject.transform.position = tilePosition;
-            //    AddObject(setObject);
+            if (!tilemap.HasTile(tilePosition) && InventorySystem.GetInstance().CheckItem())
+            {
+                tilemap.SetTile(tilePosition, emptyTilebase);
+                GameObject setObject = PhotonNetwork.Instantiate("Furnitures/" + setGameObject.name, tilePosition, Quaternion.identity);
 
-            //    InventorySystem.GetInstance().UseItem();
-            //    print(tilemap.HasTile(tilePosition));
-            //    // 통신
-            //    ObjectInfo obj = objectList.Last();
-            //    PlaceManager.ObjectInfo objectInfo = new PlaceManager.ObjectInfo();
-            //    objectInfo.objId = setObjectId;
-            //    objectInfo.x = tilePosition.x;
-            //    objectInfo.y = tilePosition.y;
-            //    //objectInfo.rot =
-            //    objectInfo.mapId = DataManager.instance.mapId;
-            //    objectInfo.mapType = DataManager.instance.MapTypeState;
-            //    PlaceManager.GetInstance().CreatePlace(objectInfo, (PlaceManager.PlaceInfo callBack) =>
-            //    {
-            //        obj.id = callBack.id;
-            //    });
-            //}
+                InventorySystem.GetInstance().PatchItemData(InventorySystem.GetInstance().GetCurItemType(), setGameObject.name, -1);
+                //setObject.transform.position = tilePosition;
+                AddObject(setObject);
+                
+                
+                print(tilemap.HasTile(tilePosition));
+                // 통신
+                ObjectInfo obj = objectList.Last();
+                PlaceManager.ObjectInfo objectInfo = new PlaceManager.ObjectInfo();
+                objectInfo.objId = setObjectId;
+                objectInfo.x = tilePosition.x;
+                objectInfo.y = tilePosition.y;
+                //objectInfo.rot =
+                objectInfo.mapId = DataManager.instance.mapId;
+                objectInfo.mapType = DataManager.instance.MapTypeState;
+                PlaceManager.GetInstance().CreatePlace(objectInfo, (PlaceManager.PlaceInfo callBack) =>
+                {
+                    obj.id = callBack.id;
+                });
+            }
         }
 
         public void CopyTile(Vector3Int _tilePosition, int objId)
