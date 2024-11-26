@@ -31,6 +31,7 @@ public class BuyItem : MonoBehaviour
     // 아이템 정보 반환 ((INT) 관련 Text => ItemData
     public InventorySystem.ItemData GetData()
     {
-        return new InventorySystem.ItemData(itemName.text, Int32.Parse(itemPrice.text), "", Int32.Parse(itemN.text));
+        // itemidx, itemType 정보 전송X (현재 반환값에서는 필요X)
+        return new InventorySystem.ItemData(-1, -1, itemName.text, Int32.Parse(itemPrice.text), "", Int32.Parse(itemN.text));
     }
 }

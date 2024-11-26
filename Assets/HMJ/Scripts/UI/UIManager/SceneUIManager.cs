@@ -99,6 +99,9 @@ namespace MJ
         [Header("게시판 패널")]
         public GameObject boardPanel;
 
+        [Header("아카이빙갤러리 패널")]
+        public GameObject archivePanel;
+
         [Header("맵 등록 패널")]
         public GameObject mapRegisterPanel;
 
@@ -384,6 +387,11 @@ namespace MJ
         {
             boardPanel.SetActive(true);
             boardPanel.GetComponent<Board>().LoadBoardData();
+        }
+        public void OnArchivePanel()
+        {
+            archivePanel.SetActive(true);
+            archivePanel.GetComponent<Gallery>().LoadData();
         }
         public void OnMapRegisterPanel()
         {
