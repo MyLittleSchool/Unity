@@ -132,7 +132,7 @@ namespace GH
                 playerStingName = "test";
 
             }
-            sting.transform.position = transform.position;
+            sting.transform.position = transform.position + new Vector3(0,0.5f,0);
             sting.transform.right = stingDir;
             strgMove.stingPlayer = playerStingName;
 
@@ -162,7 +162,15 @@ namespace GH
         // 콜라이더 엔터로 찌르기가 들어오면
         // 매프레임을 랜덤값으로 float 0~0.2로 x y값을 부여하고
         // 1초 뒤에 다시 000으로 돌아온다.
-        
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            StingMove stingMove = collision.GetComponent<StingMove>();
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Sting") && stingMove.stingPlayer != photonView.Owner.NickName)
+            {
+                modelTransform.localPosition = new Vector3(Random.Range(0, 0.15f), Random.Range(0, 0.15f), 0);
+            }
+        }
+
         private void OnTriggerStay2D(Collider2D collision)
         {
             StingMove stingMove = collision.GetComponent<StingMove>();

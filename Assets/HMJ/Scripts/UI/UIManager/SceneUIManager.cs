@@ -267,7 +267,7 @@ namespace MJ
         [Header("프로필 편집 인풋필드 리스트")]
         public List<TMP_InputField> profileInputField;
 
-  
+
         #endregion
 
         private void Start()
@@ -330,8 +330,8 @@ namespace MJ
             //if (commonButton)
             //    commonButton.onClick.AddListener(OnInventoryCommon);
 
-                //if (myClassRoomButton)
-                //    myClassRoomButton.onClick.AddListener(OnInventoryMyClassRoom);
+            //if (myClassRoomButton)
+            //    myClassRoomButton.onClick.AddListener(OnInventoryMyClassRoom);
 
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {
@@ -915,7 +915,7 @@ namespace MJ
 
 
             print("학교 정보 불러오기");
-            
+
 
         }
         private void SetSchoolName(int option)
@@ -1083,6 +1083,6 @@ namespace MJ
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }
-   
+
     }
 }

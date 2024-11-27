@@ -30,6 +30,7 @@ namespace GH
 
         void Start()
         {
+            PlayerNameSet();
             //¸»Ç³¼± ²ô±â
             malpungPanel.SetActive(false);
 
@@ -47,8 +48,10 @@ namespace GH
         }
         public void PlayerNameSet()
         {
-            playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.name;
-            PhotonNetMgr.instance.ChangeNickname(AuthManager.GetInstance().userAuthData.userInfo.name);
+            playerNameText.text = photonView.Owner.NickName;
+            //playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.name;
+
+            //PhotonNetMgr.instance.ChangeNickname(AuthManager.GetInstance().userAuthData.userInfo.name);
 
         }
 
