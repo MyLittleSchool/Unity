@@ -83,6 +83,10 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+    public void GetMethod(HttpInfo info)
+    {
+        StartCoroutine(Get(info));
+    }
     public IEnumerator Post(HttpInfo info)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, info.body, info.contentType))
