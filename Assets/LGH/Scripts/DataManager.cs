@@ -71,8 +71,8 @@ namespace GH
             {
                 Destroy(gameObject);
             }
-            Screen.SetResolution(360, 800, false);
-            Screen.fullScreen = false;
+            //Screen.SetResolution(360, 800, false);
+            //Screen.fullScreen = false;
             privateRoomName = "";
         }
         public void PlayerFind()
