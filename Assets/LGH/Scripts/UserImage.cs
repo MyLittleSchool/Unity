@@ -41,8 +41,7 @@ public class UserImage : MonoBehaviour
             avatarIndexData = JsonUtility.FromJson<AvatarIndexData>(downloadHandler.text);
             AvatarSetting(avatarIndexData.infoList[0], avatarIndexData.infoList[1], avatarIndexData.infoList[2], avatarIndexData.infoList[3]);
         };
-        StartCoroutine(HttpManager.GetInstance().Get(info));
-
+        HttpManager.GetInstance().GetMethod(info);
     }
     void AvatarSetting(int skinId, int faceId, int hairId, int clothId)
     {
