@@ -175,14 +175,15 @@ public class QuestManager : MonoBehaviour
             Destroy(questItemList[i]);
         }
         questItemList.Clear();
-        // 퀘스트 아이텔 프리펩 생성하기
+        // 퀘스트 아이템 프리펩 생성하기
         for (int i = 0; i < userQuest.quest.rewardInfo.Count; i++)
         {
             GameObject rewardItem = Instantiate(questItemPrefabs, questImageTransform);
             questItemList.Add(rewardItem);
             //아이템 인덱스로 이름 받아오기! ==== 규할일 ====
 
-            //rewardItem.GetComponent<Image>().sprite
+            //rewardItem.GetComponent<Image>().sprite =       //아이템 받기
+          
             rewardItem.GetComponent<TMP_Text>().text = "이름" + " x " + userQuest.quest.rewardInfo[i].count;
         }
         // 잼이랑 경험치 수치 수정하기
@@ -213,14 +214,14 @@ public class QuestManager : MonoBehaviour
     {
         missionPanel.SetActive(true);
         MissionGet();
-    } 
+    }
     public void MissionPanelOff()
     {
         missionPanel.SetActive(false);
     }
     private void MissionGet()
     {
-        for(int i = 0; i < missionList.Count; i++)
+        for (int i = 0; i < missionList.Count; i++)
         {
             Destroy(missionList[i]);
         }
@@ -242,11 +243,20 @@ public class QuestManager : MonoBehaviour
                 missionList.Add(missionItemInfo.gameObject);
 
                 missionItemInfo.title.text = userQuestList.data[i].quest.title;
-                missionItemInfo.content.text = "- "+userQuestList.data[i].quest.content;
+                missionItemInfo.content.text = "- " + userQuestList.data[i].quest.content;
                 missionItemInfo.rewardEXP.text = userQuestList.data[i].quest.exp.ToString();
                 missionItemInfo.rewardGem.text = userQuestList.data[i].quest.gold.ToString();
-                //아이템 인덱스로 이름 받아오기! ==== 규할일 ====
-               
+
+                missionItemInfo.rewardItem.text = "";
+
+                //아이템 받기
+                for (int j = 0; i < userQuestList.data[i].quest.rewardInfo.Count; i++)
+                {
+                    InventorySystem.QuestItem questItem = InventorySystem.GetInstance().GetQuestItemIndex(userQuestList.data[i].quest.rewardInfo[j].itemIdx);
+                    missionItemInfo.rewardItem.text += questItem.ItemName;
+                    missionItemInfo.rewardItem.text += "x"+ userQuestList.data[i].quest.rewardInfo[j].count+" ";
+                }
+
             }
         };
         StartCoroutine(HttpManager.GetInstance().Get(info));
