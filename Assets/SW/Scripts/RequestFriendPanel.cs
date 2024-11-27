@@ -61,7 +61,7 @@ namespace SW
             ToastMessage.OnMessage("친구 추가를 요청하였습니다");
             WebSocketManager.GetInstance().Send(WebSocketManager.GetInstance().friendWebSocket, "{\"type\": \"FRIEND_REQUEST\", \"requesterId\": " + AuthManager.GetInstance().userAuthData.userInfo.id + ", \"receiverId\": " + receiverId + ", \"message\": \"" + msg + "\"}");
             QuestManager.instance.QuestPatch(2);
-
+            if (WebSocketManager.GetInstance().friendsUI != null && WebSocketManager.GetInstance().friendsUI.gameObject.activeSelf) WebSocketManager.GetInstance().friendsUI.RefreshFriends();
             OffPanel();
         }
     }
