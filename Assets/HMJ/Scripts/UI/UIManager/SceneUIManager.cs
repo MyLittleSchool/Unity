@@ -362,11 +362,11 @@ namespace MJ
 
             if (firstSchoolPanel.activeSelf)
             {
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    print("엔터");
-                    SchoolGet();
-                }
+                //if (Input.GetKeyDown(KeyCode.Return))
+                //{
+                //    print("엔터");
+                //    SchoolGet();
+                //}
                 schoolDropDown.onValueChanged.AddListener(delegate { SetSchoolName(schoolDropDown.value); });
 
             }
@@ -894,7 +894,7 @@ namespace MJ
 
         }
 
-        private void SchoolGet()
+        public void SchoolGet()
         {
             schooldata.data.Clear();
 

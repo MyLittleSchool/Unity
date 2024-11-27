@@ -30500,8 +30500,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 620, y: -103.235}
-  m_SizeDelta: {x: 1240, y: 98.47}
+  m_AnchoredPosition: {x: 620, y: -88.005005}
+  m_SizeDelta: {x: 1240, y: 68.01}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2380586782925093004
 MonoBehaviour:
@@ -40806,7 +40806,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 385511233}
+        m_TargetAssemblyTypeName: MJ.SceneUIManager, Assembly-CSharp
+        m_MethodName: SchoolGet
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -46833,7 +46845,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 404}
-  m_SizeDelta: {x: -200, y: 206.47}
+  m_SizeDelta: {x: -200, y: 176.01001}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &8477639219883944849
 GameObject:
