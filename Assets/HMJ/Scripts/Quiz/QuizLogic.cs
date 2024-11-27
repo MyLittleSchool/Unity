@@ -25,16 +25,6 @@ public class QuizDataGroup
 }
 public class QuizLogic : MonoBehaviour
 {
-    static QuizLogic instance;
-    public static QuizLogic GetInstance()
-    {
-        return instance;
-    }
-    private void Awake()
-    {
-        instance = this;
-    }
-
     public List<QuizDataGroup> quizList;
 
     public enum QuizState
@@ -70,21 +60,12 @@ public class QuizLogic : MonoBehaviour
 
     QUIZCATEGORY curQuizCategory;
 
-    bool quizStart = false;
-
-    public void SetQuizStart()
-    {
-        quizStart = true;
-    }
     private void Start()
     {
         pv = GetComponent<PhotonView>();
     }
     private void Update()
     {
-        if (!quizStart)
-            return;
-
         StartQuiz();
         NextQuizState();
     }
@@ -107,7 +88,8 @@ public class QuizLogic : MonoBehaviour
 
     public void StartQuiz()
     {
-        if(m_eNextQuizOrder == QuizState.QuizNoneState)
+        curQuizCategory = GH.DataManager.instance.curQuizChannel;
+        if (m_eNextQuizOrder == QuizState.QuizNoneState)
         {
             if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount >= minimumPlayer)
                 m_eNextQuizOrder = QuizState.QuizReadyState;
@@ -241,8 +223,6 @@ public class QuizLogic : MonoBehaviour
         yield return new WaitForSeconds(_lastTime);
 
         text.text = winnerData;
-
-        quizStart = false;
     }
 
     public void SendAllQuizWinnerData()

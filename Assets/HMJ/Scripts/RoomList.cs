@@ -21,7 +21,6 @@ public class RoomList : MonoBehaviourPunCallbacks
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
 

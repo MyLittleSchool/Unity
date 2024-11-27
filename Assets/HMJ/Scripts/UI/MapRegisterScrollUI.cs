@@ -15,7 +15,6 @@ public class MapRegisterScrollUI : ScrollUI
     protected virtual void Start()
     {
         base.Start();
-        LoadClassImage();
     }
 
     // Update is called once per frame
@@ -42,15 +41,30 @@ public class MapRegisterScrollUI : ScrollUI
 
     public override void AddItem() 
     {
+        //itemlist.Clear();
+        //imageList.Clear();
+        //content.DetachChildren();
+
+        //prefab.GetComponent<MapRegisterDataUI>().SetRegisterImageData(spriteData);
+        //GameObject item = Instantiate(prefab, content);
+
+        //itemlist.Add(item);
+        //// item.GetComponent<Image>().settex
+        //imageList.Add(item.GetComponent<Image>());
+    }
+
+    public void SettingItem()
+    {
         itemlist.Clear();
         imageList.Clear();
         content.DetachChildren();
+
+        LoadClassImage();
 
         prefab.GetComponent<MapRegisterDataUI>().SetRegisterImageData(spriteData);
         GameObject item = Instantiate(prefab, content);
 
         itemlist.Add(item);
-        // item.GetComponent<Image>().settex
         imageList.Add(item.GetComponent<Image>());
     }
 
