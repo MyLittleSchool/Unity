@@ -18,16 +18,7 @@ namespace SW
         {
             if (gameObject.name == "GoClass")
             {
-                DataManager.instance.playerCurrChannel = DataManager.instance.playerName;
-                PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
-                DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
-                DataManager.instance.MapTypeState = DataManager.MapType.MyClassroom;
-
-                //DataManager.instance.player = null;
-                PhotonNetwork.LeaveRoom();
-                PhotonNetMgr.instance.sceneNum = 2;
-                //SceneManager.LoadScene(2);
-                //PhotonNetMgr.instance.CreateRoom();
+                SceneMgr.instance.ClassIn();
             }
             else
             {
