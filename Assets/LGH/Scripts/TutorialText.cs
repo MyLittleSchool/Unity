@@ -22,7 +22,7 @@ public class TutorialText : MonoBehaviour
 
     private bool texting = false;
 
-
+    public TutorialManager tutorialManager;
 
     void Start()
     {
@@ -55,13 +55,16 @@ public class TutorialText : MonoBehaviour
     }
     IEnumerator ClassText()
     {
-      
+        yield return new WaitUntil(() => tutorialManager.lawStart);
+        yield return null;
 
         StartCoroutine(TextPrint("마이리틀스쿨에 입학한 걸 환영해!\r\n나는 로우야!!\r\n새로운 친구들을 사귈 수 있게 도와주고 있어!"));
         yield return new WaitUntil(() => texting && (Input.touchCount == 1 || Input.GetMouseButtonDown(0)));
         yield return null;
-
-        StartCoroutine(TextPrintDone("이곳은 나만의 교실이야! \r\n사물함에는 다른 사람이 방문해서 남긴 쪽지를 볼 수 있어!"));
+        StartCoroutine(TextPrint("이곳은 나만의 교실이야! \r\n사물함에는 다른 사람이 방문해서 남긴 쪽지를 볼 수 있어!"));
+        yield return new WaitUntil(() => texting && (Input.touchCount == 1 || Input.GetMouseButtonDown(0)));
+        yield return null;
+        StartCoroutine(TextPrintDone("그럼 어느 중학교에 다니고 있는지 알려줄 수 있을까??"));
     }
 
 
