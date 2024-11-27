@@ -426,6 +426,10 @@ namespace MJ
         {
             mapRegisterPanel.SetActive(true);
             mapContestPanel.SetActive(false);
+
+            // 맵 등록 패널에 이미지 업로드
+            SettingMapPanel.GetInstance().UploadMapImageData();
+            // 여기서 
         }
 
         public void OnMapContestPanel()

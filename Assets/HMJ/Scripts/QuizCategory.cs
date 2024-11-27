@@ -1,4 +1,5 @@
 using ExitGames.Client.Photon.StructWrapping;
+using GH;
 using MJ;
 using Photon.Pun;
 using Photon.Realtime;
@@ -75,9 +76,8 @@ public class QuizCategory : MonoBehaviourPunCallbacks
     public void EnterQuizRoom()
     {
         SceneUIManager.GetInstance().OffQuizCategoryPanel();
+        GH.DataManager.instance.curQuizChannel = curQuizCategory;
         SceneMgr.instance.QuizIn(curQuizRoomName[(int)curQuizCategory]);
-
-        StartCoroutine(SettingQuizCategory());
     }
 
     public void RoomListUpdate()
@@ -108,13 +108,6 @@ public class QuizCategory : MonoBehaviourPunCallbacks
     private void OnEnable()
     {
         RoomListUpdate();
-    }
-
-    IEnumerator SettingQuizCategory()
-    {
-        yield return new WaitUntil(() => { return QuizLogic.GetInstance() == null; });
-
-        QuizLogic.GetInstance().SelectQuiz(curQuizCategory);
     }
 
 

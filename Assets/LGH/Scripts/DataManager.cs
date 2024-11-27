@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static QuizCategory;
 
 namespace GH
 {
@@ -19,6 +20,7 @@ namespace GH
         public string playerCurrChannel;
         public int mapId;
         public string privateRoomName;
+        public QUIZCATEGORY curQuizChannel;
         public enum MapType { Login, School, MyClassroom, Square, Quiz, QuizSquare, ContestClassroom,Note, Others }
         public MapType mapType = MapType.MyClassroom;
         public MapType MapTypeState

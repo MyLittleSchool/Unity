@@ -14,6 +14,9 @@ public class MapContestScrollUI : ScrollUI
     protected virtual void Start()
     {
         base.Start();
+
+        // ¸ðµç ¸Ê ÄÜÅ×½ºÆ® ¸Ê µî·Ï½Ã¿¡ ´Ý±â
+        addItemButton.onClick.AddListener(() => SceneUIManager.GetInstance().OffAllMapPanel());
     }
 
     // Update is called once per frame

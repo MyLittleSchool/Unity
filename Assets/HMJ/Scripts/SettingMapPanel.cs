@@ -35,4 +35,9 @@ public class SettingMapPanel : MonoBehaviour
         mapContestScrollUICom.MapDataLoad();
     }
 
+    public void UploadMapImageData()
+    {
+        mapRegisterScrollUICom.SettingItem();
+    }
+
 }
