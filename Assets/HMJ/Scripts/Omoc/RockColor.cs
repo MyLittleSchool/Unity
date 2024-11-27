@@ -1,4 +1,5 @@
 using MJ;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class RockColor : MonoBehaviour
     private InputRocks rocksData1;
     private InputRocks rocksData2;
     bool inputSpace;
+    PhotonView pv;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,7 @@ public class RockColor : MonoBehaviour
         rocksData1 = GameObject.Find("RockManager1").GetComponentInChildren<InputRocks>();
         rocksData2 = GameObject.Find("RockManager2").GetComponentInChildren<InputRocks>();
         inputSpace = false;
+        pv = GetComponent<PhotonView>();
 
         InitColor();
     }
@@ -73,8 +76,11 @@ public class RockColor : MonoBehaviour
 
     public void ChangeRockColor()
     {
-        rocksData1.SetRockColor(rockColor);
-        rocksData2.SetRockColor(rockColor);
+        if (pv.IsMine)
+        {
+            rocksData1.SetRockColor(rockColor);
+            rocksData2.SetRockColor(rockColor);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

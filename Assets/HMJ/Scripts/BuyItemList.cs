@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UI;
 using static Item;
@@ -14,6 +15,10 @@ public class BuyItemList : MonoBehaviour
     public GameObject parentPanel;
     public GameObject buyPanel;
 
+    // 현재 재화 텍스트
+    public TMP_Text gemText;
+
+    int buyValue = 0;
     private static BuyItemList instance;
     public static BuyItemList GetInstance()
     {
@@ -102,12 +107,23 @@ public class BuyItemList : MonoBehaviour
 
     public void SetCalculateText()
     {
-        coinText.text = CalculateBuyItem().ToString();
+        buyValue = CalculateBuyItem();
+        coinText.text = buyValue.ToString();
     }
 
     public void PatchInventoryData()
     {
         foreach (KeyValuePair<string, BuyItemData> objectBuyItem in buyItemList)
             InventorySystem.GetInstance().PatchItemData(objectBuyItem.Value.itemType, objectBuyItem.Key, objectBuyItem.Value.count);
+
+        if(InventorySystem.GetInstance().Gold - buyValue >= 0)
+            InventorySystem.GetInstance().Gold -= buyValue;
+
+        gemText.text = InventorySystem.GetInstance().Gold.ToString();
+    }
+
+    private void OnEnable()
+    {
+        gemText.text = InventorySystem.GetInstance().Gold.ToString();
     }
 }
