@@ -68,7 +68,7 @@ namespace SW
             //RefreshTab3(recommFriends);
             ChangeTab(0);
         }
-        private void ClosePanel()
+        public void ClosePanel()
         {
             gameObject.SetActive(false);
         }

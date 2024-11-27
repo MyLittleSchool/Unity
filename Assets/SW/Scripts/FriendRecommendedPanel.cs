@@ -1,4 +1,5 @@
 using GH;
+using MJ;
 using UnityEngine;
 using UnityEngine.Networking;
 namespace SW
@@ -23,29 +24,29 @@ namespace SW
                         {
                             School school = JsonUtility.FromJson<School>(res.text);
                             SceneMgr.instance.SchoolIn(school.schoolName, userInfo.mapId);
-                            gameObject.SetActive(false);
+                            WebSocketManager.GetInstance().friendsUI.ClosePanel();
                         };
                         StartCoroutine(HttpManager.GetInstance().Get(info2));
                     }
                     else if (userInfo.mapType == DataManager.MapType.MyClassroom.ToString())
                     {
                         SceneMgr.instance.ClassIn(userInfo.name, userInfo.mapId);
-                        gameObject.SetActive(false);
+                        WebSocketManager.GetInstance().friendsUI.ClosePanel();
                     }
                     else if (userInfo.mapType == DataManager.MapType.Square.ToString())
                     {
                         SceneMgr.instance.SquareIn();
-                        gameObject.SetActive(false);
+                        WebSocketManager.GetInstance().friendsUI.ClosePanel();
                     }
                     else if (userInfo.mapType == DataManager.MapType.Quiz.ToString())
                     {
                         SceneMgr.instance.QuizSquareIn();
-                        gameObject.SetActive(false);
+                        WebSocketManager.GetInstance().friendsUI.ClosePanel();
                     }
                     else if (userInfo.mapType == DataManager.MapType.QuizSquare.ToString())
                     {
                         SceneMgr.instance.QuizSquareIn();
-                        gameObject.SetActive(false);
+                        WebSocketManager.GetInstance().friendsUI.ClosePanel();
                     }
                     else if (userInfo.mapType == DataManager.MapType.ContestClassroom.ToString())
                     {
@@ -59,7 +60,7 @@ namespace SW
                 else
                 {
                     SceneMgr.instance.ClassIn(userInfo.name, userInfo.mapId);
-                    gameObject.SetActive(false);
+                    WebSocketManager.GetInstance().friendsUI.ClosePanel();
                 }
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
