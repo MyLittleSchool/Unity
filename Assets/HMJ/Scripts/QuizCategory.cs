@@ -55,7 +55,6 @@ public class QuizCategory : MonoBehaviourPunCallbacks
     public void SelectQuizCategory(QUIZCATEGORY _QuizCategory)
     {
         curQuizCategory = _QuizCategory;
-        QuizLogic.GetInstance().SelectQuiz(curQuizCategory);
     }
 
     public void InitButtonCategory()
@@ -77,8 +76,8 @@ public class QuizCategory : MonoBehaviourPunCallbacks
     {
         SceneUIManager.GetInstance().OffQuizCategoryPanel();
         SceneMgr.instance.QuizIn(curQuizRoomName[(int)curQuizCategory]);
-        SceneUIManager.GetInstance().OnQuizQuestionPanel();
-        QuizLogic.GetInstance().SetQuizStart();
+
+        StartCoroutine(SettingQuizCategory());
     }
 
     public void RoomListUpdate()
@@ -105,12 +104,18 @@ public class QuizCategory : MonoBehaviourPunCallbacks
 
     }
 
+
     private void OnEnable()
     {
         RoomListUpdate();
     }
-    //// 방 목록 업데이트 콜백
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+
+    IEnumerator SettingQuizCategory()
     {
+        yield return new WaitUntil(() => { return QuizLogic.GetInstance() == null; });
+
+        QuizLogic.GetInstance().SelectQuiz(curQuizCategory);
     }
+
+
 }

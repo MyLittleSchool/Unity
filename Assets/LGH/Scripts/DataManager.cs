@@ -36,6 +36,10 @@ namespace GH
                 userPosInfo.isOnline = true;
                 WebSocketManager webSocketManager = WebSocketManager.GetInstance();
                 webSocketManager.Send(webSocketManager.friendWebSocket, JsonUtility.ToJson(userPosInfo));
+                // 여기서 bgm 변경
+
+                SoundManager.instance.StopBgmSound();
+                SoundManager.instance.PlayBgmSound(mapType);
             }
         }
         [Serializable]
@@ -87,7 +91,10 @@ namespace GH
             }
         }
 
-   
+        public void ChangeBGM()
+        {
+
+        }
       
     }
 

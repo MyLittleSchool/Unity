@@ -9,10 +9,13 @@ public class MapRegisterScrollUI : ScrollUI
 {
     public MapContestScrollUI myMapContestScrollUIcp;
     private GameObject registerObject;
+
+    private Sprite spriteData;
     // Start is called before the first frame update
     protected virtual void Start()
     {
         base.Start();
+        LoadClassImage();
     }
 
     // Update is called once per frame
@@ -43,8 +46,6 @@ public class MapRegisterScrollUI : ScrollUI
         imageList.Clear();
         content.DetachChildren();
 
-        Sprite spriteData = SetPrefabImage();
-
         prefab.GetComponent<MapRegisterDataUI>().SetRegisterImageData(spriteData);
         GameObject item = Instantiate(prefab, content);
 
@@ -53,6 +54,10 @@ public class MapRegisterScrollUI : ScrollUI
         imageList.Add(item.GetComponent<Image>());
     }
 
+    public void LoadClassImage()
+    {
+        spriteData = SetPrefabImage();
+    }
 
     public Sprite SetPrefabImage()
     {

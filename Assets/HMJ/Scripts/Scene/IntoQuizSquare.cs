@@ -12,7 +12,6 @@ public class IntoQuizSquare : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player") && collision.gameObject.GetComponent<PhotonView>().IsMine)
         {
             SceneUIManager.GetInstance().OffQuizCategoryPanel();
-            SceneUIManager.GetInstance().OffQuizQuestionPanel();
             SceneMgr.instance.QuizSquareIn();
 
             StartCoroutine(WaitInRoom_Quest());

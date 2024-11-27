@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static GH.DataManager;
 
 public class SoundManager : MonoBehaviour
 {
@@ -83,12 +85,15 @@ public class SoundManager : MonoBehaviour
         eftAudio.Stop();
     }
 
-    public void PlayBgmSound(EBgmType idx)
+    public void PlayBgmSound(MapType idx)
     {
         int audioIdx = (int)idx;
 
-        bgmAudio.clip = bgmAudios[audioIdx];
+        if ((bgmAudios.Length <= (int)idx) || !bgmAudios[audioIdx])
+            return;
 
+        bgmAudio.clip = bgmAudios[audioIdx];
+        bgmAudio.loop = true;
         bgmAudio.Play();
     }
 

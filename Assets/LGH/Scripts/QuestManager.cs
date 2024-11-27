@@ -188,6 +188,8 @@ public class QuestManager : MonoBehaviour
 
             rewardItem.GetComponent<Image>().sprite = questItem.textureSprite;   //아이템 받기
             rewardItem.GetComponentInChildren<TMP_Text>().text = questItem.ItemName + " x " + userQuest.quest.rewardInfo[i].count;
+
+            InventorySystem.GetInstance().PatchItemData(userQuest.quest.rewardInfo[i].itemIdx, userQuest.quest.rewardInfo[i].count);
         }
         // 잼이랑 경험치 수치 수정하기
         gemText.text = "잼 +" + userQuest.quest.gold;

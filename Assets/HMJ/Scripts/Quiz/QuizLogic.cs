@@ -32,11 +32,7 @@ public class QuizLogic : MonoBehaviour
     }
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        instance = this;
     }
 
     public List<QuizDataGroup> quizList;
