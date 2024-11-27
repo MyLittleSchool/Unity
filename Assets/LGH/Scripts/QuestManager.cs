@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using TMPro;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
+using Image = UnityEngine.UI.Image;
 
 #region DTO
 // 튜토리얼 
@@ -181,10 +182,10 @@ public class QuestManager : MonoBehaviour
             GameObject rewardItem = Instantiate(questItemPrefabs, questImageTransform);
             questItemList.Add(rewardItem);
             //아이템 인덱스로 이름 받아오기! ==== 규할일 ====
+            InventorySystem.QuestItem questItem = InventorySystem.GetInstance().GetQuestItemIndex(userQuest.quest.rewardInfo[i].itemIdx);
 
-            //rewardItem.GetComponent<Image>().sprite =       //아이템 받기
-          
-            rewardItem.GetComponent<TMP_Text>().text = "이름" + " x " + userQuest.quest.rewardInfo[i].count;
+            rewardItem.GetComponent<Image>().sprite = questItem.textureSprite;   //아이템 받기
+            rewardItem.GetComponent<TMP_Text>().text = questItem.ItemName + " x " + userQuest.quest.rewardInfo[i].count;
         }
         // 잼이랑 경험치 수치 수정하기
         gemText.text = "잼 +" + userQuest.quest.gold;
