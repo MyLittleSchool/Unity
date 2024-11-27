@@ -169,6 +169,8 @@ public class QuestManager : MonoBehaviour
     }
     private void QuestSuccess(UserQuest userQuest)
     {
+        SoundManager.instance.InteractMainEftSound(SoundManager.EInteractEftType.MISSION_CLEAR);
+
         questPanel.SetActive(true);
         for (int i = 0; i < questItemList.Count; i++)
         {

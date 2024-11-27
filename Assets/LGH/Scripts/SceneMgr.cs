@@ -42,7 +42,7 @@ public class SceneMgr : MonoBehaviour
     {
 
         SceneManager.LoadScene(2);
-        SoundManager.instance.PlayBgmSound(SoundManager.EBgmType.BGM_DATA);
+        SoundManager.instance.PlayBgmSound(SoundManager.EBgmType.BGM_CLASS);
 
     }
     public void ClassIn(string roomName = null, int mapId = -1)
@@ -65,6 +65,8 @@ public class SceneMgr : MonoBehaviour
         PhotonNetMgr.instance.sceneNum = 2;
 
         SceneUIManager.GetInstance().OnInventoryUI();
+
+        SoundManager.instance.PlayBgmSound(SoundManager.EBgmType.BGM_CLASS);
         //SceneManager.LoadScene(2);
         //PhotonNetMgr.instance.CreateRoom();
     }
@@ -98,6 +100,8 @@ public class SceneMgr : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 1;
         SceneUIManager.GetInstance().OnInventoryUI();
+
+        SoundManager.instance.PlayBgmSound(SoundManager.EBgmType.BGM_SCHOOL);
     }
 
     public void QuizIn(string quizRoomName)

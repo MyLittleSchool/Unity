@@ -1,4 +1,5 @@
 using ExitGames.Client.Photon;
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Chat;
 using Photon.Pun;
 using Photon.Realtime;
@@ -227,6 +228,8 @@ namespace GH
                     //말풍선에 텍스트를 넣는다.
                     playerMalpung.RPC_MalPungText(inputChat.text);
                     inputChat.text = "";
+
+                    SoundManager.instance.InteractMainEftSound(SoundManager.EInteractEftType.BUBBLE_UP);
                 }
             }
             else if (ChatModeState == ChatMode.AIChatBot)

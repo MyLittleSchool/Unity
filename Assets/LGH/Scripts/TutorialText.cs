@@ -68,8 +68,11 @@ public class TutorialText : MonoBehaviour
     // 텍스트 하나씩 생기게 하기
     IEnumerator TextPrintDone(string text)
     {
+        SoundManager.instance.InteractMainEftSound(SoundManager.EInteractEftType.WRITE_DATA);
+
         yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
         yield return new WaitForSeconds(0.3f);
+
         int count = 0;
         tutorialText.text = "";
 
@@ -91,6 +94,7 @@ public class TutorialText : MonoBehaviour
 
         if (count == text.Length)
         {
+            SoundManager.instance.StopEftSound();
             yield return new WaitUntil(() => Input.touchCount == 1 || Input.GetMouseButtonDown(0));
             gameObject.SetActive(false);
         }
@@ -100,6 +104,8 @@ public class TutorialText : MonoBehaviour
     // 텍스트 하나씩 생기게 하기
     IEnumerator TextPrint(string text)
     {
+        SoundManager.instance.InteractMainEftSound(SoundManager.EInteractEftType.WRITE_DATA);
+
         yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
         yield return new WaitForSeconds(0.3f);
         int count = 0;
@@ -125,6 +131,7 @@ public class TutorialText : MonoBehaviour
         if (count == text.Length)
         {
             texting = true;
+            SoundManager.instance.StopEftSound();
         }
     }
 

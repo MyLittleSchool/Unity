@@ -18,6 +18,7 @@ namespace GH
            // pv = DataManager.instance.player.GetComponent<PhotonView>();
             but = GetComponent<Button>();
             but.onClick.AddListener(EmojiPlay);
+            but.onClick.AddListener(() => SoundManager.instance.ButtonMainEftSound(SoundManager.EButtonEftType.ICON_UP));
         }
 
         void Update()

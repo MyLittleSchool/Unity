@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
 
+
     public enum EMainEftType
     {
     }
@@ -22,7 +23,8 @@ public class SoundManager : MonoBehaviour
 
     public enum EBgmType
     {
-        BGM_DATA
+        BGM_CLASS,
+        BGM_SCHOOL
     }
 
     public static SoundManager instance;
@@ -76,7 +78,11 @@ public class SoundManager : MonoBehaviour
         eftAudio.PlayOneShot(InteractEftAudios[audioIdx]);
     }
 
-    
+    public void StopEftSound()
+    {
+        eftAudio.Stop();
+    }
+
     public void PlayBgmSound(EBgmType idx)
     {
         int audioIdx = (int)idx;

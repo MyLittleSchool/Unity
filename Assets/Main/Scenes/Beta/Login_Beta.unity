@@ -8271,6 +8271,7 @@ GameObject:
   - component: {fileID: 1090905153}
   - component: {fileID: 1090905152}
   - component: {fileID: 1090905151}
+  - component: {fileID: 1090905155}
   m_Layer: 5
   m_Name: X_Button
   m_TagString: Untagged
@@ -8391,6 +8392,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090905149}
   m_CullTransparentMesh: 1
+--- !u!114 &1090905155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090905149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 605119387e18a5744a27834635d99a3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1102827126
 GameObject:
   m_ObjectHideFlags: 0
@@ -17497,6 +17510,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8240434675831640311, guid: d085f90f19fbf214a829dbb75c9e113b,
+        type: 3}
+      propertyPath: bgmAudios.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8240434675831640311, guid: d085f90f19fbf214a829dbb75c9e113b,
+        type: 3}
+      propertyPath: bgmAudios.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: e94ba785ecbc0654b91ccb1bff999068, type: 3}
+    - target: {fileID: 8240434675831640311, guid: d085f90f19fbf214a829dbb75c9e113b,
+        type: 3}
+      propertyPath: buttonEftAudios.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 16c1c5dabdcfab54c894c483f1b9cc52, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
