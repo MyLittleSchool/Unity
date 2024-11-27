@@ -3,6 +3,7 @@ using MJ;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class CaptureManager : MonoBehaviour
@@ -53,8 +54,16 @@ public class CaptureManager : MonoBehaviour
 
         
         byte[] bytes = texture.EncodeToPNG();
-        m_CurrentCaptureTexturePath = "MapImage/" + DateTime.Now.ToString(("yyyy_MM_dd_HH_mm_ss_")) + DataManager.instance.playerName + ".png";
-        System.IO.File.WriteAllBytes(Application.dataPath + "/Resources/" + m_CurrentCaptureTexturePath, bytes);
+
+        string saveDirectory = Application.persistentDataPath + "/MapImage";
+        m_CurrentCaptureTexturePath = saveDirectory + "/" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_") + DataManager.instance.playerName + ".png";
+
+        if (!System.IO.Directory.Exists(saveDirectory))
+        {
+            System.IO.Directory.CreateDirectory(saveDirectory);
+        }
+
+        System.IO.File.WriteAllBytes(m_CurrentCaptureTexturePath, bytes);
 
         Texture2D textureData = new Texture2D(2, 2);
         textureData.LoadImage(bytes); // PNG -> Texture·Î ·Îµå

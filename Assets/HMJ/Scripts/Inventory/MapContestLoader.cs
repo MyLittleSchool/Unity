@@ -106,7 +106,7 @@ namespace MJ
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest/upload-image";
             info.contentType = "multipart/form-data";
-            info.body = Application.dataPath + "/Resources/" + mapRoute; // 파일 경로
+            info.body = mapRoute; // 파일 이름
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 string fileName = downloadHandler.text.ToString().Substring(39);
