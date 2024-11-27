@@ -89,6 +89,9 @@ namespace MJ
         [Header("인벤토리 선택 버튼 - 학교")]
         public Button myClassRoomButton;
 
+        [Header("샵 닫기 버튼")]
+        public Button shopCloseButton;
+
         #endregion
 
         #region Panel
@@ -322,11 +325,13 @@ namespace MJ
             if (avatarDecoOffButton)
                 avatarDecoOffButton.onClick.AddListener(OffDecorationPanel);
 
+            if (shopCloseButton)
+                shopCloseButton.onClick.AddListener(OffShopPanel);
             //if (commonButton)
             //    commonButton.onClick.AddListener(OnInventoryCommon);
 
-            //if (myClassRoomButton)
-            //    myClassRoomButton.onClick.AddListener(OnInventoryMyClassRoom);
+                //if (myClassRoomButton)
+                //    myClassRoomButton.onClick.AddListener(OnInventoryMyClassRoom);
 
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {

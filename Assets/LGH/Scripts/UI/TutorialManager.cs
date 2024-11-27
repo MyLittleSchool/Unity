@@ -19,7 +19,7 @@ public class TutorialManager : MonoBehaviour
     public TutoPage tutoPage;
 
 
-    guideInfo guideInfo;
+    public guideInfo guideInfo;
     public List<Sprite> guideImages;
 
     public GameObject guidePanel;
@@ -27,7 +27,6 @@ public class TutorialManager : MonoBehaviour
     public bool lawStart = false;
     void Start()
     {
-        guideInfo = guidePanel.GetComponent<guideInfo>();
         tutoPage = TutoPage.Start;
         guideInfo.beforeButton.gameObject.SetActive(false);
         guideInfo.startButton.gameObject.SetActive(false);

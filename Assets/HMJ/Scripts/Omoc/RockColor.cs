@@ -20,7 +20,7 @@ public class RockColor : MonoBehaviour
         rocksData1 = GameObject.Find("RockManager1").GetComponentInChildren<InputRocks>();
         rocksData2 = GameObject.Find("RockManager2").GetComponentInChildren<InputRocks>();
         inputSpace = false;
-        pv = GetComponent<PhotonView>();
+        pv = GetComponentInChildren<PhotonView>();
 
         InitColor();
     }
