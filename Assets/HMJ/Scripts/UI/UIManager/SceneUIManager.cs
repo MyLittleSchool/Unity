@@ -177,6 +177,10 @@ namespace MJ
 
         [Header("샵 패널")]
         public GameObject shopPanel;
+
+
+        [Header("가이드 패널")]
+        public GameObject guidePanel;
         #endregion
 
         #region SingleTone
@@ -329,6 +333,7 @@ namespace MJ
                 RegisterAvatar();
 
                 firstLoginPanel.SetActive(true);
+                guidePanel.SetActive(true);
             }
             else
                 GetAvatar();
