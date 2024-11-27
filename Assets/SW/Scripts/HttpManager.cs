@@ -158,6 +158,28 @@ public class HttpManager : MonoBehaviour
         }
 
     }
+    // 파일 업로드(form-data)
+    public IEnumerator UploadFileByFormDataByte(HttpInfo info, string fileName, byte[] byteData)
+    {
+        // info.data에는 파일의 위치
+        // info.data 에 있는 파일을 byte 배열로 읽어오자.
+        byte[] data = byteData;
+
+        // data를 MultipartForm 으로 셋팅
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        formData.Add(new MultipartFormFileSection("file", data, fileName, info.contentType));
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, formData))
+        {
+            print("요청");
+            // 서버에 요청 보내기
+            yield return webRequest.SendWebRequest();
+
+            // 서버에게 응답이 왔다.
+            DoneRequest(webRequest, info);            
+        }
+
+    }
 
     // 파일 업로드
     public IEnumerator UploadFileByByte(HttpInfo info)

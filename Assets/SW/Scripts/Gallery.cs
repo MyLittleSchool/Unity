@@ -17,6 +17,7 @@ namespace SW
         private string path;
         public Transform content;
         public GameObject contentPrefab;
+        private byte[] byteData;
         public void FileBrowser()
         {
             if (IsDesktopPlatform())
@@ -62,7 +63,9 @@ namespace SW
                             readableTexture.SetPixels(texture.GetPixels());
                             readableTexture.Apply();
 
-                            byte[] pngData = readableTexture.EncodeToPNG();
+                            byte[] pngData = texture.EncodeToPNG();
+                            byteData = pngData;
+                            Debug.LogError("byte±æÀÌ ÆÄ¾Ç : " + byteData.Length);
                             texture2.LoadImage(pngData);
                             //raw.texture = texture2;
                             if (texture != null)
