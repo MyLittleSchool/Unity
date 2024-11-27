@@ -42,6 +42,7 @@ public class SceneMgr : MonoBehaviour
     {
 
         SceneManager.LoadScene(2);
+        SoundManager.instance.PlayBgmSound(SoundManager.EBgmType.BGM_DATA);
 
     }
     public void ClassIn(string roomName = null, int mapId = -1)
