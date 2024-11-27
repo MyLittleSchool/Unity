@@ -174,6 +174,9 @@ namespace MJ
 
         [Header("맵 콘테스트 계산 영수증 - 맵 콘테스트")]
         public GameObject mapContestBill;
+
+        [Header("샵 패널")]
+        public GameObject shopPanel;
         #endregion
 
         #region SingleTone
@@ -444,6 +447,17 @@ namespace MJ
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = true;
             }
+        }
+
+        //샵 온 오프
+        public void OnShopPanel()
+        {
+            shopPanel.SetActive(true);
+        }
+
+        public void OffShopPanel()
+        {
+            shopPanel.SetActive(false);
         }
 
 
