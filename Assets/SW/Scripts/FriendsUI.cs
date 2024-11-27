@@ -177,9 +177,20 @@ namespace SW
             StatusInfo status = JsonUtility.FromJson<StatusInfo>(json);
             FriendPanel comp = friendDic[status.userId];
             SetFriendPanel(comp, isOnline, status.mapType, status.mapId);
+        }
+        private struct StatusInfo
+        {
+            public int userId;
+            public int mapId;
+            public string mapType;
+        }
+        public void SetFriendPanel(FriendPanel comp, bool isOnline, string mapType, int mapId)
+        {
             // 체크 버튼
             Transform btn = comp.transform.Find("CheckButton");
-            btn.GetComponent<Button>().onClick.AddListener(() =>
+            Button button = btn.GetComponent<Button>();
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() =>
             {
                 if (btn.transform.GetChild(1).gameObject.activeSelf)
                 {
@@ -198,15 +209,6 @@ namespace SW
                 }
                 btn.transform.GetChild(1).gameObject.SetActive(!btn.transform.GetChild(1).gameObject.activeSelf);
             });
-        }
-        private struct StatusInfo
-        {
-            public int userId;
-            public int mapId;
-            public string mapType;
-        }
-        public void SetFriendPanel(FriendPanel comp, bool isOnline, string mapType, int mapId)
-        {
             comp.RequestButton.onClick.RemoveAllListeners();
             comp.PassButton.onClick.RemoveAllListeners();
             if (isOnline)
@@ -361,7 +363,7 @@ namespace SW
                         comp.id = friend.id;
                         comp.NickNameText.text = friend.name;
                         friendDic[comp.id] = comp;
-                        SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
+                        //SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                     }
                 }
                 if (tab == 0) ChangeTab(tab);
