@@ -26,6 +26,7 @@ public class TutorialText : MonoBehaviour
 
     void Start()
     {
+        tutorialText.text = "";
         tutorialText = GetComponentInChildren<TMP_Text>();
     }
 
@@ -99,6 +100,7 @@ public class TutorialText : MonoBehaviour
         {
             SoundManager.instance.StopEftSound();
             yield return new WaitUntil(() => Input.touchCount == 1 || Input.GetMouseButtonDown(0));
+            tutorialText.text = "";
             gameObject.SetActive(false);
         }
 
