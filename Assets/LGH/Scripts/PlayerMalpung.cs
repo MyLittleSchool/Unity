@@ -36,11 +36,11 @@ namespace GH
 
             // 말풍 텍스트 초기화
             malpungText.text = "";
-            playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.name;
+            playerNameText.text = photonView.Owner.NickName;
         }
 
-        // Update is called once per frame
-        void Update()
+            // Update is called once per frame
+            void Update()
         {
 
             OnMalpung();
@@ -48,7 +48,7 @@ namespace GH
         }
         public void PlayerNameSet()
         {
-            playerNameText.text = photonView.Owner.NickName;
+           // playerNameText.text = photonView.Owner.NickName;
             //playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.name;
 
             //PhotonNetMgr.instance.ChangeNickname(AuthManager.GetInstance().userAuthData.userInfo.name);
