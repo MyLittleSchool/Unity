@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using MJ;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapRegisterDataUI;
@@ -54,7 +56,13 @@ public class MapContestScrollUI : ScrollUI
             //item.set
             MJ.MapContestDataUI mapContestDataUI = item.GetComponent<MJ.MapContestDataUI>();
 
-            if (MapContestLoader.GetInstance().sprites.Count != 0)
+            int count = 0;
+            for (; count < 100; count++)
+            {
+                if (MapContestLoader.GetInstance().sprites[i] == null)
+                    break;
+            }
+            if (count != 0)
             {
                 mapContestDataUI.SetRegisterData(respon[i], MapContestLoader.GetInstance().sprites[i]);
 

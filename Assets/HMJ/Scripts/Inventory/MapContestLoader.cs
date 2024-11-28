@@ -2,6 +2,7 @@ using GH;
 using SW;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Resources;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -63,7 +64,8 @@ namespace MJ
         public MapContestDataList mapDatas;
         public MapContestScrollUI mapContestScrollUIComponent;
 
-        public List<Texture2D> sprites = new List<Texture2D>();
+        public Texture2D[] sprites;
+        //public List<Texture2D> sprites = new List<Texture2D>();
 
         public List<ObjectContestInfo> loadfurnitureList;
 
@@ -75,7 +77,7 @@ namespace MJ
             {
                 instance = this;
                 DontDestroyOnLoad(gameObject);
-
+                sprites = new Texture2D[100];
             }
             else
             {
@@ -144,7 +146,7 @@ namespace MJ
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 DownloadHandlerTexture handler = downloadHandler as DownloadHandlerTexture;
-                sprites.Add(handler.texture);
+                sprites[idx] = handler.texture;
                 //sprites[idx] = sprite;
             };
             StartCoroutine(HttpManager.GetInstance().DownloadSprite(info));
@@ -161,7 +163,8 @@ namespace MJ
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 mapDatas = JsonUtility.FromJson<MapContestDataList>(downloadHandler.text);
-                sprites.Clear();
+                for (int i = 0; i < sprites.Length; i++)
+                    sprites[i] = null;
                 Debug.Log("--------------------------------------------------------------------------------");
                 for (int i = 0; i < mapDatas.response.Count; i++)
                     ReceiveMapImage(mapDatas.response[i].previewImageUrl, i);
@@ -176,7 +179,13 @@ namespace MJ
             if (mapDatas.response.Count <= 0)
                 return false;
 
-            if (sprites.Count == mapDatas.response.Count)
+            int count = 0;
+            for(int i = 0; i < sprites.Count(); i++)
+            {
+                if (sprites[i] != null)
+                    count++;
+            }
+            if (count == mapDatas.response.Count)
                 return true;
 
             return false;
