@@ -75,6 +75,7 @@ namespace GH
             }
             //Screen.SetResolution(360, 800, false);
             //Screen.fullScreen = false;
+            SetFullScreenToMonitorResolution();
             privateRoomName = "";
         }
         public void PlayerFind()
@@ -97,7 +98,15 @@ namespace GH
         {
 
         }
-      
+        public void SetFullScreenToMonitorResolution()
+        {
+            // 현재 모니터의 기본 해상도로 설정
+            int width = Screen.currentResolution.width;
+            int height = Screen.currentResolution.height;
+
+            // 해상도를 모니터 해상도로 설정하고 전체화면 모드로 전환
+            Screen.SetResolution(width, height, FullScreenMode.FullScreenWindow);
+        }
     }
 
 }

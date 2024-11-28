@@ -83,7 +83,7 @@ namespace GH
             Vector3 initPosition = GameObject.Find("SpwanPosition").transform.position;
 
             GameObject spwanPlayer = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);
-            Instantiate(interacterPrefab, spwanPlayer.transform);
+            Instantiate(interacterPrefab, spwanPlayer.transform.position + Vector3.up * 0.5f, Quaternion.identity, spwanPlayer.transform);
 
             if (spwanPlayer.GetComponent<PhotonView>().IsMine)
             {
