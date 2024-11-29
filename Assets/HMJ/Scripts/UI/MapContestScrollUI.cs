@@ -1,8 +1,6 @@
-using JetBrains.Annotations;
 using MJ;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapRegisterDataUI;
