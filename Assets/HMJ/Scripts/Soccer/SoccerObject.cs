@@ -48,18 +48,7 @@ namespace MJ
 
         private void Update()
         {
-            if (pv.IsMine)
-            {
-                if(Input.GetKeyDown(KeyCode.K))
-                {
-                    if(bounceObject && bounceObject.GetBounceBall())
-                        KickBall(bounceObject.GetPlayerDirection());
-                    else if(DataManager.instance.player)
-                        CheckPlayer();
-                }
-                MoveBall();
-                DistanseCheck();
-            }
+            ballUpdate();
         }
 
         private void FixedUpdate()
@@ -153,17 +142,12 @@ namespace MJ
 
         public void KickBall(float degree, Vector2 joyStickData)
         {
-            // degree 값을 라디안으로 변환
             float radian = degree * Mathf.Deg2Rad;
 
-            // 각도를 기준으로 3D 방향 벡터 생성
             Vector2 direction = new Vector2(Mathf.Cos(radian) * Mathf.Abs(joyStickData.x), Mathf.Sin(radian) * Mathf.Abs(joyStickData.y + 0.05f));
 
-            // y축으로 추가적인 힘
             Vector2 force = direction * forceMagnitude;
 
-            Debug.Log("Force: " + force);
-            // AddForce를 이용해 공에 힘을 가함
             rigidbody.AddForce(force, ForceMode2D.Impulse);
         }
 
@@ -183,6 +167,22 @@ namespace MJ
             else if (stream.IsReading)
             {              
                 myPos = (Vector3)stream.ReceiveNext();
+            }
+        }
+
+        public void ballUpdate()
+        {
+            if (pv.IsMine)
+            {
+                if (gameInteractButton.GetInstance().GetButtonDown())
+                {
+                    if (bounceObject && bounceObject.GetBounceBall())
+                        KickBall(bounceObject.GetPlayerDirection());
+                    else if (DataManager.instance.player)
+                        CheckPlayer();
+                }
+                MoveBall();
+                DistanseCheck();
             }
         }
     }

@@ -47,7 +47,7 @@ namespace MJ
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKey(KeyCode.Space)) // Space
+            if (gameInteractButton.GetInstance().GetButtonDown()) // Space
             {
                 int[] Grid = CheckRockIdx();
                 SendInputRock(Grid[0], Grid[1], (int)rockColor);
