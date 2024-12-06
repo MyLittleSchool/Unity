@@ -170,17 +170,21 @@ namespace MJ
             }
         }
 
+        public bool CheckPlayerDistance()
+        {
+            GameObject player = DataManager.instance.player;
+
+            return player && Vector3.Distance(player.transform.position, transform.position) < 3.0f;
+        }
         public void ballUpdate()
         {
             if (pv.IsMine)
             {
-                if (gameInteractButton.GetInstance().GetButtonDown())
-                {
-                    if (bounceObject && bounceObject.GetBounceBall())
-                        KickBall(bounceObject.GetPlayerDirection());
-                    else if (DataManager.instance.player)
-                        CheckPlayer();
-                }
+
+                if (bounceObject && bounceObject.GetBounceBall())
+                    KickBall(bounceObject.GetPlayerDirection());
+                else if (DataManager.instance.player && CheckPlayerDistance() && gameInteractButton.GetInstance().GetButtonDown())
+                    CheckPlayer();
                 MoveBall();
                 DistanseCheck();
             }
