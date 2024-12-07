@@ -38,10 +38,10 @@ public class ROCK : MonoBehaviour
         switch (_rockColor)
         {
             case ROCKCOLOR.NONE:
-                spriteRenderer.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+                newColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
                 break;
             case ROCKCOLOR.WHITE:
-                spriteRenderer.color = Color.white;
+                newColor = Color.white;
                 break;
             case ROCKCOLOR.PURPLE:
                 ColorUtility.TryParseHtmlString("#6F4BF2", out newColor);

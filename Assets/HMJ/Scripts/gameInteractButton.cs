@@ -27,7 +27,6 @@ public class gameInteractButton : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("버튼 체크: " + bButton);
     }
 
     public void InitButton()

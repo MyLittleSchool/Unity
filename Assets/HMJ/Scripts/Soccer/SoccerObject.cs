@@ -61,11 +61,7 @@ namespace MJ
                 playerCollision();
                 bPlayerCollision = false;
             }
-            if (pv.IsMine)
-            {
-
-            }
-            else
+            if (!pv.IsMine)
             {
                 transform.position = myPos;
             }
@@ -180,7 +176,6 @@ namespace MJ
         {
             if (pv.IsMine)
             {
-
                 if (bounceObject && bounceObject.GetBounceBall())
                     KickBall(bounceObject.GetPlayerDirection());
                 else if (DataManager.instance.player && CheckPlayerDistance() && gameInteractButton.GetInstance().GetButtonDown())

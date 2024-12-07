@@ -1,4 +1,6 @@
+using GH;
 using MJ;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,14 +12,17 @@ public class RockColor : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private InputRocks rocksData1;
     private InputRocks rocksData2;
-    bool inputSpace;
+
+    bool bCollision;
+
+    LayerMask playerLayer;
     // Start is called before the first frame update
     void Start()
     {
+        playerLayer = LayerMask.NameToLayer("Player");
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rocksData1 = GameObject.Find("RockManager1").GetComponentInChildren<InputRocks>();
         rocksData2 = GameObject.Find("RockManager2").GetComponentInChildren<InputRocks>();
-        inputSpace = false;
 
         InitColor();
     }
@@ -26,6 +31,8 @@ public class RockColor : MonoBehaviour
     void Update()
     {
         KeyInputCheck();
+
+        Debug.Log("bCollision: " + bCollision);
     }
 
     public void InitColor()
@@ -66,9 +73,8 @@ public class RockColor : MonoBehaviour
 
     public void KeyInputCheck()
     {
-        inputSpace = false;
         if (gameInteractButton.GetInstance().GetButtonDown())
-            inputSpace = true;
+            CheckColorTile();
     }
 
     public void ChangeRockColor()
@@ -77,12 +83,26 @@ public class RockColor : MonoBehaviour
         rocksData2.SetRockColor(rockColor);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    public void CheckColorTile()
     {
-        if (collision.gameObject.name.Contains("Player") && inputSpace)
-        {
+        if(bCollision)
             ChangeRockColor();
-        }
+
+
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject collisionObject = collision.gameObject;
+        if (collisionObject.name.Contains("Player") && collisionObject.GetComponentInParent<PhotonView>().IsMine)
+            bCollision = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        GameObject collisionObject = collision.gameObject;
+        if (collisionObject.name.Contains("Player") && collisionObject.GetComponentInParent<PhotonView>().IsMine)
+            bCollision = false;
     }
 
 }

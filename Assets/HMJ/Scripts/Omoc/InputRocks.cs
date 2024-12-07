@@ -107,6 +107,7 @@ namespace MJ
 
         public void InitRocks()
         {
+            rockColor = ROCKCOLOR.WHITE;
             LoadRockData();
             for (int i = 0; i < ROCK_ROW; i++)
             {
@@ -133,9 +134,7 @@ namespace MJ
             for (int i = 0; i < ROCK_ROW; i++)
             {
                 for (int j = 0; j < ROCK_COLUMN; j++)
-                {
                     rockDatas[i, j].SetColor(ROCKCOLOR.NONE);
-                }
             }
             yield return null;
         }
