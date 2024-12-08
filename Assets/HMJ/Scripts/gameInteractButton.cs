@@ -44,7 +44,8 @@ public class gameInteractButton : MonoBehaviour
 
     public void ButtonDown()
     {
-        StartCoroutine(interactButtonDown());
+        if(!bButton)
+            StartCoroutine(interactButtonDown());
     }
 
     public bool GetButtonDown()

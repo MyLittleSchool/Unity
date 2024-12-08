@@ -78,6 +78,7 @@ public class SceneMgr : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 3;
         SceneUIManager.GetInstance().OffInventoryUI();
+        // GameManager.instance.coSpawnSoccer();
     }
 
     public void SchoolIn(string roomName = null, int mapId = -1)

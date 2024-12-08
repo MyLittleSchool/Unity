@@ -91,6 +91,21 @@ namespace GH
             }
 
         }
+
+        public void coSpawnSoccer()
+        {
+            StartCoroutine(SpawnSoccer());
+
+        }
+        IEnumerator SpawnSoccer()
+        {
+            //룸에 입장이 완료될 때까지 기다린다.
+            yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
+
+            Vector3 initPosition = GameObject.Find("Objects/SoccerPosition").transform.position;
+
+            GameObject spawnSoccer = PhotonNetwork.Instantiate("Soccer", initPosition, Quaternion.identity);
+        }
         public void ConversionPanel()
         {
             if (onActivate)
