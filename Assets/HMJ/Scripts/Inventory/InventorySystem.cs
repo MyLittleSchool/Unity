@@ -187,7 +187,10 @@ public class InventorySystem : MonoBehaviour
             if (null != itemData)
                 break;
         }
-        
+
+        ItemType _itemType = ItemType.Common;
+        if (itemData.itemType == "MyClassRoom")
+            _itemType = ItemType.MyClassRoom;
         itemData.count += _Count;
 
         if (null == itemData)
@@ -199,6 +202,7 @@ public class InventorySystem : MonoBehaviour
         info.contentType = "application/json";
         info.onComplete = (DownloadHandler downloadHandler) =>
         {
+            SetItemComponent(_itemType);
             print(downloadHandler.text);
         };
         StartCoroutine(HttpManager.GetInstance().Patch(info));

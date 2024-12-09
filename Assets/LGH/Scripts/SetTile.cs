@@ -5,10 +5,13 @@ using SW;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static GH.DataManager;
 using static Item;
+using static UnityEngine.UI.Image;
 
 namespace GH
 {
@@ -176,6 +179,9 @@ namespace GH
                 {
                     if (obj.position == tilePosition)
                     {
+                        string objName = obj.obj.ToString().Split('(')[0].Trim(); ; // 해당 생성된 오브젝트 이름 자르기((1), (2)...)
+                        Debug.Log("자른 이름: " + objName);
+                        InventorySystem.GetInstance().PatchItemData(objName, 1);
                         photonView.RPC(nameof(ReqDeleteTile), obj.obj.GetPhotonView().Owner, tilePosition.x, tilePosition.y, tilePosition.z);
                     }
                 }
