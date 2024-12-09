@@ -139,6 +139,10 @@ namespace GH
                     obj.id = callBack.id;
                 });
             }
+            else
+            {
+                RPC_DeleteTile();
+            }
         }
 
         public void CopyTile(Vector3Int _tilePosition, int objId)
