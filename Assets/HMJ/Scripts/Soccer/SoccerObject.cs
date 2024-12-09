@@ -12,34 +12,10 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
     private Rigidbody2D rigidbody;
     private float forceMagnitude = 5.0f;
 
-    private GameObject dribblePlayer = null;
-
-    private bool isDribbling = false;
-
     private void Awake()
     {
         rigidbody = GetComponentInChildren<Rigidbody2D>();
         pv = GetComponent<PhotonView>();
-    }
-
-    private void Update()
-    {
-
-    }
-
-    [PunRPC]
-    public void SyncDribblingPlayer(int photonViewID)
-    {
-        PhotonView photonView = PhotonView.Find(photonViewID);
-
-        if (photonView != null)
-            dribblePlayer = photonView.gameObject;
-    }
-
-    [PunRPC]
-    public void ResetDribblingPlayer()
-    {
-        dribblePlayer = null;
     }
 
     public void KickBall()
@@ -66,7 +42,6 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
     [PunRPC]
     public void ResetBall(Vector3 vec3Position)
     {
-        isDribbling = false; // 드리블도 리셋
         transform.position = vec3Position;
         rigidbody.velocity = Vector2.zero;
         rigidbody.angularVelocity = 0.0f;
@@ -77,7 +52,7 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
         int[] layer = { LayerMask.NameToLayer("NetCollision"), LayerMask.NameToLayer("OutCollision") };
 
         // 플레이어와 충돌
-        if (collision.gameObject.name.Contains("Player") && (collision.gameObject.GetComponent<PhotonView>().IsMine) && !isDribbling)
+        if (collision.gameObject.name.Contains("Player") && (collision.gameObject.GetComponent<PhotonView>().IsMine))
         {
             pv.RPC("ResetBall", RpcTarget.All, transform.position);
             KickBall();
@@ -98,13 +73,8 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
         rigidbody.angularVelocity = 0.0f;
         yield return null;
     }
-
-
-
 }
-
 /*
- * 
          if (gameInteractButton.GetInstance().GetButtonDown())
         {
             Debug.Log("현재 Soccer: " + gameObject.name);

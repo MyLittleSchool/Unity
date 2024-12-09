@@ -4,9 +4,9 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ROCK;
+using static OmokPiece;
 
-public class RockColor : MonoBehaviour
+public class OmokColorSelector : MonoBehaviour
 {
     public ROCKCOLOR rockColor;
     private SpriteRenderer spriteRenderer;

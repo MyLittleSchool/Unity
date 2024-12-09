@@ -9,7 +9,6 @@ public class gameInteractButton : MonoBehaviour
 {
     private static gameInteractButton instance;
 
-    private Button gameInteractBut;
     private bool bButton;
 
     public static gameInteractButton GetInstance()
@@ -31,12 +30,12 @@ public class gameInteractButton : MonoBehaviour
 
     public void InitButton()
     {
-        gameInteractBut = GetComponent<Button>();
         bButton = false;
     }
 
     IEnumerator interactButtonDown()
     {
+        Debug.Log("Button Pressed");
         bButton = true;
         yield return null;
         bButton = false;

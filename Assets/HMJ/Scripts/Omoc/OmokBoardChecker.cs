@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 
-public class OmocCheck : MonoBehaviour
+public class OmokBoardChecker : MonoBehaviour
 {
-    public bool OmocWin(ROCK[,] _rockDatas, int row, int col)
+    public bool OmocWin(OmokPiece[,] _rockDatas, int row, int col)
     { // 3 4
         if (row < 0 || col < 0 || row >= MJ.InputRocks.ROCK_ROW || col >= MJ.InputRocks.ROCK_COLUMN)
             return false;
@@ -25,7 +25,7 @@ public class OmocCheck : MonoBehaviour
     /// <param name="col"></param>
     /// <param name="n"></param>
     /// <returns></returns>
-    public bool HorizontalOmoc(ROCK[,] _rockDatas, int row, int col, int n)
+    public bool HorizontalOmoc(OmokPiece[,] _rockDatas, int row, int col, int n)
     {
         int leftHorizon = LeftHorizontalOmoc(_rockDatas, row, col - 1, 0, _rockDatas[row, col].GetColor());
         int rightHorizon = RightHorizontalOmoc(_rockDatas, row, col + 1, 0, _rockDatas[row, col].GetColor());
@@ -39,7 +39,7 @@ public class OmocCheck : MonoBehaviour
             return false;
     }
 
-    public int LeftHorizontalOmoc(ROCK[ , ] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int LeftHorizontalOmoc(OmokPiece[ , ] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (col < 0) return n;
 
@@ -49,7 +49,7 @@ public class OmocCheck : MonoBehaviour
         return LeftHorizontalOmoc(_rockDatas, row, --col, n, color);
     }
 
-    public int RightHorizontalOmoc(ROCK[ , ] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int RightHorizontalOmoc(OmokPiece[ , ] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (col >= MJ.InputRocks.ROCK_COLUMN) return n;
 
@@ -68,7 +68,7 @@ public class OmocCheck : MonoBehaviour
     /// <param name="color"></param>
     /// <returns></returns>
     /// 
-    public bool VerticalOmoc(ROCK[,] _rockDatas, int row, int col, int n)
+    public bool VerticalOmoc(OmokPiece[,] _rockDatas, int row, int col, int n)
     {
         int leftVertical = UpVerticalOmoc(_rockDatas, row - 1, col, 0, _rockDatas[row, col].GetColor());
         int rightVertical = DownVerticalOmoc(_rockDatas, row + 1, col, 0, _rockDatas[row, col].GetColor());
@@ -83,7 +83,7 @@ public class OmocCheck : MonoBehaviour
 
     }
 
-    public int UpVerticalOmoc(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int UpVerticalOmoc(OmokPiece[,] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (row < 0) return n;
 
@@ -93,7 +93,7 @@ public class OmocCheck : MonoBehaviour
         return UpVerticalOmoc(_rockDatas, --row, col, n, color);
     }
 
-    public int DownVerticalOmoc(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int DownVerticalOmoc(OmokPiece[,] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (row >= MJ.InputRocks.ROCK_ROW) return n;
 
@@ -113,7 +113,7 @@ public class OmocCheck : MonoBehaviour
     /// <returns></returns>
     /// 
 
-    public bool RightDiagonal(ROCK[,] _rockDatas, int row, int col, int n)
+    public bool RightDiagonal(OmokPiece[,] _rockDatas, int row, int col, int n)
     {
         int upRightDiagonal = UPRightDiagonal(_rockDatas, row - 1, col + 1, 0, _rockDatas[row, col].GetColor());
         int downRightDiagonal = DownRightDiagonal(_rockDatas, row + 1, col - 1, 0, _rockDatas[row, col].GetColor());
@@ -127,7 +127,7 @@ public class OmocCheck : MonoBehaviour
             return false;
     }
 
-    public int UPRightDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int UPRightDiagonal(OmokPiece[,] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (row < 0 || col >= MJ.InputRocks.ROCK_COLUMN) return n;
 
@@ -137,7 +137,7 @@ public class OmocCheck : MonoBehaviour
         return UPRightDiagonal(_rockDatas, --row, ++col, n, color);
     }
 
-    public int DownRightDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int DownRightDiagonal(OmokPiece[,] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (row >= MJ.InputRocks.ROCK_ROW || col < 0) return n;
 
@@ -158,7 +158,7 @@ public class OmocCheck : MonoBehaviour
     /// <returns></returns>
     /// 
 
-    public bool LeftDiagonal(ROCK[,] _rockDatas, int row, int col, int n)
+    public bool LeftDiagonal(OmokPiece[,] _rockDatas, int row, int col, int n)
     {
         int upRightDiagonal = UpLeftDiagonal(_rockDatas, row - 1, col - 1, 0, _rockDatas[row, col].GetColor());
         int downRightDiagonal = DownLeftDiagonal(_rockDatas, row + 1, col + 1, 0, _rockDatas[row, col].GetColor());
@@ -172,7 +172,7 @@ public class OmocCheck : MonoBehaviour
             return false;
     }
 
-    public int UpLeftDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int UpLeftDiagonal(OmokPiece[,] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (row < 0 || col < 0) return n;
 
@@ -182,7 +182,7 @@ public class OmocCheck : MonoBehaviour
         return UpLeftDiagonal(_rockDatas, --row, --col, n, color);
     }
 
-    public int DownLeftDiagonal(ROCK[,] _rockDatas, int row, int col, int n, ROCK.ROCKCOLOR color)
+    public int DownLeftDiagonal(OmokPiece[,] _rockDatas, int row, int col, int n, OmokPiece.ROCKCOLOR color)
     {
         if (row >= MJ.InputRocks.ROCK_ROW || col >= MJ.InputRocks.ROCK_COLUMN) return n;
 
@@ -193,12 +193,12 @@ public class OmocCheck : MonoBehaviour
 
     // 시작 위치, 누적할 위치XY, 총 개수
     //private IEnumerator ResetSoccerPosition(float delayTime)
-    IEnumerator ResetOmoc(ROCK[,] _rockDatas, Vector2Int firstXY, Vector2Int GapXY, int N, float delayTime)
+    IEnumerator ResetOmoc(OmokPiece[,] _rockDatas, Vector2Int firstXY, Vector2Int GapXY, int N, float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
 
         for (int i = 0; i < N; i++)
-            _rockDatas[firstXY.y + GapXY.y * i, firstXY.x + GapXY.x * i].SetColor(ROCK.ROCKCOLOR.NONE);
+            _rockDatas[firstXY.y + GapXY.y * i, firstXY.x + GapXY.x * i].SetColor(OmokPiece.ROCKCOLOR.NONE);
 
         yield return null;
     }

@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Photon.Pun;
 
-using static ROCK;
+using static OmokPiece;
 using static UnityEngine.Rendering.DebugUI.Table;
 using TMPro;
 
@@ -27,20 +27,20 @@ namespace MJ
 
         static Vector3 PIVOT = new Vector3(-GRID_SIZE * ROCK_ROW / 2, -GRID_SIZE * ROCK_COLUMN / 2, 0.0f);
 
-        private ROCK[,] rockDatas = new ROCK[ROCK_ROW, ROCK_COLUMN];
+        private OmokPiece[,] rockDatas = new OmokPiece[ROCK_ROW, ROCK_COLUMN];
 
         private GameObject rockPrefabObject;
 
-        private ROCK.ROCKCOLOR rockColor = ROCKCOLOR.WHITE;
+        private OmokPiece.ROCKCOLOR rockColor = ROCKCOLOR.WHITE;
 
-        private OmocCheck omocCheck;
+        private OmokBoardChecker omocCheck;
 
         private PhotonView pv;
         // Start is called before the first frame update
         void Start()
         {
             pv = GetComponent<PhotonView>();
-            omocCheck = GetComponent<OmocCheck>();
+            omocCheck = GetComponent<OmokBoardChecker>();
             InitRocks();
         }
 
@@ -116,7 +116,7 @@ namespace MJ
                     GameObject rockObject = Instantiate<GameObject>(rockPrefabObject, transform);
                     rockObject.transform.localPosition = new Vector3(j * GRID_SIZE + PIVOT.x + GRID_SIZE * 0.5f, i * GRID_SIZE + PIVOT.y + GRID_SIZE * 0.5f, 0.0f);
 
-                    rockDatas[i, j] = rockObject.GetComponent<ROCK>();
+                    rockDatas[i, j] = rockObject.GetComponent<OmokPiece>();
 
                 }
             }
