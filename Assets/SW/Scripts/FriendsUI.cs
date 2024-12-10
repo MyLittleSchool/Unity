@@ -505,6 +505,7 @@ namespace SW
                     comp.NickNameText.text = friend.name;
                     friendDic[comp.id] = comp;
                     SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
+                    // 규현 확인 
                     comp.ProfileImage.AvatarGet(list.friends[i].requester.id);
 
 
