@@ -57,7 +57,7 @@ namespace MJ
         }
         public void SendInputRock(int row, int col, int rockColor)
         {
-            pv.RPC("InputRock", RpcTarget.AllBuffered, row, col, rockColor);
+            pv.RPC("InputRock", RpcTarget.All, row, col, rockColor);
         }
 
         public void SendOmocWin(int row, int col)

@@ -13,10 +13,4 @@ public class ButtonObject : MonoBehaviour
         if(button)
             button.onClick.AddListener(() => SoundManager.instance.ButtonMainEftSound(SoundManager.EButtonEftType.BUTTON_CLICK));
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
