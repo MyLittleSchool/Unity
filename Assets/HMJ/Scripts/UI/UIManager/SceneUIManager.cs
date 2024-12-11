@@ -1,5 +1,6 @@
 using GH;
 using Photon.Pun;
+using Photon.Voice.Unity.Demos;
 using SW;
 using System;
 using System.Collections;
@@ -350,7 +351,9 @@ namespace MJ
             InitOtherPlayerPanel();
             initDecorationPanel();
             ProfileSet();
-
+            inventoryRT = mapInventoryPanel.GetComponent<RectTransform>();
+            inventoryDataRT = mapInventoryPanel.transform.GetChild(0).GetComponent<RectTransform>();
+            mainPanelLayoutGroup = inventoryRT.parent.GetComponent<VerticalLayoutGroup>();
         }
         private void Update()
         {
@@ -449,10 +452,35 @@ namespace MJ
         {
             yield return new WaitUntil(() => mapInventoryPanel != null);
         }
-
+        // 인벤토리 애니메이션
+        public RectTransform inventoryRT;
+        public RectTransform inventoryDataRT;
+        public VerticalLayoutGroup mainPanelLayoutGroup;
+        public void SetInventoryPanel(bool value)
+        {
+            mapInventoryPanel.SetActive(value);
+            if (!value) mainPanelLayoutGroup.spacing = 0;
+        }
+        public void MoveInventoryPanel(float newValue)
+        {
+            //inventoryRT.SetHeight(newValue);
+            inventoryDataRT.anchoredPosition = new Vector2(inventoryDataRT.anchoredPosition.x, (newValue - 775) * 1.6f);
+            mainPanelLayoutGroup.spacing = -200 -200 + 200 * newValue/ 775;
+        }
         public void OnMapInventoryPanel()
         {
-            mapInventoryPanel.SetActive(true);
+            //asdfasdf
+            iTween.Stop(mapInventoryPanel);
+            iTween.ValueTo(mapInventoryPanel, iTween.Hash(
+                "from", 0,
+                "to", 775,
+                "time", 0.6f,
+                "easetype", iTween.EaseType.easeOutCubic,
+                "onupdate", nameof(MoveInventoryPanel),
+                "onupdatetarget", gameObject
+            ));
+            SetInventoryPanel(true);
+            //mapInventoryPanel.SetActive(true);
             InventoryCloseButton.gameObject.SetActive(true);
             InventoryButton.gameObject.SetActive(false);
             ChatPanel.gameObject.SetActive(false);
@@ -460,6 +488,31 @@ namespace MJ
             if (DataManager.instance.player != null)
             {
                 DataManager.instance.player.GetComponent<SetTile>().setMode = true;
+            }
+        }
+        public void CloseMapInventoryPanel()
+        {
+            //asdfasdf
+            iTween.Stop(mapInventoryPanel);
+            iTween.ValueTo(mapInventoryPanel, iTween.Hash(
+                "from", 775,
+                "to", 0,
+                "time", 0.6f,
+                "easetype", iTween.EaseType.easeInCubic,
+                "onupdate", nameof(MoveInventoryPanel),
+                "onupdatetarget", gameObject,
+                "oncomplete", nameof(SetInventoryPanel),
+                "oncompletetarget", gameObject,
+                "oncompleteparams", false
+            ));
+            //mapInventoryPanel.SetActive(false);
+            InventoryCloseButton.gameObject.SetActive(false);
+            InventoryButton.gameObject.SetActive(true);
+            ChatPanel.gameObject.SetActive(true);
+            if (DataManager.instance.player != null)
+            {
+                DataManager.instance.player.GetComponent<SetTile>().setMode = false;
+                QuestManager.instance.QuestPatch(4);
             }
         }
 
@@ -486,22 +539,11 @@ namespace MJ
             mapContestButton.gameObject.SetActive(true);
         }
 
-        public void CloseMapInventoryPanel()
-        {
-            mapInventoryPanel.SetActive(false);
-            InventoryCloseButton.gameObject.SetActive(false);
-            InventoryButton.gameObject.SetActive(true);
-            ChatPanel.gameObject.SetActive(true);
-            if (DataManager.instance.player != null)
-            {
-                DataManager.instance.player.GetComponent<SetTile>().setMode = false;
-                QuestManager.instance.QuestPatch(4);
-            }
-        }
 
         public void OnInventoryUI()
         {
             mapInventoryPanel.SetActive(false);
+            CloseMapInventoryPanel();
             InventoryCloseButton.gameObject.SetActive(false);
             InventoryButton.gameObject.SetActive(true);
         }
@@ -509,6 +551,7 @@ namespace MJ
         public void OffInventoryUI()
         {
             mapInventoryPanel.SetActive(false);
+            CloseMapInventoryPanel();
             InventoryCloseButton.gameObject.SetActive(false);
             InventoryButton.gameObject.SetActive(false);
             ChatPanel.gameObject.SetActive(true);
@@ -542,6 +585,7 @@ namespace MJ
         {
             if (menuPanel.activeSelf)
             {
+                //asdfasdf
                 iTween.Stop(menuPanel);
                 MoveMenuPanel(267);
                 iTween.ValueTo(menuPanel, iTween.Hash(
@@ -601,16 +645,30 @@ namespace MJ
             if (mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel.SetActive(false);
         }
-
+        bool isProfileOn = true;
         public void OnOffMyProfile()
         {
             //버튼으로 키고 끄기
-            myProfilePanel.SetActive(!myProfilePanel.activeSelf);
-
+            isProfileOn = !isProfileOn;
+            myProfilePanel.SetActive(true);
+            iTween.Stop(myProfilePanel);
+            iTween.ValueTo(myProfilePanel, iTween.Hash(
+                "from", isProfileOn ? 0 : -700,
+                "to", isProfileOn ? -700 : 0,
+                "time", 0.6f,
+                "easetype", isProfileOn ? iTween.EaseType.easeInCubic : iTween.EaseType.easeOutCubic,
+                "onupdate", nameof(MoveProfilePanel),
+                "onupdatetarget", gameObject
+                ));
             Image myProfileImage = myProfileButton.transform.GetChild(0).GetComponent<Image>();
             Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(202, 202, 202, 255);
             myProfileImage.color = myprofileColor;
 
+        }
+        public void MoveProfilePanel(float value)
+        {
+            RectTransform rt = myProfilePanel.GetComponent<RectTransform>();
+            rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, value);
         }
         //우측상단 이미지 새로 고침
         public void ProfileSet()
