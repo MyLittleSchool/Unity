@@ -506,7 +506,7 @@ namespace SW
                     friendDic[comp.id] = comp;
                     SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                     // 규현 확인 
-                    comp.ProfileImage.AvatarGet(list.friends[i].requester.id);
+                    comp.ProfileImage.AvatarGet(friend.id);
 
 
                 }
