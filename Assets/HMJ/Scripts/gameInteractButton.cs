@@ -33,7 +33,6 @@ public class gameInteractButton : MonoBehaviour
 
     IEnumerator interactButtonDown()
     {
-        Debug.Log("Button Pressed");
         bButton = true;
         yield return null;
         bButton = false;
@@ -58,7 +57,7 @@ public class gameInteractButton : MonoBehaviour
         Vector2[] OmocPosition = { new Vector2(-19.3f, -22.7f), new Vector2(-7.6f, -22.6f) };
         foreach (Vector2 pos in OmocPosition)
         {
-            if (Vector2.Distance(DataManager.instance.player.transform.position, pos) <= 8.0f)
+            if (Vector2.Distance(DataManager.instance.player.transform.position, pos) <= 9.0f)
                 return true;
         }
         return false;

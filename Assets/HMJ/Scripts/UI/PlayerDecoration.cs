@@ -118,7 +118,7 @@ namespace MJ
                 for (int j = 0; j < sprites.Length; j++) // 특정 아이템 이미지 데이터 가져오기
                 {
                     loadDecorationImage[i, j] = sprites[j].texture;
-                    Debug.Log("Loaded Sprite: " + ImagePath + DecorationData[i] + "/" + sprites[j].name);
+                    // Debug.Log("Loaded Sprite: " + ImagePath + DecorationData[i] + "/" + sprites[j].name);
                 }
             }
         }

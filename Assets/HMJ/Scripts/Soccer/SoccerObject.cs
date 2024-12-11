@@ -12,6 +12,9 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
     private Rigidbody2D rigidbody;
     private float forceMagnitude = 5.0f;
 
+    // 축구 결과창
+    public GameObject UIPanel;
+
     private void Awake()
     {
         rigidbody = GetComponentInChildren<Rigidbody2D>();
@@ -59,9 +62,13 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
         }
 
         // 특정 레이어와 충돌 - 네트 및 외부 콜리전
-        for(int i = 0; i < layer.Length; i++)
+        for (int i = 0; i < layer.Length; i++)
             if (collision.gameObject.layer == layer[i])
-                StartCoroutine(ResetSoccerPosition(2.0f));
+            {
+                if (collision.gameObject.layer == LayerMask.NameToLayer("NetCollision"))
+                    SendSoccerWin();
+                StartCoroutine(ResetSoccerPosition(0.3f));
+            }
     }
 
     private IEnumerator ResetSoccerPosition(float delayTime)
@@ -72,6 +79,19 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
         rigidbody.velocity = Vector2.zero;
         rigidbody.angularVelocity = 0.0f;
         yield return null;
+    }
+
+    public void SendSoccerWin()
+    {
+        pv.RPC("SoccerWinPlayUI", RpcTarget.All, DataManager.instance.playerName);
+    }
+
+    [PunRPC]
+    public void SoccerWinPlayUI(string playerName)
+    {
+        FadeOutUI fadeOutUI = UIPanel.GetComponentInChildren<FadeOutUI>();
+        fadeOutUI.GetComponentInChildren<TMP_Text>().text = playerName + " 축구 성공!";
+        UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
     }
 }
 /*

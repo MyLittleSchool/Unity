@@ -98,8 +98,6 @@ public class BounceObject : MonoBehaviour, IPunObservable
     {
         Vector3 transformPosition = DataManager.instance.player.transform.position;
         transform.position = new Vector3(transformPosition.x, transformPosition.y + bounceY + 0.5f, 0.0f);
-
-        Debug.Log("bounceY: " + bounceY);
     }
 
     public bool GetBounceBall()

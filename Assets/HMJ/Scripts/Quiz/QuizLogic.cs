@@ -105,7 +105,6 @@ public class QuizLogic : MonoBehaviour
     {
         if (m_eCurQuizOrder == m_eNextQuizOrder)
             return;
-        Debug.Log("상태 변환: " + m_eCurQuizOrder.ToString());
         switch (m_eNextQuizOrder)
         {
             case QuizState.QuizReadyState:
@@ -160,7 +159,6 @@ public class QuizLogic : MonoBehaviour
     public void QuizClearCheck()
     {
         GameObject player = DataManager.instance.player;
-        Debug.Log("플레이어 x:" + player.transform.position.x);
         if (((player.transform.position.x > 0) && !quizList[(int)curQuizCategory].quizDatas[idx].quizBoolean) || ((player.transform.position.x < 0) && quizList[(int)curQuizCategory].quizDatas[idx].quizBoolean))// x
         {
             quizClear = true;
