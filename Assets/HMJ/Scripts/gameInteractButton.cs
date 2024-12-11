@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class gameInteractButton : MonoBehaviour
 {
@@ -54,12 +55,22 @@ public class gameInteractButton : MonoBehaviour
         if (!DataManager.instance.player || PhotonNetMgr.instance.roomName != "∏∏≥≤¿« ±§¿Â")
             return false;
 
+
         Vector2[] OmocPosition = { new Vector2(-19.3f, -22.7f), new Vector2(-7.6f, -22.6f) };
+        Vector2[] colorPosition = { new Vector2(-4.4f - 13.5f, 5f -21.22f), new Vector2(-2.2f - 13.5f, 5 - 21.22f), new Vector2(0f - 13.5f, 5 - 21.22f), new Vector2(2.2f - 13.5f, 5 - 21.22f), new Vector2(4.4f - 13.5f, 5 - 21.22f) };
+
         foreach (Vector2 pos in OmocPosition)
         {
-            if (Vector2.Distance(DataManager.instance.player.transform.position, pos) <= 9.0f)
+            if (Vector2.Distance(DataManager.instance.player.transform.position, pos) <= 6.0f)
                 return true;
         }
+
+        foreach (Vector2 pos in colorPosition)
+        {
+            if (Vector2.Distance(DataManager.instance.player.transform.position, pos) <= 1.0f)
+                return true;
+        }
+
         return false;
     }
 
