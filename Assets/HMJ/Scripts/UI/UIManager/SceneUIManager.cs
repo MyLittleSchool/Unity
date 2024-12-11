@@ -160,6 +160,10 @@ namespace MJ
 
         [Header("학교 방문 패널")]
         public GameObject visitOtherSchoolPanel;
+        
+        [Header("학교 방문 패널")]
+        public GameObject visitNearSchoolPanel;
+
 
         [Header("프라이빗 룸 패널")]
         public GameObject privateRoomPanel;
@@ -719,6 +723,10 @@ namespace MJ
         public void OnVisitOtherSchoolPanel()
         {
             visitOtherSchoolPanel.SetActive(true);
+        } 
+        public void OnVisitNearSchoolPanel()
+        {
+            visitNearSchoolPanel.SetActive(true);
         }
 
         public void OnVoicePanel()
