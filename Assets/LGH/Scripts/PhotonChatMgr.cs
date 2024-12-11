@@ -333,21 +333,35 @@ namespace GH
         public void ChatLogActive()
         {
             RectTransform chatRectTransform = chatLogView.GetComponent<RectTransform>();
-            float chatHeight = 0;
+            //float chatHeight = 0;
             // 챗로그창이 꺼져있으면 키고 껴져있으면 킨다.
             chatLogOn = chatLogOn ? false : true;
 
             //챗 로그의 높이로 챗 로그를 활성화 * 엑티브를 끄면 스크립트를 못가져와서 에러가 난다.
-            chatHeight = chatLogOn ? 1000 : 0;
+            //chatHeight = chatLogOn ? 1000 : 0;
+            iTween.Stop(chatLogView);
+            iTween.ValueTo(chatLogView, iTween.Hash(
+                "from", chatLogOn ? 0 : 1000,
+                "to", chatLogOn ? 1000 : 0,
+                "time", 0.6f,
+                "easetype", chatLogOn ? iTween.EaseType.easeOutCubic : iTween.EaseType.easeInCubic,
+                "onupdate", nameof(ChangeChatHeight),
+                "onupdatetarget", gameObject
+                ));
             //chatLogView.GetComponentAtIndex<Image>(0).raycastTarget = chatLogOn ? true : false;
             chatRectTransform.GetChild(0).GetComponent<Image>().raycastTarget = chatLogOn ? true : false;
-            chatRectTransform.sizeDelta = new Vector2(chatRectTransform.sizeDelta.x, chatHeight);
+            //chatRectTransform.sizeDelta = new Vector2(chatRectTransform.sizeDelta.x, chatHeight);
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentRectTransform);
             LayoutRebuilder.ForceRebuildLayoutImmediate(chatMainPanelRecttransform);
             LayoutRebuilder.ForceRebuildLayoutImmediate(chatPanelRecttransform);
 
 
 
+        }
+        public void ChangeChatHeight(float value)
+        {
+            RectTransform chatRectTransform = chatLogView.GetComponent<RectTransform>();
+            chatRectTransform.sizeDelta = new Vector2(chatRectTransform.sizeDelta.x, value);
         }
 
         public void ChatLogSeverPost(string s)
