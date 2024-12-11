@@ -32,7 +32,7 @@ public class OmokColorSelector : MonoBehaviour
     {
         KeyInputCheck();
 
-        Debug.Log("bCollision: " + bCollision);
+       // Debug.Log("bCollision: " + bCollision);
     }
 
     public void InitColor()
