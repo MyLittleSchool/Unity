@@ -59,7 +59,7 @@ namespace MJ
         public void IntoMapcontestRoom()
         {
             MapContestLoader.GetInstance().loadfurnitureList = mapContestData.furnitureList;
-            SceneMgr.instance.MapContestMapIn(DataManager.instance.playerName + "ÀÇ " + mapContestData.title);
+            SceneMgr.instance.MapContestMapIn(mapContestData.title);
             SceneUIManager.GetInstance().CloseMapContestPanel();
         }
 
