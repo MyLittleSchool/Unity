@@ -44,6 +44,7 @@ public class SceneMgr : MonoBehaviour
         SoundManager.instance.StopBgmSound();
         SoundManager.instance.PlayBgmSound(DataManager.MapType.MyClassroom);
 
+        StartCoroutine(SpawnPlayer());
     }
     public void ClassIn(string roomName = null, int mapId = -1)
     {
@@ -136,5 +137,13 @@ public class SceneMgr : MonoBehaviour
         PhotonNetwork.LeaveRoom();
         PhotonNetMgr.instance.sceneNum = 6;
         SceneUIManager.GetInstance().OffInventoryUI();
+    }
+
+    IEnumerator SpawnPlayer()
+    {
+        //GameManager-instance 생성 완료될 때까지 기다린다.
+        yield return new WaitUntil(() => { return GameManager.instance; });
+
+        GameManager.instance.CoSpwamPlayer();
     }
 }

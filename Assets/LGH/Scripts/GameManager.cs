@@ -57,7 +57,6 @@ namespace GH
             emojiRT = emojiButtonPannel.GetComponent<RectTransform>();
             stingRT = stingButton.GetComponent<RectTransform>();
             interracBut.SetActive(false);
-            CoSpwamPlayer();
             // OnPhotonSerializeView 에서 데이터 전송 빈도 수 설정하기(per seconds)
             PhotonNetwork.SerializationRate = 60;
             // 대부분 데이터 전송 빈도 수 설정하기
@@ -79,7 +78,6 @@ namespace GH
         {
             //룸에 입장이 완료될 때까지 기다린다.
             yield return new WaitUntil(() => { return PhotonNetwork.InRoom; });
-
             Vector3 initPosition = GameObject.Find("SpwanPosition").transform.position;
 
             GameObject spwanPlayer = PhotonNetwork.Instantiate("Player", initPosition, Quaternion.identity);

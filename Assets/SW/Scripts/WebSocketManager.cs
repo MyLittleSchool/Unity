@@ -67,6 +67,27 @@ namespace SW
                 Debug.LogError("WebSocket 연결 중 오류 발생: " + ex.Message);
             }
         }
+
+        public void LogOut()
+        {
+            try
+            {
+                if (friendWebSocket != null)
+                {
+                    if (friendWebSocket.IsAlive)
+                    {
+                        friendWebSocket.Close(); // WebSocket 연결 종료
+                        Debug.Log("서버와의 연결이 종료되었습니다.");
+                    }
+                    friendWebSocket = null; // 리소스 정리
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("WebSocket 연결 종료 중 오류 발생: " + ex.Message);
+            }
+        }
+
         private Queue<string> receiveQueue = new Queue<string>();
         private void Receive(object sender, MessageEventArgs e)
         {

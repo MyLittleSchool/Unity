@@ -84,6 +84,18 @@ namespace SW
             StartCoroutine(getAccessToken());
         }
 
+        // 계정 삭제 클릭 시 실행되는 함수
+        public void OnDeleteAccountClick()
+        {
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user?userId=" + userAuthData.userInfo.id;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                Debug.Log(userAuthData.userInfo.name + "의 계정 삭제 성공");
+            };
+            StartCoroutine(HttpManager.GetInstance().Delete(info));
+        }
+
         // Spring 서버로 Authorization Code를 보내는 함수
         public IEnumerator getAccessToken()
         {

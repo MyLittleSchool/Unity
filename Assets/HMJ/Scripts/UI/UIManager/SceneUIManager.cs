@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static HttpManager;
 
@@ -93,9 +94,27 @@ namespace MJ
         [Header("샵 닫기 버튼")]
         public Button shopCloseButton;
 
+        [Header("설정 버튼")]
+        public Button settingButton;
+        public Button settingCloseButton;
+
+        [Header("탈퇴 버튼")]
+        public Button deleteAccountPanelButton;
+        public Button deleteAccountButton;
+        public Button deleteCancleButton;
+
+        [Header("로그아웃 버튼")]
+        public Button logOutButton;
         #endregion
 
         #region Panel
+
+        [Header("설정 패널")]
+        public GameObject settingPanel;
+
+        [Header("탈퇴 패널")]
+        public GameObject deleteAccountPanel;
+
         [Header("꾸미기 패널")]
         public GameObject DecorationPanel;
 
@@ -332,11 +351,40 @@ namespace MJ
 
             if (shopCloseButton)
                 shopCloseButton.onClick.AddListener(OffShopPanel);
-            //if (commonButton)
-            //    commonButton.onClick.AddListener(OnInventoryCommon);
 
-            //if (myClassRoomButton)
-            //    myClassRoomButton.onClick.AddListener(OnInventoryMyClassRoom);
+            if (settingButton)
+                settingButton.onClick.AddListener(OnSettingPanel);
+
+            if (settingCloseButton)
+                settingCloseButton.onClick.AddListener(OffSettingPanel);
+
+            if (deleteAccountPanelButton)
+                deleteAccountPanelButton.onClick.AddListener(OndeleteAccountPanel);
+
+            if (deleteAccountButton)
+            {
+                deleteAccountButton.onClick.AddListener(OffdeleteAccountPanel);
+                deleteAccountButton.onClick.AddListener(OffSettingPanel);
+                deleteAccountButton.onClick.AddListener(OnMenuButtonClick);
+                deleteAccountButton.onClick.AddListener(DeleteAccount);
+
+            }
+
+
+            if (deleteCancleButton)
+            {
+                deleteCancleButton.onClick.AddListener(OffdeleteAccountPanel);
+                deleteCancleButton.onClick.AddListener(OffSettingPanel);
+                deleteCancleButton.onClick.AddListener(OnMenuButtonClick);
+            }
+
+            if (logOutButton)
+            {
+                logOutButton.onClick.AddListener(OffdeleteAccountPanel);
+                logOutButton.onClick.AddListener(OffSettingPanel);
+                logOutButton.onClick.AddListener(OnMenuButtonClick);
+                logOutButton.onClick.AddListener(LogOutAccount);
+            }
 
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {
@@ -696,7 +744,6 @@ namespace MJ
             ProfileSet();
         }
 
-
         public void OffMapInventoryErrorPanel()
         {
             mapInventoryErrorPanel.SetActive(false);
@@ -862,6 +909,39 @@ namespace MJ
 
         }
 
+        public void OnSettingPanel()
+        {
+            settingPanel.SetActive(true);
+        }
+
+        public void OffSettingPanel()
+        {
+            settingPanel.SetActive(false);
+        }
+
+        public void OndeleteAccountPanel()
+        {
+            deleteAccountPanel.SetActive(true);
+        }
+
+        public void OffdeleteAccountPanel()
+        {
+            deleteAccountPanel.SetActive(false);
+        }
+
+        public void DeleteAccount()
+        {
+            deleteAccountPanel.SetActive(false);
+            AuthManager.GetInstance().OnDeleteAccountClick();
+            SceneManager.LoadScene(0);
+        }
+
+        public void LogOutAccount()
+        {
+            WebSocketManager.GetInstance().LogOut();
+            SceneManager.LoadScene(0);
+        }
+
         //프로필 편집 초기값
         private void ProfileFirstSet()
         {
@@ -929,7 +1009,7 @@ namespace MJ
             profileMyMessage.text = userInfo.statusMesasge;
         }
 
-        //첫 로그인 핵생 선택 버튼
+        //첫 로그인 학생 선택 버튼
         private void ClickStudent()
         {
             firstLoginPanel.SetActive(false);
@@ -940,6 +1020,7 @@ namespace MJ
             firstLoginPanel.SetActive(false);
 
         }
+
         private void SchoolSave()
         {
             HttpInfo info = new HttpInfo();
