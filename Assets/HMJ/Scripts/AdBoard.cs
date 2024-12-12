@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class AdBoard : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    public string url;
     // Update is called once per frame
     void Update()
     {
@@ -35,6 +30,6 @@ public class AdBoard : MonoBehaviour
     }
     public void PrivateButton()
     {
-        Application.OpenURL("https://geukggom.tistory.com/150");
+        Application.OpenURL(url);
     }
 }
