@@ -98,6 +98,9 @@ namespace GH
         [Header("7. 남녀성별")]
         public bool gender;
 
+        [Header("8. 이메일 중복")]
+        public bool isEmailDuplicate;
+
         [Header("통신 인풋필드 리스트")]
         // 0 - 이름, 1 - 이메일, 2 - PassWord, 3 - 생년월일
         public List<TMP_InputField> joinInfoInfoList;
@@ -121,6 +124,8 @@ namespace GH
 
         private void Start()
         {
+
+            isEmailDuplicate = false;
 
             // 초기 패널 엑티브 적용
             for (int i = 0; i < logins.Count; i++)
@@ -193,6 +198,8 @@ namespace GH
                     break;
 
                 case Loginstep.EMAIL:
+                    if (isEmailDuplicate)
+                        return;
                     currentJoinInfo.email = joinInfoInfoList[1].text;
                     break;
 
@@ -243,7 +250,16 @@ namespace GH
         public void CheckID()
         {
             //통신***** 아이디 중복 확인
-            checkIDText.gameObject.SetActive(true);
+            IsEmailDuplicate((isDuplicate) =>
+            {
+                checkIDText.gameObject.SetActive(true);
+                isEmailDuplicate = isDuplicate;
+                if (isDuplicate)
+                    checkIDText.text = "가입 불가능한 이메일 입니다.";
+                else
+                    checkIDText.text = "가입 가능한 이메일 입니다.";
+            });
+
         }
 
         public void PWCheck()
@@ -407,5 +423,20 @@ namespace GH
             gender = false;
         }
 
+
+        public void IsEmailDuplicate(System.Action<bool> callback)
+        {
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/is-exist/" + joinInfoInfoList[1].text;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                Debug.Log("info.url: " + info.url);
+                Debug.Log("res bool: " + res.text);
+
+                bool isDuplicate = res.text == "true";
+                callback(isDuplicate);
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+        }
     }
 }
