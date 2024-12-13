@@ -11,6 +11,7 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
     private PhotonView pv;
     private Rigidbody2D rigidbody;
     private float forceMagnitude = 5.0f;
+    string kickPlayer;
 
     // 축구 결과창
     public GameObject UIPanel;
@@ -43,11 +44,12 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
     }
 
     [PunRPC]
-    public void ResetBall(Vector3 vec3Position)
+    public void ResetBall(Vector3 vec3Position, string _kickPlayer)
     {
         transform.position = vec3Position;
         rigidbody.velocity = Vector2.zero;
         rigidbody.angularVelocity = 0.0f;
+        kickPlayer = _kickPlayer;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -57,7 +59,7 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
         // 플레이어와 충돌
         if (collision.gameObject.name.Contains("Player") && (collision.gameObject.GetComponent<PhotonView>().IsMine))
         {
-            pv.RPC("ResetBall", RpcTarget.All, transform.position);
+            pv.RPC("ResetBall", RpcTarget.All, transform.position, DataManager.instance.playerName);
             KickBall();
         }
 
@@ -83,14 +85,14 @@ public class SoccerObject : MonoBehaviour/*, IPunObservable*/
 
     public void SendSoccerWin()
     {
-        pv.RPC("SoccerWinPlayUI", RpcTarget.All, DataManager.instance.playerName);
+        pv.RPC("SoccerWinPlayUI", RpcTarget.All);
     }
 
     [PunRPC]
-    public void SoccerWinPlayUI(string playerName)
+    public void SoccerWinPlayUI()
     {
         FadeOutUI fadeOutUI = UIPanel.GetComponentInChildren<FadeOutUI>();
-        fadeOutUI.GetComponentInChildren<TMP_Text>().text = playerName + " 축구 성공!";
+        fadeOutUI.GetComponentInChildren<TMP_Text>().text = kickPlayer + " 축구 성공!";
         UIPanel.GetComponentInChildren<FadeOutUI>().FadeInOut(0.0f, 3.0f);
     }
 }
