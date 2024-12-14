@@ -269,6 +269,9 @@ public class InventorySystem : MonoBehaviour
             return;
         for (int i = 0; i < loadItemData[(int)_itemType].response.Count(); i++)
         {
+            if (childPanel[i] == null)
+                continue;
+                Debug.Log("현재 i번째 null: " + i);
             childPanel[i].SetActive(true);
             GameObject itemPrefab = LoadItemData(_itemType, loadItemData[(int)_itemType].response[i].itemName);
             itemComponents[i].SetData(loadItemData[(int)_itemType].response[i].itemName, loadItemData[(int)_itemType].response[i].price, loadItemData[(int)_itemType].response[i].itemType.ToString(), loadItemData[(int)_itemType].response[i].count, itemPrefab);
@@ -285,7 +288,10 @@ public class InventorySystem : MonoBehaviour
     public void ResetItemComponents()
     {
         for (int i = 0; i < childPanel.Count(); i++)
-            childPanel[i].SetActive(false);
+        {
+            if (childPanel[i])
+                childPanel[i].SetActive(false);
+        }
     }
     public GameObject LoadItemData(ItemType _itemType, string _itemName)
     {
