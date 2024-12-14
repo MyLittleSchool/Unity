@@ -649,26 +649,52 @@ namespace MJ
             if (mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel.SetActive(false);
         }
-        bool isProfileOn = true;
+        bool isProfileOff = true;
+        TMP_Text emotionText;
         public void OnOffMyProfile()
         {
             //버튼으로 키고 끄기
-            isProfileOn = !isProfileOn;
+            isProfileOff = !isProfileOff;
             myProfilePanel.SetActive(true);
             iTween.Stop(myProfilePanel);
             iTween.ValueTo(myProfilePanel, iTween.Hash(
-                "from", isProfileOn ? 0 : -700,
-                "to", isProfileOn ? -700 : 0,
+                "from", isProfileOff ? 0 : -700,
+                "to", isProfileOff ? -700 : 0,
                 "time", 0.6f,
-                "easetype", isProfileOn ? iTween.EaseType.easeInCubic : iTween.EaseType.easeOutCubic,
+                "easetype", isProfileOff ? iTween.EaseType.easeInCubic : iTween.EaseType.easeOutCubic,
                 "onupdate", nameof(MoveProfilePanel),
                 "onupdatetarget", gameObject
                 ));
             Image myProfileImage = myProfileButton.transform.GetChild(0).GetComponent<Image>();
             Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(202, 202, 202, 255);
             myProfileImage.color = myprofileColor;
-
+            if (!isProfileOff)
+            {
+                HttpInfo info = new HttpInfo();
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/emotion-analysis/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+                info.onComplete = (DownloadHandler res) =>
+                {
+                    EmotionInfo data = JsonUtility.FromJson<EmotionInfo>(res.text);
+                    if (data.emotion == "" || data.emotion == "없음")
+                    {
+                        emotionText.text = "기쁨";
+                    }
+                    else
+                    {
+                        emotionText.text = data.emotion;
+                    }
+                };
+                StartCoroutine(HttpManager.GetInstance().Get(info));
+            }
         }
+        [Serializable]
+        private struct EmotionInfo
+        {
+            public string message;
+            public string emotion;
+            public int score;
+        }
+
         public void MoveProfilePanel(float value)
         {
             RectTransform rt = myProfilePanel.GetComponent<RectTransform>();
@@ -927,6 +953,7 @@ namespace MJ
 
             //메시지
             profileMyMessage.text = userInfo.statusMesasge;
+            emotionText = myProfilePanel.transform.GetChild(0).Find("Emotion_Text").GetComponent<TMP_Text>();
         }
 
         //첫 로그인 핵생 선택 버튼
@@ -1076,6 +1103,21 @@ namespace MJ
                     comp.NickNameText.text = userInfo.name;
                     comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
                     comp.MessageText.text = userInfo.statusMesasge;
+                    HttpInfo info = new HttpInfo();
+                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/emotion-analysis/" + userInfo.id;
+                    info.onComplete = (DownloadHandler res) =>
+                    {
+                        EmotionInfo data = JsonUtility.FromJson<EmotionInfo>(res.text);
+                        if (data.emotion == "" || data.emotion == "없음")
+                        {
+                            comp.StateText.text = "기쁨";
+                        }
+                        else
+                        {
+                            comp.StateText.text = data.emotion;
+                        }
+                    };
+                    StartCoroutine(HttpManager.GetInstance().Get(info));
                 }
             }
             else othersProfilePanel.SetActive(false);

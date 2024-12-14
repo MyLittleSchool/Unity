@@ -141,6 +141,7 @@ namespace SW
             SaveInfo saveInfo = new SaveInfo();
             saveInfo.title = titleText.text;
             saveInfo.schoolId = DataManager.instance.mapId;
+            saveInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
             // Ελ½Ε
             HttpManager httpManager = HttpManager.GetInstance();
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
@@ -170,6 +171,7 @@ namespace SW
             public string imgUrl;
             public string title;
             public int schoolId;
+            public int userId;
         }
         public void LoadData()
         {
