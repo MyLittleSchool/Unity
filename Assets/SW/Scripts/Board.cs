@@ -65,6 +65,7 @@ public class Board : MonoBehaviour
         BoardPostInfo boardPostInfo = new BoardPostInfo();
         boardPostInfo.title = titleInputField.text;
         boardPostInfo.content = contentInputField.text;
+        boardPostInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
         info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board";
         info.body = JsonUtility.ToJson(boardPostInfo);
@@ -84,6 +85,7 @@ public class Board : MonoBehaviour
     {
         public string title;
         public string content;
+        public int userId;
     }
 
     public void SetContentPanel()
