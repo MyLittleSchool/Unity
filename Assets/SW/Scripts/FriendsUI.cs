@@ -540,7 +540,7 @@ namespace SW
                     comp.GradeText.text = requester.grade + "ÇÐ³â";
                     comp.locationText.text = requester.school.location + " " + requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
-                    comp.ProfileImage.AvatarGet(list.requests[i].id);
+                    comp.ProfileImage.AvatarGet(requester.id);
                     comp.MessageText.text = list.requests[i].message;
                     if (requester.isOnline)
                     {
