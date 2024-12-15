@@ -150,7 +150,10 @@ namespace SW
             info.body = path;
             info.onComplete = (DownloadHandler res) =>
             {
-                saveInfo.imgUrl = res.text;
+                print("사진등록");
+                ImageInfo imageInfo = JsonUtility.FromJson<ImageInfo>(res.text);
+                saveInfo.publicId = imageInfo.publicId;
+                saveInfo.imgUrl = imageInfo.url;
                 HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
                 info2.url = httpManager.SERVER_ADRESS + "/gallery";
                 info2.contentType = "application/json";
@@ -166,8 +169,16 @@ namespace SW
             SetCreatePanel(false);
         }
         [Serializable]
+        private struct ImageInfo
+        {
+            public string url;
+            public string publicId;
+        }
+
+        [Serializable]
         private struct SaveInfo
         {
+            public string publicId;
             public string imgUrl;
             public string title;
             public int schoolId;
