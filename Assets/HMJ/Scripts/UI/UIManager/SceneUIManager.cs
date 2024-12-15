@@ -160,7 +160,7 @@ namespace MJ
 
         [Header("학교 방문 패널")]
         public GameObject visitOtherSchoolPanel;
-        
+
         [Header("학교 방문 패널")]
         public GameObject visitNearSchoolPanel;
 
@@ -271,7 +271,6 @@ namespace MJ
 
         [Header("프로필 편집 인풋필드 리스트")]
         public List<TMP_InputField> profileInputField;
-
 
         #endregion
 
@@ -469,7 +468,7 @@ namespace MJ
         {
             //inventoryRT.SetHeight(newValue);
             inventoryDataRT.anchoredPosition = new Vector2(inventoryDataRT.anchoredPosition.x, (newValue - 775) * 1.6f);
-            mainPanelLayoutGroup.spacing = -200 -200 + 200 * newValue/ 775;
+            mainPanelLayoutGroup.spacing = -200 - 200 + 200 * newValue / 775;
         }
         public void OnMapInventoryPanel()
         {
@@ -515,8 +514,11 @@ namespace MJ
             ChatPanel.gameObject.SetActive(true);
             if (DataManager.instance.player != null)
             {
+                if (DataManager.instance.player.GetComponent<SetTile>().setMode)
+                {
+                    QuestManager.instance.QuestPatch(4);
+                }
                 DataManager.instance.player.GetComponent<SetTile>().setMode = false;
-                QuestManager.instance.QuestPatch(4);
             }
         }
 
@@ -749,7 +751,7 @@ namespace MJ
         public void OnVisitOtherSchoolPanel()
         {
             visitOtherSchoolPanel.SetActive(true);
-        } 
+        }
         public void OnVisitNearSchoolPanel()
         {
             visitNearSchoolPanel.SetActive(true);
