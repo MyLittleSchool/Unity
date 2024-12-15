@@ -156,7 +156,7 @@ public class Board : MonoBehaviour
     public void LoadBoardData()
     {
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board/list/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board/all-list/" + AuthManager.GetInstance().userAuthData.userInfo.id;
         info.onComplete = (DownloadHandler res) =>
         {
             // Á¦°Å
