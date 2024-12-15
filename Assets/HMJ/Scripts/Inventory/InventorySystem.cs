@@ -160,6 +160,7 @@ public class InventorySystem : MonoBehaviour
         ItemData itemData = loadItemData[(int)_itemType].response.Find(x => _itemName == x.itemName);
         itemData.count += _Count;
 
+        Debug.Log("Patch - 아이템 이름: " + itemData.itemName + " 인덱스: " + itemData.itemIdx + " 아이템 타입: " + itemData.itemType + " 인벤토리 id: " + itemData.inventoryId);
         //UpdateItemData(itemData.itemType, _itemName, _Count);
 
         if (null == itemData)
