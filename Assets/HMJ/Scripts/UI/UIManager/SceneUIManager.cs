@@ -668,7 +668,7 @@ namespace MJ
                 "onupdatetarget", gameObject
                 ));
             Image myProfileImage = myProfileButton.transform.GetChild(0).GetComponent<Image>();
-            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(202, 202, 202, 255);
+            Color32 myprofileColor = !isProfileOff ? new Color32(242, 136, 75, 255) : new Color32(202, 202, 202, 255);
             myProfileImage.color = myprofileColor;
             if (!isProfileOff)
             {
