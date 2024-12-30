@@ -160,6 +160,7 @@ public class InventorySystem : MonoBehaviour
         ItemData itemData = loadItemData[(int)_itemType].response.Find(x => _itemName == x.itemName);
         itemData.count += _Count;
 
+        Debug.Log("Patch - 아이템 이름: " + itemData.itemName + " 인덱스: " + itemData.itemIdx + " 아이템 타입: " + itemData.itemType + " 인벤토리 id: " + itemData.inventoryId);
         //UpdateItemData(itemData.itemType, _itemName, _Count);
 
         if (null == itemData)
@@ -269,6 +270,9 @@ public class InventorySystem : MonoBehaviour
             return;
         for (int i = 0; i < loadItemData[(int)_itemType].response.Count(); i++)
         {
+            if (childPanel[i] == null)
+                continue;
+                Debug.Log("현재 i번째 null: " + i);
             childPanel[i].SetActive(true);
             GameObject itemPrefab = LoadItemData(_itemType, loadItemData[(int)_itemType].response[i].itemName);
             itemComponents[i].SetData(loadItemData[(int)_itemType].response[i].itemName, loadItemData[(int)_itemType].response[i].price, loadItemData[(int)_itemType].response[i].itemType.ToString(), loadItemData[(int)_itemType].response[i].count, itemPrefab);
@@ -285,7 +289,10 @@ public class InventorySystem : MonoBehaviour
     public void ResetItemComponents()
     {
         for (int i = 0; i < childPanel.Count(); i++)
-            childPanel[i].SetActive(false);
+        {
+            if (childPanel[i])
+                childPanel[i].SetActive(false);
+        }
     }
     public GameObject LoadItemData(ItemType _itemType, string _itemName)
     {
