@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -359,7 +360,7 @@ namespace GH
 
 
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/sign-up";
             info.body = JsonUtility.ToJson(joinInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -374,20 +375,44 @@ namespace GH
             currentLoginstep = Loginstep.LOGIN;
         }
 
+
+
         private void UserLogin()
         {
+
+            UserInfo tokenInfo = new UserInfo();
+            tokenInfo.username = loginList[0].text;
+            tokenInfo.password = loginList[1].text;
+
             HttpInfo info = new HttpInfo();
-            info.url =  HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/login";
+            info.body = JsonUtility.ToJson(tokenInfo);
+            info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
-                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-                print(jsonData);
-                //jsonData를 PostInfoArray 형으로 바꾸자.
-                getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
-                print("get : "+getUserInfo);
-                LoginCallback();
+                print("token : " + downloadHandler.text);
+                AuthManager.GetInstance().token = downloadHandler.text;
+
+                // 겟으로 받아오기
+                HttpInfo info2 = new HttpInfo();
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
+                info.onComplete = (DownloadHandler downloadHandler) =>
+                {
+                    string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                    print(jsonData);
+                    //jsonData를 PostInfoArray 형으로 바꾸자.
+                    getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+                    print("get : " + getUserInfo);
+                    LoginCallback();
+                };
+                StartCoroutine(HttpManager.GetInstance().Get(info2));
+
             };
-            StartCoroutine(HttpManager.GetInstance().Get(info));
+            StartCoroutine(HttpManager.GetInstance().Post(info));
+
+           
+
+
 
 
         }
@@ -439,4 +464,6 @@ namespace GH
             StartCoroutine(HttpManager.GetInstance().Get(info));
         }
     }
+
+
 }

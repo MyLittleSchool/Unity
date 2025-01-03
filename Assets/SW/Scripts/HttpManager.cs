@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
+using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEditor.PackageManager.Requests;
+using SW;
 
 [System.Serializable]
 public struct PostInfo
@@ -43,10 +46,11 @@ public class HttpManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public string SERVER_ADRESS { get; } = "http://125.132.216.190:5544";
+    public string SERVER_ADRESS { get; } = "http://175.196.249.220:5544";
     /*
     http://My-little-school-dev-env.eba-rfqxtdpp.ap-northeast-2.elasticbeanstalk.com
     http://125.132.216.190:5544
+    http://175.196.249.220:5544
     */
     public class HttpInfo
     {
@@ -76,6 +80,9 @@ public class HttpManager : MonoBehaviour
         string url = info.url;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
 
@@ -91,6 +98,9 @@ public class HttpManager : MonoBehaviour
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, info.body, info.contentType))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
 
@@ -103,9 +113,13 @@ public class HttpManager : MonoBehaviour
     {
         using (UnityWebRequest webRequest = new UnityWebRequest(info.url, "PATCH"))
         {
+
             // 요청 본문 설정 (byte[] 형태로 설정)
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(info.body);
             webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
 
             // Content-Type 설정
             webRequest.SetRequestHeader("Content-Type", info.contentType);
@@ -128,6 +142,9 @@ public class HttpManager : MonoBehaviour
         // UnityWebRequest.Delete()로 DELETE 요청 생성
         using (UnityWebRequest webRequest = UnityWebRequest.Delete(url))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
 
@@ -149,6 +166,9 @@ public class HttpManager : MonoBehaviour
 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, formData))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             print("요청");
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
@@ -171,6 +191,9 @@ public class HttpManager : MonoBehaviour
 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, formData))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             print("요청");
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
@@ -190,6 +213,9 @@ public class HttpManager : MonoBehaviour
 
         using (UnityWebRequest webRequest = new UnityWebRequest(info.url, "Post"))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             // 업로드 하는 데이터
             webRequest.uploadHandler = new UploadHandlerRaw(data);
             webRequest.uploadHandler.contentType = info.contentType;
@@ -209,6 +235,9 @@ public class HttpManager : MonoBehaviour
     {
         using (UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(info.url))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             yield return webRequest.SendWebRequest();
             DoneRequest(webRequest, info);
         }
@@ -218,6 +247,9 @@ public class HttpManager : MonoBehaviour
     {
         using (UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(info.url, AudioType.WAV))
         {
+            // Token Authorization 헤더 추가
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+
             yield return webRequest.SendWebRequest();
             //DownloadHandlerAudioClip handler = webRequest.downloadHandler as DownloadHandlerAudioClip;
             //handler.audioClip 을 audiosource에 세팅하고 플레이

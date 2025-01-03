@@ -34,9 +34,14 @@ namespace SW
             }
         }
 
+        //ÅäÅ«°ª
+        public string token;
+
         [System.Serializable]
         public struct AuthData
         {
+            
+
             public UserInfo userInfo;
             public AuthData(UserInfo info)
             {
@@ -45,7 +50,9 @@ namespace SW
                 //GetInstance().OnlineStatue();
                 WebSocketManager.GetInstance().LogIn(info.id);
             }
+
         }
+
         public AuthData userAuthData { get; set; }
         public int MapId { get; set; } = 1;
 

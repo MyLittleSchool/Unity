@@ -1,5 +1,6 @@
 using SW;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 namespace GH
 {
@@ -7,6 +8,9 @@ namespace GH
     [System.Serializable]
     public struct UserInfo
     {
+        //юс╫ц..?(╠т)
+        public string username;
+
         public int id;
         public string socialId;
         public string name;
