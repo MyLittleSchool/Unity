@@ -8,4 +8,5 @@ public class GalleryContentPanel : MonoBehaviour
 {
     public Image image;
     public TMP_Text title;
+    public Button reportButton;
 }
