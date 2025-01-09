@@ -35,7 +35,8 @@ namespace SW
         }
 
         //ÅäÅ«°ª
-        public string token;
+        public string accessToken;
+        public string refreshToken;
 
         [System.Serializable]
         public struct AuthData

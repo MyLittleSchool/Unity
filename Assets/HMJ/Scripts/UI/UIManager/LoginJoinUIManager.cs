@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -35,6 +36,8 @@ namespace GH
         public UserInfo currentJoinInfo;
 
         public UserInfoData getUserInfo;
+
+        public TokenData tokenGet;
 
         #region Button
         [Header("다음 버튼 리스트")]
@@ -221,7 +224,7 @@ namespace GH
 
             }
             logins[(int)currentLoginstep + 1].SetActive(true);
-            
+
             currentLoginstep++;
         }
         public void BackStep()
@@ -381,7 +384,7 @@ namespace GH
         {
 
             UserInfo tokenInfo = new UserInfo();
-            tokenInfo.username = loginList[0].text;
+            tokenInfo.userEmail = loginList[0].text;
             tokenInfo.password = loginList[1].text;
 
             HttpInfo info = new HttpInfo();
@@ -390,49 +393,93 @@ namespace GH
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
-                print("token : " + downloadHandler.text);
-                AuthManager.GetInstance().token = downloadHandler.text;
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
 
-                // 겟으로 받아오기
-                HttpInfo info2 = new HttpInfo();
-                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
-                info.onComplete = (DownloadHandler downloadHandler) =>
+                tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
+                AuthManager.GetInstance().accessToken = tokenGet.data.accessToken;
+                AuthManager.GetInstance().refreshToken = tokenGet.data.refreshToken;
+
+                if (AuthManager.GetInstance().accessToken != "")
                 {
-                    string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-                    print(jsonData);
-                    //jsonData를 PostInfoArray 형으로 바꾸자.
-                    getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
-                    print("get : " + getUserInfo);
-                    LoginCallback();
-                };
-                StartCoroutine(HttpManager.GetInstance().Get(info2));
-
+                    print("id : " + loginList[0].text);
+                    // 겟으로 받아오기
+                    HttpInfo info2 = new HttpInfo();
+                    //info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/list";
+                    info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
+                    info2.onComplete = (DownloadHandler downloadHandler) =>
+                    {
+                        string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                        print(jsonData);
+                        //jsonData를 PostInfoArray 형으로 바꾸자.
+                        getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+                        print("get : " + getUserInfo);
+                        LoginCallback();
+                    };
+                    StartCoroutine(HttpManager.GetInstance().Get(info2));
+                }
+                else
+                {
+                    PWCheckText.SetActive(true);
+                    print("로그인에 실패하였습니다.");
+                }
             };
             StartCoroutine(HttpManager.GetInstance().Post(info));
 
-           
+
+        }
+
+        private void testGet()
+        {
+            UserInfo tokenInfo = new UserInfo();
+            tokenInfo.userEmail = loginList[0].text;
+            tokenInfo.password = loginList[1].text;
 
 
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/login";
+            info.body = JsonUtility.ToJson(tokenInfo);
+            info.contentType = "application/json";
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
 
-
+                tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
+                print("token : " + tokenGet.data.accessToken);
+                AuthManager.GetInstance().accessToken = tokenGet.data.accessToken;
+                if (AuthManager.GetInstance().accessToken != "")
+                {
+                    print("id : " + loginList[0].text);
+                    // 겟으로 받아오기
+                    HttpInfo info2 = new HttpInfo();
+                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/list";
+                    //info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
+                    info.onComplete = (DownloadHandler downloadHandler) =>
+                    {
+                        string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                        print(jsonData);
+                        //jsonData를 PostInfoArray 형으로 바꾸자.
+                        //getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+                        // print("get : " + getUserInfo);
+                        // LoginCallback();
+                    };
+                    StartCoroutine(HttpManager.GetInstance().Get(info2));
+                }
+                else
+                {
+                    PWCheckText.SetActive(true);
+                    print("로그인에 실패하였습니다.");
+                }
+            };
+            StartCoroutine(HttpManager.GetInstance().Post(info));
         }
         private void LoginCallback()
         {
-            if (getUserInfo.data.password == loginList[1].text)
-            {
-                print("맞음");
-                AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
-                //씬 넘어가기
-                DataManager.instance.playerName = getUserInfo.data.name;
-                SceneMgr.instance.Login();
-            }
-            else
-            {
-                print("틀림");
+            print("로그인 성공");
+            AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
+            //씬 넘어가기
+            DataManager.instance.playerName = getUserInfo.data.name;
+            SceneMgr.instance.Login();
 
-                PWCheckText.SetActive(true);
-                print("비밀번호가 다릅니다");
-            }
         }
 
         private void ClickMen()
@@ -465,5 +512,15 @@ namespace GH
         }
     }
 
+    [System.Serializable]
+    public struct Token
+    {
+        public string accessToken;
+        public string refreshToken;
+    }
 
+    public struct TokenData
+    {
+        public Token data;
+    }
 }

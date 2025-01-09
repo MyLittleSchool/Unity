@@ -81,8 +81,9 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
+            print("Bearer " + AuthManager.GetInstance().accessToken);
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
 
@@ -99,7 +100,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, info.body, info.contentType))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
@@ -119,7 +120,7 @@ public class HttpManager : MonoBehaviour
             webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
 
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             // Content-Type 설정
             webRequest.SetRequestHeader("Content-Type", info.contentType);
@@ -143,7 +144,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Delete(url))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
@@ -167,7 +168,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, formData))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             print("요청");
             // 서버에 요청 보내기
@@ -192,7 +193,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Post(info.url, formData))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             print("요청");
             // 서버에 요청 보내기
@@ -214,7 +215,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = new UnityWebRequest(info.url, "Post"))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             // 업로드 하는 데이터
             webRequest.uploadHandler = new UploadHandlerRaw(data);
@@ -236,7 +237,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(info.url))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             yield return webRequest.SendWebRequest();
             DoneRequest(webRequest, info);
@@ -248,7 +249,7 @@ public class HttpManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(info.url, AudioType.WAV))
         {
             // Token Authorization 헤더 추가
-            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().token);
+            webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
             yield return webRequest.SendWebRequest();
             //DownloadHandlerAudioClip handler = webRequest.downloadHandler as DownloadHandlerAudioClip;
