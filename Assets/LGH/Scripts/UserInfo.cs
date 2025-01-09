@@ -8,9 +8,6 @@ namespace GH
     [System.Serializable]
     public struct UserInfo
     {
-        //юс╫ц..?(╠т)
-        public string userEmail;
-
         public int id;
         public string socialId;
         public string name;

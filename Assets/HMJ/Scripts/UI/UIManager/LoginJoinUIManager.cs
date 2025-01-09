@@ -383,7 +383,7 @@ namespace GH
         private void UserLogin()
         {
 
-            UserInfo tokenInfo = new UserInfo();
+            TokenInfo tokenInfo = new TokenInfo();
             tokenInfo.userEmail = loginList[0].text;
             tokenInfo.password = loginList[1].text;
 
@@ -428,50 +428,7 @@ namespace GH
 
         }
 
-        private void testGet()
-        {
-            UserInfo tokenInfo = new UserInfo();
-            tokenInfo.userEmail = loginList[0].text;
-            tokenInfo.password = loginList[1].text;
-
-
-            HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/login";
-            info.body = JsonUtility.ToJson(tokenInfo);
-            info.contentType = "application/json";
-            info.onComplete = (DownloadHandler downloadHandler) =>
-            {
-                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-
-                tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
-                print("token : " + tokenGet.data.accessToken);
-                AuthManager.GetInstance().accessToken = tokenGet.data.accessToken;
-                if (AuthManager.GetInstance().accessToken != "")
-                {
-                    print("id : " + loginList[0].text);
-                    // 겟으로 받아오기
-                    HttpInfo info2 = new HttpInfo();
-                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/list";
-                    //info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
-                    info.onComplete = (DownloadHandler downloadHandler) =>
-                    {
-                        string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-                        print(jsonData);
-                        //jsonData를 PostInfoArray 형으로 바꾸자.
-                        //getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
-                        // print("get : " + getUserInfo);
-                        // LoginCallback();
-                    };
-                    StartCoroutine(HttpManager.GetInstance().Get(info2));
-                }
-                else
-                {
-                    PWCheckText.SetActive(true);
-                    print("로그인에 실패하였습니다.");
-                }
-            };
-            StartCoroutine(HttpManager.GetInstance().Post(info));
-        }
+       
         private void LoginCallback()
         {
             print("로그인 성공");
@@ -512,15 +469,7 @@ namespace GH
         }
     }
 
-    [System.Serializable]
-    public struct Token
-    {
-        public string accessToken;
-        public string refreshToken;
-    }
+ 
 
-    public struct TokenData
-    {
-        public Token data;
-    }
+ 
 }

@@ -7,6 +7,7 @@ using System.IO;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEditor.PackageManager.Requests;
 using SW;
+using GH;
 
 [System.Serializable]
 public struct PostInfo
@@ -257,6 +258,8 @@ public class HttpManager : MonoBehaviour
             DoneRequest(webRequest, info);
         }
     }
+
+    public TokenData tokenGet;
     void DoneRequest(UnityWebRequest webRequest, HttpInfo info)
     {
         // 만약에 결과가 정상이라면
@@ -271,9 +274,34 @@ public class HttpManager : MonoBehaviour
         }
         else
         {
-            // 그렇지 않다면 (Error 라면)
-            // Error 의 이유를 출력
             Debug.LogError("Net Error : " + webRequest.error); 
+            
+            if ((int)webRequest.responseCode == 403)
+            {
+              
+                print("토큰을 다시 받아옵니다");
+
+                TokenInfo tokenInfo = new TokenInfo();
+                tokenInfo.userEmail = AuthManager.GetInstance().userAuthData.userInfo.email;
+                tokenInfo.refreshToken = AuthManager.GetInstance().refreshToken;
+
+                HttpInfo info2 = new HttpInfo();
+                info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/refresh";
+                info2.body = JsonUtility.ToJson(tokenInfo);
+                info2.contentType = "application/json";
+                info2.onComplete = (DownloadHandler downloadHandler) =>
+                {
+                    string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+
+                    tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
+                    AuthManager.GetInstance().accessToken = tokenGet.data.accessToken;
+                    AuthManager.GetInstance().refreshToken = tokenGet.data.refreshToken;
+
+                    
+                };
+                StartCoroutine(HttpManager.GetInstance().Post(info2));
+
+            }
         }
     }
 }
