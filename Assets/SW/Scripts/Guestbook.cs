@@ -276,6 +276,11 @@ namespace SW
             {
                 delBtn.gameObject.SetActive(false);
             }
+            // 신고 버튼
+            newContent.transform.GetChild(1).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Report.instance.CreateReportInfo("방명록 - " + contentData.content, Report.ContentType.Guestbook, contentData.userId, contentData.id);
+            });
             newContent.GetComponent<Image>().color = HexToColor(contentData.rgb);
             TMP_Text contentText = newContent.transform.GetChild(0).GetComponent<TMP_Text>();
             contentText.text = contentData.content;
@@ -294,6 +299,11 @@ namespace SW
             {
                 deleteSelected = contentData;
                 deletePanel.gameObject.SetActive(true);
+            });
+            // 신고 버튼
+            newContent.transform.GetChild(1).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Report.instance.CreateReportInfo("쪽지 - " + contentData.content, Report.ContentType.Note, contentData.userId, contentData.id);
             });
             newContent.GetComponent<Image>().color = HexToColor(contentData.rgb);
             TMP_Text contentText = newContent.transform.GetChild(0).GetComponent<TMP_Text>();

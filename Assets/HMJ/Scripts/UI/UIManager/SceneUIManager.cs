@@ -1179,31 +1179,40 @@ namespace MJ
                 // 터치한 오브젝트에 대한 처리 수행
                 if (hit.collider.gameObject.GetComponent<PhotonView>().IsMine == false)
                 {
-                    othersProfilePanel.SetActive(true);
                     UserInfo userInfo = hit.collider.gameObject.GetComponent<UserRPC>().userInfo;
-                    FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
-                    comp.id = userInfo.id;
-                    comp.NickNameText.text = userInfo.name;
-                    comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
-                    comp.MessageText.text = userInfo.statusMesasge;
-                    HttpInfo info = new HttpInfo();
-                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/emotion-analysis/" + userInfo.id;
-                    info.onComplete = (DownloadHandler res) =>
-                    {
-                        EmotionInfo data = JsonUtility.FromJson<EmotionInfo>(res.text);
-                        if (data.emotion == "" || data.emotion == "없음")
-                        {
-                            comp.StateText.text = "기쁨";
-                        }
-                        else
-                        {
-                            comp.StateText.text = data.emotion;
-                        }
-                    };
-                    StartCoroutine(HttpManager.GetInstance().Get(info));
+                    OnProfilePanel(userInfo);
                 }
             }
             else othersProfilePanel.SetActive(false);
+        }
+        public void OnProfilePanel(UserInfo userInfo)
+        {
+            othersProfilePanel.SetActive(true);
+            FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
+            comp.id = userInfo.id;
+            comp.NickNameText.text = userInfo.name;
+            comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
+            comp.MessageText.text = userInfo.statusMesasge;
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/emotion-analysis/" + userInfo.id;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                EmotionInfo data = JsonUtility.FromJson<EmotionInfo>(res.text);
+                if (data.emotion == "" || data.emotion == "없음")
+                {
+                    comp.StateText.text = "기쁨";
+                }
+                else
+                {
+                    comp.StateText.text = data.emotion;
+                }
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+            comp.reportButton.onClick.RemoveAllListeners();
+            comp.reportButton.onClick.AddListener(() =>
+            {
+                Report.instance.CreateReportInfo(userInfo.username, Report.ContentType.User, userInfo.id);
+            });
         }
         private bool IsPointerOverUIObject(Vector2 touchPosition)
         {

@@ -201,6 +201,10 @@ namespace SW
                     GalleryContentPanel comp = newPanel.GetComponent<GalleryContentPanel>();
                     comp.title.text = data.data[i].title;
                     StartCoroutine(DownloadImage(data.data[i].imgUrl, comp.image));
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        Report.instance.CreateReportInfo("°¶·¯¸® - " + data.data[i].title, Report.ContentType.Gallery, -1, data.data[i].id);
+                    });
                 }
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));

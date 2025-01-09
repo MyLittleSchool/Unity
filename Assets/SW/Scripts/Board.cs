@@ -33,6 +33,7 @@ public class Board : MonoBehaviour
     public TMP_Text comentCountText;
     public TMP_InputField comentInputField;
     public Button saveComentButton;
+    public Button reportButton;
     public void ClosePanel()
     {
         gameObject.SetActive(false);
@@ -189,8 +190,6 @@ public class Board : MonoBehaviour
                 comp.comentCount = boardGetList.data[i].commentCount;
                 comp.comentCountText.text = comp.comentCount.ToString();
                 comp.isExistLike = boardGetList.data[i].isExistLike;
-                // 댓글 개수 구현 필요\
-                //comp.comentCountText.text = comp.
                 comp.button.onClick.AddListener(() =>
                 {
                     loadedContent = comp;
@@ -248,6 +247,11 @@ public class Board : MonoBehaviour
                             StartCoroutine(HttpManager.GetInstance().Post(info));
                         }
                     });
+                    reportButton.onClick.RemoveAllListeners();
+                    reportButton.onClick.AddListener(() =>
+                    {
+                        Report.instance.CreateReportInfo("게시판 - " + boardGetList.data[i].title, Report.ContentType.Board, -1, boardGetList.data[i].boardId);
+                    });
                 });
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
@@ -293,6 +297,10 @@ public class Board : MonoBehaviour
                 // 댓글 생성
                 GameObject newPanel = Instantiate(commentPrefab, boardContents.transform);
                 newPanel.transform.GetComponentInChildren<TMP_Text>().text = data.data[i].content;
+                newPanel.transform.GetChild(0).GetComponentInChildren<Button>().onClick.AddListener(() =>
+                {
+                    Report.instance.CreateReportInfo("댓글 - " + data.data[i].content, Report.ContentType.Comment, -1, data.data[i].commentId);
+                });
             }
             comentCountText.text = data.data.Length.ToString();
         };

@@ -1,4 +1,5 @@
 using GH;
+using MJ;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Photon.Pun;
@@ -9,6 +10,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static SW.FriendsUI;
+using static Unity.Burst.Intrinsics.X86.Avx;
 namespace SW
 {
     public class FriendsUI : MonoBehaviour
@@ -500,6 +503,10 @@ namespace SW
                     GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
                     UserInfo friend = list.friends[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.friends[i].receiver : list.friends[i].requester;
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        SceneUIManager.GetInstance().OnProfilePanel(friend);
+                    });
                     comp.friendshipId = list.friends[i].id;
                     comp.id = friend.id;
                     comp.NickNameText.text = friend.name;
@@ -534,6 +541,10 @@ namespace SW
                     // 내가 받은 요청
                     GameObject newPanel = Instantiate(requestedPrefab, contentsTabs[1]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        SceneUIManager.GetInstance().OnProfilePanel(requester);
+                    });
                     comp.friendshipId = list.requests[i].id;
                     comp.id = requester.id;
                     comp.NickNameText.text = requester.name;
@@ -587,12 +598,14 @@ namespace SW
                 for (int i = 0; i < list.requests.Length; i++)
                 {
                     //친구 리스트------------------------------------------------------------------
-
-                    UserInfo requester = list.requests[i].requester;
                     // 내가 보낸 요청
                     GameObject newPanel = Instantiate(requestingPrefab, contentsTabs[2]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
                     UserInfo receiver = list.requests[i].receiver;
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        SceneUIManager.GetInstance().OnProfilePanel(receiver);
+                    });
                     comp.friendshipId = list.requests[i].id;
                     comp.id = receiver.id;
                     comp.NickNameText.text = receiver.name;
@@ -665,6 +678,18 @@ namespace SW
                     friendPanel.RequestButton.onClick.AddListener(() =>
                     {
                         WebSocketManager.GetInstance().OnRequestFriendPanel(friendPanel.id);
+                    });
+                    friendPanel.reportButton.onClick.AddListener(() =>
+                    {
+                        int userId = GetComponent<FriendPanel>().id;
+                        HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
+                        info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/" + userId;
+                        info2.onComplete = (DownloadHandler res) =>
+                        {
+                            UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
+                            SceneUIManager.GetInstance().OnProfilePanel(userInfo);
+                        };
+                        StartCoroutine(HttpManager.GetInstance().Get(info2));
                     });
                 }
                 if (tab == 3) ChangeTab(tab);
