@@ -689,7 +689,7 @@ namespace SW
                             UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
                             SceneUIManager.GetInstance().OnProfilePanel(userInfo);
                         };
-                        StartCoroutine(HttpManager.GetInstance().Get(info));
+                        StartCoroutine(HttpManager.GetInstance().Get(info2));
                     });
                 }
                 if (tab == 3) ChangeTab(tab);
