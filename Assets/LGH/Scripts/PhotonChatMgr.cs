@@ -243,7 +243,6 @@ namespace GH
 
         private void CreateChatItem(string chat, Color chatColor, string nickname)
         {
-
             //s의 내용을 ChatItem을 만들자
             GameObject go = Instantiate(chatItemPrefab, contentRectTransform);
             ChatItem chatItem = go.GetComponent<ChatItem>();

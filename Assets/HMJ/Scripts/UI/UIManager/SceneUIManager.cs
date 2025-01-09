@@ -1211,7 +1211,7 @@ namespace MJ
             comp.reportButton.onClick.RemoveAllListeners();
             comp.reportButton.onClick.AddListener(() =>
             {
-                Report.instance.CreateReportInfo(userInfo.username, Report.ContentType.User, userInfo.id);
+                Report.instance.CreateReportInfo(userInfo.name, Report.ContentType.User, userInfo.id);
             });
         }
         private bool IsPointerOverUIObject(Vector2 touchPosition)
