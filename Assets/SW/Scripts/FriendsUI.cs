@@ -237,10 +237,10 @@ namespace SW
                     info.onComplete = (DownloadHandler res) =>
                     {
                         UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
-                        comp.StateText.text = "<color=#F2884B>" + userInfo.name + "님의 교실";
+                        comp.StateText.text = "<color=#F2884B>" + userInfo.nickname + "님의 교실";
                         comp.PassButton.onClick.AddListener(() =>
                         {
-                            SceneMgr.instance.ClassIn(userInfo.name, mapId);
+                            SceneMgr.instance.ClassIn(userInfo.nickname, mapId);
                             gameObject.SetActive(false);
                         });
                     };
@@ -280,7 +280,7 @@ namespace SW
                     info.onComplete = (DownloadHandler res) =>
                     {
                         UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
-                        comp.StateText.text = "<color=#F2884B>" + userInfo.name + "님의 맵 콘테스트";
+                        comp.StateText.text = "<color=#F2884B>" + userInfo.nickname + "님의 맵 콘테스트";
                         comp.PassButton.onClick.AddListener(() =>
                         {
                             ToastMessage.OnMessage("따라갈 수 없는 위치에 있습니다");
@@ -361,7 +361,7 @@ namespace SW
                         UserInfo friend = list.response[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.response[i].receiver : list.response[i].requester;
                         comp.friendshipId = list.response[i].id;
                         comp.id = friend.id;
-                        comp.NickNameText.text = friend.name;
+                        comp.NickNameText.text = friend.nickname;
                         friendDic[comp.id] = comp;
                         //SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                     }
@@ -386,7 +386,7 @@ namespace SW
                         UserInfo requester = list.response[i].requester;
                         comp.friendshipId = list.response[i].id;
                         comp.id = requester.id;
-                        comp.NickNameText.text = requester.name;
+                        comp.NickNameText.text = requester.nickname;
                         comp.GradeText.text = requester.grade + "학년";
                         comp.locationText.text = requester.school.schoolName;
                         comp.InterestText.text = "#" + String.Join(" #", requester.interest);
@@ -444,7 +444,7 @@ namespace SW
                         UserInfo receiver = list.response[i].receiver;
                         comp.friendshipId = list.response[i].id;
                         comp.id = receiver.id;
-                        comp.NickNameText.text = receiver.name;
+                        comp.NickNameText.text = receiver.nickname;
                         if (receiver.isOnline)
                         {
                             comp.StateText.text = "<color=#F2884B>접속중";
@@ -502,7 +502,7 @@ namespace SW
                     UserInfo friend = list.friends[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.friends[i].receiver : list.friends[i].requester;
                     comp.friendshipId = list.friends[i].id;
                     comp.id = friend.id;
-                    comp.NickNameText.text = friend.name;
+                    comp.NickNameText.text = friend.nickname;
                     friendDic[comp.id] = comp;
                     SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                     // 규현 확인 
@@ -536,7 +536,7 @@ namespace SW
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
                     comp.friendshipId = list.requests[i].id;
                     comp.id = requester.id;
-                    comp.NickNameText.text = requester.name;
+                    comp.NickNameText.text = requester.nickname;
                     comp.GradeText.text = requester.grade + "학년";
                     comp.locationText.text = requester.school.location + " " + requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
@@ -595,7 +595,7 @@ namespace SW
                     UserInfo receiver = list.requests[i].receiver;
                     comp.friendshipId = list.requests[i].id;
                     comp.id = receiver.id;
-                    comp.NickNameText.text = receiver.name;
+                    comp.NickNameText.text = receiver.nickname;
                     comp.GradeText.text = receiver.grade + "학년";
                     comp.locationText.text = receiver.school.location + " " + receiver.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", receiver.interest);

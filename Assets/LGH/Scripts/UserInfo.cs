@@ -10,6 +10,7 @@ namespace GH
     {
         public int id;
         public string socialId;
+        public string nickname;
         public string name;
         public int grade;
         public string birthday;

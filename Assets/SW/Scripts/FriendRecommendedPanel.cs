@@ -30,7 +30,7 @@ namespace SW
                     }
                     else if (userInfo.mapType == DataManager.MapType.MyClassroom.ToString())
                     {
-                        SceneMgr.instance.ClassIn(userInfo.name, userInfo.mapId);
+                        SceneMgr.instance.ClassIn(userInfo.id.ToString(), userInfo.mapId);
                         WebSocketManager.GetInstance().friendsUI.ClosePanel();
                     }
                     else if (userInfo.mapType == DataManager.MapType.Square.ToString())
@@ -59,7 +59,7 @@ namespace SW
                 }
                 else
                 {
-                    SceneMgr.instance.ClassIn(userInfo.name, userInfo.mapId);
+                    SceneMgr.instance.ClassIn(userInfo.id.ToString(), userInfo.mapId);
                     WebSocketManager.GetInstance().friendsUI.ClosePanel();
                 }
             };

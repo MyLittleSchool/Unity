@@ -84,7 +84,7 @@ public class HttpManager : MonoBehaviour
             // Token Authorization 헤더 추가
             webRequest.SetRequestHeader("Authorization", "Bearer " + AuthManager.GetInstance().accessToken);
 
-            print("Bearer " + AuthManager.GetInstance().accessToken);
+            //print("Bearer " + AuthManager.GetInstance().accessToken);
             // 서버에 요청 보내기
             yield return webRequest.SendWebRequest();
 
@@ -291,11 +291,12 @@ public class HttpManager : MonoBehaviour
                 info2.contentType = "application/json";
                 info2.onComplete = (DownloadHandler downloadHandler) =>
                 {
-                    string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                   
 
-                    tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
-                    AuthManager.GetInstance().accessToken = tokenGet.data.accessToken;
-                    AuthManager.GetInstance().refreshToken = tokenGet.data.refreshToken;
+                    print(downloadHandler.text);
+                    //tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
+                    AuthManager.GetInstance().accessToken = downloadHandler.text;
+                    //AuthManager.GetInstance().refreshToken = tokenGet.data.refreshToken;
 
                     
                 };

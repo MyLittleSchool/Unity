@@ -36,7 +36,7 @@ namespace GH
 
             // 말풍 텍스트 초기화
             malpungText.text = "";
-            playerNameText.text = photonView.Owner.NickName;
+            playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.nickname;
         }
 
             // Update is called once per frame

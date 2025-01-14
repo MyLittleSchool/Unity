@@ -975,7 +975,7 @@ namespace MJ
         {
             UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
             //이름 창 세팅
-            profileInputField[0].text = userInfo.name;
+            profileInputField[0].text = userInfo.nickname;
             //상태메시지 세팅
             profileInputField[1].text = userInfo.statusMesasge;
 
@@ -991,10 +991,9 @@ namespace MJ
         private void ProfileEditSave()
         {
             UserInfo joinInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            joinInfo.name = nickNameInputField.text;
+            joinInfo.nickname = nickNameInputField.text;
             joinInfo.interest = selectedInterest;
             joinInfo.statusMesasge = myMessageInputField.text;
-            joinInfo.schoolId = 1;
 
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/profile";
@@ -1007,7 +1006,7 @@ namespace MJ
             StartCoroutine(HttpManager.GetInstance().Patch(info));
 
             currentuserInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            currentuserInfo.name = nickNameInputField.text;
+            currentuserInfo.nickname = nickNameInputField.text;
             currentuserInfo.interest = selectedInterest;
             currentuserInfo.statusMesasge = myMessageInputField.text;
 
@@ -1027,7 +1026,7 @@ namespace MJ
             profileInterest.text = "";
             profileMyMessage.text = "";
             UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            profileLvNick.text = userInfo.level + " | " + userInfo.name;
+            profileLvNick.text = userInfo.level + " | " + userInfo.nickname;
             for (int i = 0; i < userInfo.interest.Count; i++)
             {
                 profileInterest.text += "#" + userInfo.interest[i] + " ";
@@ -1183,7 +1182,7 @@ namespace MJ
                     UserInfo userInfo = hit.collider.gameObject.GetComponent<UserRPC>().userInfo;
                     FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
                     comp.id = userInfo.id;
-                    comp.NickNameText.text = userInfo.name;
+                    comp.NickNameText.text = userInfo.nickname;
                     comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
                     comp.MessageText.text = userInfo.statusMesasge;
                     HttpInfo info = new HttpInfo();

@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
 using MJ;
+using SW;
 
 namespace GH
 {
@@ -51,8 +52,8 @@ namespace GH
         }
         void Start()
         {
-            playerName = DataManager.instance.playerName;
-            roomName = DataManager.instance.playerName;
+            playerName = AuthManager.GetInstance().userAuthData.userInfo.id.ToString();
+            roomName = AuthManager.GetInstance().userAuthData.userInfo.id.ToString();
             StartLogin();
 
             //로딩채널 활성화
@@ -187,6 +188,10 @@ namespace GH
         {
             base.OnJoinedRoom();
             topMenuText.text = roomName;
+            if(topMenuText.text == AuthManager.GetInstance().userAuthData.userInfo.id.ToString())
+            {
+                topMenuText.text = AuthManager.GetInstance().userAuthData.userInfo.nickname;
+            }
             DataManager.instance.playerCurrChannel = roomName;
             PhotonChatMgr.instance.currChannel = roomName;
             PhotonChatMgr.instance.ChatChannelChange();
