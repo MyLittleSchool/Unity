@@ -12,7 +12,7 @@ public class ButtonColor : ButtonObject
     // Start is called before the first frame update
     void Start()
     {
-        buttonImage = button.GetComponentInChildren<Image>();
+        buttonImage = GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -24,9 +24,15 @@ public class ButtonColor : ButtonObject
     public void ChangeButtonClick()
     {
         if (buttonImage.color == selectColor)
+        {
             buttonImage.color = nonSelectColor;
+            Debug.Log("현재 버튼 색상: " + "선택x 색상");
+        }
         else
+        {
             buttonImage.color = selectColor;
+            Debug.Log("현재 버튼 색상: " + "선택o 색상");
+        }
     }
 
     public bool bSelectButton()

@@ -208,6 +208,9 @@ namespace MJ
 
         [Header("가이드 패널")]
         public GameObject guidePanel;
+
+        [Header("방문자 인벤토리 셋팅 패널")]
+        public GameObject OtherInventoryPanel;
         #endregion
 
         #region SingleTone
@@ -615,6 +618,17 @@ namespace MJ
             }
         }
 
+        public void OnOtherInventorySettingUI()
+        {
+            OtherInventoryPanel.SetActive(true);
+            Debug.Log("현재 인벤토리 설정 창 On");
+        }
+
+        public void OffOtherInventorySettingUI()
+        {
+            OtherInventoryPanel.SetActive(false);
+            Debug.Log("현재 인벤토리 설정 창 Off");
+        }
         public void OnMapConfirmPanel()
         {
             mapConfirmPanel.SetActive(true);

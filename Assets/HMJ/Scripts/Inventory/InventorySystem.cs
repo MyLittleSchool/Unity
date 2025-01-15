@@ -123,15 +123,6 @@ public class InventorySystem : MonoBehaviour
 
         installButton.onClick.AddListener(InstallItem);
     }
-    private void Start()
-    {
-
-    }
-
-    private void Update()
-    {
-    }
-
     public ItemType GetCurItemType()
     {
         if (choiceItem)
