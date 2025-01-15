@@ -1,15 +1,8 @@
 using SW;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static HttpManager;
 
@@ -291,6 +284,20 @@ namespace GH
 
         public void NickCheck()
         {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/nickname/" + joinInfoInfoList[0].text;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                print(jsonData);
+                //jsonData를 PostInfoArray 형으로 바꾸자.
+                getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+                print("get : " + getUserInfo);
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+
+
+
             if (checkNicknameBool)
             {
                 nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
@@ -298,8 +305,8 @@ namespace GH
             }
             else
             {
-                nextButtons[4].GetComponent<Image>().color = noneSelectColor;
-                nextButtons[4].interactable = false;
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = noneSelectColor;
+                nextButtons[(int)currentLoginstep].interactable = false;
             }
         }
 

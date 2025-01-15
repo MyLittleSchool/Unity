@@ -12,7 +12,7 @@ using SW;
 
 namespace GH
 {
-    public class PhotonNetMgr : MonoBehaviourPunCallbacks 
+    public class PhotonNetMgr : MonoBehaviourPunCallbacks
     {
 
         //상단 방 이름
@@ -74,7 +74,7 @@ namespace GH
             PhotonNetwork.ConnectUsingSettings();
         }
 
-        
+
 
         public override void OnConnected()
         {
@@ -188,10 +188,13 @@ namespace GH
         {
             base.OnJoinedRoom();
             topMenuText.text = roomName;
-            if(topMenuText.text == AuthManager.GetInstance().userAuthData.userInfo.id.ToString())
+            if (topMenuText.text == AuthManager.GetInstance().userAuthData.userInfo.id.ToString())
             {
                 topMenuText.text = AuthManager.GetInstance().userAuthData.userInfo.nickname;
             }
+
+
+
             DataManager.instance.playerCurrChannel = roomName;
             PhotonChatMgr.instance.currChannel = roomName;
             PhotonChatMgr.instance.ChatChannelChange();
@@ -221,7 +224,7 @@ namespace GH
         public override void OnLeftRoom()
         {
             base.OnLeftRoom();
-            
+
             print(MethodInfo.GetCurrentMethod().Name + " is call!");
             //CreateRoom();
             //// 방에 입장한 친구들은 모두 1번 씬으로 이동하자
@@ -247,7 +250,7 @@ namespace GH
 
 
 
-        
+
     }
-    
+
 }

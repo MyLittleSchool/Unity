@@ -1002,22 +1002,29 @@ namespace MJ
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 print(downloadHandler.text);
+
+                AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(joinInfo);
+
+
+                if (DataManager.instance.mapType == DataManager.MapType.MyClassroom)
+                {
+                    PhotonNetMgr.instance.topMenuText.text = AuthManager.GetInstance().userAuthData.userInfo.nickname;
+                }
+
+
+                DataManager.instance.player.GetComponent<PlayerMalpung>().RPC_PlayerNicknameSet();
+              
+
+                //프로필 이미지 변경 및 이름 변경
+                ProfileSet();
+                SetProfile();
+
+
             };
             StartCoroutine(HttpManager.GetInstance().Patch(info));
 
-            currentuserInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            currentuserInfo.nickname = nickNameInputField.text;
-            currentuserInfo.interest = selectedInterest;
-            currentuserInfo.statusMesasge = myMessageInputField.text;
-
-            AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(currentuserInfo);
-            SetProfile();
 
             QuestManager.instance.QuestPatch(1);
-
-            //프로필 이미지 변경 및 이름 변경
-            ProfileSet();
-            DataManager.instance.player.GetComponent<PlayerMalpung>().PlayerNameSet();
 
         }
 
