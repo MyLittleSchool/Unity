@@ -15,7 +15,6 @@ namespace GH
         public enum Loginstep
         {
             START,
-            SERVICE,
             LOGIN,
             NAME,
             EMAIL,
@@ -39,7 +38,13 @@ namespace GH
         [Header("이전 버튼 리스트")]
         public List<Button> backButtons;
 
-        [Header("4. 중복 버튼")]
+        [Header("2. 닉네임 중복 버튼")]
+        public Button checkNicknameButton;
+
+        [Header("2. 닉네임 중복 확인 bool")]
+        public bool checkNicknameBool = false;
+
+        [Header("4. 아이디 중복 버튼")]
         public Button checkIDButton;
 
         [Header("4. 인증 확인 버튼")]
@@ -121,6 +126,9 @@ namespace GH
 
         private void Start()
         {
+            //닉네임 체크 다음 버튼 비활성화
+            nextButtons[2].GetComponent<Image>().color = noneSelectColor;
+            nextButtons[2].interactable = false;
 
             isEmailDuplicate = false;
 
@@ -191,7 +199,8 @@ namespace GH
             switch (currentLoginstep)
             {
                 case Loginstep.NAME:
-                    currentJoinInfo.name = joinInfoInfoList[0].text;
+                    currentJoinInfo.nickname = joinInfoInfoList[0].text;
+                    currentJoinInfo.name = joinInfoInfoList[4].text;
                     break;
 
                 case Loginstep.EMAIL:
@@ -263,13 +272,41 @@ namespace GH
         {
             if (pWCheckInputField.text.Length > 0 && pWInputField.text == pWCheckInputField.text)
             {
-                nextButtons[5].GetComponent<Image>().color = selectColor;
-                nextButtons[5].interactable = true;
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
+                nextButtons[(int)currentLoginstep].interactable = true;
             }
             else
             {
-                nextButtons[5].GetComponent<Image>().color = noneSelectColor;
-                nextButtons[5].interactable = false;
+                nextButtons[4].GetComponent<Image>().color = noneSelectColor;
+                nextButtons[4].interactable = false;
+            }
+        }
+
+        public void NickCheck()
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/nickname/" + joinInfoInfoList[0].text;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                print(jsonData);
+                //jsonData를 PostInfoArray 형으로 바꾸자.
+                getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+                print("get : " + getUserInfo);
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+
+
+
+            if (checkNicknameBool)
+            {
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
+                nextButtons[(int)currentLoginstep].interactable = true;
+            }
+            else
+            {
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = noneSelectColor;
+                nextButtons[(int)currentLoginstep].interactable = false;
             }
         }
 
@@ -348,6 +385,7 @@ namespace GH
 
             UserInfo joinInfo = new UserInfo();
             joinInfo.email = currentJoinInfo.email;
+            joinInfo.nickname = currentJoinInfo.nickname;
             joinInfo.name = currentJoinInfo.name;
             joinInfo.birthday = currentJoinInfo.birthday;
             joinInfo.gender = gender;
@@ -376,7 +414,7 @@ namespace GH
         private void UserLogin()
         {
 
-            UserInfo tokenInfo = new UserInfo();
+            TokenInfo tokenInfo = new TokenInfo();
             tokenInfo.userEmail = loginList[0].text;
             tokenInfo.password = loginList[1].text;
 
@@ -421,56 +459,13 @@ namespace GH
 
         }
 
-        private void testGet()
-        {
-            UserInfo tokenInfo = new UserInfo();
-            tokenInfo.userEmail = loginList[0].text;
-            tokenInfo.password = loginList[1].text;
-
-
-            HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/login";
-            info.body = JsonUtility.ToJson(tokenInfo);
-            info.contentType = "application/json";
-            info.onComplete = (DownloadHandler downloadHandler) =>
-            {
-                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-
-                tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
-                print("token : " + tokenGet.data.accessToken);
-                AuthManager.GetInstance().accessToken = tokenGet.data.accessToken;
-                if (AuthManager.GetInstance().accessToken != "")
-                {
-                    print("id : " + loginList[0].text);
-                    // 겟으로 받아오기
-                    HttpInfo info2 = new HttpInfo();
-                    info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/list";
-                    //info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
-                    info.onComplete = (DownloadHandler downloadHandler) =>
-                    {
-                        string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-                        print(jsonData);
-                        //jsonData를 PostInfoArray 형으로 바꾸자.
-                        //getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
-                        // print("get : " + getUserInfo);
-                        // LoginCallback();
-                    };
-                    StartCoroutine(HttpManager.GetInstance().Get(info2));
-                }
-                else
-                {
-                    PWCheckText.SetActive(true);
-                    print("로그인에 실패하였습니다.");
-                }
-            };
-            StartCoroutine(HttpManager.GetInstance().Post(info));
-        }
+       
         private void LoginCallback()
         {
             print("로그인 성공");
             AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
             //씬 넘어가기
-            DataManager.instance.playerName = getUserInfo.data.name;
+            DataManager.instance.playerName = getUserInfo.data.nickname;
             SceneMgr.instance.Login();
 
         }
@@ -505,15 +500,7 @@ namespace GH
         }
     }
 
-    [System.Serializable]
-    public struct Token
-    {
-        public string accessToken;
-        public string refreshToken;
-    }
+ 
 
-    public struct TokenData
-    {
-        public Token data;
-    }
+ 
 }

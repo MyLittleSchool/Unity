@@ -99,7 +99,7 @@ namespace SW
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user?userId=" + userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler res) =>
             {
-                Debug.Log(userAuthData.userInfo.name + "의 계정 삭제 성공");
+                Debug.Log(userAuthData.userInfo.nickname + "의 계정 삭제 성공");
             };
             StartCoroutine(HttpManager.GetInstance().Delete(info));
         }

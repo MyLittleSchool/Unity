@@ -48,10 +48,10 @@ public class SceneMgr : MonoBehaviour
     }
     public void ClassIn(string roomName = null, int mapId = -1)
     {
-        DataManager.instance.playerCurrChannel = DataManager.instance.playerName;
+        DataManager.instance.playerCurrChannel = AuthManager.GetInstance().userAuthData.userInfo.id.ToString();
         if (roomName == null)
         {
-            PhotonNetMgr.instance.roomName = DataManager.instance.playerName;
+            PhotonNetMgr.instance.roomName = AuthManager.GetInstance().userAuthData.userInfo.id.ToString();
             DataManager.instance.mapId = AuthManager.GetInstance().userAuthData.userInfo.id;
         }
         else
