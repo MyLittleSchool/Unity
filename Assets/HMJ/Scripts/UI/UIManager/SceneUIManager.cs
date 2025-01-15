@@ -989,7 +989,7 @@ namespace MJ
         {
             UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
             //이름 창 세팅
-            profileInputField[0].text = userInfo.name;
+            profileInputField[0].text = userInfo.nickname;
             //상태메시지 세팅
             profileInputField[1].text = userInfo.statusMesasge;
 
@@ -1005,10 +1005,9 @@ namespace MJ
         private void ProfileEditSave()
         {
             UserInfo joinInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            joinInfo.name = nickNameInputField.text;
+            joinInfo.nickname = nickNameInputField.text;
             joinInfo.interest = selectedInterest;
             joinInfo.statusMesasge = myMessageInputField.text;
-            joinInfo.schoolId = 1;
 
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/profile";
@@ -1017,22 +1016,29 @@ namespace MJ
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 print(downloadHandler.text);
+
+                AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(joinInfo);
+
+
+                if (DataManager.instance.mapType == DataManager.MapType.MyClassroom)
+                {
+                    PhotonNetMgr.instance.topMenuText.text = AuthManager.GetInstance().userAuthData.userInfo.nickname;
+                }
+
+
+                DataManager.instance.player.GetComponent<PlayerMalpung>().RPC_PlayerNicknameSet();
+              
+
+                //프로필 이미지 변경 및 이름 변경
+                ProfileSet();
+                SetProfile();
+
+
             };
             StartCoroutine(HttpManager.GetInstance().Patch(info));
 
-            currentuserInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            currentuserInfo.name = nickNameInputField.text;
-            currentuserInfo.interest = selectedInterest;
-            currentuserInfo.statusMesasge = myMessageInputField.text;
-
-            AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(currentuserInfo);
-            SetProfile();
 
             QuestManager.instance.QuestPatch(1);
-
-            //프로필 이미지 변경 및 이름 변경
-            ProfileSet();
-            DataManager.instance.player.GetComponent<PlayerMalpung>().PlayerNameSet();
 
         }
 
@@ -1041,7 +1047,7 @@ namespace MJ
             profileInterest.text = "";
             profileMyMessage.text = "";
             UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            profileLvNick.text = userInfo.level + " | " + userInfo.name;
+            profileLvNick.text = userInfo.level + " | " + userInfo.nickname;
             for (int i = 0; i < userInfo.interest.Count; i++)
             {
                 profileInterest.text += "#" + userInfo.interest[i] + " ";
@@ -1194,7 +1200,9 @@ namespace MJ
                 if (hit.collider.gameObject.GetComponent<PhotonView>().IsMine == false)
                 {
                     UserInfo userInfo = hit.collider.gameObject.GetComponent<UserRPC>().userInfo;
+
                     OnProfilePanel(userInfo);
+
                 }
             }
             else othersProfilePanel.SetActive(false);

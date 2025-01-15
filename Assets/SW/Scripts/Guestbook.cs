@@ -157,7 +157,7 @@ namespace SW
                     ContentData newContent = new ContentData();
                     newContent.id = post.id;
                     newContent.userId = post.user.id;
-                    newContent.nickname = post.user.name;
+                    newContent.nickname = post.user.nickname;
                     newContent.content = post.content;
                     switch (post.backgroundColor)
                     {
@@ -193,7 +193,7 @@ namespace SW
                             ContentData newContent = new ContentData();
                             newContent.id = post.id;
                             newContent.userId = post.user.id;
-                            newContent.nickname = post.user.name;
+                            newContent.nickname = post.user.nickname;
                             newContent.content = post.content;
                             switch (post.backgroundColor)
                             {

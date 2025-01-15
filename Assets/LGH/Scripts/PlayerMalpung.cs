@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using Photon.Pun;
 using SW;
+using static UnityEngine.Rendering.DebugUI;
+using static HttpManager;
+using UnityEngine.Networking;
 
 namespace GH
 {
@@ -11,6 +14,8 @@ namespace GH
 
     public class PlayerMalpung : MonoBehaviourPun, IPunObservable
     {
+        public UserInfoData getUserInfo;
+
         //말풍선
         public GameObject malpungPanel;
         public TMP_Text malpungText;
@@ -30,29 +35,22 @@ namespace GH
 
         void Start()
         {
-            PlayerNameSet();
             //말풍선 끄기
             malpungPanel.SetActive(false);
 
             // 말풍 텍스트 초기화
             malpungText.text = "";
-            playerNameText.text = photonView.Owner.NickName;
+
+            //PlayerNicknameSet();
+            RPC_PlayerNicknameSet();
         }
 
-            // Update is called once per frame
-            void Update()
+        // Update is called once per frame
+        void Update()
         {
 
             OnMalpung();
             malpungPanel.SetActive(onMalpung);
-        }
-        public void PlayerNameSet()
-        {
-           // playerNameText.text = photonView.Owner.NickName;
-            //playerNameText.text = AuthManager.GetInstance().userAuthData.userInfo.name;
-
-            //PhotonNetMgr.instance.ChangeNickname(AuthManager.GetInstance().userAuthData.userInfo.name);
-
         }
 
         //말풍선 생기기
@@ -94,7 +92,30 @@ namespace GH
             photonView.RPC(nameof(MalPungText), RpcTarget.All, value);
         }
 
+        [PunRPC]
+        public void PlayerNicknameSet()
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/" + photonView.Owner.NickName;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                print(jsonData);
+                //jsonData를 PostInfoArray 형으로 바꾸자.
+                getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
 
+                playerNameText.text = getUserInfo.data.nickname;
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+        
+
+        }
+
+        public void RPC_PlayerNicknameSet()
+        {
+            photonView.RPC(nameof(PlayerNicknameSet), RpcTarget.All);
+
+        }
 
 
     }
