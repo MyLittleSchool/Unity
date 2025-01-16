@@ -105,6 +105,9 @@ namespace MJ
 
         [Header("로그아웃 버튼")]
         public Button logOutButton;
+
+        [Header("종료 버튼")]
+        public Button quitButton;
         #endregion
 
         #region Panel
@@ -388,6 +391,9 @@ namespace MJ
                 logOutButton.onClick.AddListener(OnMenuButtonClick);
                 logOutButton.onClick.AddListener(LogOutAccount);
             }
+
+            if(quitButton)
+                quitButton.onClick.AddListener(QuitApp);
 
             if (AuthManager.GetInstance().userAuthData.userInfo.school.schoolName == "")
             {
@@ -983,6 +989,11 @@ namespace MJ
         {
             WebSocketManager.GetInstance().LogOut();
             SceneManager.LoadScene(0);
+        }
+
+        public void QuitApp()
+        {
+            Application.Quit();
         }
 
         //프로필 편집 초기값
