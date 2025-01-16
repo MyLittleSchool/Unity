@@ -47,6 +47,7 @@ namespace SW
             try
             {
                 friendWebSocket = new WebSocket(SERVER_ADDRESS + "/ws?userId=" + id + "&mapId=" + id + "&mapType=MyClassroom");
+                friendWebSocket.SetCredentials("Bearer", AuthManager.GetInstance().accessToken, true);
                 friendWebSocket.OnOpen += (sender, e) =>
                 {
                     Debug.Log("서버와 연결되었습니다.");
