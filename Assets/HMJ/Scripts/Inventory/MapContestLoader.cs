@@ -10,6 +10,13 @@ using static HttpManager;
 using static MapRegisterDataUI;
 namespace MJ
 {
+    [System.Serializable]
+    public class ImageData
+    {
+        public string url;
+        public string publicId;
+    }
+
     [Serializable]
     public class ObjectContestInfo
     {
@@ -33,6 +40,7 @@ namespace MJ
         public int likeCount;
         public int viewCount;
         public int userId;
+        public string publicId;
     }
 
     [Serializable]
@@ -111,15 +119,35 @@ namespace MJ
             info.body = mapRoute; // 파일 이름
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
-                string fileName = downloadHandler.text.ToString().Substring(39);
-                SendMapData(mapRegisterData, fileName);
+                string jsonResponse = downloadHandler.text;
 
+                try
+                {
+                    // JSON 파싱을 위한 임시 클래스
+                    var jsonData = JsonUtility.FromJson<ImageData>(jsonResponse);
+
+                    // URL과 publicId 추출
+                    string url = jsonData.url;
+                    string publicId = jsonData.publicId;
+
+                    // 추출된 데이터 디버깅 출력
+                    Debug.Log("URL: " + url);
+                    Debug.Log("Public ID: " + publicId);
+
+                    // 파일 이름 전달 (publicId를 기준으로 전달)
+                    SendMapData(mapRegisterData, url, publicId);
+                    Debug.Log("맵 콘테스트 이미지 보내기 성공");
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("JSON 파싱 실패: " + ex.Message);
+                }
             };
             StartCoroutine(HttpManager.GetInstance().UploadFileByFormData(info, mapRoute));
 
         }
 
-        public void SendMapData(MapRegisterData mapRegisterData, string url)
+        public void SendMapData(MapRegisterData mapRegisterData, string url, string PublicId)
         {
             MapContestData mapContestInfo = new MapContestData();
 
@@ -127,12 +155,15 @@ namespace MJ
             mapContestInfo.description = mapRegisterData.Description;
             mapContestInfo.userId = DataManager.instance.mapId;
             mapContestInfo.previewImageUrl = url;
+            mapContestInfo.publicId = PublicId;
+
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/map-contest";
             info.body = JsonUtility.ToJson(mapContestInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
+                Debug.Log("맵 콘테스트 데이터 보내기 성공");
                 print(downloadHandler.text);
             };
 

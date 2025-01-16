@@ -21,5 +21,6 @@ namespace SW
         public TMP_Text MessageText;
         public Button PassButton;
         public Button RequestButton;
+        public Button reportButton;
     }
 }

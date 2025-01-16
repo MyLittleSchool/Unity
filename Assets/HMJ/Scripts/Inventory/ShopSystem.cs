@@ -56,8 +56,8 @@ public class SellSystem : MonoBehaviour
         {
             instance = this;
         }
-        clickComponents = new ClickButton[25];
-        childPanel = new GameObject[25];
+        clickComponents = new ClickButton[40];
+        childPanel = new GameObject[40];
 
         InitItemList();
         GetItemComponents();

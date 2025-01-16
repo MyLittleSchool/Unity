@@ -1,4 +1,5 @@
 using GH;
+using MJ;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Photon.Pun;
@@ -9,6 +10,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static SW.FriendsUI;
+using static Unity.Burst.Intrinsics.X86.Avx;
 namespace SW
 {
     public class FriendsUI : MonoBehaviour
@@ -237,10 +240,10 @@ namespace SW
                     info.onComplete = (DownloadHandler res) =>
                     {
                         UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
-                        comp.StateText.text = "<color=#F2884B>" + userInfo.name + "님의 교실";
+                        comp.StateText.text = "<color=#F2884B>" + userInfo.nickname + "님의 교실";
                         comp.PassButton.onClick.AddListener(() =>
                         {
-                            SceneMgr.instance.ClassIn(userInfo.name, mapId);
+                            SceneMgr.instance.ClassIn(userInfo.nickname, mapId);
                             gameObject.SetActive(false);
                         });
                     };
@@ -280,7 +283,7 @@ namespace SW
                     info.onComplete = (DownloadHandler res) =>
                     {
                         UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
-                        comp.StateText.text = "<color=#F2884B>" + userInfo.name + "님의 맵 콘테스트";
+                        comp.StateText.text = "<color=#F2884B>" + userInfo.nickname + "님의 맵 콘테스트";
                         comp.PassButton.onClick.AddListener(() =>
                         {
                             ToastMessage.OnMessage("따라갈 수 없는 위치에 있습니다");
@@ -361,7 +364,7 @@ namespace SW
                         UserInfo friend = list.response[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.response[i].receiver : list.response[i].requester;
                         comp.friendshipId = list.response[i].id;
                         comp.id = friend.id;
-                        comp.NickNameText.text = friend.name;
+                        comp.NickNameText.text = friend.nickname;
                         friendDic[comp.id] = comp;
                         //SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                     }
@@ -386,7 +389,7 @@ namespace SW
                         UserInfo requester = list.response[i].requester;
                         comp.friendshipId = list.response[i].id;
                         comp.id = requester.id;
-                        comp.NickNameText.text = requester.name;
+                        comp.NickNameText.text = requester.nickname;
                         comp.GradeText.text = requester.grade + "학년";
                         comp.locationText.text = requester.school.schoolName;
                         comp.InterestText.text = "#" + String.Join(" #", requester.interest);
@@ -444,7 +447,7 @@ namespace SW
                         UserInfo receiver = list.response[i].receiver;
                         comp.friendshipId = list.response[i].id;
                         comp.id = receiver.id;
-                        comp.NickNameText.text = receiver.name;
+                        comp.NickNameText.text = receiver.nickname;
                         if (receiver.isOnline)
                         {
                             comp.StateText.text = "<color=#F2884B>접속중";
@@ -500,9 +503,13 @@ namespace SW
                     GameObject newPanel = Instantiate(friendPrefab, contentsTabs[0]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
                     UserInfo friend = list.friends[i].requester.id == AuthManager.GetInstance().userAuthData.userInfo.id ? list.friends[i].receiver : list.friends[i].requester;
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        SceneUIManager.GetInstance().OnProfilePanel(friend);
+                    });
                     comp.friendshipId = list.friends[i].id;
                     comp.id = friend.id;
-                    comp.NickNameText.text = friend.name;
+                    comp.NickNameText.text = friend.nickname;
                     friendDic[comp.id] = comp;
                     SetFriendPanel(comp, friend.isOnline, friend.mapType, friend.mapId);
                     // 규현 확인 
@@ -534,13 +541,17 @@ namespace SW
                     // 내가 받은 요청
                     GameObject newPanel = Instantiate(requestedPrefab, contentsTabs[1]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        SceneUIManager.GetInstance().OnProfilePanel(requester);
+                    });
                     comp.friendshipId = list.requests[i].id;
                     comp.id = requester.id;
-                    comp.NickNameText.text = requester.name;
+                    comp.NickNameText.text = requester.nickname;
                     comp.GradeText.text = requester.grade + "학년";
                     comp.locationText.text = requester.school.location + " " + requester.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", requester.interest);
-                    comp.ProfileImage.AvatarGet(list.requests[i].id);
+                    comp.ProfileImage.AvatarGet(requester.id);
                     comp.MessageText.text = list.requests[i].message;
                     if (requester.isOnline)
                     {
@@ -587,15 +598,17 @@ namespace SW
                 for (int i = 0; i < list.requests.Length; i++)
                 {
                     //친구 리스트------------------------------------------------------------------
-
-                    UserInfo requester = list.requests[i].requester;
                     // 내가 보낸 요청
                     GameObject newPanel = Instantiate(requestingPrefab, contentsTabs[2]);
                     FriendPanel comp = newPanel.GetComponent<FriendPanel>();
                     UserInfo receiver = list.requests[i].receiver;
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        SceneUIManager.GetInstance().OnProfilePanel(receiver);
+                    });
                     comp.friendshipId = list.requests[i].id;
                     comp.id = receiver.id;
-                    comp.NickNameText.text = receiver.name;
+                    comp.NickNameText.text = receiver.nickname;
                     comp.GradeText.text = receiver.grade + "학년";
                     comp.locationText.text = receiver.school.location + " " + receiver.school.schoolName;
                     comp.InterestText.text = "#" + String.Join(" #", receiver.interest);
@@ -665,6 +678,18 @@ namespace SW
                     friendPanel.RequestButton.onClick.AddListener(() =>
                     {
                         WebSocketManager.GetInstance().OnRequestFriendPanel(friendPanel.id);
+                    });
+                    friendPanel.reportButton.onClick.AddListener(() =>
+                    {
+                        int userId = GetComponent<FriendPanel>().id;
+                        HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
+                        info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/" + userId;
+                        info2.onComplete = (DownloadHandler res) =>
+                        {
+                            UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
+                            SceneUIManager.GetInstance().OnProfilePanel(userInfo);
+                        };
+                        StartCoroutine(HttpManager.GetInstance().Get(info2));
                     });
                 }
                 if (tab == 3) ChangeTab(tab);

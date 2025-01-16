@@ -75,7 +75,7 @@ namespace GH
             }
             //Screen.SetResolution(360, 800, false);
             //Screen.fullScreen = false;
-            SetFullScreenToMonitorResolution();
+            //SetFullScreenToMonitorResolution();
             privateRoomName = "";
         }
         public void PlayerFind()

@@ -179,7 +179,7 @@ namespace MJ
 
         [Header("학교 방문 패널")]
         public GameObject visitOtherSchoolPanel;
-        
+
         [Header("학교 방문 패널")]
         public GameObject visitNearSchoolPanel;
 
@@ -208,6 +208,9 @@ namespace MJ
 
         [Header("가이드 패널")]
         public GameObject guidePanel;
+
+        [Header("방문자 인벤토리 셋팅 패널")]
+        public GameObject OtherInventoryPanel;
         #endregion
 
         #region SingleTone
@@ -247,6 +250,7 @@ namespace MJ
         public TMP_Text nickNameText;
         public TMP_Text interestText;
         public TMP_Text myMessageText;
+        public TMP_Text nickCheckInfoText;
 
         [Header("관심사 딕셔너리")]
         private Dictionary<string, GameObject> buttonList = new Dictionary<string, GameObject>();
@@ -290,7 +294,6 @@ namespace MJ
 
         [Header("프로필 편집 인풋필드 리스트")]
         public List<TMP_InputField> profileInputField;
-
 
         #endregion
 
@@ -517,7 +520,7 @@ namespace MJ
         {
             //inventoryRT.SetHeight(newValue);
             inventoryDataRT.anchoredPosition = new Vector2(inventoryDataRT.anchoredPosition.x, (newValue - 775) * 1.6f);
-            mainPanelLayoutGroup.spacing = -200 -200 + 200 * newValue/ 775;
+            mainPanelLayoutGroup.spacing = -200 - 200 + 200 * newValue / 775;
         }
         public void OnMapInventoryPanel()
         {
@@ -563,8 +566,11 @@ namespace MJ
             ChatPanel.gameObject.SetActive(true);
             if (DataManager.instance.player != null)
             {
+                if (DataManager.instance.player.GetComponent<SetTile>().setMode)
+                {
+                    QuestManager.instance.QuestPatch(4);
+                }
                 DataManager.instance.player.GetComponent<SetTile>().setMode = false;
-                QuestManager.instance.QuestPatch(4);
             }
         }
 
@@ -613,6 +619,17 @@ namespace MJ
             }
         }
 
+        public void OnOtherInventorySettingUI()
+        {
+            OtherInventoryPanel.SetActive(true);
+            Debug.Log("현재 인벤토리 설정 창 On");
+        }
+
+        public void OffOtherInventorySettingUI()
+        {
+            OtherInventoryPanel.SetActive(false);
+            Debug.Log("현재 인벤토리 설정 창 Off");
+        }
         public void OnMapConfirmPanel()
         {
             mapConfirmPanel.SetActive(true);
@@ -697,26 +714,52 @@ namespace MJ
             if (mapSuccessRegisterPanel)
                 mapSuccessRegisterPanel.SetActive(false);
         }
-        bool isProfileOn = true;
+        bool isProfileOff = true;
+        TMP_Text emotionText;
         public void OnOffMyProfile()
         {
             //버튼으로 키고 끄기
-            isProfileOn = !isProfileOn;
+            isProfileOff = !isProfileOff;
             myProfilePanel.SetActive(true);
             iTween.Stop(myProfilePanel);
             iTween.ValueTo(myProfilePanel, iTween.Hash(
-                "from", isProfileOn ? 0 : -700,
-                "to", isProfileOn ? -700 : 0,
+                "from", isProfileOff ? 0 : -700,
+                "to", isProfileOff ? -700 : 0,
                 "time", 0.6f,
-                "easetype", isProfileOn ? iTween.EaseType.easeInCubic : iTween.EaseType.easeOutCubic,
+                "easetype", isProfileOff ? iTween.EaseType.easeInCubic : iTween.EaseType.easeOutCubic,
                 "onupdate", nameof(MoveProfilePanel),
                 "onupdatetarget", gameObject
                 ));
             Image myProfileImage = myProfileButton.transform.GetChild(0).GetComponent<Image>();
-            Color32 myprofileColor = myProfilePanel.activeSelf ? new Color32(242, 136, 75, 255) : new Color32(202, 202, 202, 255);
+            Color32 myprofileColor = !isProfileOff ? new Color32(242, 136, 75, 255) : new Color32(202, 202, 202, 255);
             myProfileImage.color = myprofileColor;
-
+            if (!isProfileOff)
+            {
+                HttpInfo info = new HttpInfo();
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/emotion-analysis/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+                info.onComplete = (DownloadHandler res) =>
+                {
+                    EmotionInfo data = JsonUtility.FromJson<EmotionInfo>(res.text);
+                    if (data.emotion == "" || data.emotion == "없음")
+                    {
+                        emotionText.text = "기쁨";
+                    }
+                    else
+                    {
+                        emotionText.text = data.emotion;
+                    }
+                };
+                StartCoroutine(HttpManager.GetInstance().Get(info));
+            }
         }
+        [Serializable]
+        private struct EmotionInfo
+        {
+            public string message;
+            public string emotion;
+            public int score;
+        }
+
         public void MoveProfilePanel(float value)
         {
             RectTransform rt = myProfilePanel.GetComponent<RectTransform>();
@@ -770,7 +813,7 @@ namespace MJ
         public void OnVisitOtherSchoolPanel()
         {
             visitOtherSchoolPanel.SetActive(true);
-        } 
+        }
         public void OnVisitNearSchoolPanel()
         {
             visitNearSchoolPanel.SetActive(true);
@@ -947,7 +990,7 @@ namespace MJ
         {
             UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
             //이름 창 세팅
-            profileInputField[0].text = userInfo.name;
+            profileInputField[0].text = userInfo.nickname;
             //상태메시지 세팅
             profileInputField[1].text = userInfo.statusMesasge;
 
@@ -963,10 +1006,9 @@ namespace MJ
         private void ProfileEditSave()
         {
             UserInfo joinInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            joinInfo.name = nickNameInputField.text;
+            joinInfo.nickname = nickNameInputField.text;
             joinInfo.interest = selectedInterest;
             joinInfo.statusMesasge = myMessageInputField.text;
-            joinInfo.schoolId = 1;
 
             HttpInfo info = new HttpInfo();
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/profile";
@@ -975,22 +1017,65 @@ namespace MJ
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 print(downloadHandler.text);
+
+                AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(joinInfo);
+
+
+                if (DataManager.instance.mapType == DataManager.MapType.MyClassroom)
+                {
+                    PhotonNetMgr.instance.topMenuText.text = AuthManager.GetInstance().userAuthData.userInfo.nickname;
+                }
+
+
+                DataManager.instance.player.GetComponent<PlayerMalpung>().RPC_PlayerNicknameSet();
+              
+
+                //프로필 이미지 변경 및 이름 변경
+                ProfileSet();
+                SetProfile();
+
+
             };
             StartCoroutine(HttpManager.GetInstance().Patch(info));
 
-            currentuserInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            currentuserInfo.name = nickNameInputField.text;
-            currentuserInfo.interest = selectedInterest;
-            currentuserInfo.statusMesasge = myMessageInputField.text;
-
-            AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(currentuserInfo);
-            SetProfile();
 
             QuestManager.instance.QuestPatch(1);
 
-            //프로필 이미지 변경 및 이름 변경
-            ProfileSet();
-            DataManager.instance.player.GetComponent<PlayerMalpung>().PlayerNameSet();
+        }
+
+        public void NickCheck()
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/is-exist/nickname/" + nickNameInputField.text;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+                if(nickNameInputField.text == AuthManager.GetInstance().userAuthData.userInfo.nickname)
+                {
+                    myProfileSaveButton.GetComponent<Image>().color = selectColor;
+                    myProfileSaveButton.interactable = true;
+
+                    nickCheckInfoText.gameObject.SetActive(true);
+                    nickCheckInfoText.text = "기존과 동일한 닉네임 입니다.";
+                }
+                else if (downloadHandler.text == "false")
+                {
+                    myProfileSaveButton.GetComponent<Image>().color = selectColor;
+                    myProfileSaveButton.interactable = true;
+
+                    nickCheckInfoText.gameObject.SetActive(true);
+                    nickCheckInfoText.text = "가입 가능한 닉네임 입니다.";
+                }
+                else
+                {
+                    myProfileSaveButton.GetComponent<Image>().color = noneSelectColor;
+                    myProfileSaveButton.interactable = false;
+
+                    nickCheckInfoText.gameObject.SetActive(true);
+                    nickCheckInfoText.text = "중복된 닉네임 입니다.";
+                }
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
 
         }
 
@@ -999,7 +1084,7 @@ namespace MJ
             profileInterest.text = "";
             profileMyMessage.text = "";
             UserInfo userInfo = AuthManager.GetInstance().userAuthData.userInfo;
-            profileLvNick.text = userInfo.level + " | " + userInfo.name;
+            profileLvNick.text = userInfo.level + " | " + userInfo.nickname;
             for (int i = 0; i < userInfo.interest.Count; i++)
             {
                 profileInterest.text += "#" + userInfo.interest[i] + " ";
@@ -1007,6 +1092,7 @@ namespace MJ
 
             //메시지
             profileMyMessage.text = userInfo.statusMesasge;
+            emotionText = myProfilePanel.transform.GetChild(0).Find("Emotion_Text").GetComponent<TMP_Text>();
         }
 
         //첫 로그인 학생 선택 버튼
@@ -1150,16 +1236,42 @@ namespace MJ
                 // 터치한 오브젝트에 대한 처리 수행
                 if (hit.collider.gameObject.GetComponent<PhotonView>().IsMine == false)
                 {
-                    othersProfilePanel.SetActive(true);
                     UserInfo userInfo = hit.collider.gameObject.GetComponent<UserRPC>().userInfo;
-                    FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
-                    comp.id = userInfo.id;
-                    comp.NickNameText.text = userInfo.name;
-                    comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
-                    comp.MessageText.text = userInfo.statusMesasge;
+
+                    OnProfilePanel(userInfo);
+
                 }
             }
             else othersProfilePanel.SetActive(false);
+        }
+        public void OnProfilePanel(UserInfo userInfo)
+        {
+            othersProfilePanel.SetActive(true);
+            FriendPanel comp = othersProfilePanel.GetComponent<FriendPanel>();
+            comp.id = userInfo.id;
+            comp.NickNameText.text = userInfo.name;
+            comp.InterestText.text = "#" + String.Join(" #", userInfo.interest);
+            comp.MessageText.text = userInfo.statusMesasge;
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/emotion-analysis/" + userInfo.id;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                EmotionInfo data = JsonUtility.FromJson<EmotionInfo>(res.text);
+                if (data.emotion == "" || data.emotion == "없음")
+                {
+                    comp.StateText.text = "기쁨";
+                }
+                else
+                {
+                    comp.StateText.text = data.emotion;
+                }
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+            comp.reportButton.onClick.RemoveAllListeners();
+            comp.reportButton.onClick.AddListener(() =>
+            {
+                Report.instance.CreateReportInfo(userInfo.name, Report.ContentType.User, userInfo.id);
+            });
         }
         private bool IsPointerOverUIObject(Vector2 touchPosition)
         {

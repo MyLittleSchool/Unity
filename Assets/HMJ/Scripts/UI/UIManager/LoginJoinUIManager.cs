@@ -1,13 +1,8 @@
 using SW;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static HttpManager;
 
@@ -20,7 +15,6 @@ namespace GH
         public enum Loginstep
         {
             START,
-            SERVICE,
             LOGIN,
             NAME,
             EMAIL,
@@ -35,6 +29,8 @@ namespace GH
 
         public UserInfoData getUserInfo;
 
+        public TokenData tokenGet;
+
         #region Button
         [Header("다음 버튼 리스트")]
         public List<Button> nextButtons;
@@ -42,7 +38,13 @@ namespace GH
         [Header("이전 버튼 리스트")]
         public List<Button> backButtons;
 
-        [Header("4. 중복 버튼")]
+        [Header("2. 닉네임 중복 버튼")]
+        public Button checkNicknameButton;
+
+        [Header("2. 닉네임 중복 확인 bool")]
+        public bool checkNicknameBool = false;
+
+        [Header("4. 아이디 중복 버튼")]
         public Button checkIDButton;
 
         [Header("4. 인증 확인 버튼")]
@@ -98,6 +100,9 @@ namespace GH
         [Header("7. 남녀성별")]
         public bool gender;
 
+        [Header("8. 이메일 중복")]
+        public bool isEmailDuplicate;
+
         [Header("통신 인풋필드 리스트")]
         // 0 - 이름, 1 - 이메일, 2 - PassWord, 3 - 생년월일
         public List<TMP_InputField> joinInfoInfoList;
@@ -112,6 +117,8 @@ namespace GH
         [Header("비밀번호 틀림 텍스트")]
         public GameObject PWCheckText;
 
+        [Header("닉네임 중복 안내 텍스트")]
+        public TMP_Text nickCheckInfo;
 
         private Color32 selectColor = new Color32(242, 136, 75, 255);
         private Color32 noneSelectColor = new Color32(242, 242, 242, 255);
@@ -121,6 +128,12 @@ namespace GH
 
         private void Start()
         {
+            //닉네임 체크 다음 버튼 비활성화
+            nextButtons[2].GetComponent<Image>().color = noneSelectColor;
+            nextButtons[2].interactable = false;
+
+            nickCheckInfo.gameObject.SetActive(false);
+            isEmailDuplicate = false;
 
             // 초기 패널 엑티브 적용
             for (int i = 0; i < logins.Count; i++)
@@ -189,10 +202,13 @@ namespace GH
             switch (currentLoginstep)
             {
                 case Loginstep.NAME:
-                    currentJoinInfo.name = joinInfoInfoList[0].text;
+                    currentJoinInfo.nickname = joinInfoInfoList[0].text;
+                    currentJoinInfo.name = joinInfoInfoList[4].text;
                     break;
 
                 case Loginstep.EMAIL:
+                    if (isEmailDuplicate)
+                        return;
                     currentJoinInfo.email = joinInfoInfoList[1].text;
                     break;
 
@@ -213,7 +229,7 @@ namespace GH
 
             }
             logins[(int)currentLoginstep + 1].SetActive(true);
-            
+
             currentLoginstep++;
         }
         public void BackStep()
@@ -243,21 +259,59 @@ namespace GH
         public void CheckID()
         {
             //통신***** 아이디 중복 확인
-            checkIDText.gameObject.SetActive(true);
+            IsEmailDuplicate((isDuplicate) =>
+            {
+                checkIDText.gameObject.SetActive(true);
+                isEmailDuplicate = isDuplicate;
+                if (isDuplicate)
+                    checkIDText.text = "가입 불가능한 이메일 입니다.";
+                else
+                    checkIDText.text = "가입 가능한 이메일 입니다.";
+            });
+
         }
 
         public void PWCheck()
         {
             if (pWCheckInputField.text.Length > 0 && pWInputField.text == pWCheckInputField.text)
             {
-                nextButtons[5].GetComponent<Image>().color = selectColor;
-                nextButtons[5].interactable = true;
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
+                nextButtons[(int)currentLoginstep].interactable = true;
             }
             else
             {
-                nextButtons[5].GetComponent<Image>().color = noneSelectColor;
-                nextButtons[5].interactable = false;
+                nextButtons[4].GetComponent<Image>().color = noneSelectColor;
+                nextButtons[4].interactable = false;
             }
+        }
+
+        public void NickCheck()
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/is-exist/nickname/" + joinInfoInfoList[0].text;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+                if (downloadHandler.text == "false")
+                {
+                    nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
+                    nextButtons[(int)currentLoginstep].interactable = true;
+
+                    nickCheckInfo.gameObject.SetActive(true);
+                    nickCheckInfo.text = "가입 가능한 닉네임 입니다.";
+                }
+                else
+                {
+                    nextButtons[(int)currentLoginstep].GetComponent<Image>().color = noneSelectColor;
+                    nextButtons[(int)currentLoginstep].interactable = false;
+
+                    nickCheckInfo.gameObject.SetActive(true);
+                    nickCheckInfo.text = "중복된 닉네임 입니다.";
+                }
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+
+
         }
 
         private void InterestButtonCreate()
@@ -335,6 +389,7 @@ namespace GH
 
             UserInfo joinInfo = new UserInfo();
             joinInfo.email = currentJoinInfo.email;
+            joinInfo.nickname = currentJoinInfo.nickname;
             joinInfo.name = currentJoinInfo.name;
             joinInfo.birthday = currentJoinInfo.birthday;
             joinInfo.gender = gender;
@@ -343,7 +398,7 @@ namespace GH
 
 
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user";
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/sign-up";
             info.body = JsonUtility.ToJson(joinInfo);
             info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
@@ -358,40 +413,65 @@ namespace GH
             currentLoginstep = Loginstep.LOGIN;
         }
 
+
+
         private void UserLogin()
         {
+
+            TokenInfo tokenInfo = new TokenInfo();
+            tokenInfo.userEmail = loginList[0].text;
+            tokenInfo.password = loginList[1].text;
+
             HttpInfo info = new HttpInfo();
-            info.url =  HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/auth/login";
+            info.body = JsonUtility.ToJson(tokenInfo);
+            info.contentType = "application/json";
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
                 string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-                print(jsonData);
-                //jsonData를 PostInfoArray 형으로 바꾸자.
-                getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
-                print("get : "+getUserInfo);
-                LoginCallback();
+
+                tokenGet = JsonUtility.FromJson<TokenData>(jsonData);
+                AuthManager.GetInstance().accessToken = tokenGet.data.accessToken;
+                AuthManager.GetInstance().refreshToken = tokenGet.data.refreshToken;
+
+                if (AuthManager.GetInstance().accessToken != "")
+                {
+                    print("id : " + loginList[0].text);
+                    // 겟으로 받아오기
+                    HttpInfo info2 = new HttpInfo();
+                    //info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/list";
+                    info2.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/email/" + loginList[0].text;
+                    info2.onComplete = (DownloadHandler downloadHandler) =>
+                    {
+                        string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
+                        print(jsonData);
+                        //jsonData를 PostInfoArray 형으로 바꾸자.
+                        getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
+                        print("get : " + getUserInfo);
+                        LoginCallback();
+                    };
+                    StartCoroutine(HttpManager.GetInstance().Get(info2));
+                }
+                else
+                {
+                    PWCheckText.SetActive(true);
+                    print("로그인에 실패하였습니다.");
+                }
             };
-            StartCoroutine(HttpManager.GetInstance().Get(info));
+            StartCoroutine(HttpManager.GetInstance().Post(info));
 
 
         }
+
+       
         private void LoginCallback()
         {
-            if (getUserInfo.data.password == loginList[1].text)
-            {
-                print("맞음");
-                AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
-                //씬 넘어가기
-                DataManager.instance.playerName = getUserInfo.data.name;
-                SceneMgr.instance.Login();
-            }
-            else
-            {
-                print("틀림");
+            print("로그인 성공");
+            AuthManager.GetInstance().userAuthData = new AuthManager.AuthData(getUserInfo.data);
+            //씬 넘어가기
+            DataManager.instance.playerName = getUserInfo.data.nickname;
+            SceneMgr.instance.Login();
 
-                PWCheckText.SetActive(true);
-                print("비밀번호가 다릅니다");
-            }
         }
 
         private void ClickMen()
@@ -407,5 +487,24 @@ namespace GH
             gender = false;
         }
 
+
+        public void IsEmailDuplicate(System.Action<bool> callback)
+        {
+            HttpManager.HttpInfo info = new HttpManager.HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/is-exist/" + joinInfoInfoList[1].text;
+            info.onComplete = (DownloadHandler res) =>
+            {
+                Debug.Log("info.url: " + info.url);
+                Debug.Log("res bool: " + res.text);
+
+                bool isDuplicate = res.text == "true";
+                callback(isDuplicate);
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
+        }
     }
+
+ 
+
+ 
 }

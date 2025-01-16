@@ -141,6 +141,7 @@ namespace SW
             SaveInfo saveInfo = new SaveInfo();
             saveInfo.title = titleText.text;
             saveInfo.schoolId = DataManager.instance.mapId;
+            saveInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
             // 통신
             HttpManager httpManager = HttpManager.GetInstance();
             HttpManager.HttpInfo info = new HttpManager.HttpInfo();
@@ -149,7 +150,10 @@ namespace SW
             info.body = path;
             info.onComplete = (DownloadHandler res) =>
             {
-                saveInfo.imgUrl = res.text;
+                print("사진등록");
+                ImageInfo imageInfo = JsonUtility.FromJson<ImageInfo>(res.text);
+                saveInfo.publicId = imageInfo.publicId;
+                saveInfo.imgUrl = imageInfo.url;
                 HttpManager.HttpInfo info2 = new HttpManager.HttpInfo();
                 info2.url = httpManager.SERVER_ADRESS + "/gallery";
                 info2.contentType = "application/json";
@@ -165,11 +169,20 @@ namespace SW
             SetCreatePanel(false);
         }
         [Serializable]
+        private struct ImageInfo
+        {
+            public string url;
+            public string publicId;
+        }
+
+        [Serializable]
         private struct SaveInfo
         {
+            public string publicId;
             public string imgUrl;
             public string title;
             public int schoolId;
+            public int userId;
         }
         public void LoadData()
         {
@@ -188,6 +201,10 @@ namespace SW
                     GalleryContentPanel comp = newPanel.GetComponent<GalleryContentPanel>();
                     comp.title.text = data.data[i].title;
                     StartCoroutine(DownloadImage(data.data[i].imgUrl, comp.image));
+                    comp.reportButton.onClick.AddListener(() =>
+                    {
+                        Report.instance.CreateReportInfo("갤러리 - " + data.data[i].title, Report.ContentType.Gallery, -1, data.data[i].id);
+                    });
                 }
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));

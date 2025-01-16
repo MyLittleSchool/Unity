@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86.Avx;
 namespace SW
 {
     public class UserRPC : MonoBehaviourPunCallbacks
@@ -46,6 +47,10 @@ namespace SW
             playerPanel = playerUI.GetComponent<PlayerPanel>();
             playerPanel.userRPC = this;
             userInfo = JsonUtility.FromJson<UserInfo>(_userInfo);
+            playerPanel.reportButton.onClick.AddListener(() =>
+            {
+                SceneUIManager.GetInstance().OnProfilePanel(userInfo);
+            });
             StartCoroutine(Co_SetAvatar(playerPanel.userRPC.userInfo.id, playerPanel));
         }
         [PunRPC]
@@ -55,6 +60,10 @@ namespace SW
             playerPanel = playerUI.GetComponent<PlayerPanel>();
             playerPanel.userRPC = this;
             userInfo = JsonUtility.FromJson<UserInfo>(_userInfo);
+            playerPanel.reportButton.onClick.AddListener(() =>
+            {
+                SceneUIManager.GetInstance().OnProfilePanel(userInfo);
+            });
             StartCoroutine(Co_SetAvatar(playerPanel.userRPC.userInfo.id, playerPanel));
         }
         IEnumerator Co_SetAvatar(int id, PlayerPanel panel)

@@ -34,10 +34,11 @@ namespace SW
         }
         #endregion
 
-        public string SERVER_ADDRESS { get; } = "ws://My-little-school-dev-env.eba-rfqxtdpp.ap-northeast-2.elasticbeanstalk.com";
+        public string SERVER_ADDRESS { get; } = "ws://175.196.249.220:5544";
         /*
         ws://My-little-school-dev-env.eba-rfqxtdpp.ap-northeast-2.elasticbeanstalk.com
         ws://125.132.216.190:5544
+        ws://175.196.249.220:5544
          */
         public WebSocket friendWebSocket;
         public FriendsUI friendsUI;
@@ -46,6 +47,7 @@ namespace SW
             try
             {
                 friendWebSocket = new WebSocket(SERVER_ADDRESS + "/ws?userId=" + id + "&mapId=" + id + "&mapType=MyClassroom");
+                friendWebSocket.SetCredentials("Bearer", AuthManager.GetInstance().accessToken, true);
                 friendWebSocket.OnOpen += (sender, e) =>
                 {
                     Debug.Log("서버와 연결되었습니다.");

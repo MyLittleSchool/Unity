@@ -1,5 +1,6 @@
 using GH;
 using Photon.Pun;
+using SW;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace MJ
 
         public Button viewsButton;
         public Button likesButton;
-
+        public Button reportButton;
 
         MapContestData mapContestData;
         // Start is called before the first frame update
@@ -48,6 +49,11 @@ namespace MJ
 
             viewsButton.onClick.AddListener(SettingUIData);
             likesButton.onClick.AddListener(SettingUIData);
+
+            reportButton.onClick.AddListener(() =>
+            {
+                Report.instance.CreateReportInfo("맵콘테스트 - " + mapContestData.title, Report.ContentType.MapContest, mapContestData.userId, mapContestData.id);
+            });
         }
 
         // Update is called once per frame
@@ -59,7 +65,7 @@ namespace MJ
         public void IntoMapcontestRoom()
         {
             MapContestLoader.GetInstance().loadfurnitureList = mapContestData.furnitureList;
-            SceneMgr.instance.MapContestMapIn(DataManager.instance.playerName + "의 " + mapContestData.title);
+            SceneMgr.instance.MapContestMapIn(mapContestData.title);
             SceneUIManager.GetInstance().CloseMapContestPanel();
         }
 

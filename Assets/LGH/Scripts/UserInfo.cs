@@ -1,5 +1,6 @@
 using SW;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 namespace GH
 {
@@ -9,6 +10,7 @@ namespace GH
     {
         public int id;
         public string socialId;
+        public string nickname;
         public string name;
         public int grade;
         public string birthday;

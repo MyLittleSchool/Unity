@@ -66,6 +66,7 @@ public class Item : MonoBehaviour
 
         if (tmpItem)
         {
+            Debug.Log("아이템 이름: " + _itemName);
             SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             tmpItem.SetText_Image(_itemName, _count, spriteRenderer.sprite.texture);
         }

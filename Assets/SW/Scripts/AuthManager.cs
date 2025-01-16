@@ -34,9 +34,15 @@ namespace SW
             }
         }
 
+        //토큰값
+        public string accessToken;
+        public string refreshToken;
+
         [System.Serializable]
         public struct AuthData
         {
+            
+
             public UserInfo userInfo;
             public AuthData(UserInfo info)
             {
@@ -45,7 +51,9 @@ namespace SW
                 //GetInstance().OnlineStatue();
                 WebSocketManager.GetInstance().LogIn(info.id);
             }
+
         }
+
         public AuthData userAuthData { get; set; }
         public int MapId { get; set; } = 1;
 
@@ -91,7 +99,7 @@ namespace SW
             info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user?userId=" + userAuthData.userInfo.id;
             info.onComplete = (DownloadHandler res) =>
             {
-                Debug.Log(userAuthData.userInfo.name + "의 계정 삭제 성공");
+                Debug.Log(userAuthData.userInfo.nickname + "의 계정 삭제 성공");
             };
             StartCoroutine(HttpManager.GetInstance().Delete(info));
         }

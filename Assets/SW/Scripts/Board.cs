@@ -33,6 +33,7 @@ public class Board : MonoBehaviour
     public TMP_Text comentCountText;
     public TMP_InputField comentInputField;
     public Button saveComentButton;
+    public Button reportButton;
     public void ClosePanel()
     {
         gameObject.SetActive(false);
@@ -65,6 +66,7 @@ public class Board : MonoBehaviour
         BoardPostInfo boardPostInfo = new BoardPostInfo();
         boardPostInfo.title = titleInputField.text;
         boardPostInfo.content = contentInputField.text;
+        boardPostInfo.userId = AuthManager.GetInstance().userAuthData.userInfo.id;
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
         info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board";
         info.body = JsonUtility.ToJson(boardPostInfo);
@@ -84,6 +86,7 @@ public class Board : MonoBehaviour
     {
         public string title;
         public string content;
+        public int userId;
     }
 
     public void SetContentPanel()
@@ -154,7 +157,7 @@ public class Board : MonoBehaviour
     public void LoadBoardData()
     {
         HttpManager.HttpInfo info = new HttpManager.HttpInfo();
-        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board/list/" + AuthManager.GetInstance().userAuthData.userInfo.id;
+        info.url = HttpManager.GetInstance().SERVER_ADRESS + "/board/all-list/" + AuthManager.GetInstance().userAuthData.userInfo.id;
         info.onComplete = (DownloadHandler res) =>
         {
             // 제거
@@ -187,8 +190,6 @@ public class Board : MonoBehaviour
                 comp.comentCount = boardGetList.data[i].commentCount;
                 comp.comentCountText.text = comp.comentCount.ToString();
                 comp.isExistLike = boardGetList.data[i].isExistLike;
-                // 댓글 개수 구현 필요\
-                //comp.comentCountText.text = comp.
                 comp.button.onClick.AddListener(() =>
                 {
                     loadedContent = comp;
@@ -246,6 +247,11 @@ public class Board : MonoBehaviour
                             StartCoroutine(HttpManager.GetInstance().Post(info));
                         }
                     });
+                    reportButton.onClick.RemoveAllListeners();
+                    reportButton.onClick.AddListener(() =>
+                    {
+                        Report.instance.CreateReportInfo("게시판 - " + boardGetList.data[i].title, Report.ContentType.Board, -1, boardGetList.data[i].boardId);
+                    });
                 });
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
@@ -291,6 +297,10 @@ public class Board : MonoBehaviour
                 // 댓글 생성
                 GameObject newPanel = Instantiate(commentPrefab, boardContents.transform);
                 newPanel.transform.GetComponentInChildren<TMP_Text>().text = data.data[i].content;
+                newPanel.transform.GetChild(0).GetComponentInChildren<Button>().onClick.AddListener(() =>
+                {
+                    Report.instance.CreateReportInfo("댓글 - " + data.data[i].content, Report.ContentType.Comment, -1, data.data[i].commentId);
+                });
             }
             comentCountText.text = data.data.Length.ToString();
         };

@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.StructWrapping;
+using MJ;
 using Photon.Chat;
 using Photon.Pun;
 using Photon.Realtime;
@@ -240,14 +241,23 @@ namespace GH
             }
         }
 
-        private void CreateChatItem(string chat, Color chatColor)
+        private void CreateChatItem(string chat, Color chatColor, string nickname)
         {
-
             //s의 내용을 ChatItem을 만들자
             GameObject go = Instantiate(chatItemPrefab, contentRectTransform);
             ChatItem chatItem = go.GetComponent<ChatItem>();
             chatList.Add(go);
-
+            go.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                HttpInfo info = new HttpInfo();
+                info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/find-user/nickname/" + nickname;
+                info.onComplete = (DownloadHandler res) =>
+                {
+                    UserInfo userInfo = JsonUtility.FromJson<UserInfo>(res.text);
+                    SceneUIManager.GetInstance().OnProfilePanel(userInfo);
+                };
+                StartCoroutine(HttpManager.GetInstance().Get(info));
+            });
 
             // 가져온 컴포넌트의 SetText함수를 실행
             chatItem.SetText(chat, chatColor);
@@ -292,7 +302,7 @@ namespace GH
             for (int i = 0; i < senders.Length; i++)
             {
                 // 채팅 아이템 만들어서 스크롤 뷰에 올리기
-                CreateChatItem(messages[i].ToString(), color);
+                CreateChatItem(messages[i].ToString(), color, senders[i]);
             }
         }
 
@@ -300,7 +310,7 @@ namespace GH
         public void OnPrivateMessage(string sender, object message, string channelName)
         {
             //채팅 아이템 만들어서 스크롤 뷰에 붙이자
-            CreateChatItem(message.ToString(), color);
+            CreateChatItem(message.ToString(), color, sender);
         }
 
         //채널을 참여할 때
