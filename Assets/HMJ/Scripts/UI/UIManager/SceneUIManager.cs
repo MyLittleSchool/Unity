@@ -250,6 +250,7 @@ namespace MJ
         public TMP_Text nickNameText;
         public TMP_Text interestText;
         public TMP_Text myMessageText;
+        public TMP_Text nickCheckInfoText;
 
         [Header("관심사 딕셔너리")]
         private Dictionary<string, GameObject> buttonList = new Dictionary<string, GameObject>();
@@ -1039,6 +1040,42 @@ namespace MJ
 
 
             QuestManager.instance.QuestPatch(1);
+
+        }
+
+        public void NickCheck()
+        {
+            HttpInfo info = new HttpInfo();
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/is-exist/nickname/" + nickNameInputField.text;
+            info.onComplete = (DownloadHandler downloadHandler) =>
+            {
+                print(downloadHandler.text);
+                if(nickNameInputField.text == AuthManager.GetInstance().userAuthData.userInfo.nickname)
+                {
+                    myProfileSaveButton.GetComponent<Image>().color = selectColor;
+                    myProfileSaveButton.interactable = true;
+
+                    nickCheckInfoText.gameObject.SetActive(true);
+                    nickCheckInfoText.text = "기존과 동일한 닉네임 입니다.";
+                }
+                else if (downloadHandler.text == "false")
+                {
+                    myProfileSaveButton.GetComponent<Image>().color = selectColor;
+                    myProfileSaveButton.interactable = true;
+
+                    nickCheckInfoText.gameObject.SetActive(true);
+                    nickCheckInfoText.text = "가입 가능한 닉네임 입니다.";
+                }
+                else
+                {
+                    myProfileSaveButton.GetComponent<Image>().color = noneSelectColor;
+                    myProfileSaveButton.interactable = false;
+
+                    nickCheckInfoText.gameObject.SetActive(true);
+                    nickCheckInfoText.text = "중복된 닉네임 입니다.";
+                }
+            };
+            StartCoroutine(HttpManager.GetInstance().Get(info));
 
         }
 

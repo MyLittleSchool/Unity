@@ -117,6 +117,8 @@ namespace GH
         [Header("비밀번호 틀림 텍스트")]
         public GameObject PWCheckText;
 
+        [Header("닉네임 중복 안내 텍스트")]
+        public TMP_Text nickCheckInfo;
 
         private Color32 selectColor = new Color32(242, 136, 75, 255);
         private Color32 noneSelectColor = new Color32(242, 242, 242, 255);
@@ -130,6 +132,7 @@ namespace GH
             nextButtons[2].GetComponent<Image>().color = noneSelectColor;
             nextButtons[2].interactable = false;
 
+            nickCheckInfo.gameObject.SetActive(false);
             isEmailDuplicate = false;
 
             // 초기 패널 엑티브 적용
@@ -285,29 +288,30 @@ namespace GH
         public void NickCheck()
         {
             HttpInfo info = new HttpInfo();
-            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/nickname/" + joinInfoInfoList[0].text;
+            info.url = HttpManager.GetInstance().SERVER_ADRESS + "/user/is-exist/nickname/" + joinInfoInfoList[0].text;
             info.onComplete = (DownloadHandler downloadHandler) =>
             {
-                string jsonData = "{ \"data\" : " + downloadHandler.text + "}";
-                print(jsonData);
-                //jsonData를 PostInfoArray 형으로 바꾸자.
-                getUserInfo = JsonUtility.FromJson<UserInfoData>(jsonData);
-                print("get : " + getUserInfo);
+                print(downloadHandler.text);
+                if (downloadHandler.text == "false")
+                {
+                    nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
+                    nextButtons[(int)currentLoginstep].interactable = true;
+
+                    nickCheckInfo.gameObject.SetActive(true);
+                    nickCheckInfo.text = "가입 가능한 닉네임 입니다.";
+                }
+                else
+                {
+                    nextButtons[(int)currentLoginstep].GetComponent<Image>().color = noneSelectColor;
+                    nextButtons[(int)currentLoginstep].interactable = false;
+
+                    nickCheckInfo.gameObject.SetActive(true);
+                    nickCheckInfo.text = "중복된 닉네임 입니다.";
+                }
             };
             StartCoroutine(HttpManager.GetInstance().Get(info));
 
 
-
-            if (checkNicknameBool)
-            {
-                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
-                nextButtons[(int)currentLoginstep].interactable = true;
-            }
-            else
-            {
-                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = noneSelectColor;
-                nextButtons[(int)currentLoginstep].interactable = false;
-            }
         }
 
         private void InterestButtonCreate()

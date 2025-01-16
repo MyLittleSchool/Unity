@@ -7778,8 +7778,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -52.01695, y: 49}
-  m_SizeDelta: {x: -106.1661, y: -97.000145}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -100, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &198209829
 MonoBehaviour:
@@ -9279,6 +9279,7 @@ MonoBehaviour:
   nickNameText: {fileID: 3589406255715885339}
   interestText: {fileID: 7731591840292172300}
   myMessageText: {fileID: 167472698918627381}
+  nickCheckInfoText: {fileID: 2197111360404257944}
   interestButtonPrefab: {fileID: 2914267298495062984, guid: e35afc1d795fbd844a155acfe535b55a,
     type: 3}
   interestButtonTransform: {fileID: 6151289327954976585}
@@ -9287,9 +9288,9 @@ MonoBehaviour:
   profileInterest: {fileID: 3233412282745613003}
   profileMyMessage: {fileID: 6986990046884754068}
   currentuserInfo:
-    userEmail: 
     id: 0
     socialId: 
+    nickname: 
     name: 
     grade: 0
     birthday: 
@@ -29585,7 +29586,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB2E4\uB978 \uCE5C\uAD6C\n\uD5C8\uC6A9"
+  m_text: "\uD568\uAED8 \uAFB8\uBBF8\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ce85a5f8d61d8e04294c714968a1e449, type: 2}
   m_sharedMaterial: {fileID: -5890699479723582061, guid: ce85a5f8d61d8e04294c714968a1e449,
@@ -40599,7 +40600,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0/10
+  m_text: 0/8
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 51db17a56305986499055cd98d26564e, type: 2}
   m_sharedMaterial: {fileID: -5890699479723582061, guid: 51db17a56305986499055cd98d26564e,
@@ -41490,7 +41491,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 10
+  m_CharacterLimit: 8
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -41511,7 +41512,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 385511233}
+        m_TargetAssemblyTypeName: MJ.SceneUIManager, Assembly-CSharp
+        m_MethodName: NickCheck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -42996,7 +43009,7 @@ GameObject:
   - component: {fileID: 5653982187512701372}
   - component: {fileID: 8769563924598920794}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ProfileEditSaveButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
