@@ -1,6 +1,7 @@
 using SW;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ namespace GH
         {
             START,
             LOGIN,
+            TermsOfService,
             NAME,
             EMAIL,
             PASSWORD,
@@ -69,6 +71,22 @@ namespace GH
 
         [Header("인덱스 슬라이더")]
         public Slider indexSlider;
+
+        [Header("2. 서비스 이용 약관 동의")]
+        public bool serviceBool;
+        public Button serviceCheckButton;
+        public Button serviceDetailButton;
+        public GameObject serviceDetailPanel;
+        public Button serviceDetailExit;
+        public Button serviceDetailAgree;
+
+        [Header("2. 개인정보 동의")]
+        public bool personalBool;
+        public Button personalCheckButton;
+        public Button personalDetailButton;
+        public GameObject personalDetailPanel;
+        public Button personalDetailExit;
+        public Button personalDetailAgree;
 
         [Header("4. 중복 아이디 텍스트")]
         public TMP_Text checkIDText;
@@ -128,10 +146,27 @@ namespace GH
 
         private void Start()
         {
-            //닉네임 체크 다음 버튼 비활성화
+            //동의 체크 다음 버튼 비활성화
             nextButtons[2].GetComponent<Image>().color = noneSelectColor;
             nextButtons[2].interactable = false;
+            serviceBool = false;
+            personalBool = false;
+            serviceCheckButton.onClick.AddListener(ServiceCheck);
+            personalCheckButton.onClick.AddListener(PersonalCheck);
 
+            //서비스 디테일 패널 할당
+            serviceDetailButton.onClick.AddListener(ServiceDetailOnOff);
+            serviceDetailExit.onClick.AddListener(ServiceDetailOnOff);
+            serviceDetailAgree.onClick.AddListener(ServiceDetailAgree);
+
+            personalDetailButton.onClick.AddListener(PersonalDetailOnOff);
+            personalDetailExit.onClick.AddListener(PersonalDetailOnOff);
+            personalDetailAgree.onClick.AddListener(PersonalDetailAgree);
+            
+
+            //닉네임 체크 다음 버튼 비활성화
+            nextButtons[3].GetComponent<Image>().color = noneSelectColor;
+            nextButtons[3].interactable = false;
             nickCheckInfo.gameObject.SetActive(false);
             isEmailDuplicate = false;
 
@@ -181,6 +216,30 @@ namespace GH
         {
             switch (currentLoginstep)
             {
+                case Loginstep.TermsOfService:
+                    TermsCheckNext();
+                    if (serviceBool)
+                    {
+                        serviceCheckButton.transform.GetChild(0).gameObject.SetActive(true);
+                        serviceCheckButton.transform.GetChild(1).gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        serviceCheckButton.transform.GetChild(0).gameObject.SetActive(false);
+                        serviceCheckButton.transform.GetChild(1).gameObject.SetActive(true);
+                    }
+                    if (personalBool)
+                    {
+                        personalCheckButton.transform.GetChild(0).gameObject.SetActive(true);
+                        personalCheckButton.transform.GetChild(1).gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        personalCheckButton.transform.GetChild(0).gameObject.SetActive(false);
+                        personalCheckButton.transform.GetChild(1).gameObject.SetActive(true);
+                    }
+                    break;
+
                 case Loginstep.NAME:
                     break;
 
@@ -270,7 +329,76 @@ namespace GH
             });
 
         }
+        public void TermsCheckNext()
+        {
+            if (serviceBool && personalBool)
+            {
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = selectColor;
+                nextButtons[(int)currentLoginstep].interactable = true;
+            }
+            else
+            {
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = noneSelectColor;
+                nextButtons[(int)currentLoginstep].interactable = false;
+            }
+        }
 
+        public void ServiceCheck()
+        {
+            if (serviceBool)
+            {
+                serviceBool = false;
+            }
+            else
+            {
+                serviceBool = true;
+            }
+        }
+
+        public void PersonalCheck()
+        {
+            if (personalBool)
+            {
+                personalBool = false;
+            }
+            else
+            {
+                personalBool = true;
+            }
+        }
+
+        public void ServiceDetailOnOff()
+        {
+            if (serviceDetailPanel.activeSelf)
+            {
+                serviceDetailPanel.SetActive(false);
+            }
+            else
+            {
+                serviceDetailPanel.SetActive(true);
+            }
+        }
+        public void ServiceDetailAgree()
+        {
+            serviceDetailPanel.SetActive(false);
+            serviceBool = true;
+        }
+        public void PersonalDetailOnOff()
+        {
+            if (personalDetailPanel.activeSelf)
+            {
+                personalDetailPanel.SetActive(false);
+            }
+            else
+            {
+                personalDetailPanel.SetActive(true);
+            }
+        }
+        public void PersonalDetailAgree()
+        {
+            personalDetailPanel.SetActive(false);
+            personalBool = true;
+        }
         public void PWCheck()
         {
             if (pWCheckInputField.text.Length > 0 && pWInputField.text == pWCheckInputField.text)
@@ -280,8 +408,8 @@ namespace GH
             }
             else
             {
-                nextButtons[4].GetComponent<Image>().color = noneSelectColor;
-                nextButtons[4].interactable = false;
+                nextButtons[(int)currentLoginstep].GetComponent<Image>().color = noneSelectColor;
+                nextButtons[(int)currentLoginstep].interactable = false;
             }
         }
 
@@ -463,7 +591,7 @@ namespace GH
 
         }
 
-       
+
         private void LoginCallback()
         {
             print("로그인 성공");
@@ -504,7 +632,7 @@ namespace GH
         }
     }
 
- 
 
- 
+
+
 }
